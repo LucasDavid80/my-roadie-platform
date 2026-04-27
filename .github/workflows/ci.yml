@@ -42,8 +42,42 @@ jobs:
   # ==========================================
   # TEST JOBS
   # ==========================================
-  # frontend-test:
-  #   needs: frontend-lint
+  frontend-test:
+    needs: frontend-lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend-web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test -- --run
+
+  backend-test:
+    needs: backend-lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm test
+
+  # ==========================================
+  # E2E TESTS (Playwright)
+  # ==========================================
+  # frontend-e2e:
+  #   needs: [frontend-build, backend-build] # Garante que os apps compilam antes de testar
   #   runs-on: ubuntu-latest
   #   defaults:
   #     run:
@@ -53,25 +87,10 @@ jobs:
   #     - uses: actions/setup-node@v4
   #       with:
   #         node-version: '20'
-  #         cache: 'npm'
   #     - run: npm ci
-  #     - run: npm test # Roda os testes (Jest/Vitest)
-
-  # backend-test:
-  #   needs: backend-lint
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: ./backend
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20'
-  #         cache: 'npm'
-  #     - run: npm ci
-  #     - run: npx prisma generate
-  #     - run: npm test # Roda os testes do NestJS
+  #     - run: npx playwright install --with-deps
+  #     # No CI, você precisaria subir o front e back em background ou usar o webServer do playwright.config
+  #     - run: npx playwright test
 
       
   # ==========================================
