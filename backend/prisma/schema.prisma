@@ -1,13 +1,50 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  // url       = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
+}
+
+// --- Entidades do My Roadie ---
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(MUSICIAN)
+  events    Event[]  @relation("UserEvents")
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  date        DateTime
+  location    String
+  description String?
+  status      String   @default("PENDING") // PENDING, CONFIRMED, FINISHED
+
+  // Relacionamento com quem criou o evento
+  createdById String
+  createdBy   User   @relation("UserEvents", fields: [createdById], references: [id])
+
+  tasks     Task[]
+  createdAt DateTime @default(now())
+}
+
+model Task {
+  id          String  @id @default(uuid())
+  description String
+  isDone      Boolean @default(false)
+  eventId     String
+  event       Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  MUSICIAN
+  ROADIE
+  ADMIN
 }
