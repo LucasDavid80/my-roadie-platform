@@ -1,26 +1,39 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Cores Principais */
+  --color-primary: #f59e0b;
+  --color-primary-dark: #d97706;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Cores Secundárias e Profundidade */
+  --color-secondary: #2c3e50;
+  --color-black: #000000;
+  --color-error: #ef4444; /* Colors.red no Flutter */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  /* Backgrounds */
+  --color-background: #ffffff;
+  --color-light-background: #fffbeb;
+  --color-input-border: #e0e0e0;
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Texto */
+  --color-text-dark: #000000;
+  --color-text-light: #ffffff;
+  --color-text-grey: #9ca3af;
+
+  /* Cards e Destaques */
+  --color-card-blue: #3b82f6;
+  --color-card-green: #10b981;
+  --color-card-purple: #8b5cf6;
+
+  /* Degradês (Grradients) */
+  --background-image-primary-gradient: linear-gradient(
+    to bottom right,
+    #f59e0b,
+    #d97706
+  );
+  --background-image-depth-gradient: linear-gradient(
+    to bottom right,
+    #2c3e50,
+    #000000
+  );
 }
