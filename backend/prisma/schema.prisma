@@ -1,50 +1,127 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  // url       = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
 }
 
-// --- Entidades do My Roadie ---
-
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  role      Role     @default(MUSICIAN)
-  events    Event[]  @relation("UserEvents")
-  createdAt DateTime @default(now())
+  id             String        @id @default(uuid())
+  email          String        @unique
+  name           String?
+  role           Role          @default(MUSICIAN)
+  experience     String?
+  phone          String?
+  instagram      String?
+  city           String?
+  federativeUnit String?
+  minCache       Decimal?      @db.Decimal(10, 2)
+  youtubeLink    String?
+  bio            String?
+  instruments    String[]
+  styles         String[]
+  isAvailable    Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  supabaseId     String        @unique
+  updatedAt      DateTime      @updatedAt
+  bands          BandMember[]
+  createdEvents  Event[]       @relation("EventCreator")
+  transactions   Transaction[]
+}
+
+model Band {
+  id           String           @id @default(uuid())
+  name         String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  members      BandMember[]
+  events       Event[]
+  repertoire   RepertoireSong[]
+  transactions Transaction[]
+}
+
+model BandMember {
+  id       String   @id @default(uuid())
+  userId   String
+  bandId   String
+  role     String?
+  joinedAt DateTime @default(now())
+  band     Band     @relation(fields: [bandId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, bandId])
 }
 
 model Event {
-  id          String   @id @default(uuid())
-  title       String
-  date        DateTime
-  location    String
-  description String?
-  status      String   @default("PENDING") // PENDING, CONFIRMED, FINISHED
-
-  // Relacionamento com quem criou o evento
-  createdById String
-  createdBy   User   @relation("UserEvents", fields: [createdById], references: [id])
-
-  tasks     Task[]
-  createdAt DateTime @default(now())
+  id           String        @id @default(uuid())
+  title        String
+  date         DateTime
+  location     String
+  description  String?
+  createdById  String
+  createdAt    DateTime      @default(now())
+  bandId       String
+  updatedAt    DateTime      @updatedAt
+  status       EventStatus   @default(PENDING)
+  band         Band          @relation(fields: [bandId], references: [id])
+  createdBy    User          @relation("EventCreator", fields: [createdById], references: [id])
+  tasks        Task[]
+  transactions Transaction[]
 }
 
 model Task {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   description String
-  isDone      Boolean @default(false)
+  isDone      Boolean  @default(false)
   eventId     String
-  event       Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model RepertoireSong {
+  id       String  @id @default(uuid())
+  title    String
+  artist   String?
+  key      String?
+  position Int
+  notes    String?
+  bandId   String
+  band     Band    @relation(fields: [bandId], references: [id])
+
+  @@index([bandId, position])
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  description String
+  amount      Decimal         @db.Decimal(10, 2)
+  type        TransactionType
+  date        DateTime
+  createdAt   DateTime        @default(now())
+  bandId      String
+  eventId     String?
+  userId      String
+  band        Band            @relation(fields: [bandId], references: [id])
+  event       Event?          @relation(fields: [eventId], references: [id])
+  user        User            @relation(fields: [userId], references: [id])
 }
 
 enum Role {
   MUSICIAN
   ROADIE
   ADMIN
+}
+
+enum EventStatus {
+  PENDING
+  CONFIRMED
+  FINISHED
+  CANCELLED
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }

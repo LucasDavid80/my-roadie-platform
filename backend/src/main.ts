@@ -13,8 +13,10 @@ async function bootstrap() {
       transform: true, // Transforma os tipos automaticamente
     }),
   );
+  // Esta linha substitui a necessidade do enableShutdownHooks no service
+  app.enableShutdownHooks();
 
   app.enableCors();
   await app.listen(process.env.PORT || 3001);
 }
-bootstrap();
+void bootstrap();
