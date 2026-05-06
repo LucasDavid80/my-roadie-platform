@@ -1,23 +1,26 @@
 export interface UserEntity {
     id: string;
-    name: string;
-    experience: string;
-    phone: string;
-    instagram: string;
-    city: string;
-    federativeUnit: string;
-    minCache: number;
-    youtubeLink: string;
-    bio: string;
-    instruments: string[];
-    styles: string[];
+    email: string;
+    name?: string;
+    role: 'MUSICIAN' | 'ROADIE' | 'ADMIN';
+    experience?: string;
+    phone?: string;
+    instagram?: string;
+    city?: string;
+    federativeUnit?: string;
+    minCache?: number;
+    youtubeLink?: string;
+    bio?: string;
+    instruments?: string[];
+    styles?: string[];
     isAvailable: boolean;
-    // Note: Adicionei o e-mail aqui porque o seu backend NestJS o utiliza como campo obrigatório
-    email?: string;
+    supabaseId: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
-// Para o formulário de cadastro inicial (Step 1), geralmente usamos apenas um subconjunto:
-export type CreateUserData = Pick<UserEntity, 'name' | 'email'> & {
+export type CreateUserData = Pick<UserEntity, 'email' | 'supabaseId'> & {
+    name?: string;
     password?: string;
     role?: 'MUSICIAN' | 'ROADIE' | 'ADMIN';
 };

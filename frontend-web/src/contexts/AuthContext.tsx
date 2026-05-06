@@ -4,47 +4,55 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 import { UserEntity } from '@/types/user';
 import { api } from '@/services/api';
 
+interface SignInCredentials {
+    email: string;
+    password?: string;
+}
+
 interface AuthContextData {
     user: UserEntity | null;
     isAuthenticated: boolean;
-    signIn: (credentials: any) => Promise<void>;
+    signIn: (credentials: SignInCredentials) => Promise<void>;
     signOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<UserEntity | null>(null);
+export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
+    const [user, setUser] = useState<UserEntity | null>(() => {
+        if (typeof window !== 'undefined') {
+            const storedUser = localStorage.getItem('@MyRoadie:user');
+            const storedToken = localStorage.getItem('@MyRoadie:token');
+            if (storedUser && storedToken) {
+                try {
+                    return JSON.parse(storedUser);
+                } catch {
+                    return null;
+                }
+            }
+        }
+        return null;
+    });
     const isAuthenticated = !!user;
 
-    async function signIn({ email, password }: any) {
-        // 1. Chamada para o seu NestJS
-        // const response = await api.post('/auth/login', { email, password });
+    async function signIn({ email }: SignInCredentials) {
+        try {
+            const response = await api.post('/auth/login', { email });
+            const { access_token, user: userData } = response.data;
 
-        // 2. Simulação de sucesso para agora
-        const mockUser: UserEntity = {
-            id: '1',
-            name: 'Lucas',
-            email: email,
-            role: 'ROADIE',
-            experience: '5 anos',
-            isAvailable: true,
-            instruments: [],
-            styles: [],
-            phone: '',
-            instagram: '',
-            city: '',
-            federativeUnit: '',
-            minCache: 0,
-            youtubeLink: '',
-            bio: ''
-        };
+            localStorage.setItem('@MyRoadie:token', access_token);
+            localStorage.setItem('@MyRoadie:user', JSON.stringify(userData));
 
-        setUser(mockUser);
-        // Aqui no futuro salvaríamos o token nos Cookies
+            setUser(userData);
+        } catch (error) {
+            console.error('Erro no login:', error);
+            throw new Error('Falha na autenticação');
+        }
     }
 
     function signOut() {
+        localStorage.removeItem('@MyRoadie:token');
+        localStorage.removeItem('@MyRoadie:user');
         setUser(null);
     }
 
