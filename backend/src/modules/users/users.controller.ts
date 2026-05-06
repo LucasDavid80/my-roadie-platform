@@ -1,29 +1,41 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
   Post,
   HttpCode,
   HttpStatus,
+  Get,
+  Param,
+  Patch,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '@prisma/client';
+import { OwnershipGuard } from '../auth/guards/ownership.guard';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @HttpCode(HttpStatus.CREATED) // Garante status 201 explicitamente
+  @Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.usersService.createUser({
+      ...createUserDto,
+      role: createUserDto.role || 'MUSICIAN',
+    });
   }
 
   @Get()
+  @Roles(Role.ADMIN)
   findAll() {
     return this.usersService.findAll();
   }
@@ -34,12 +46,14 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(OwnershipGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT) // Retorna 204 (Sucesso, mas sem corpo)
+  @Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }

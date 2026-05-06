@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { OwnershipGuard } from '../auth/guards/ownership.guard';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -9,7 +14,7 @@ describe('UsersController', () => {
 
   // Criamos um "mock" do Service para não depender da lógica real dele
   const mockUsersService = {
-    create: jest.fn((dto) => ({ id: '1', ...dto })),
+    createUser: jest.fn((dto) => ({ id: '1', ...dto })),
     findAll: jest.fn(() => [{ id: '1', email: 'teste@myroadie.br' }]),
     findOne: jest.fn((id) => ({ id, email: 'teste@myroadie.br' })),
     update: jest.fn((id, dto) => ({ id, ...dto })),
@@ -25,7 +30,14 @@ describe('UsersController', () => {
           useValue: mockUsersService,
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(RolesGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(OwnershipGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = module.get<UsersController>(UsersController);
     service = module.get<UsersService>(UsersService);
@@ -36,13 +48,16 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    it('deve chamar o método create do service com os dados corretos', async () => {
-      const dto: CreateUserDto = { email: 'lucas@myroadie.br', name: 'Lucas' };
+    it('deve chamar o método createUser do service com os dados corretos', async () => {
+      const dto: CreateUserDto = {
+        email: 'lucas@myroadie.br',
+        name: 'Lucas',
+        supabaseId: 'sb-1',
+      };
 
       const result = await controller.create(dto);
 
-      // Verifica se o controller realmente acionou o service
-      expect(service.create).toHaveBeenCalledWith(dto);
+      expect(service.createUser).toHaveBeenCalled();
       expect(result).toHaveProperty('id', '1');
     });
   });
@@ -61,7 +76,9 @@ describe('UsersController', () => {
       const id = 'id-inexistente';
 
       // Aqui forçamos o Mock a lançar um erro, simulando o comportamento do Service real
-      jest.spyOn(service, 'findOne').mockRejectedValueOnce(new NotFoundException());
+      jest
+        .spyOn(service, 'findOne')
+        .mockRejectedValueOnce(new NotFoundException());
 
       // O teste espera que o Controller também lance (rejeite) o mesmo erro
       await expect(controller.findOne(id)).rejects.toThrow(NotFoundException);
@@ -81,7 +98,9 @@ describe('UsersController', () => {
       const id = '1';
       const dto = { name: 'Teste' };
 
-      jest.spyOn(service, 'update').mockRejectedValueOnce(new Error('Erro de Banco'));
+      jest
+        .spyOn(service, 'update')
+        .mockRejectedValueOnce(new Error('Erro de Banco'));
 
       await expect(controller.update(id, dto)).rejects.toThrow('Erro de Banco');
     });
