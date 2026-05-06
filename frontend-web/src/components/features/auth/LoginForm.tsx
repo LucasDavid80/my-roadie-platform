@@ -7,9 +7,12 @@ import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { loginSchema, LoginFormData } from './login-schema';
 import { useRouter } from 'next/navigation';
 
+import { useAuth } from '@/contexts/AuthContext';
+
 export function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
+    const { signIn } = useAuth();
 
     const {
         register,
@@ -20,13 +23,12 @@ export function LoginForm() {
     });
 
     const onSubmit = async (data: LoginFormData) => {
-        // Simulação do _doLogin() do Flutter
-        console.log('Dados de login:', data);
-
-        // Aqui você chamaria seu backend NestJS futuramente
-        // await api.post('/auth/login', data);
-
-        router.push('/dashboard');
+        try {
+            await signIn({ email: data.email, password: data.password });
+            router.push('/dashboard');
+        } catch (error) {
+            alert('Falha no login. Verifique suas credenciais.');
+        }
     };
 
     return (
@@ -73,7 +75,7 @@ export function LoginForm() {
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-[50px] bg-primary text-white font-bold rounded-xl shadow-md 
+                className="w-full h-12.5 bg-primary text-white font-bold rounded-xl shadow-md 
         hover:brightness-90 active:scale-[0.98] transition-all disabled:opacity-50 mt-4"
             >
                 {isSubmitting ? 'CARREGANDO...' : 'ENTRAR'}

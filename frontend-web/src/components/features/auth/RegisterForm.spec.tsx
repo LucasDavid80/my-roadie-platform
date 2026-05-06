@@ -1,5 +1,5 @@
 import { RegisterForm } from '@/components/features/auth/RegisterForm';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({

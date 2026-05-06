@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 export const handlers = [
     // Mock do Login
     http.post('http://localhost:3001/auth/login', async ({ request }) => {
-        const body: any = await request.json();
+        const body = await request.json() as { email?: string; password?: string };
 
         if (body.email === 'lucas@myroadie.br' && body.password === '123456') {
             return HttpResponse.json({

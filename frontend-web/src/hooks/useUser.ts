@@ -5,13 +5,13 @@ export function useUser(initialUser: UserEntity) {
     const [user, setUser] = useState<UserEntity>(initialUser);
 
     // Funções de atualização (Substituem os void update... do Dart)
-    const updateField = (field: keyof UserEntity, value: any) => {
+    const updateField = (field: keyof UserEntity, value: unknown) => {
         setUser((prev) => ({ ...prev, [field]: value }));
     };
 
     const toggleListItem = (field: 'instruments' | 'styles', item: string) => {
         setUser((prev) => {
-            const currentList = [...(prev[field] as string[])];
+            const currentList = [...(prev[field])];
             const index = currentList.indexOf(item);
 
             if (index > -1) {

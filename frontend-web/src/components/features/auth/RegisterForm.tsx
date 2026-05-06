@@ -18,8 +18,15 @@ export function RegisterForm() {
             await userService.signUp(data);
             alert('Conta criada com sucesso! Agora faça seu login.');
             router.push('/login');
-        } catch (error: any) {
-            alert(error.response?.data?.message || 'Erro ao criar conta');
+        } catch (error: unknown) {
+            if (typeof error === 'object' && error !== null) {
+                const err = error as Record<string, unknown>;
+                const response = err.response as { data?: { message?: string } } | undefined;
+                const message = response?.data?.message ?? 'Erro ao criar conta';
+                alert(message);
+            } else {
+                alert('Erro ao criar conta');
+            }
         }
     };
 
@@ -83,7 +90,7 @@ export function RegisterForm() {
             {/* BOTÃO CADASTRAR (Cores Secondary conforme o Flutter) */}
             <button
                 type="submit"
-                className="w-full h-[50px] bg-secondary text-white font-bold rounded-xl shadow-md hover:brightness-110 active:scale-[0.98] transition-all mt-4"
+                className="w-full h-12.5 bg-secondary text-white font-bold rounded-xl shadow-md hover:brightness-110 active:scale-[0.98] transition-all mt-4"
                 disabled={isSubmitting}
             >
                 CADASTRAR

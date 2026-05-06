@@ -12,9 +12,11 @@ export default function LoginPage() {
             <div className="flex flex-col items-center mb-8">
                 <div className="w-32 h-32 bg-white rounded-[20px] shadow-2xl flex items-center justify-center p-4">
                     {/* Certifique-se de ter a logo em public/assets/logo.png */}
-                    <img
+                    <Image
                         src="/assets/logo.png"
                         alt="MyRoadie Logo"
+                        width={128}
+                        height={128}
                         className="w-full h-full object-contain"
                     />
                 </div>
