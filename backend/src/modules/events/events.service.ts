@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 export class EventsService {
   // Injeção de Dependência: o NestJS entrega o Prisma pronto para uso
   // constructor(private prisma: PrismaService) { }
-
   // async create(createEventDto: CreateEventDto) {
   //   return this.prisma.event.create({
   //     data: {
@@ -20,13 +19,11 @@ export class EventsService {
   //     },
   //   });
   // }
-
   // async findAll() {
   //   return this.prisma.event.findMany({
   //     include: { tasks: true }, // Já traz as tarefas vinculadas se houver
   //   });
   // }
-
   // async findOne(id: string) { // Alterado de number para string (UUID)
   //   return this.prisma.event.findUnique({
   //     where: { id },
