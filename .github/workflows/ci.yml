@@ -30,6 +30,9 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -38,6 +41,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: './backend/package-lock.json'
       - run: npm ci
+      - run: npx prisma generate
       - run: npm run lint
       
   # ==========================================
