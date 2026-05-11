@@ -11,7 +11,7 @@ export function useUser(initialUser: UserEntity) {
 
     const toggleListItem = (field: 'instruments' | 'styles', item: string) => {
         setUser((prev) => {
-            const currentList = [...(prev[field])];
+            const currentList = [...(prev[field] ?? [])];
             const index = currentList.indexOf(item);
 
             if (index > -1) {

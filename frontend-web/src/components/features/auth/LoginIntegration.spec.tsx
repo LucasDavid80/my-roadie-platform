@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { LoginForm } from './LoginForm';
 import { describe, it, expect, vi } from 'vitest';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const mockPush = vi.fn();
 vi.mock('next/navigation', () => ({
@@ -9,7 +10,11 @@ vi.mock('next/navigation', () => ({
 
 describe('Login Integration', () => {
     it('deve redirecionar para a dashboard ao fazer login com sucesso', async () => {
-        render(<LoginForm />);
+        render(
+            <AuthProvider>
+                <LoginForm />
+            </AuthProvider>
+        );
 
         fireEvent.change(screen.getByPlaceholderText('E-mail'), {
             target: { value: 'lucas@myroadie.br' }

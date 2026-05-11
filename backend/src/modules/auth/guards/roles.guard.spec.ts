@@ -25,10 +25,7 @@ describe('RolesGuard', () => {
     reflector = module.get<Reflector>(Reflector);
   });
 
-  const createMockContext = (
-    userRole: Role | null,
-    requiredRoles: Role[] | null,
-  ): ExecutionContext => {
+  const createMockContext = (userRole: Role | null): ExecutionContext => {
     return {
       getHandler: jest.fn(),
       getClass: jest.fn(),
@@ -42,21 +39,21 @@ describe('RolesGuard', () => {
 
   it('deve permitir acesso se não houver roles requeridas', () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(null);
-    const context = createMockContext(Role.MUSICIAN, null);
+    const context = createMockContext(Role.MUSICIAN);
 
     expect(guard.canActivate(context)).toBe(true);
   });
 
   it('deve permitir acesso se o usuário tiver a role requerida', () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([Role.ADMIN]);
-    const context = createMockContext(Role.ADMIN, [Role.ADMIN]);
+    const context = createMockContext(Role.ADMIN);
 
     expect(guard.canActivate(context)).toBe(true);
   });
 
   it('deve negar acesso se o usuário não tiver a role requerida', () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([Role.ADMIN]);
-    const context = createMockContext(Role.MUSICIAN, [Role.ADMIN]);
+    const context = createMockContext(Role.MUSICIAN);
 
     expect(guard.canActivate(context)).toBe(false);
   });

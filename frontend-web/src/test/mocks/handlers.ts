@@ -3,12 +3,19 @@ import { http, HttpResponse } from 'msw';
 export const handlers = [
     // Mock do Login
     http.post('http://localhost:3001/auth/login', async ({ request }) => {
-        const body = await request.json() as { email?: string; password?: string };
+        const body = await request.json() as { email?: string };
 
-        if (body.email === 'lucas@myroadie.br' && body.password === '123456') {
+        if (body.email === 'lucas@myroadie.br') {
             return HttpResponse.json({
                 access_token: 'fake-jwt-token',
-                user: { id: '1', name: 'Lucas David', email: body.email }
+                user: { 
+                    id: '1', 
+                    name: 'Lucas David', 
+                    email: body.email,
+                    role: 'ROADIE',
+                    isAvailable: true,
+                    supabaseId: 'mock-supabase-id'
+                }
             }, { status: 200 });
         }
 

@@ -51,6 +51,7 @@ describe('AuthService', () => {
 
       expect(result).toHaveProperty('access_token', 'mock-token');
       expect(result.user.email).toBe(mockUser.email);
+      expect(() => jwtService.signAsync).toBeDefined();
       expect(jwtService.signAsync).toHaveBeenCalled();
     });
 

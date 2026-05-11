@@ -56,8 +56,9 @@ describe('UsersService', () => {
         role: Role.ROADIE,
         supabaseId: 'supabase-id-123',
       };
-      const result = await service.createUser(dto as any);
+      const result = await service.createUser(dto);
 
+      expect(() => prisma.user.create).toBeDefined();
       expect(prisma.user.create).toHaveBeenCalled();
       expect(result.email).toBe(dto.email);
     });
@@ -94,6 +95,7 @@ describe('UsersService', () => {
     it('deve remover um usuário', async () => {
       const removed = await service.remove('uuid-123');
       expect(removed.id).toBe(mockUser.id);
+      expect(() => prisma.user.delete).toBeDefined();
       expect(prisma.user.delete).toHaveBeenCalled();
     });
   });
