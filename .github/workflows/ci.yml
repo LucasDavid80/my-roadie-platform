@@ -3,14 +3,21 @@ name: My Roadie Ecosystem CI/CD
 on:
   push:
     branches: [ main, master ]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
   pull_request:
     branches: [ main, master ]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
 
 jobs:
   # ==========================================
   # LINTS JOBS
   # ==========================================
   frontend-lint:
+    if: "contains(github.event.head_commit.message, '[web]') || github.event_name == 'pull_request' || (!contains(github.event.head_commit.message, '[backend]') && !contains(github.event.head_commit.message, '[mobile]'))"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,6 +33,7 @@ jobs:
       - run: npm run lint
   
   backend-lint:
+    if: "contains(github.event.head_commit.message, '[backend]') || github.event_name == 'pull_request' || (!contains(github.event.head_commit.message, '[web]') && !contains(github.event.head_commit.message, '[mobile]'))"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -44,19 +52,20 @@ jobs:
       - run: npx prisma generate
       - run: npm run lint
 
-  mobile-lint:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./mobile
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - run: flutter pub get
-      - run: flutter analyze
+  # mobile-lint:
+  #   if: "contains(github.event.head_commit.message, '[mobile]') || github.event_name == 'pull_request'"
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: ./mobile
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: 'stable'
+  #         cache: true
+  #     - run: flutter pub get
+  #     - run: flutter analyze
 
   # ==========================================
   # TEST JOBS
@@ -97,41 +106,21 @@ jobs:
       - run: npx prisma generate
       - run: npm test
 
-  mobile-test:
-    needs: mobile-lint
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./mobile
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - run: flutter pub get
-      - run: flutter test
-
-  # ==========================================
-  # E2E TESTS (Playwright)
-  # ==========================================
-  # frontend-e2e:
-  #   needs: [frontend-build, backend-build] # Garante que os apps compilam antes de testar
+  # mobile-test:
+  #   needs: mobile-lint
   #   runs-on: ubuntu-latest
   #   defaults:
   #     run:
-  #       working-directory: ./frontend-web
+  #       working-directory: ./mobile
   #   steps:
   #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v4
+  #     - uses: subosito/flutter-action@v2
   #       with:
-  #         node-version: '22'
-  #     - run: npm ci
-  #     - run: npx playwright install --with-deps
-  #     # No CI, você precisaria subir o front e back em background ou usar o webServer do playwright.config
-  #     - run: npx playwright test
+  #         channel: 'stable'
+  #         cache: true
+  #     - run: flutter pub get
+  #     - run: flutter test
 
-      
   # ==========================================
   # BUILD JOBS
   # ==========================================
@@ -174,42 +163,17 @@ jobs:
       - run: npx prisma generate
       - run: npm run build
 
-  mobile-build:
-    needs: mobile-test
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./mobile
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - run: flutter pub get
-      - run: flutter build apk --release
-
-  # ==========================================
-  # DEPLOY JOBS (Placeholders para o futuro)
-  # ==========================================
-  # frontend-deploy:
-  #   needs: frontend-build
+  # mobile-build:
+  #   needs: mobile-test
   #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: ./mobile
   #   steps:
-  #     - name: Deploy to Vercel
-  #       run: echo "Aqui entrará o comando de deploy da Vercel"
-
-  # backend-deploy:
-  #   needs: backend-build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Deploy to Render
-  #       run: echo "Aqui entrará o webhook do Render"
-
-  # notify:
-  #   needs: [frontend-deploy, backend-deploy]
-  #   runs-on: ubuntu-latest
-  #   if: always()
-  #   steps:
-  #     - name: Send Notification
-  #       run: echo "Pipeline finalizado com sucesso!"
+  #     - uses: actions/checkout@v4
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: 'stable'
+  #         cache: true
+  #     - run: flutter pub get
+  #     - run: flutter build apk --release
