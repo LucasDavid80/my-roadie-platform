@@ -18,6 +18,7 @@ O projeto é estruturado como um monorepo (gerenciado manualmente ou via pastas 
 
 - `backend/`: API NestJS. Contém a lógica de negócio, integrações de banco e autenticação.
 - `frontend-web/`: Aplicação Next.js (App Router). Interface principal do usuário.
+- `mobile/`: Aplicativo móvel desenvolvido em Flutter.
 - `docs/`: Documentação detalhada sobre arquitetura, regras de negócio e padrões.
 - `prisma/`: (Dentro de `backend/`) Esquema do banco de dados e migrações.
 
@@ -38,6 +39,13 @@ O projeto é estruturado como um monorepo (gerenciado manualmente ou via pastas 
 - **Build:** `npm run build`
 - **Testes (Vitest):** `npm test`
 - **Lint:** `npm run lint`
+
+### Mobile (`mobile/`)
+- **Dependências:** `flutter pub get`
+- **Desenvolvimento:** `flutter run`
+- **Build (Android):** `flutter build apk`
+- **Build (iOS):** `flutter build ios`
+- **Análise:** `flutter analyze`
 
 ## 📏 Convenções de Desenvolvimento
 
