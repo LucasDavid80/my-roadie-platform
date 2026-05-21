@@ -26,13 +26,14 @@ Execução (comandos)
 - Rodar todos os testes: `cd backend && npm test`
 - Rodar testes do módulo users (exemplo): `cd backend && npx jest "src/modules/users" --runInBand`
 - Rodar e2e: `cd backend && npm run test:e2e`
+- **CI Local (act):** Rode `act --secret-file .secrets` para validar o pipeline completo antes de enviar o código.
 
 Boas práticas
 - Isolar testes unitários do banco — use mocks ou implementações em memória.
 - Manter fixtures e factories simples e reutilizáveis (ex.: factories para User).
 - Limpar estado entre testes (transações revertidas, truncates ou recriação do schema).
 - Cobertura: priorizar cobertura em regras de negócio críticas; não transformar 100% de coverage em objetivo absoluto.
-- CI: rodar lint → unit tests → build → integração/e2e (e2e podem rodar em job separado/condicional).
+- CI: rodar lint → unit tests → build → integração/e2e. Use o `act` para simular este fluxo.
 
 Dados de teste e seed
 - Fornecer scripts de seed leves para e2e (usuários, roles, dados essenciais).

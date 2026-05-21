@@ -55,8 +55,13 @@ O projeto é estruturado como um monorepo (gerenciado manualmente ou via pastas 
 ### Frontend (Next.js)
 - **Componentes:** Preferência por componentes funcionais e hooks.
 - **Estilização:** TailwindCSS (configurado no root).
+- **Roteamento:** Atenção ao uso de **Route Groups** (pastas entre parênteses como `(dashboard)`). Elas organizam o código sem adicionar segmentos à URL (ex: `src/app/(dashboard)/profile/page.tsx` é acessado via `/profile`).
 - **Formulários:** `react-hook-form` com validação `zod`.
 - **Estado:** Context API para estados globais (como `AuthContext`).
+
+### Integração Backend-Frontend
+- **Sanitização de Payload:** O backend utiliza `ValidationPipe` com `forbidNonWhitelisted: true`. Ao realizar requisições `PATCH` ou `POST`, garanta que campos automáticos do banco (`id`, `createdAt`, `updatedAt`) sejam removidos do corpo da requisição no frontend para evitar erros 400.
+- **Tipagem:** Utilize as interfaces em `src/types` para manter a consistência entre o que é recebido da API e o que é usado na UI.
 
 ## 🔐 Segurança e Variáveis de Ambiente
 

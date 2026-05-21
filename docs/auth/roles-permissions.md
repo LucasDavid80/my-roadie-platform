@@ -25,6 +25,6 @@ Observações importantes:
 
 Implementação / recomendação técnica:
 - Validar autorização via Guards no backend (ex.: JwtAuthGuard + checagem de role).
-- Para ações sensíveis, verificar que `user.id === resource.createdById` ou `role === 'ADMIN'`.
+- **OwnershipGuard:** Para ações sensíveis de atualização/exclusão, o `OwnershipGuard` garante que um usuário só possa modificar seu próprio perfil (`user.userId === request.params.id`), a menos que tenha o papel `ADMIN`.
 - Para recursos ligados a Band, verificar associação via `BandMember` (ex.: `user` é membro da `band`).
 - Para fluxos de signup com Supabase: crie o usuário no Supabase Auth e em seguida crie o perfil no backend usando o `supabaseId` retornado.

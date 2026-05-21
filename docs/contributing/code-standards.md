@@ -9,10 +9,12 @@ Regras rápidas para contribuir:
 - Lint & Formatação
   - ESLint é usado em ambos os projetos; backend tem `npm run lint` com --fix.
   - Prettier configurado no backend; siga as regras existentes.
+  - **Refatoração sobre desativação:** Prefira refatorar o código (ex: usar *Optional Catch Binding* `catch {` em vez de `catch (error) {`) para resolver avisos de variáveis não utilizadas em vez de desativar regras do ESLint.
 
-- Tests
+- Tests & CI/CD
   - Backend: Jest; rodar `npm test` antes de abrir PR.
   - Frontend: Vitest disponível (`npm test`).
+  - **Simulação Local de CI:** Utilize o `act` para simular o GitHub Actions localmente. Segredos devem ser passados via arquivo `.secrets` (não comitar!) usando `act --secret-file .secrets`.
 
 - Commits & PRs
   - Mensagens descritivas; prefixar com escopo quando útil (ex: `backend: add users service`).

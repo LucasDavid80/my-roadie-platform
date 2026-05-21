@@ -12,18 +12,18 @@ Este documento descreve a arquitetura da aplicação web do My Roadie, localizad
 
 ## 🏗️ Estrutura de Pastas
 
-A aplicação segue a estrutura padrão do Next.js (App Router ou Pages) com organização por interesse:
+A aplicação segue a estrutura padrão do Next.js (App Router) com organização por interesse:
 
-- `src/app/` ou `src/pages/`: Definição de rotas e layouts da aplicação.
-- `src/components/`: Componentes de interface reutilizáveis (Botões, Cards, Modais).
-- `src/hooks/`: Hooks customizados para lógica de interface e consumo de dados.
-- `src/services/`: Configuração de clientes HTTP e chamadas para o backend NestJS.
+- `src/app/`: Definição de rotas e layouts.
+  - **Route Groups:** Pastas entre parênteses (ex: `(dashboard)`) são usadas para organizar layouts sem afetar a URL. Ex: `src/app/(dashboard)/profile/page.tsx` resolve para `/profile`.
+- `src/components/`: Componentes de interface reutilizáveis.
+- `src/hooks/`: Hooks customizados.
+- `src/services/`: Chamadas para a API.
+  - **Sanitização:** Devido ao `ValidationPipe` do backend, campos como `id`, `createdAt` e `updatedAt` devem ser removidos do corpo das requisições `POST/PATCH`.
 
 ## 🔄 Integração com o Ecossistema
 
-O frontend-web atua como a interface administrativa e de visualização para músicos e roadies:
-
-1. **Comunicação com o Backend:** Consome a API NestJS utilizando variáveis de ambiente para definir a URL base.
+1. **Comunicação com o Backend:** Consome a API NestJS. **Importante:** Sanitizar objetos antes do envio para evitar erro 400 por campos não permitidos (whitelist).
 2. **Autenticação:** Integra-se diretamente com o **Supabase Auth** para gestão de sessões e persistência de login.
 3. **Sincronização:** Exibe dados em tempo real vindos do Postgres (via API) para refletir as alterações feitas também no App Mobile.
 
