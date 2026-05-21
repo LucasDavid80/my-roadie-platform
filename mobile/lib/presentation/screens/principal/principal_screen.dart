@@ -1,0 +1,99 @@
+import 'package:agenda_musical/core/constants/app_colors.dart';
+import 'package:agenda_musical/presentation/controllers/agenda_controller.dart';
+import 'package:agenda_musical/presentation/screens/principal/widgets/commitments_widget.dart';
+import 'package:agenda_musical/presentation/screens/principal/widgets/custom_calendar.dart';
+import 'package:agenda_musical/presentation/screens/principal/widgets/header_widget.dart';
+import 'package:agenda_musical/presentation/screens/principal/widgets/infos_widget.dart';
+import 'package:agenda_musical/presentation/widgets/my_roadie_app_bar.dart';
+import 'package:agenda_musical/presentation/widgets/new_appointment_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// 1. Mudamos para StatefulWidget para poder atualizar a lista
+class PrincipalScreen extends ConsumerWidget {
+  const PrincipalScreen({super.key});
+
+  @override
+  // O build agora recebe o 'WidgetRef ref' (que é o controle remoto do Riverpod)
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 1. "Observa" a lista de eventos (se o controller mudar, aqui reconstrói)
+    final events = ref.watch(agendaProvider);
+
+    // 2. Pega os cálculos do controller
+    final totalFee = ref.read(agendaProvider.notifier).totalFee;
+    // final totalFee = ref.watch(agendaProvider.notifier).totalFee; // Se totalFee for um Provider separado, use watch. Se for um método, use read.
+    final showsCount = ref.read(agendaProvider.notifier).monthlyShows;
+
+    // 3. Criamos uma função simples para os widgets filhos chamarem o controller
+    void handleOnConfirm(newEvent) {
+      ref.read(agendaProvider.notifier).addOrUpdateEvent(newEvent);
+    }
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: const MyRoadieAppBar(selectedScreen: 'calendar'),
+
+        // 4. Botão Flutuante para Adicionar
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.primary, // Laranja
+          child: const Icon(
+            Icons.add,
+            color: AppColors.textLight,
+          ), // Ícone branco
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => Dialog(
+                child: NewAppointmentWidget(
+                  onConfirm: (newEvent) {
+                    // Aqui a mágica acontece: avisamos o motor para adicionar o evento
+                    ref
+                        .read(agendaProvider.notifier)
+                        .addOrUpdateEvent(newEvent);
+                  },
+                ),
+              ),
+            );
+          },
+        ),
+
+        body: SingleChildScrollView(
+          child: Column(
+            spacing: 8,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.shade300, width: 1.0),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: HeaderWidget(),
+                ),
+              ),
+
+              // Os Widgets agora recebem os dados atualizados automaticamente
+              InfosWidget(
+                compromissosTotal: events.length,
+                compromissosConcluidos: 0,
+                shows: showsCount,
+                faturamento: totalFee,
+              ),
+
+              CustomCalendar(events: events), // <-- Passando a lista observada
+
+              CommitmentsWidget(
+                commitments: events, // <-- Passando a lista observada
+                onConfirm:
+                    handleOnConfirm, // <-- Passando a função do controller
+              ),
+
+              const SizedBox(height: 80),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,42 @@
+assets/
+├── images/
+│   ├── logo.png
+│   └── logo.svg           
+lib/
+├── main.dart
+├── core/
+│   └── router.dart           
+├── domain/
+│   ├── entities/
+│   ├── enums/
+│   ├── helpers/
+│   ├── interfaces/
+│   └── services/           
+├── presentation/
+│   ├── controllers/
+│   ├── screens/
+│   │   ├── auth/          # Login e Cadastro
+│   │   │   ├── widgets/
+│   │   │   │   ├── login_form.dart 
+│   │   │   │   └── signup_bottom_sheet.dart 
+│   │   │   └── login_page.dart
+│   │   ├── principal/          # Tela Principal
+│   │   │   ├── widgets/
+│   │   │   │   ├── commitments_widget.dart 
+│   │   │   │   ├── custom_calendar.dart 
+│   │   │   │   ├── infos_widget.dart 
+│   │   │   │   └── header_widget.dart 
+│   │   │   └── principal_screen.dart (ou principal_screen.dart)
+│   │   └── person/        # Tela de Perfil
+│   │   │   ├── widgets/
+│   │   │   │   ├── info_widget.dart 
+│   │   │   │   ├── multi_selection_widget.dart 
+│   │   │   │   └── photo_widget.dart 
+│   │       └── person_screen.dart
+│   │
+│   ├── theme/           
+│   │   ├── app_colors.dart
+│   │
+│   └── widgets/           
+│       ├── my_roadie_app_bar.dart    # O cabeçalho
+│       └── new_appointment_widget.dart # O formulário de compromisso

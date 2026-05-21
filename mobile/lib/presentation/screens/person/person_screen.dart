@@ -1,0 +1,100 @@
+import 'package:agenda_musical/core/constants/app_colors.dart';
+import 'package:agenda_musical/presentation/controllers/user_controller.dart';
+import 'package:agenda_musical/presentation/screens/person/widgets/availability_widget.dart';
+import 'package:agenda_musical/presentation/screens/person/widgets/info_widget.dart';
+import 'package:agenda_musical/presentation/screens/person/widgets/multi_selection_widget.dart';
+import 'package:agenda_musical/presentation/screens/person/widgets/photo_widget.dart';
+import 'package:agenda_musical/presentation/screens/person/widgets/profile_header.dart';
+import 'package:agenda_musical/presentation/widgets/my_roadie_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class PersonScreen extends ConsumerWidget {
+  const PersonScreen({super.key});
+
+  @override
+  // 3. Adicionar o WidgetRef ref aqui
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Agora o ref funciona!
+    final user = ref.watch(userProvider);
+    final userNotifier = ref.read(userProvider.notifier);
+
+    final List<String> instrumentos = [
+      'Violão',
+      'Guitarra',
+      'Baixo',
+      'Bateria',
+      'Teclado',
+      'Voz/Vocal',
+    ];
+    final List<String> estilos = ['MPB', 'Rock', 'Jazz', 'Samba', 'Sertanejo'];
+
+    return Scaffold(
+      appBar: const MyRoadieAppBar(selectedScreen: 'profile'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const ProfileHeader(),
+            const SizedBox(height: 16),
+            const PhotoWidget(),
+            const InfoWidget(), // O InfoWidget já deve ser um ConsumerWidget também!
+            // Conectando os dados reais do Riverpod nos Widgets:
+            MultiSelectionWidget(
+              title: 'Instrumentos *',
+              options: instrumentos,
+              selectedItems: user.instruments, // Pega do estado
+              onToggle: (item) =>
+                  userNotifier.toggleInstrument(item), // Avisa o cérebro
+            ),
+
+            MultiSelectionWidget(
+              title: 'Estilos Musicais *',
+              options: estilos,
+              selectedItems: user.styles, // Pega do estado
+              onToggle: (item) => {/* criar método toggleStyle depois */},
+            ),
+
+            AvailabilityWidget(
+              isAvailable: user.isAvailable, // Pega do estado
+              onChanged: (val) =>
+                  userNotifier.updateAvailability(val!), // Avisa o cérebro
+            ),
+
+            _buildSaveButton(ref), // Passamos o ref para o botão se necessário
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Ajustei o botão para receber o ref se você quiser disparar alguma ação
+  Widget _buildSaveButton(WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          minimumSize: const Size(double.infinity, 54),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        onPressed: () {
+          final user = ref.read(userProvider);
+          print("Salvando perfil de: ${user.name}");
+          // Aqui depois chamaremos o Repository para salvar no banco!
+        },
+        icon: const Icon(Icons.save, color: Colors.white),
+        label: const Text(
+          "Salvar Perfil",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
