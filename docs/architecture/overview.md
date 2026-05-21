@@ -8,11 +8,11 @@ Facilitar o gerenciamento de agendas, notificações e logística para músicos 
 
 ## 🏗️ Estrutura do Projeto (Monorepo)
 
-O projeto utiliza uma arquitetura de monorepo para compartilhar tipos e lógica de negócios entre as plataformas. No repositório atual os subprojetos principais são:
+O projeto utiliza uma arquitetura de monorepo para organizar as diferentes interfaces e o núcleo de processamento. Os subprojetos principais são:
 
-- `frontend-web`: Aplicação Next.js + React (user-facing).
-- `backend`: API em **NestJS** (TypeScript). Conecta-se ao banco Supabase (Postgres).
-- `packages/shared`: (Opcional) Tipagens e utilitários compartilhados.
+- `backend`: API em **NestJS** (TypeScript). Núcleo de regras de negócio e integração com Supabase (Postgres).
+- `frontend-web`: Aplicação Next.js + React para gestão administrativa e visualização desktop.
+- `mobile`: Aplicativo móvel desenvolvido em **Flutter** para uso em tempo real na estrada.
 
 ## 🗺️ Diagrama de Contexto (C4 Model - Nível 1)
 
@@ -20,37 +20,34 @@ O projeto utiliza uma arquitetura de monorepo para compartilhar tipos e lógica 
 graph TD
     User((Músico / Roadie))
     Frontend[frontend-web (Next.js)]
+    Mobile[mobile (Flutter)]
     Backend[backend (NestJS)]
     Supabase[(Supabase - Postgres)]
     Auth[Serviço de Autenticação (Supabase Auth / JWT)]
-    Push[Push / FCM]
 
     User --> Frontend
+    User --> Mobile
     Frontend --> Backend
+    Mobile --> Backend
     Backend --> Supabase
     Backend --> Auth
-    Frontend --> Push
 ```
 
 ## Rodando localmente (resumo rápido)
 
-- Frontend:
-  - Instalar: `cd frontend-web && npm ci`
-  - Dev: `cd frontend-web && npm run dev`
-  - Build: `cd frontend-web && npm run build`
-  - Lint: `cd frontend-web && npm run lint`
+- **Frontend-Web:**
+  - `cd frontend-web && npm ci && npm run dev`
 
-- Backend (NestJS):
-  - Instalar: `cd backend && npm ci`
-  - Variáveis de ambiente essenciais:
-    - `DATABASE_URL` — connection string Postgres do Supabase (ex: `postgresql://...`).
-    - `SUPABASE_URL` e `SUPABASE_KEY` — se o projeto usa o client Supabase.
-  - Se o projeto usar Prisma: `cd backend && npx prisma generate`
-  - Dev: `cd backend && npm run start:dev`
-  - Testes: `cd backend && npm test` (teste único: `npx jest path/to/file.spec.ts`)
+- **Backend (NestJS):**
+  - `cd backend && npm ci && npx prisma generate && npm run start:dev`
+
+- **Mobile (Flutter):**
+  - `cd mobile && flutter pub get && flutter run`
 
 ## Notas importantes
 
-- CI usa Node 20 (ver `.github/workflows/ci.yml`).
+- CI usa Node 22 (ver `.github/workflows/ci.yml`).
+- Trate os módulos como independentes ao executar comandos localmente.
+
 - Trate frontend e backend como serviços independentes ao executar comandos localmente.
 - Consulte `docs/testing.md` para guias adicionais sobre testes, ERD e regras de negócio.
