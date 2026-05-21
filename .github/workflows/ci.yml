@@ -43,7 +43,21 @@ jobs:
       - run: npm ci
       - run: npx prisma generate
       - run: npm run lint
-      
+
+  mobile-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+
   # ==========================================
   # TEST JOBS
   # ==========================================
@@ -82,6 +96,21 @@ jobs:
       - run: npm ci
       - run: npx prisma generate
       - run: npm test
+
+  mobile-test:
+    needs: mobile-lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - run: flutter test
 
   # ==========================================
   # E2E TESTS (Playwright)
@@ -145,18 +174,20 @@ jobs:
       - run: npx prisma generate
       - run: npm run build
 
-  # ==========================================
-  # MOBILE JOBS (Comentado para economizar minutos)
-  # ==========================================
-  # mobile-build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: '3.x'
-  #     - run: flutter pub get
-  #     - run: flutter build apk --release
+  mobile-build:
+    needs: mobile-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - run: flutter build apk --release
 
   # ==========================================
   # DEPLOY JOBS (Placeholders para o futuro)
