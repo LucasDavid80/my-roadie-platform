@@ -26,7 +26,7 @@ export function LoginForm() {
         try {
             await signIn({ email: data.email, password: data.password });
             router.push('/dashboard');
-        } catch (error) {
+        } catch {
             alert('Falha no login. Verifique suas credenciais.');
         }
     };

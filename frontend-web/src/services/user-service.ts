@@ -46,7 +46,13 @@ export const userService = {
     },
 
     update: async (id: string, data: Partial<UserEntity>) => {
-        const response = await api.patch<UserEntity>(`/users/${id}`, data);
+        // Clonamos os dados e removemos campos que o backend não permite no body
+        const updateData = { ...data };
+        delete updateData.id;
+        delete updateData.createdAt;
+        delete updateData.updatedAt;
+
+        const response = await api.patch<UserEntity>(`/users/${id}`, updateData);
         return response.data;
     },
 

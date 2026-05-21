@@ -10,7 +10,7 @@ export function Header() {
     const { user, signOut } = useAuth();
 
     const isDashboard = pathname === '/dashboard';
-    const isProfile = pathname === '/dashboard/profile';
+    const isProfile = pathname === '/profile';
     const isAdmin = pathname.startsWith('/admin');
 
     return (
@@ -32,7 +32,7 @@ export function Header() {
                     <CalendarDays size={20} />
                 </Link>
                 <Link 
-                    href="/dashboard/profile" 
+                    href="/profile" 
                     className={`w-9 h-9 flex items-center justify-center rounded-xl transition-colors ${isProfile ? 'bg-blue-50 text-primary' : 'hover:bg-slate-100 text-slate-500'}`}
                 >
                     <User size={20} />

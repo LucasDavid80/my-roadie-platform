@@ -75,7 +75,7 @@ export default function AdminUsersPage() {
             }
             setIsModalOpen(false);
             loadUsers();
-        } catch (error) {
+        } catch {
             alert('Erro ao salvar usuário');
         }
     };

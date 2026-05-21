@@ -15,42 +15,28 @@ import { Header } from '@/components/ui/Header';
 import { SelectionTag } from '@/components/ui/SelectionTag';
 import { userService } from '@/services/user-service';
 import { UserEntity } from '@/types/user';
+import { useAuth } from '@/contexts/AuthContext';
 
 const INSTRUMENTS = ['Violão', 'Guitarra', 'Baixo', 'Bateria', 'Teclado', 'Voz/Vocal'];
 const STYLES = ['MPB', 'Rock', 'Jazz', 'Samba', 'Sertanejo'];
 
 export default function ProfilePage() {
+    const { user: authUser } = useAuth();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [user, setUser] = useState<UserEntity | null>(null);
 
     useEffect(() => {
         async function loadUser() {
+            if (!authUser?.id) return;
+
             try {
-                // Mock ID para demonstração - em produção viria do AuthContext ou Supabase
-                // Por enquanto, tentamos pegar o primeiro usuário ou usamos um mock
-                const users = await userService.getAll();
-                if (users.length > 0) {
-                    setUser(users[0]);
-                } else {
-                    setUser({
-                        id: '1',
-                        name: 'Usuário Roadie',
-                        email: 'contato@roadie.com',
-                        role: 'MUSICIAN',
-                        bio: '',
-                        city: '',
-                        federativeUnit: '',
-                        phone: '',
-                        instagram: '',
-                        youtubeLink: '',
-                        instruments: [],
-                        styles: [],
-                        isAvailable: true,
-                        supabaseId: 'mock-sb-id',
-                        minCache: 0
-                    });
+                const userData = await userService.getById(authUser.id);
+                // Converte Decimal (string vindo do JSON) para número para o input
+                if (userData.minCache) {
+                    userData.minCache = Number(userData.minCache);
                 }
+                setUser(userData);
             } catch (error) {
                 console.error("Erro ao carregar perfil", error);
             } finally {
@@ -58,7 +44,7 @@ export default function ProfilePage() {
             }
         }
         loadUser();
-    }, []);
+    }, [authUser?.id]);
 
     const toggleSelection = (list: string[] | undefined, item: string) => {
         const currentList = list || [];
@@ -75,7 +61,7 @@ export default function ProfilePage() {
         try {
             await userService.update(user.id, user);
             alert('Perfil atualizado com sucesso!');
-        } catch (error) {
+        } catch {
             alert('Erro ao salvar perfil.');
         } finally {
             setSaving(false);
