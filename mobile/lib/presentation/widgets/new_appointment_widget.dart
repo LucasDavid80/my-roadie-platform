@@ -1,6 +1,5 @@
 import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
-import 'package:agenda_musical/domain/models/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // Para formatar a data
@@ -136,7 +135,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: 0.2),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
@@ -394,8 +393,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (_titleController.text.isEmpty ||
-                                  _selectedDate == null)
+                                  _selectedDate == null) {
                                 return;
+                              }
 
                               final newEvent = EventEntity(
                                 // Se estiver editando, MANTÉM o ID original. Se for novo, gera um novo.

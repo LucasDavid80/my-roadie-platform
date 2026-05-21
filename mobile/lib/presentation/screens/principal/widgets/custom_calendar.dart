@@ -75,7 +75,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 fontWeight: FontWeight.bold,
               ),
               selectedDecoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.5),
+                color: AppColors.primary.withValues(alpha: 0.5),
                 shape: BoxShape.circle,
               ),
               outsideDaysVisible: true,

@@ -19,7 +19,7 @@ class InfoWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.05), // Sombra mais suave
+            color: AppColors.black.withValues(alpha: 0.05), // Sombra mais suave
             spreadRadius: 2,
             blurRadius: 10,
             offset: const Offset(0, 4),

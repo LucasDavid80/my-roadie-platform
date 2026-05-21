@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.4),
+                                  color: AppColors.primary.withValues(alpha: 0.4),
                                   blurRadius: 20,
                                   offset: const Offset(0, 10),
                                 ),
@@ -91,9 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                                 // AQUI ESTÁ A MÁGICA DA SOMBRA SUAVE:
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(
-                                      0.5,
-                                    ), // Preto muito transparente (fica um cinza suave)
+                                    color: Colors.black.withValues(alpha: 0.5), // Preto muito transparente (fica um cinza suave)
                                     spreadRadius:
                                         1, // O quanto a sombra "espalha" para os lados
                                     blurRadius:
@@ -195,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 30,
                           offset: const Offset(0, -10),
                         ),

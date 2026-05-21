@@ -2,9 +2,10 @@ import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class InfosWidget extends StatelessWidget {
-  int compromissosTotal, compromissosConcluidos, shows;
-  double faturamento;
-  InfosWidget({
+  final int compromissosTotal, compromissosConcluidos, shows;
+  final double faturamento;
+
+  const InfosWidget({
     super.key,
     required this.compromissosTotal,
     required this.compromissosConcluidos,
@@ -78,14 +79,14 @@ Widget infoCard(String title, String description, IconData icon, Color color) {
         leading: Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.2),
+            color: color.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, size: 24, color: color),
         ),
         title: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             color: Colors.grey,
             fontWeight: FontWeight.w600,
@@ -93,7 +94,7 @@ Widget infoCard(String title, String description, IconData icon, Color color) {
         ),
         subtitle: Text(
           description,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black,

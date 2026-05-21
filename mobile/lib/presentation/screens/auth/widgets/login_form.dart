@@ -40,8 +40,9 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             validator: (value) {
-              if (value == null || !value.contains('@'))
+              if (value == null || !value.contains('@')) {
                 return 'E-mail inválido';
+              }
               return null;
             },
           ),

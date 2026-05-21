@@ -14,7 +14,7 @@ class PhotoWidget extends StatelessWidget {
         color: AppColors.background,
         boxShadow: [
           BoxShadow(
-            color: AppColors.textGrey.withOpacity(0.05),
+            color: AppColors.textGrey.withValues(alpha: 0.05),
             spreadRadius: 2,
             blurRadius: 5,
             offset: Offset(0, 3),
@@ -43,7 +43,7 @@ class PhotoWidget extends StatelessWidget {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.rectangle,
                   border: Border.all(color: AppColors.primary, width: 2),
                   borderRadius: BorderRadius.all(Radius.circular(12)),

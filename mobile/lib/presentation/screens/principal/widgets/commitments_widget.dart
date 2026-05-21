@@ -44,6 +44,17 @@ class CommitmentsWidget extends StatelessWidget {
         ),
         const SizedBox(height: 16),
 
+        if (commitments.isEmpty)
+          const Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Center(
+              child: Text(
+                'Nenhum compromisso para este dia.',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
+
         // Lista de Cards
         ListView.builder(
           shrinkWrap: true,

@@ -81,8 +81,7 @@ class PersonScreen extends ConsumerWidget {
           ),
         ),
         onPressed: () {
-          final user = ref.read(userProvider);
-          print("Salvando perfil de: ${user.name}");
+          // final user = ref.read(userProvider);
           // Aqui depois chamaremos o Repository para salvar no banco!
         },
         icon: const Icon(Icons.save, color: Colors.white),
