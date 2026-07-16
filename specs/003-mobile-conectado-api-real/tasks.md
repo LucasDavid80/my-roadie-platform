@@ -20,7 +20,7 @@ Pré-requisitos: nenhum (Users e Events já têm API no backend).
 ## Fase 2 — Repository
 
 - [x] T2.1 — Implementar `agenda_repository_impl.dart` usando o datasource da Fase 1.
-- [ ] T2.2 — Confirmar `user_repository_impl.dart` (já presente) está alinhado ao datasource.
+- [x] T2.2 — Confirmar `user_repository_impl.dart` (já presente) está alinhado ao datasource.
 
 ## Fase 3 — Conectar telas
 
