@@ -8,7 +8,7 @@ Pré-requisitos: nenhum (Users e Events já têm API no backend).
   - Critério: causa raiz identificada e documentada (1-2 frases) antes de corrigir.
 - [x] T0.2 — Corrigir os 3 testes.
   - Critério: `flutter test` 100% verde, sem pular/ignorar teste.
-- [ ] T0.3 — Revisar o que já foi feito em `remote_datasource.dart`, `main.dart`, `user_controller` contra o padrão de Clean Architecture do `constitution.md` §2, e ajustar o que estiver fora do padrão.
+- [x] T0.3 — Revisar o que já foi feito em `remote_datasource.dart`, `main.dart`, `user_controller` contra o padrão de Clean Architecture do `constitution.md` §2, e ajustar o que estiver fora do padrão.
 
 ## Fase 1 — Datasource remoto
 
