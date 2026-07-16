@@ -4,7 +4,7 @@ Pré-requisitos: nenhum (Users e Events já têm API no backend).
 
 ## Fase 0 — Estabilizar o que já existe (antes de qualquer coisa nova)
 
-- [ ] T0.1 — Rodar `flutter test` e confirmar os 3 testes quebrados de `login_form_test.dart`.
+- [x] T0.1 — Rodar `flutter test` e confirmar os 3 testes quebrados de `login_form_test.dart`.
   - Critério: causa raiz identificada e documentada (1-2 frases) antes de corrigir.
 - [ ] T0.2 — Corrigir os 3 testes.
   - Critério: `flutter test` 100% verde, sem pular/ignorar teste.
