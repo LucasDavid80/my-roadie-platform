@@ -34,12 +34,6 @@
 - Depende de: nenhum
 - Status: ideia
 
-### Mobile conectado à API real
-- Intenção: implementar a camada `data/` do mobile (hoje vazia) para as telas existentes pararem de rodar desconectadas.
-- Impacto esperado: alto (pré-requisito de qualquer feature nova de mobile)
-- Depende de: nenhum
-- Status: ideia
-
 ---
 
 ## Novos gaps (constitution.md atualizada) — ver `plan.md` §8, itens 5-7

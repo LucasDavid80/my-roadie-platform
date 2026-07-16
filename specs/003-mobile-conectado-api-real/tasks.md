@@ -29,8 +29,8 @@ Pré-requisitos: nenhum (Users e Events já têm API no backend).
 
 ## Checklist de fechamento da feature
 
-- [ ] `flutter test` 100% verde
-- [ ] Nenhuma tela do mobile usa dado mockado para Events/User
-- [ ] Cobertura do mobile remedida e registrada em `plan.md` raiz
-- [ ] `backlog.md` — entrada "Mobile conectado à API real" removida/marcada como resolvida
-- [ ] `spec.md`/`plan.md` da baseline (raiz) atualizados para refletir que o mobile agora consome API real
+- [x] `flutter test` 100% verde
+- [x] Nenhuma tela do mobile usa dado mockado para Events/User
+- [x] Cobertura do mobile remedida e registrada em `plan.md` raiz
+- [x] `backlog.md` — entrada "Mobile conectado à API real" removida/marcada como resolvida
+- [x] `spec.md`/`plan.md` da baseline (raiz) atualizados para refletir que o mobile agora consome API real
