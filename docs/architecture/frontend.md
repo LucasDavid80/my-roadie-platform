@@ -6,9 +6,9 @@ Este documento descreve a arquitetura da aplicação web do My Roadie, localizad
 
 - **Framework:** [Next.js](https://nextjs.org/) (React)
 - **Linguagem:** TypeScript
-- **Estilização:** [Tailwind CSS / Styled Components] - _Ajustar conforme sua preferência_
-- **Gerenciamento de Estado:** [Context API / Redux / Zustand]
-- **Consumo de API:** [Axios / Fetch API]
+- **Estilização:** Tailwind CSS
+- **Gerenciamento de Estado:** Context API
+- **Consumo de API:** Axios
 
 ## 🏗️ Estrutura de Pastas
 
