@@ -68,6 +68,53 @@ class RemoteDataSource {
     }
   }
 
+  Future<void> saveEvent(EventModel event) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('${AppConfig.backendUrl}/events'),
+        headers: _getHeaders(),
+        body: jsonEncode(event.toMap()),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        if (response.statusCode == 401) {
+          throw UnauthorizedException();
+        }
+        throw ServerException('Failed to save event: ${response.statusCode}');
+      }
+    } on http.ClientException {
+      throw NetworkException();
+    } catch (e) {
+      if (e is UnauthorizedException || e is ServerException) {
+        rethrow;
+      }
+      throw NetworkException(e.toString());
+    }
+  }
+
+  Future<void> deleteEvent(String id) async {
+    try {
+      final response = await _client.delete(
+        Uri.parse('${AppConfig.backendUrl}/events/$id'),
+        headers: _getHeaders(),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        if (response.statusCode == 401) {
+          throw UnauthorizedException();
+        }
+        throw ServerException('Failed to delete event: ${response.statusCode}');
+      }
+    } on http.ClientException {
+      throw NetworkException();
+    } catch (e) {
+      if (e is UnauthorizedException || e is ServerException) {
+        rethrow;
+      }
+      throw NetworkException(e.toString());
+    }
+  }
+
   // --- User Profile ---
 
   Future<UserModel> getUserProfile(String id) async {
