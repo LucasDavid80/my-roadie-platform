@@ -1,13 +1,46 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:agenda_musical/presentation/controllers/agenda_controller.dart';
+import 'package:agenda_musical/domain/interfaces/i_agenda_repository.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
+
+class MockAgendaRepository extends Mock implements IAgendaRepository {}
 
 void main() {
   late ProviderContainer container;
+  late MockAgendaRepository mockAgendaRepository;
 
-  setUp(() {
-    container = ProviderContainer();
+  setUpAll(() {
+    registerFallbackValue(
+      EventEntity(
+        id: '1',
+        title: 'Test Event',
+        type: 'Show',
+        date: DateTime(2026, 7, 16),
+        startTime: '10:00',
+        endTime: '12:00',
+        location: 'Test Location',
+        fee: 100.0,
+      ),
+    );
+  });
+
+  setUp(() async {
+    mockAgendaRepository = MockAgendaRepository();
+    // Default mocks
+    when(() => mockAgendaRepository.getEvents()).thenAnswer((_) async => []);
+    when(() => mockAgendaRepository.saveEvent(any())).thenAnswer((_) async => {});
+    when(() => mockAgendaRepository.deleteEvent(any())).thenAnswer((_) async => {});
+
+    container = ProviderContainer(
+      overrides: [
+        agendaRepositoryProvider.overrideWithValue(mockAgendaRepository),
+      ],
+    );
+
+    // Wait for the initial async fetchEvents to finish before tests start
+    await container.read(agendaProvider.notifier).fetchEvents();
   });
 
   tearDown(() {
@@ -19,7 +52,7 @@ void main() {
     expect(state, isEmpty);
   });
 
-  test('Should add a new event', () {
+  test('Should add a new event', () async {
     final event = EventEntity(
       id: '1',
       title: 'Show Test',
@@ -32,7 +65,7 @@ void main() {
       notes: '',
     );
 
-    container.read(agendaProvider.notifier).addOrUpdateEvent(event);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(event);
     
     final state = container.read(agendaProvider);
     expect(state.length, 1);
@@ -40,7 +73,7 @@ void main() {
     expect(state.first.title, 'Show Test');
   });
 
-  test('Should update an existing event', () {
+  test('Should update an existing event', () async {
     final event1 = EventEntity(
       id: '1',
       title: 'Original Title',
@@ -53,7 +86,7 @@ void main() {
       notes: '',
     );
 
-    container.read(agendaProvider.notifier).addOrUpdateEvent(event1);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(event1);
 
     final eventUpdate = EventEntity(
       id: '1',
@@ -67,7 +100,7 @@ void main() {
       notes: 'New notes',
     );
 
-    container.read(agendaProvider.notifier).addOrUpdateEvent(eventUpdate);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(eventUpdate);
 
     final state = container.read(agendaProvider);
     expect(state.length, 1);
@@ -75,7 +108,7 @@ void main() {
     expect(state.first.fee, 600.0);
   });
 
-  test('Should calculate total fee correctly', () {
+  test('Should calculate total fee correctly', () async {
     final event1 = EventEntity(
       id: '1',
       title: 'Show 1',
@@ -100,14 +133,14 @@ void main() {
       notes: '',
     );
 
-    container.read(agendaProvider.notifier).addOrUpdateEvent(event1);
-    container.read(agendaProvider.notifier).addOrUpdateEvent(event2);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(event1);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(event2);
 
     final totalFee = container.read(agendaProvider.notifier).totalFee;
     expect(totalFee, 850.0);
   });
 
-  test('Should count monthly shows correctly', () {
+  test('Should count monthly shows correctly', () async {
     final now = DateTime.now();
     final lastMonth = DateTime(now.year, now.month - 1, now.day);
 
@@ -135,8 +168,8 @@ void main() {
       notes: '',
     );
 
-    container.read(agendaProvider.notifier).addOrUpdateEvent(eventThisMonth);
-    container.read(agendaProvider.notifier).addOrUpdateEvent(eventLastMonth);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(eventThisMonth);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(eventLastMonth);
 
     final shows = container.read(agendaProvider.notifier).monthlyShows;
     expect(shows, 1);
