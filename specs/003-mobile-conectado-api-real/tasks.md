@@ -25,7 +25,7 @@ Pré-requisitos: nenhum (Users e Events já têm API no backend).
 ## Fase 3 — Conectar telas
 
 - [x] T3.1 — Conectar tela de agenda (`principal_screen.dart`) ao repository real, removendo mock.
-- [ ] T3.2 — Conectar tela de perfil (`person_screen.dart`) ao repository real, removendo mock.
+- [x] T3.2 — Conectar tela de perfil (`person_screen.dart`) ao repository real, removendo mock.
 
 ## Checklist de fechamento da feature
 
