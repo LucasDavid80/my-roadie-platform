@@ -14,7 +14,7 @@ Pré-requisitos: nenhum (Users e Events já têm API no backend).
 
 - [x] T1.1 — Completar `remote_datasource.dart` para Events (endpoints já existem no backend).
   - Critério: 1 caso positivo + 1 negativo (erro de rede/401) testados.
-- [ ] T1.2 — Completar `remote_datasource.dart` para User (endpoints já existem no backend).
+- [x] T1.2 — Completar `remote_datasource.dart` para User (endpoints já existem no backend).
   - Critério: 1 caso positivo + 1 negativo testados.
 
 ## Fase 2 — Repository
