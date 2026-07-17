@@ -90,3 +90,33 @@
 - Impacto esperado: alto
 - Depende de: nenhum
 - Status: ideia
+
+### Notificações locais/push no App Mobile
+- Intenção: Implementar alertas e lembretes de compromissos por notificações (push/locais) no aplicativo móvel.
+- Impacto esperado: alto
+- Depende de: nenhum
+- Status: ideia
+
+### Integração de Localização com Google Maps
+- Intenção: Integrar a API do Google Maps para exibir o endereço do compromisso e permitir a navegação a partir da tela do evento.
+- Impacto esperado: médio
+- Depende de: nenhum
+- Status: ideia
+
+### Termos de Uso e Políticas da Plataforma
+- Intenção: Exibir e colher consentimento dos Termos de Uso e Políticas de Privacidade durante o cadastro.
+- Impacto esperado: alto (legal/LGPD)
+- Depende de: nenhum
+- Status: ideia
+
+### Tela de Ajuda e Relatório de Erros
+- Intenção: Apresentar guias de suporte e permitir copiar/reportar o nome e a descrição detalhada de eventuais erros da plataforma.
+- Impacto esperado: médio
+- Depende de: nenhum
+- Status: ideia
+
+### Tela de Contribuições (Apoio Monetário)
+- Intenção: Oferecer uma área de contribuição ou doações para apoiar o financiamento e manutenção do projeto.
+- Impacto esperado: médio
+- Depende de: nenhum
+- Status: ideia
