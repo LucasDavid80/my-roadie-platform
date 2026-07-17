@@ -120,3 +120,15 @@
 - Impacto esperado: médio
 - Depende de: nenhum
 - Status: ideia
+
+### Conectar formulário de Login ao authProvider real (Supabase)
+- Intenção: Impedir o bypass de login com dados aleatórios, conectando o botão de submissão do `LoginForm` ao `authProvider` real.
+- Impacto esperado: alto (crítico/segurança)
+- Depende de: nenhum
+- Status: ideia
+
+### Avaliação de Módulo Administrativo no Mobile
+- Intenção: Decidir/implementar se haverá um painel de administração simplificado no app móvel ou se a gestão ficará 100% restrita ao painel Web.
+- Impacto esperado: baixo/médio
+- Depende de: nenhum
+- Status: ideia
