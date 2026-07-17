@@ -53,16 +53,40 @@
 
 ---
 
-## Próximas features (preencha aqui as suas ideias)
+## Melhorias e Correções de Bugs (Mobile) — Testes Manuais
 
-### <Ideia 1>
-- Intenção:
-- Impacto esperado:
-- Depende de:
+### Atualização da lista de compromissos após criação
+- Intenção: Garantir que a lista de compromissos da tela de Agenda seja atualizada imediatamente após a criação de um novo evento.
+- Impacto esperado: alto (usabilidade)
+- Depende de: nenhum
 - Status: ideia
 
-### <Ideia 2>
-- Intenção:
-- Impacto esperado:
-- Depende de:
+### Correção de erro de tela vermelha na área de usuários/perfil
+- Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários.
+- Impacto esperado: alto (bug crítico/bloqueante)
+- Depende de: nenhum
+- Status: ideia
+
+### Habilitar rolagem na tela de Agenda
+- Intenção: Ajustar o layout da tela de Agenda para permitir rolagem, evitando que o calendário trave a tela verticalmente.
+- Impacto esperado: alto (usabilidade)
+- Depende de: nenhum
+- Status: ideia
+
+### Ajuste de layout horizontal do card "Novo Compromisso" e campos
+- Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.
+- Impacto esperado: médio (visual/UI)
+- Depende de: nenhum
+- Status: ideia
+
+### Centralizar botão "Criar Compromisso"
+- Intenção: Centralizar o botão de submissão do formulário de novo compromisso, atualmente alinhado à esquerda.
+- Impacto esperado: baixo (alinhamento visual)
+- Depende de: nenhum
+- Status: ideia
+
+### Validar e testar fluxo de Login com API Real
+- Intenção: Verificar a estabilidade do fluxo de login contra a API de autenticação real e criar testes adicionais de integração.
+- Impacto esperado: alto
+- Depende de: nenhum
 - Status: ideia
