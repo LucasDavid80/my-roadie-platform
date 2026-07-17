@@ -132,3 +132,33 @@
 - Impacto esperado: baixo/médio
 - Depende de: nenhum
 - Status: ideia
+
+### Gestão de Setlists com Visualizador de Letras/Cifras (Modo Palco)
+- Intenção: Permitir que os músicos criem setlists de shows a partir do repertório cadastrado e utilizem o Modo Palco (offline, letras e cifras ampliadas).
+- Impacto esperado: alto
+- Depende de: API de Repertoire
+- Status: ideia
+
+### Inventário de Equipamentos & Checklist de Carga (Roadie Check)
+- Intenção: Oferecer um painel de inventário de equipamentos por banda para fazer check-in/check-out em transportes de shows (evitando perdas).
+- Impacto esperado: alto
+- Depende de: API de Tasks
+- Status: ideia
+
+### Divisão Automatizada de Cachê (Cache Splitter)
+- Intenção: Dividir automaticamente o cachê do show entre músicos e roadies com base em percentuais ou valores fixos configurados na banda.
+- Impacto esperado: alto
+- Depende de: API de Transactions
+- Status: ideia
+
+### Sincronização de Agenda com Calendários Externos
+- Intenção: Permitir a exportação/sincronização automática dos compromissos da plataforma com Google Calendar e Apple Calendar.
+- Impacto esperado: médio
+- Depende de: nenhum
+- Status: ideia
+
+### Painel de Logística de Viagem (Roadbook Digital)
+- Intenção: Centralizar detalhes operacionais de logística como ponto de encontro, hotel, passagens, alimentação e horários da estrada em formato digital.
+- Impacto esperado: alto
+- Depende de: nenhum
+- Status: ideia
