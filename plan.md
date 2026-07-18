@@ -23,11 +23,12 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 3. Frontend Web
 
-- Next.js App Router, Route Groups `(auth)` e `(dashboard)`.
+- Next.js App Router, Route Groups `(auth)`, `(dashboard)` e `(admin)`.
 - `src/services/` concentra chamadas HTTP; sempre remover `id`/`createdAt`/`updatedAt` antes de `POST`/`PATCH`.
 - Tipos de `src/types/` devem espelhar os DTOs do backend.
 
-**Decisão pendente a fechar:** `docs/architecture/frontend.md` ainda lista estilização e gerenciamento de estado como opções entre colchetes, não resolvidas. Antes de iniciar SDD para features de frontend, essa página deveria ser atualizada com a escolha real usada no código (conferir `package.json` do `frontend-web`).
+**Decisão fechada:** A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios).
+
 
 ## 4. Mobile
 
@@ -69,10 +70,10 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 1. Módulos ausentes: Task, RepertoireSong, Transaction (schema existe, API não).
 2. Mobile sem camada de dados implementada.
-3. Decisões de stack do frontend-web não fechadas na documentação.
+3. Decisões de stack do frontend-web não fechadas na documentação (resolvido na spec 001).
 4. Nenhum `spec.md`/`plan.md`/`tasks.md` formal existia antes desta migração — daqui em diante, toda feature nova segue o fluxo descrito em `constitution.md` §8.
-5. **Rotas admin não isoladas** — `constitution.md` §9 (atualizado após esta baseline) passou a exigir um Route Group `(admin)` próprio, separado de `(dashboard)`. O código hoje tem `admin` aninhado dentro de `(dashboard)`, sem guard de papel dedicado — está fora do padrão definido depois desta baseline ter sido escrita.
-6. **Cobertura de testes não medida contra a meta atual** — `constitution.md` §5 fixou 70-80% por app (backend/frontend-web/mobile). A baseline não tem essa métrica registrada; antes de cobrar 70-80% em features novas, vale rodar a cobertura atual dos três apps para saber o ponto de partida real.
+5. **Rotas admin não isoladas** — Resolvido na spec 002 (rotas admin isoladas no Route Group `(admin)` próprio com guard de papel dedicado).
+6. **Cobertura de testes não medida contra a meta atual** — Resolvido na spec 001 (ver tabela de medição na seção 5).
 7. **Gaps de LGPD listados em `constitution.md` §10** (consentimento no cadastro, política de exclusão de conta, exportação de dados, log de acesso a dados sensíveis, confirmação de região/criptografia do Supabase) — nenhum desses está implementado hoje; são debt novo, não regressão.
 
 > Itens 5-7 nasceram de uma atualização da `constitution.md` feita **depois** desta baseline ter sido escrita — por isso o código ainda não reflete essas regras. Isso é esperado: a baseline descreve o estado no momento em que foi escrita, não persegue a constituição em tempo real. Quando esses itens forem resolvidos, atualizar este arquivo.
