@@ -23,7 +23,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 3. Frontend Web
 
-- Next.js App Router, Route Groups `(auth)` e `(dashboard)`.
+- Next.js App Router, Route Groups `(auth)`, `(dashboard)` e `(admin)`.
 - `src/services/` concentra chamadas HTTP; sempre remover `id`/`createdAt`/`updatedAt` antes de `POST`/`PATCH`.
 - Tipos de `src/types/` devem espelhar os DTOs do backend.
 
