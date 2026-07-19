@@ -1,15 +1,48 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
+import 'package:agenda_musical/domain/interfaces/i_user_repository.dart';
+import 'package:agenda_musical/data/repositories/user_repository_impl.dart';
+import 'agenda_controller.dart';
+import 'auth_controller.dart';
+
+// Provider para injeção do repositório de usuário
+final userRepositoryProvider = Provider<IUserRepository>((ref) {
+  return UserRepositoryImpl(ref.read(remoteDataSourceProvider));
+});
 
 // 1. Mudamos de StateNotifier para Notifier
 class UserNotifier extends Notifier<UserEntity> {
   // 2. O valor inicial agora é passado dentro do método obrigatório build()
   @override
   UserEntity build() {
-    return UserEntity(id: '1');
+    final authState = ref.watch(authProvider);
+    final userId = authState.user?.id;
+    if (userId != null) {
+      Future.microtask(() => fetchProfile(userId));
+      return UserEntity(id: userId);
+    }
+    return UserEntity(id: '1'); // Fallback para ID default
   }
 
-  // O resto da sua lógica continua idêntico, o 'state' funciona perfeitamente aqui!
+  Future<void> fetchProfile(String userId) async {
+    try {
+      final userProfile = await ref.read(userRepositoryProvider).getUser(userId);
+      state = userProfile;
+    } catch (e) {
+      // Trata erros de forma segura
+    }
+  }
+
+  Future<void> saveProfile() async {
+    if (state.id.isEmpty) return;
+    try {
+      final updated = await ref.read(userRepositoryProvider).updateUser(state.id, state);
+      state = updated;
+    } catch (e) {
+      // Trata erros de forma segura
+    }
+  }
+
   void updateName(String val) => state = state.copyWith(name: val);
   void updateExperience(String val) => state = state.copyWith(experience: val);
   void updatePhone(String val) => state = state.copyWith(phone: val);

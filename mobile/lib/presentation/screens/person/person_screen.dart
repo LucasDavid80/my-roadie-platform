@@ -51,7 +51,7 @@ class PersonScreen extends ConsumerWidget {
               title: 'Estilos Musicais *',
               options: estilos,
               selectedItems: user.styles, // Pega do estado
-              onToggle: (item) => {/* criar método toggleStyle depois */},
+              onToggle: (item) => userNotifier.toggleStyle(item),
             ),
 
             AvailabilityWidget(
@@ -60,7 +60,7 @@ class PersonScreen extends ConsumerWidget {
                   userNotifier.updateAvailability(val!), // Avisa o cérebro
             ),
 
-            _buildSaveButton(ref), // Passamos o ref para o botão se necessário
+            _buildSaveButton(context, ref), // Passamos o ref para o botão se necessário
             const SizedBox(height: 40),
           ],
         ),
@@ -69,7 +69,7 @@ class PersonScreen extends ConsumerWidget {
   }
 
   // Ajustei o botão para receber o ref se você quiser disparar alguma ação
-  Widget _buildSaveButton(WidgetRef ref) {
+  Widget _buildSaveButton(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton.icon(
@@ -80,9 +80,16 @@ class PersonScreen extends ConsumerWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: () {
-          // final user = ref.read(userProvider);
-          // Aqui depois chamaremos o Repository para salvar no banco!
+        onPressed: () async {
+          await ref.read(userProvider.notifier).saveProfile();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Perfil salvo com sucesso!'),
+                backgroundColor: AppColors.primary,
+              ),
+            );
+          }
         },
         icon: const Icon(Icons.save, color: Colors.white),
         label: const Text(

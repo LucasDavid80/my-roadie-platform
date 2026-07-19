@@ -1,0 +1,57 @@
+// lib/presentation/controllers/auth_controller.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../domain/interfaces/i_auth_repository.dart';
+import '../../data/repositories/auth_repository_impl.dart';
+import '../../data/datasources/auth_remote_datasource.dart';
+
+// Providers para injeção
+final supabaseClientProvider = Provider((ref) => Supabase.instance.client);
+final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(ref.read(supabaseClientProvider)));
+final authRepositoryProvider = Provider<IAuthRepository>((ref) => AuthRepositoryImpl(ref.read(authRemoteDataSourceProvider)));
+
+class AuthState {
+  final User? user;
+  final bool isLoading;
+  final String? error;
+
+  AuthState({this.user, this.isLoading = false, this.error});
+
+  AuthState copyWith({User? user, bool? isLoading, String? error}) {
+    return AuthState(
+      user: user ?? this.user,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+    );
+  }
+}
+
+class AuthController extends Notifier<AuthState> {
+  IAuthRepository get _repository => ref.read(authRepositoryProvider);
+
+  @override
+  AuthState build() {
+    return AuthState(user: _repository.currentUser);
+  }
+
+  Future<bool> login(String email, String password) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final user = await _repository.signIn(email, password);
+      state = state.copyWith(user: user, isLoading: false);
+      return true;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      return false;
+    }
+  }
+
+  Future<void> logout() async {
+    await _repository.signOut();
+    state = AuthState(user: null);
+  }
+}
+
+final authProvider = NotifierProvider<AuthController, AuthState>(() {
+  return AuthController();
+});

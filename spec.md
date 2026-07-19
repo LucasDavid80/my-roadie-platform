@@ -39,7 +39,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 ### Mobile (`mobile/lib/`)
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
-- ⚠️ **Camada de dados vazia:** `data/datasources/remote_datasource.dart`, `data/datasources/local_datasource.dart`, `data/repositories/agenda_repository_impl.dart` e `data/models/event_model.dart` existem como arquivos, mas **estão em branco (0 bytes)**. Ou seja: a UI do mobile hoje não está de fato conectada ao backend — é a interface pronta, esperando a integração.
+- ✅ **Camada de dados implementada:** `data/datasources/remote_datasource.dart`, `data/repositories/agenda_repository_impl.dart` e `data/repositories/user_repository_impl.dart` estão implementados e testados, conectando a interface mobile aos endpoints correspondentes de Events e Users do backend real.
 
 ## 5. Regras de negócio confirmadas (das que já têm API)
 
@@ -53,7 +53,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 - Módulo de **logística** — citado como exemplo em `docs/architecture/backend.md` (`ex: events, users, logistics`), mas não existe nenhum código para isso. É uma menção aspiracional, não uma feature.
 - Exposição via API de **Task, RepertoireSong e Transaction** (ver seção 4).
-- Integração do mobile com a API real.
+- Integração do mobile com a API real (resolvido na spec 003).
 
 ## 7. Critério de "pronto" desta baseline
 

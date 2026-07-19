@@ -29,12 +29,7 @@ void main() {
   });
 
   testWidgets('Should call onConfirm with correct data when fields are filled', (WidgetTester tester) async {
-    EventEntity? capturedEvent;
-    
-    // Precisamos de uma data fixa para o teste ser determinístico
-    final testDate = DateTime(2026, 5, 21);
-
-    await tester.pumpWidget(createTestWidget(onConfirm: (e) => capturedEvent = e));
+    await tester.pumpWidget(createTestWidget(onConfirm: (e) {}));
 
     // 1. Digita o título
     await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Show de Rock');

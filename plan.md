@@ -33,9 +33,8 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 ## 4. Mobile
 
 - Clean Architecture: `domain/` → `data/` → `presentation/`.
-- Estado atual: telas de auth, agenda e perfil implementadas na camada `presentation/`, mas a camada `data/` (datasources, repository, models) está vazia — a UI ainda roda desconectada do backend.
+- Estado atual: as telas de auth, agenda e perfil estão conectadas à API real do backend através do `remote_datasource` e dos repositories.
 
-**Próximo passo natural (mesmo antes de novas features):** uma spec dedicada a "conectar mobile à API" (implementar `remote_datasource.dart`, `agenda_repository_impl.dart`, `event_model.dart`) é provavelmente pré-requisito de qualquer feature nova de mobile, porque sem isso o app mobile não reflete dados reais.
 
 ## 5. Testes
 
@@ -50,7 +49,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 |---|---|---|---|---|
 | Backend | 66.35% | 69.35% | 71.42% | 65.89% |
 | Frontend Web | 70.00% | 67.39% | 75.00% | 71.59% |
-| Mobile | - | - | - | 63.72% |
+| Mobile | - | - | - | 77.82% |
 
 ## 6. CI/CD
 
@@ -69,10 +68,10 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 ## 8. Débito técnico a considerar antes/junto das próximas features
 
 1. Módulos ausentes: Task, RepertoireSong, Transaction (schema existe, API não).
-2. Mobile sem camada de dados implementada.
+2. Mobile com camada de dados implementada e conectada (resolvido na spec 003).
 3. Decisões de stack do frontend-web não fechadas na documentação (resolvido na spec 001).
 4. Nenhum `spec.md`/`plan.md`/`tasks.md` formal existia antes desta migração — daqui em diante, toda feature nova segue o fluxo descrito em `constitution.md` §8.
-5. **Rotas admin não isoladas** — Resolvido na spec 002 (rotas admin isoladas no Route Group `(admin)` próprio com guard de papel dedicado).
+5. **Rotas admin não isoladas** — `constitution.md` §9 (atualizado após esta baseline) passou a exigir um Route Group `(admin)` próprio, separado de `(dashboard)`. O código hoje tem `admin` aninhado dentro de `(dashboard)`, sem guard de papel dedicado — está fora do padrão definido depois desta baseline ter sido escrita.
 6. **Cobertura de testes não medida contra a meta atual** — Resolvido na spec 001 (ver tabela de medição na seção 5).
 7. **Gaps de LGPD listados em `constitution.md` §10** (consentimento no cadastro, política de exclusão de conta, exportação de dados, log de acesso a dados sensíveis, confirmação de região/criptografia do Supabase) — nenhum desses está implementado hoje; são debt novo, não regressão.
 

@@ -1,13 +1,55 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'package:agenda_musical/presentation/controllers/user_controller.dart';
+import 'package:agenda_musical/presentation/controllers/auth_controller.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
+import 'package:agenda_musical/domain/interfaces/i_user_repository.dart';
+
+class MockUserRepository extends Mock implements IUserRepository {}
+class MockUser extends Mock implements User {}
+
+class FakeAuthController extends AuthController {
+  final User? _user;
+  FakeAuthController(this._user);
+
+  @override
+  AuthState build() {
+    return AuthState(user: _user);
+  }
+}
 
 void main() {
   late ProviderContainer container;
+  late MockUserRepository mockUserRepository;
+  late MockUser mockUser;
 
-  setUp(() {
-    container = ProviderContainer();
+  setUpAll(() {
+    registerFallbackValue(
+      UserEntity(id: '1'),
+    );
+  });
+
+  setUp(() async {
+    mockUserRepository = MockUserRepository();
+    mockUser = MockUser();
+    when(() => mockUser.id).thenReturn('1');
+
+    when(() => mockUserRepository.getUser('1')).thenAnswer((_) async => UserEntity(id: '1'));
+    when(() => mockUserRepository.updateUser('1', any())).thenAnswer((invocation) async {
+      return invocation.positionalArguments[1] as UserEntity;
+    });
+
+    container = ProviderContainer(
+      overrides: [
+        authProvider.overrideWith(() => FakeAuthController(mockUser)),
+        userRepositoryProvider.overrideWithValue(mockUserRepository),
+      ],
+    );
+
+    // Wait for the initial async fetchProfile to finish before tests start
+    await container.read(userProvider.notifier).fetchProfile('1');
   });
 
   tearDown(() {
