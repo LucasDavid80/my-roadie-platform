@@ -33,7 +33,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ⚠️ **Task, RepertoireSong, Transaction** — **existem apenas no `schema.prisma`**. Não há módulo NestJS (`controller`/`service`/`dto`) para nenhum dos três ainda. Ou seja: as regras descritas em `docs/business-rules/rules.md` para tarefas, repertório e transações são o *comportamento pretendido*, não o *comportamento disponível via API* hoje.
 
 ### Frontend Web (`frontend-web/src/`)
-- Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(dashboard)/admin`.
+- Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`.
 - Serviços de API e contexto de autenticação (`AuthContext`) existem na estrutura.
 - A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios), eliminando os placeholders.
 
