@@ -4,7 +4,7 @@ Pré-requisitos: nenhum.
 
 ## Fase 1 — Setup de DTOs e Estrutura do Módulo
 
-- [ ] T1.1 — Criar os DTOs `CreateTaskDto` e `UpdateTaskDto` em `backend/src/modules/tasks/dto/`.
+- [x] T1.1 — Criar os DTOs `CreateTaskDto` e `UpdateTaskDto` em `backend/src/modules/tasks/dto/`.
   - Critério: DTOs possuem anotações de validação com `class-validator` (`IsString`, `IsNotEmpty`, `IsBoolean`, `IsUUID`, `IsOptional`).
 - [ ] T1.2 — Criar o módulo NestJS `TasksModule` em `backend/src/modules/tasks/tasks.module.ts`.
   - Critério: Módulo declara `TasksController`, `TasksService` e importa `PrismaModule`.
