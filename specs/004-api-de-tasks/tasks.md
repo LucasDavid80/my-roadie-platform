@@ -6,7 +6,7 @@ Pré-requisitos: nenhum.
 
 - [x] T1.1 — Criar os DTOs `CreateTaskDto` e `UpdateTaskDto` em `backend/src/modules/tasks/dto/`.
   - Critério: DTOs possuem anotações de validação com `class-validator` (`IsString`, `IsNotEmpty`, `IsBoolean`, `IsUUID`, `IsOptional`).
-- [ ] T1.2 — Criar o módulo NestJS `TasksModule` em `backend/src/modules/tasks/tasks.module.ts`.
+- [x] T1.2 — Criar o módulo NestJS `TasksModule` em `backend/src/modules/tasks/tasks.module.ts`.
   - Critério: Módulo declara `TasksController`, `TasksService` e importa `PrismaModule`.
 
 ## Fase 2 — Lógica de Negócio e Controladora
