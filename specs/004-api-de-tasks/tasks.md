@@ -11,7 +11,7 @@ Pré-requisitos: nenhum.
 
 ## Fase 2 — Lógica de Negócio e Controladora
 
-- [ ] T2.1 — Implementar `TasksService` em `backend/src/modules/tasks/tasks.service.ts`.
+- [x] T2.1 — Implementar `TasksService` em `backend/src/modules/tasks/tasks.service.ts`.
   - Critério: Métodos `create`, `findAll`, `findOne`, `update` e `remove` operando com `PrismaService`, lançando `NotFoundException` para IDs ou `eventId` inexistentes.
 - [ ] T2.2 — Implementar `TasksController` em `backend/src/modules/tasks/tasks.controller.ts`.
   - Critério: Rotas expostas em `/tasks` protegidas por `JwtAuthGuard` respondendo com os códigos HTTP adequados (201, 200, 204, 404).
