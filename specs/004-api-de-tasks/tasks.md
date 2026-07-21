@@ -20,7 +20,7 @@ Pré-requisitos: nenhum.
 
 ## Fase 3 — Testes Unitários e Integração E2E
 
-- [ ] T3.1 — Criar testes unitários para `TasksService` em `backend/src/modules/tasks/tasks.service.spec.ts`.
+- [x] T3.1 — Criar testes unitários para `TasksService` em `backend/src/modules/tasks/tasks.service.spec.ts`.
   - Critério: Cobertura com mocks do `PrismaService`, contendo ao menos 1 caso positivo e 1 caso negativo (not found) por método.
 - [ ] T3.2 — Criar testes unitários para `TasksController` em `backend/src/modules/tasks/tasks.controller.spec.ts`.
   - Critério: Testar delegação correta ao serviço e retorno dos endpoints para casos de sucesso e erro.
