@@ -15,7 +15,7 @@ Pré-requisitos: nenhum.
   - Critério: Métodos `create`, `findAll`, `findOne`, `update` e `remove` operando com `PrismaService`, lançando `NotFoundException` para IDs ou `eventId` inexistentes.
 - [x] T2.2 — Implementar `TasksController` em `backend/src/modules/tasks/tasks.controller.ts`.
   - Critério: Rotas expostas em `/tasks` protegidas por `JwtAuthGuard` respondendo com os códigos HTTP adequados (201, 200, 204, 404).
-- [ ] T2.3 — Registrar `TasksModule` no `AppModule` (`backend/src/app.module.ts`).
+- [x] T2.3 — Registrar `TasksModule` no `AppModule` (`backend/src/app.module.ts`).
   - Critério: Aplicação NestJS inicia sem erros de injeção de dependência.
 
 ## Fase 3 — Testes Unitários e Integração E2E
