@@ -30,7 +30,8 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **auth** — login via Supabase Auth, estratégia JWT, guards (`JwtAuthGuard`, `RolesGuard`, `OwnershipGuard`).
 - ✅ **users** — CRUD completo (`POST /users`, `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`), com testes unitários e e2e.
 - ✅ **events** — CRUD de eventos com DTOs de criação/atualização e testes.
-- ⚠️ **Task, RepertoireSong, Transaction** — **existem apenas no `schema.prisma`**. Não há módulo NestJS (`controller`/`service`/`dto`) para nenhum dos três ainda. Ou seja: as regras descritas em `docs/business-rules/rules.md` para tarefas, repertório e transações são o *comportamento pretendido*, não o *comportamento disponível via API* hoje.
+- ✅ **tasks** — CRUD completo de tarefas (`POST /tasks`, `GET /tasks`, `GET /tasks/:id`, `PATCH /tasks/:id`, `DELETE /tasks/:id`), com DTOs validados via `class-validator`, proteção via `JwtAuthGuard`, e cobertura de testes unitários e E2E.
+- ⚠️ **RepertoireSong, Transaction** — **existem apenas no `schema.prisma`**. Não há módulo NestJS (`controller`/`service`/`dto`) para ambos ainda.
 
 ### Frontend Web (`frontend-web/src/`)
 - Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`.
@@ -52,7 +53,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 ## 6. Fora do escopo desta baseline (não construído ainda)
 
 - Módulo de **logística** — citado como exemplo em `docs/architecture/backend.md` (`ex: events, users, logistics`), mas não existe nenhum código para isso. É uma menção aspiracional, não uma feature.
-- Exposição via API de **Task, RepertoireSong e Transaction** (ver seção 4).
+- Exposição via API de **RepertoireSong e Transaction** (ver seção 4; API de Tasks exposta na spec 004).
 - Integração do mobile com a API real (resolvido na spec 003).
 
 ## 7. Critério de "pronto" desta baseline

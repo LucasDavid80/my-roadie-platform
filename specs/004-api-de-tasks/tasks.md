@@ -29,8 +29,8 @@ Pré-requisitos: nenhum.
 
 ## Checklist de fechamento da feature
 
-- [ ] `TasksModule` registrado em `backend/src/app.module.ts`
-- [ ] Testes unitários (`npm test`) executando e passando no backend
-- [ ] Testes E2E (`npm run test:e2e`) executando e passando no backend
-- [ ] Cobertura do backend atinge os requisitos de `constitution.md` §5 (≥ 70%)
-- [ ] Status atualizado em `backlog.md` para "concluído" ao finalizar a feature
+- [x] `TasksModule` registrado em `backend/src/app.module.ts`
+- [x] Testes unitários (`npm test`) executando e passando no backend
+- [x] Testes E2E (`npm run test:e2e`) executando e passando no backend
+- [x] Cobertura do backend atinge os requisitos de `constitution.md` §5 (≥ 70%)
+- [x] Status atualizado em `backlog.md` para "concluído" ao finalizar a feature
