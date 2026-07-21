@@ -24,7 +24,7 @@ Pré-requisitos: nenhum.
   - Critério: Cobertura com mocks do `PrismaService`, contendo ao menos 1 caso positivo e 1 caso negativo (not found) por método.
 - [x] T3.2 — Criar testes unitários para `TasksController` em `backend/src/modules/tasks/tasks.controller.spec.ts`.
   - Critério: Testar delegação correta ao serviço e retorno dos endpoints para casos de sucesso e erro.
-- [ ] T3.3 — Criar suite de testes E2E em `backend/test/tasks.e2e-spec.ts`.
+- [x] T3.3 — Criar suite de testes E2E em `backend/test/tasks.e2e-spec.ts`.
   - Critério: Testes cobrindo criação, listagem por evento, busca por ID, atualização, deleção e rejeição de requisições não autenticadas (401).
 
 ## Checklist de fechamento da feature
