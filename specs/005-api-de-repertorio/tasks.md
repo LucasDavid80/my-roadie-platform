@@ -6,7 +6,7 @@ Pré-requisitos: nenhum.
 
 - [x] T1.1 — Criar os DTOs `CreateRepertoireSongDto` e `UpdateRepertoireSongDto` em `backend/src/modules/repertoire/dto/`.
   - Critério: DTOs possuem anotações de validação com `class-validator` (`IsString`, `IsNotEmpty`, `IsInt`, `IsUUID`, `IsOptional`).
-- [ ] T1.2 — Criar o módulo NestJS `RepertoireModule` em `backend/src/modules/repertoire/repertoire.module.ts`.
+- [x] T1.2 — Criar o módulo NestJS `RepertoireModule` em `backend/src/modules/repertoire/repertoire.module.ts`.
   - Critério: Módulo declara `RepertoireController`, `RepertoireService` e importa `PrismaModule`.
 
 ## Fase 2 — Lógica de Negócio e Controladora
