@@ -14,12 +14,12 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 2. Backend
 
-- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`).
+- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`).
 - Persistência: Prisma Client sobre Postgres (Supabase). `DATABASE_URL` via env.
 - Fluxo de schema: editar `prisma/schema.prisma` → migration → `npx prisma generate` → atualizar `docs/database/erd.md`.
 - Autenticação: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts`) e guards.
 
-**Lacuna conhecida:** `RepertoireSong` e `Transaction` têm `model` no Prisma mas nenhum módulo NestJS (API de `Task` resolvida na spec 004). Antes de qualquer feature nova que dependa dessas entidades, essa lacuna precisa virar uma spec/feature própria (`specs/00X-repertoire-api`, etc.), não ser resolvida "de passagem" dentro de outra feature.
+**Lacuna conhecida:** `Transaction` tem `model` no Prisma mas nenhum módulo NestJS (API de `Task` resolvida na spec 004, API de `RepertoireSong` resolvida na spec 005). Antes de qualquer feature nova que dependa dessa entidade, essa lacuna precisa virar uma spec/feature própria (`specs/006-transactions-api`, etc.), não ser resolvida "de passagem" dentro de outra feature.
 
 ## 3. Frontend Web
 
@@ -43,11 +43,11 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Mobile: `flutter_test`, testes já cobrindo vários widgets/controllers em `mobile/test/`.
 - Banco de teste isolado (`DATABASE_URL_TEST`) para integração/e2e; migrations aplicadas antes de rodar.
 
-### Cobertura de Testes (Medição de 28/07/2026 — Spec 004)
+### Cobertura de Testes (Medição de 28/07/2026 — Spec 005)
 
 | App | % Statements | % Branches | % Functions | % Lines |
 |---|---|---|---|---|
-| Backend | 70.37% | 72.09% | 80.00% | 70.85% |
+| Backend | 73.49% | 74.54% | 84.61% | 74.55% |
 | Frontend Web | 70.00% | 67.39% | 75.00% | 71.59% |
 | Mobile | - | - | - | 77.82% |
 
@@ -67,7 +67,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 8. Débito técnico a considerar antes/junto das próximas features
 
-1. Módulos ausentes: RepertoireSong, Transaction (schema existe, API não; módulo Task entregue na spec 004).
+1. Módulos ausentes: Transaction (schema existe, API não; módulo Task entregue na spec 004, módulo RepertoireSong entregue na spec 005).
 2. Mobile com camada de dados implementada e conectada (resolvido na spec 003).
 3. Decisões de stack do frontend-web não fechadas na documentação (resolvido na spec 001).
 4. Nenhum `spec.md`/`plan.md`/`tasks.md` formal existia antes desta migração — daqui em diante, toda feature nova segue o fluxo descrito em `constitution.md` §8.
