@@ -11,7 +11,7 @@ Pré-requisitos: nenhum.
 
 ## Fase 2 — Lógica de Negócio e Controladora
 
-- [ ] T2.1 — Implementar `RepertoireService` em `backend/src/modules/repertoire/repertoire.service.ts`.
+- [x] T2.1 — Implementar `RepertoireService` em `backend/src/modules/repertoire/repertoire.service.ts`.
   - Critério: Métodos `create`, `findAll`, `findOne`, `update` e `remove` operando com `PrismaService`, lançando `NotFoundException` para IDs ou `bandId` inexistentes.
 - [ ] T2.2 — Implementar `RepertoireController` em `backend/src/modules/repertoire/repertoire.controller.ts`.
   - Critério: Rotas expostas em `/repertoire` protegidas por `JwtAuthGuard` respondendo com os códigos HTTP adequados (201, 200, 204, 404).
