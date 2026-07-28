@@ -43,11 +43,11 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Mobile: `flutter_test`, testes já cobrindo vários widgets/controllers em `mobile/test/`.
 - Banco de teste isolado (`DATABASE_URL_TEST`) para integração/e2e; migrations aplicadas antes de rodar.
 
-### Cobertura de Testes (Medição de 14/07/2026)
+### Cobertura de Testes (Medição de 28/07/2026 — Spec 004)
 
 | App | % Statements | % Branches | % Functions | % Lines |
 |---|---|---|---|---|
-| Backend | 66.35% | 69.35% | 71.42% | 65.89% |
+| Backend | 70.37% | 72.09% | 80.00% | 70.85% |
 | Frontend Web | 70.00% | 67.39% | 75.00% | 71.59% |
 | Mobile | - | - | - | 77.82% |
 

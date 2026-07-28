@@ -33,9 +33,10 @@ Conforme a `constitution.md` §3 ("schema não é feature entregue"), uma entida
 
 ## Critérios de Sucesso
 
-- [ ] Endpoints HTTP para criação, listagem, busca por ID, edição e remoção de tarefas funcionando corretamente.
-- [ ] Requisições `POST` e `PATCH` validadas por DTOs com `ValidationPipe` e `forbidNonWhitelisted: true`.
-- [ ] Chamadas sem token JWT apropriado rejeitadas com HTTP 401 Unauthorized.
-- [ ] Testes unitários do `TasksService` e `TasksController` cobrindo casos de sucesso e tratamento de erros (ex.: tarefa não encontrada -> HTTP 404).
-- [ ] Testes de integração E2E cobrindo o fluxo completo da API de tarefas.
-- [ ] Cobertura de testes do backend atende a meta estipulada em `constitution.md` §5 (mínimo 70%).
+- [x] Endpoints HTTP para criação, listagem, busca por ID, edição e remoção de tarefas funcionando corretamente.
+- [x] Requisições `POST` e `PATCH` validadas por DTOs com `ValidationPipe` e `forbidNonWhitelisted: true`.
+- [x] Chamadas sem token JWT apropriado rejeitadas com HTTP 401 Unauthorized.
+- [x] Testes unitários do `TasksService` e `TasksController` cobrindo casos de sucesso e tratamento de erros (ex.: tarefa não encontrada -> HTTP 404).
+- [x] Testes de integração E2E cobrindo o fluxo completo da API de tarefas.
+- [x] Cobertura de testes do backend atende a meta estipulada em `constitution.md` §5 (mínimo 70%).
+

@@ -16,17 +16,11 @@
 
 ## Gaps técnicos da baseline (ver `plan.md` §8) — candidatos naturais a virarem as primeiras specs
 
-### API de Tasks
-- Intenção: expor `Task` (checklist de eventos) via backend, hoje só existe no schema.
-- Impacto esperado: alto (bloqueia qualquer feature de checklist/logística de evento)
-- Depende de: nenhum
-- Status: concluído (specs/004-api-de-tasks/)
-
 ### API de Repertoire
 - Intenção: expor `RepertoireSong` via backend para gestão de repertório por banda.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Status: ideia
+- Status: em spec → specs/005-api-de-repertorio/
 
 ### API de Transactions
 - Intenção: expor `Transaction` via backend (financeiro da banda/evento).
