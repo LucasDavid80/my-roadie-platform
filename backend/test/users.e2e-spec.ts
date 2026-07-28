@@ -2,19 +2,38 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { JwtAuthGuard } from './../src/modules/auth/guards/jwt-auth.guard';
+import { RolesGuard } from './../src/modules/auth/guards/roles.guard';
+import { PrismaService } from './../src/prisma/prisma.service';
 
 describe('UsersController (e2e)', () => {
   let app: INestApplication;
 
+  const mockPrismaService = {
+    user: {
+      create: jest.fn().mockImplementation(({ data }) =>
+        Promise.resolve({
+          id: 'uuid-123',
+          ...data,
+        }),
+      ),
+    },
+  };
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrismaService)
+      .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(RolesGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     app = moduleFixture.createNestApplication();
 
-    // CRUCIAL: Ative o ValidationPipe no teste E2E também!
-    // Sem isso, os testes de e-mail e role inválidos vão passar direto.
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -36,6 +55,7 @@ describe('UsersController (e2e)', () => {
         .post('/users')
         .send({
           email: 'lucas@myroadie.br',
+          supabaseId: 'sb-123',
           name: 'Lucas',
           role: 'ROADIE',
         })
@@ -50,9 +70,10 @@ describe('UsersController (e2e)', () => {
         .post('/users')
         .send({
           email: 'email-errado',
+          supabaseId: 'sb-123',
           name: 'Lucas',
         })
-        .expect(400); // O ValidationPipe deve barrar aqui
+        .expect(400);
     });
 
     it('deve retornar 400 ao enviar role inexistente', () => {
@@ -60,7 +81,8 @@ describe('UsersController (e2e)', () => {
         .post('/users')
         .send({
           email: 'lucas@myroadie.br',
-          role: 'BATMAN', // Role inválido
+          supabaseId: 'sb-123',
+          role: 'BATMAN',
         })
         .expect(400);
     });

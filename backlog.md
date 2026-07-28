@@ -20,7 +20,7 @@
 - Intenção: expor `Task` (checklist de eventos) via backend, hoje só existe no schema.
 - Impacto esperado: alto (bloqueia qualquer feature de checklist/logística de evento)
 - Depende de: nenhum
-- Status: ideia
+- Status: concluído (specs/004-api-de-tasks/)
 
 ### API de Repertoire
 - Intenção: expor `RepertoireSong` via backend para gestão de repertório por banda.
