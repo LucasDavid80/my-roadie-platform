@@ -58,4 +58,5 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 ## 7. Critério de "pronto" desta baseline
 
-Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — se qualquer item da seção 4 mudar (ex.: alguém implementar o módulo de Tasks), este arquivo deve ser atualizado no mesmo PR que implementa a mudança.
+Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a entrega do módulo de Tasks (Spec 004). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
+
