@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
+import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { JwtAuthGuard } from '../src/modules/auth/guards/jwt-auth.guard';
@@ -32,33 +33,43 @@ describe('TasksController (e2e)', () => {
 
   const mockPrismaService = {
     event: {
-      findUnique: jest.fn().mockImplementation(({ where }) => {
-        if (where.id === mockEventId) return Promise.resolve(mockEvent);
-        return Promise.resolve(null);
-      }),
+      findUnique: jest
+        .fn()
+        .mockImplementation(({ where }: { where: { id: string } }) => {
+          if (where.id === mockEventId) return Promise.resolve(mockEvent);
+          return Promise.resolve(null);
+        }),
     },
     task: {
       create: jest.fn().mockResolvedValue(mockTask),
-      findMany: jest.fn().mockImplementation(({ where }) => {
-        if (where && where.eventId === mockEventId)
-          return Promise.resolve([mockTask]);
-        if (where && where.eventId === 'non-existent-event')
-          return Promise.resolve([]);
-        return Promise.resolve([mockTask]);
-      }),
-      findUnique: jest.fn().mockImplementation(({ where }) => {
-        if (where.id === mockTaskId) return Promise.resolve(mockTask);
-        return Promise.resolve(null);
-      }),
-      update: jest
+      findMany: jest
         .fn()
-        .mockResolvedValue({ ...mockTask, isDone: true, description: 'Atualizada' }),
+        .mockImplementation(
+          ({ where }: { where?: { eventId?: string } } = {}) => {
+            if (where && where.eventId === mockEventId)
+              return Promise.resolve([mockTask]);
+            if (where && where.eventId === 'non-existent-event')
+              return Promise.resolve([]);
+            return Promise.resolve([mockTask]);
+          },
+        ),
+      findUnique: jest
+        .fn()
+        .mockImplementation(({ where }: { where: { id: string } }) => {
+          if (where.id === mockTaskId) return Promise.resolve(mockTask);
+          return Promise.resolve(null);
+        }),
+      update: jest.fn().mockResolvedValue({
+        ...mockTask,
+        isDone: true,
+        description: 'Atualizada',
+      }),
       delete: jest.fn().mockResolvedValue(mockTask),
     },
   };
 
   describe('Sem Autenticação (Guarda JWT ativa)', () => {
-    let unauthApp: INestApplication;
+    let unauthApp: INestApplication<App>;
 
     beforeAll(async () => {
       const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -92,7 +103,7 @@ describe('TasksController (e2e)', () => {
   });
 
   describe('Com Autenticação (Guarda JWT simulada)', () => {
-    let app: INestApplication;
+    let app: INestApplication<App>;
 
     beforeAll(async () => {
       const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -132,8 +143,11 @@ describe('TasksController (e2e)', () => {
           })
           .expect(201)
           .expect((res) => {
-            expect(res.body).toHaveProperty('id', mockTaskId);
-            expect(res.body.description).toBe('Passagem de som e checagem de cabos');
+            const body = res.body as { id: string; description: string };
+            expect(body).toHaveProperty('id', mockTaskId);
+            expect(body.description).toBe(
+              'Passagem de som e checagem de cabos',
+            );
           });
       });
 
@@ -165,8 +179,9 @@ describe('TasksController (e2e)', () => {
           .get('/tasks')
           .expect(200)
           .expect((res) => {
-            expect(Array.isArray(res.body)).toBe(true);
-            expect(res.body.length).toBeGreaterThan(0);
+            const body = res.body as unknown[];
+            expect(Array.isArray(body)).toBe(true);
+            expect(body.length).toBeGreaterThan(0);
           });
       });
 
@@ -175,8 +190,9 @@ describe('TasksController (e2e)', () => {
           .get(`/tasks?eventId=${mockEventId}`)
           .expect(200)
           .expect((res) => {
-            expect(Array.isArray(res.body)).toBe(true);
-            expect(res.body[0].eventId).toBe(mockEventId);
+            const body = res.body as { eventId: string }[];
+            expect(Array.isArray(body)).toBe(true);
+            expect(body[0].eventId).toBe(mockEventId);
           });
       });
     });
@@ -187,7 +203,8 @@ describe('TasksController (e2e)', () => {
           .get(`/tasks/${mockTaskId}`)
           .expect(200)
           .expect((res) => {
-            expect(res.body.id).toBe(mockTaskId);
+            const body = res.body as { id: string };
+            expect(body.id).toBe(mockTaskId);
           });
       });
 
@@ -208,7 +225,8 @@ describe('TasksController (e2e)', () => {
           })
           .expect(200)
           .expect((res) => {
-            expect(res.body.isDone).toBe(true);
+            const body = res.body as { isDone: boolean };
+            expect(body.isDone).toBe(true);
           });
       });
 
