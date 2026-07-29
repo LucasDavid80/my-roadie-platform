@@ -6,7 +6,7 @@ Pré-requisitos: nenhum.
 
 - [x] T1.1 — Criar os DTOs `CreateTransactionDto` e `UpdateTransactionDto` em `backend/src/modules/transactions/dto/`.
   - Critério: DTOs utilizam `class-validator` e `class-transformer` (`IsString`, `IsNotEmpty`, `IsNumber`, `IsPositive`, `IsEnum`, `IsDateString`, `IsUUID`, `IsOptional`) e respeitam a whitelist de campos.
-- [ ] T1.2 — Criar o módulo NestJS `TransactionsModule` em `backend/src/modules/transactions/transactions.module.ts`.
+- [x] T1.2 — Criar o módulo NestJS `TransactionsModule` em `backend/src/modules/transactions/transactions.module.ts`.
   - Critério: Módulo declara `TransactionsController`, `TransactionsService` e importa `PrismaModule`.
 
 ## Fase 2 — Lógica de Negócio e Controladora
