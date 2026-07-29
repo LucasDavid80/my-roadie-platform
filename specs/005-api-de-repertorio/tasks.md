@@ -32,6 +32,5 @@ Pré-requisitos: nenhum.
 - [x] `RepertoireModule` registrado em `backend/src/app.module.ts`
 - [x] Testes unitários (`npm test`) executando e passando no backend
 - [x] Testes E2E (`npm run test:e2e`) executando e passando no backend
-- [x] Cobertura do backend atinge os requisitos de `constitution.md` §5 (≥ 80%)
+- [x] Cobertura do backend atinge os requisitos de `constitution.md` §5 (≥ 80%) (Atual: 95.48% Stmts / 94.98% Lines no backend; 100% no RepertoireModule)
 - [x] Status atualizado em `backlog.md` para "concluído" ao finalizar a feature
-

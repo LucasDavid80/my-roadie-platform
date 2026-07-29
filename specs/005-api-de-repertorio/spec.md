@@ -38,5 +38,5 @@ Conforme estabelecido na `constitution.md` §3 ("schema não é feature entregue
 - [x] Chamadas sem token JWT apropriado rejeitadas com HTTP 401 Unauthorized.
 - [x] Testes unitários do `RepertoireService` e `RepertoireController` cobrindo casos de sucesso e tratamento de erros (ex.: música ou banda não encontrada -> HTTP 404).
 - [x] Testes de integração E2E cobrindo o fluxo completo da API de repertório.
-- [x] Cobertura de testes do backend atende a meta estipulada em `constitution.md` §5 (mínimo 80%).
+- [x] Cobertura global do backend atende a meta estipulada em `constitution.md` §5 (mínimo 80%). (Medição real: 95.48% Stmts / 94.98% Lines no global; 100% no RepertoireModule)
 
