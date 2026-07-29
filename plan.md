@@ -14,12 +14,12 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 2. Backend
 
-- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`).
+- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`, `transactions`).
 - Persistência: Prisma Client sobre Postgres (Supabase). `DATABASE_URL` via env.
 - Fluxo de schema: editar `prisma/schema.prisma` → migration → `npx prisma generate` → atualizar `docs/database/erd.md`.
 - Autenticação: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts`) e guards.
 
-**Lacuna conhecida:** `Transaction` tem `model` no Prisma mas nenhum módulo NestJS (API de `Task` resolvida na spec 004, API de `RepertoireSong` resolvida na spec 005). Antes de qualquer feature nova que dependa dessa entidade, essa lacuna precisa virar uma spec/feature própria (`specs/006-transactions-api`, etc.), não ser resolvida "de passagem" dentro de outra feature.
+**Lacunas de módulos zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e expostos via API NestJS.
 
 ## 3. Frontend Web
 
@@ -67,7 +67,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 8. Débito técnico a considerar antes/junto das próximas features
 
-1. Módulos ausentes: Transaction (schema existe, API não; módulo Task entregue na spec 004, módulo RepertoireSong entregue na spec 005).
+1. Módulos ausentes: nenhum (módulos Task, RepertoireSong e Transaction entregues nas specs 004, 005 e 006).
 2. Mobile com camada de dados implementada e conectada (resolvido na spec 003).
 3. Decisões de stack do frontend-web não fechadas na documentação (resolvido na spec 001).
 4. Nenhum `spec.md`/`plan.md`/`tasks.md` formal existia antes desta migração — daqui em diante, toda feature nova segue o fluxo descrito em `constitution.md` §8.

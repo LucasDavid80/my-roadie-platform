@@ -32,5 +32,5 @@ Pré-requisitos: nenhum.
 - [x] `TransactionsModule` registrado no `AppModule` (`backend/src/app.module.ts`)
 - [x] Testes unitários (`npm test`) executando e passando no backend
 - [x] Testes E2E (`npm run test:e2e`) executando e passando no backend
-- [x] Cobertura global do backend cumpre o piso mínimo de 80% (`constitution.md` §5)
-- [x] Status atualizado em `backlog.md` para "concluído (specs/006-api-de-transactions/)" ao finalizar a feature
+- [x] Cobertura global do backend cumpre o piso mínimo de 80% (`constitution.md` §5) (Medição real: 95.74% Stmts / 95.29% Lines no global; 100% no TransactionsModule)
+- [x] Entrada removida de `backlog.md` ao finalizar a feature
