@@ -25,8 +25,8 @@ class PrincipalScreen extends ConsumerWidget {
     final showsCount = ref.read(agendaProvider.notifier).monthlyShows;
 
     // 3. Criamos uma função simples para os widgets filhos chamarem o controller
-    void handleOnConfirm(newEvent) {
-      ref.read(agendaProvider.notifier).addOrUpdateEvent(newEvent);
+    Future<void> handleOnConfirm(newEvent) async {
+      await ref.read(agendaProvider.notifier).addOrUpdateEvent(newEvent);
     }
 
     return SafeArea(
@@ -45,9 +45,9 @@ class PrincipalScreen extends ConsumerWidget {
               context: context,
               builder: (context) => Dialog(
                 child: NewAppointmentWidget(
-                  onConfirm: (newEvent) {
+                  onConfirm: (newEvent) async {
                     // Aqui a mágica acontece: avisamos o motor para adicionar o evento
-                    ref
+                    await ref
                         .read(agendaProvider.notifier)
                         .addOrUpdateEvent(newEvent);
                   },

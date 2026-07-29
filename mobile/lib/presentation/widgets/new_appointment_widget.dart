@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // Para formatar a data
 
 class NewAppointmentWidget extends StatefulWidget {
-  // 2. Mude o tipo da função de retorno
-  final Function(EventEntity) onConfirm;
+  final Future<void> Function(EventEntity) onConfirm;
   final EventEntity?
   event; // <--- AGORA É OPCIONAL (Pode ser nulo se for criar)
 
@@ -391,7 +390,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_titleController.text.isEmpty ||
                                   _selectedDate == null) {
                                 return;
@@ -420,10 +419,14 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                 notes: _notesController.text,
                               );
 
-                              widget.onConfirm(newEvent);
-                              context.pop();
-
-                              // Futuro: Salvar no Firebase
+                              try {
+                                await widget.onConfirm(newEvent);
+                                if (context.mounted) {
+                                  Navigator.of(context).pop();
+                                }
+                              } catch (e) {
+                                // Mantém o formulário aberto em caso de exceção de persistência
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
