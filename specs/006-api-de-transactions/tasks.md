@@ -20,7 +20,7 @@ Pré-requisitos: nenhum.
 
 ## Fase 3 — Testes Unitários e Integração E2E
 
-- [ ] T3.1 — Criar testes unitários para `TransactionsService` em `backend/src/modules/transactions/transactions.service.spec.ts`.
+- [x] T3.1 — Criar testes unitários para `TransactionsService` em `backend/src/modules/transactions/transactions.service.spec.ts`.
   - Critério: Suíte com mocks do `PrismaService` cobrindo ao menos 3 cenários positivos e 3 negativos (mínimo exigido por constitution.md §5).
 - [ ] T3.2 — Criar testes unitários para `TransactionsController` em `backend/src/modules/transactions/transactions.controller.spec.ts`.
   - Critério: Testar integração do controlador delegando chamadas ao serviço com tratamento de erros.
