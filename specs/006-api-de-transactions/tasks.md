@@ -22,7 +22,7 @@ Pré-requisitos: nenhum.
 
 - [x] T3.1 — Criar testes unitários para `TransactionsService` em `backend/src/modules/transactions/transactions.service.spec.ts`.
   - Critério: Suíte com mocks do `PrismaService` cobrindo ao menos 3 cenários positivos e 3 negativos (mínimo exigido por constitution.md §5).
-- [ ] T3.2 — Criar testes unitários para `TransactionsController` em `backend/src/modules/transactions/transactions.controller.spec.ts`.
+- [x] T3.2 — Criar testes unitários para `TransactionsController` em `backend/src/modules/transactions/transactions.controller.spec.ts`.
   - Critério: Testar integração do controlador delegando chamadas ao serviço com tratamento de erros.
 - [ ] T3.3 — Criar suíte de testes de integração E2E em `backend/test/transactions.e2e-spec.ts`.
   - Critério: Testes cobrindo fluxo completo da API de transações, validações de DTO (400) e rejeição de acessos sem autenticação JWT (401).
