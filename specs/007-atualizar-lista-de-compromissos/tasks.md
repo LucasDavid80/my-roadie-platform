@@ -6,7 +6,7 @@ Pré-requisitos: `specs/003-mobile-conectado-api-real` (camada data do mobile im
 
 - [x] T1.1 — Atualizar `AgendaController.addOrUpdateEvent` em `mobile/lib/presentation/controllers/agenda_controller.dart` para consumir o `EventEntity` retornado da persistência ou sincronizar `state` via re-fetch.
   - Critério de teste: Teste unitário em `agenda_controller_test.dart` confirmando que, após chamar `addOrUpdateEvent`, o `state` contém o novo evento retornado pelo repositório.
-- [ ] T1.2 — Implementar tratamento de erro e preservação de estado no `AgendaController` para falhas na persistência.
+- [x] T1.2 — Implementar tratamento de erro e preservação de estado no `AgendaController` para falhas na persistência.
   - Critério de teste: Teste unitário em `agenda_controller_test.dart` simulando exceção do repositório (`Exception('Erro API')`) e verificando que a lista original no `state` é preservada sem inserção de itens corrompidos.
 
 ## Fase 2 — Integração com Formulário e Widgets da UI

@@ -51,7 +51,7 @@ class AgendaController extends Notifier<List<EventEntity>> {
         state = [...state, savedEvent];
       }
     } catch (e) {
-      // Trata erros de forma segura
+      rethrow;
     }
   }
 

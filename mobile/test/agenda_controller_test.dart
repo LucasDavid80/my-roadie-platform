@@ -109,6 +109,34 @@ void main() {
     expect(state.first.id, 'real-uuid-from-api-456');
   });
 
+  test('Should preserve original state and throw exception when saveEvent fails (T1.2)', () async {
+    final eventToFail = EventEntity(
+      id: 'fail-123',
+      title: 'Show que falha',
+      type: 'Show',
+      date: DateTime.now(),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Pub',
+      fee: 500.0,
+      notes: '',
+    );
+
+    when(() => mockAgendaRepository.saveEvent(eventToFail))
+        .thenThrow(Exception('Erro API'));
+
+    final initialList = container.read(agendaProvider);
+
+    expect(
+      () => container.read(agendaProvider.notifier).addOrUpdateEvent(eventToFail),
+      throwsA(isA<Exception>()),
+    );
+
+    final state = container.read(agendaProvider);
+    expect(state, equals(initialList));
+    expect(state.any((e) => e.id == 'fail-123'), false);
+  });
+
   test('Should update an existing event', () async {
     final event1 = EventEntity(
       id: '1',
