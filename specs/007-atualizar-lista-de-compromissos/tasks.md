@@ -13,7 +13,7 @@ Pré-requisitos: `specs/003-mobile-conectado-api-real` (camada data do mobile im
 
 - [x] T2.1 — Atualizar a submissão do formulário `NewAppointmentWidget` e o callback em `PrincipalScreen` para aguardar a sincronização e fechar o modal com segurança.
   - Critério de teste: Teste de widget no Flutter simulando a abertura do modal, preenchimento dos campos, clique em "Criar Compromisso" e verificação do fechamento do modal.
-- [ ] T2.2 — Garantir a reatividade dos widgets `CommitmentsWidget` e `CustomCalendar` na `PrincipalScreen` quando o `agendaProvider` emitir novo estado.
+- [x] T2.2 — Garantir a reatividade dos widgets `CommitmentsWidget` e `CustomCalendar` na `PrincipalScreen` quando o `agendaProvider` emitir novo estado.
   - Critério de teste: Teste de widget confirmando que a adição de um novo evento ao estado faz o item aparecer renderizado na árvore de widgets da `PrincipalScreen`.
 
 ## Fase 3 — Validação de Regressão e Suíte Mobile

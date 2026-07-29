@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class CommitmentsWidget extends StatelessWidget {
   // Pode mudar para StatelessWidget!
   final List<EventEntity> commitments;
-  final Function(EventEntity) onConfirm;
+  final Future<void> Function(EventEntity) onConfirm;
 
   const CommitmentsWidget({
     super.key,

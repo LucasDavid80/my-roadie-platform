@@ -15,7 +15,7 @@ void main() {
         body: SingleChildScrollView(
           child: CommitmentsWidget(
             commitments: events,
-            onConfirm: (_) {},
+            onConfirm: (e) async {},
           ),
         ),
       ),
