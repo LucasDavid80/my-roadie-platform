@@ -5,6 +5,7 @@ import { EventsModule } from './modules/events/events.module';
 import { UsersModule } from './modules/users/users.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { RepertoireModule } from './modules/repertoire/repertoire.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
@@ -20,6 +21,7 @@ import { ConfigModule } from '@nestjs/config';
     UsersModule,
     TasksModule,
     RepertoireModule,
+    TransactionsModule,
     PrismaModule,
   ],
   controllers: [AppController],
