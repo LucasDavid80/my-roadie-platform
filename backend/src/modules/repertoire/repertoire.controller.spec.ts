@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { RepertoireController } from './repertoire.controller';
 import { RepertoireService } from './repertoire.service';
 import { CreateRepertoireSongDto } from './dto/create-repertoire-song.dto';
@@ -17,6 +17,12 @@ describe('RepertoireController', () => {
     key: 'C#m',
     position: 1,
     notes: 'Intro no violão',
+    bandId: 'band-uuid-123',
+  };
+
+  const mockMinimalSong = {
+    id: 'song-uuid-456',
+    title: 'Música Mínima',
     bandId: 'band-uuid-123',
   };
 
@@ -51,7 +57,7 @@ describe('RepertoireController', () => {
   });
 
   describe('create', () => {
-    it('deve delegar a criação da música ao RepertoireService', async () => {
+    it('deve delegar a criação da música com todos os campos ao RepertoireService', async () => {
       const dto: CreateRepertoireSongDto = {
         title: 'Música Exemplo',
         bandId: 'band-uuid-123',
@@ -67,6 +73,21 @@ describe('RepertoireController', () => {
       expect(result).toEqual(mockSong);
     });
 
+    it('deve delegar a criação com apenas os campos obrigatórios', async () => {
+      const dto: CreateRepertoireSongDto = {
+        title: 'Música Mínima',
+        bandId: 'band-uuid-123',
+      };
+      jest
+        .spyOn(service, 'create')
+        .mockResolvedValueOnce(mockMinimalSong as any);
+
+      const result = await controller.create(dto);
+
+      expect(service.create).toHaveBeenCalledWith(dto);
+      expect(result).toEqual(mockMinimalSong);
+    });
+
     it('deve repassar NotFoundException se a banda não for encontrada no service', async () => {
       const dto: CreateRepertoireSongDto = {
         title: 'Música Nova',
@@ -78,6 +99,21 @@ describe('RepertoireController', () => {
         .mockRejectedValueOnce(new NotFoundException('Banda não encontrada'));
 
       await expect(controller.create(dto)).rejects.toThrow(NotFoundException);
+    });
+
+    it('deve repassar erro genérico ou de validação vindo do service', async () => {
+      const dto: CreateRepertoireSongDto = {
+        title: 'Música Inválida',
+        bandId: 'band-uuid-123',
+      };
+
+      jest
+        .spyOn(service, 'create')
+        .mockRejectedValueOnce(new BadRequestException('Dados inválidos'));
+
+      await expect(controller.create(dto)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -95,6 +131,25 @@ describe('RepertoireController', () => {
       expect(service.findAll).toHaveBeenCalledWith('band-uuid-123');
       expect(result).toEqual([mockSong]);
     });
+
+    it('deve repassar erro retornado pelo service ao listar', async () => {
+      jest
+        .spyOn(service, 'findAll')
+        .mockRejectedValueOnce(new Error('Erro interno do serviço'));
+
+      await expect(controller.findAll('band-uuid-123')).rejects.toThrow(
+        'Erro interno do serviço',
+      );
+    });
+
+    it('deve retornar lista vazia se o service não encontrar músicas para a banda', async () => {
+      jest.spyOn(service, 'findAll').mockResolvedValueOnce([]);
+
+      const result = await controller.findAll('band-sem-musicas');
+
+      expect(result).toEqual([]);
+      expect(service.findAll).toHaveBeenCalledWith('band-sem-musicas');
+    });
   });
 
   describe('findOne', () => {
@@ -103,6 +158,17 @@ describe('RepertoireController', () => {
 
       expect(service.findOne).toHaveBeenCalledWith('song-uuid-123');
       expect(result).toEqual(mockSong);
+    });
+
+    it('deve retornar outra música pelo ID correspondente', async () => {
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValueOnce(mockMinimalSong as any);
+
+      const result = await controller.findOne('song-uuid-456');
+
+      expect(service.findOne).toHaveBeenCalledWith('song-uuid-456');
+      expect(result).toEqual(mockMinimalSong);
     });
 
     it('deve repassar NotFoundException se a música não for encontrada', async () => {
@@ -114,10 +180,20 @@ describe('RepertoireController', () => {
         NotFoundException,
       );
     });
+
+    it('deve repassar erro inesperado retornado pelo service', async () => {
+      jest
+        .spyOn(service, 'findOne')
+        .mockRejectedValueOnce(new Error('Erro no servidor'));
+
+      await expect(controller.findOne('song-uuid-123')).rejects.toThrow(
+        'Erro no servidor',
+      );
+    });
   });
 
   describe('update', () => {
-    it('deve atualizar a música chamando o service com ID e DTO', async () => {
+    it('deve atualizar a música chamando o service com ID e DTO de título', async () => {
       const dto: UpdateRepertoireSongDto = { title: 'Novo Título' };
       const updatedSong = { ...mockSong, title: 'Novo Título' };
 
@@ -129,6 +205,23 @@ describe('RepertoireController', () => {
       expect(result.title).toBe('Novo Título');
     });
 
+    it('deve atualizar múltiplos campos da música chamando o service', async () => {
+      const dto: UpdateRepertoireSongDto = {
+        artist: 'Novo Artista',
+        key: 'Am',
+        position: 5,
+      };
+      const updatedSong = { ...mockSong, ...dto };
+
+      jest.spyOn(service, 'update').mockResolvedValueOnce(updatedSong);
+
+      const result = await controller.update('song-uuid-123', dto);
+
+      expect(service.update).toHaveBeenCalledWith('song-uuid-123', dto);
+      expect(result.artist).toBe('Novo Artista');
+      expect(result.key).toBe('Am');
+    });
+
     it('deve repassar NotFoundException se a música a ser atualizada não for encontrada', async () => {
       jest
         .spyOn(service, 'update')
@@ -137,6 +230,16 @@ describe('RepertoireController', () => {
       await expect(
         controller.update('id-inexistente', { title: 'Novo Título' }),
       ).rejects.toThrow(NotFoundException);
+    });
+
+    it('deve repassar erro genérico vindo do service durante a atualização', async () => {
+      jest
+        .spyOn(service, 'update')
+        .mockRejectedValueOnce(new Error('Erro ao atualizar registro'));
+
+      await expect(
+        controller.update('song-uuid-123', { title: 'Novo Título' }),
+      ).rejects.toThrow('Erro ao atualizar registro');
     });
   });
 
@@ -148,6 +251,17 @@ describe('RepertoireController', () => {
       expect(result).toEqual(mockSong);
     });
 
+    it('deve remover outra música confirmando a delegação ao service', async () => {
+      jest
+        .spyOn(service, 'remove')
+        .mockResolvedValueOnce(mockMinimalSong as any);
+
+      const result = await controller.remove('song-uuid-456');
+
+      expect(service.remove).toHaveBeenCalledWith('song-uuid-456');
+      expect(result).toEqual(mockMinimalSong);
+    });
+
     it('deve repassar NotFoundException se a música a ser removida não existir', async () => {
       jest
         .spyOn(service, 'remove')
@@ -155,6 +269,16 @@ describe('RepertoireController', () => {
 
       await expect(controller.remove('id-inexistente')).rejects.toThrow(
         NotFoundException,
+      );
+    });
+
+    it('deve repassar erro genérico se a remoção falhar no service', async () => {
+      jest
+        .spyOn(service, 'remove')
+        .mockRejectedValueOnce(new Error('Erro ao deletar registro'));
+
+      await expect(controller.remove('song-uuid-123')).rejects.toThrow(
+        'Erro ao deletar registro',
       );
     });
   });

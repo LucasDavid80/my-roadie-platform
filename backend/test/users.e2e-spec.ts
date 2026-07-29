@@ -1,22 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
+import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 import { JwtAuthGuard } from './../src/modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from './../src/modules/auth/guards/roles.guard';
 import { PrismaService } from './../src/prisma/prisma.service';
 
 describe('UsersController (e2e)', () => {
-  let app: INestApplication;
+  let app: INestApplication<App>;
 
   const mockPrismaService = {
     user: {
-      create: jest.fn().mockImplementation(({ data }) =>
-        Promise.resolve({
-          id: 'uuid-123',
-          ...data,
-        }),
-      ),
+      create: jest
+        .fn()
+        .mockImplementation(({ data }: { data: Record<string, unknown> }) =>
+          Promise.resolve({
+            id: 'uuid-123',
+            ...data,
+          }),
+        ),
     },
   };
 
