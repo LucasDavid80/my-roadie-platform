@@ -114,6 +114,12 @@
 - Depende de: API de Tasks (spec 004)
 - Status: ideia
 
+### Persistência Local e Sincronização Offline (Offline-First)
+- Intenção: Implementar cache/banco local (ex.: Hive ou SQLite) no app mobile para permitir criar, visualizar e editar compromissos sem sinal de internet, sincronizando os dados com o backend NestJS quando a conexão for reestabelecida.
+- Impacto esperado: alto (confiabilidade em palcos, festivais e estradas)
+- Depende de: Atualização da lista de compromissos após criação (spec 007)
+- Status: ideia
+
 ---
 
 ### Fase 4: Logística, Geolocalização & Integração de Agenda
