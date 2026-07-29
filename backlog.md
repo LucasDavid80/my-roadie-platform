@@ -26,7 +26,7 @@
 - Intenção: expor `Transaction` via backend (financeiro da banda/evento).
 - Impacto esperado: alto, mas sensível — exige atenção extra a testes e autorização.
 - Depende de: nenhum
-- Status: em spec → specs/006-api-de-transactions
+- Status: concluído (specs/006-api-de-transactions/)
 
 ---
 

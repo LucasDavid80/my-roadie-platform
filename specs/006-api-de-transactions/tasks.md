@@ -24,13 +24,13 @@ Pré-requisitos: nenhum.
   - Critério: Suíte com mocks do `PrismaService` cobrindo ao menos 3 cenários positivos e 3 negativos (mínimo exigido por constitution.md §5).
 - [x] T3.2 — Criar testes unitários para `TransactionsController` em `backend/src/modules/transactions/transactions.controller.spec.ts`.
   - Critério: Testar integração do controlador delegando chamadas ao serviço com tratamento de erros.
-- [ ] T3.3 — Criar suíte de testes de integração E2E em `backend/test/transactions.e2e-spec.ts`.
+- [x] T3.3 — Criar suíte de testes de integração E2E em `backend/test/transactions.e2e-spec.ts`.
   - Critério: Testes cobrindo fluxo completo da API de transações, validações de DTO (400) e rejeição de acessos sem autenticação JWT (401).
 
 ## Checklist de fechamento da feature
 
-- [ ] `TransactionsModule` registrado no `AppModule` (`backend/src/app.module.ts`)
-- [ ] Testes unitários (`npm test`) executando e passando no backend
-- [ ] Testes E2E (`npm run test:e2e`) executando e passando no backend
-- [ ] Cobertura global do backend cumpre o piso mínimo de 80% (`constitution.md` §5)
-- [ ] Status atualizado em `backlog.md` para "concluído (specs/006-api-de-transactions/)" ao finalizar a feature
+- [x] `TransactionsModule` registrado no `AppModule` (`backend/src/app.module.ts`)
+- [x] Testes unitários (`npm test`) executando e passando no backend
+- [x] Testes E2E (`npm run test:e2e`) executando e passando no backend
+- [x] Cobertura global do backend cumpre o piso mínimo de 80% (`constitution.md` §5)
+- [x] Status atualizado em `backlog.md` para "concluído (specs/006-api-de-transactions/)" ao finalizar a feature
