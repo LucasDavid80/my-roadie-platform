@@ -68,7 +68,7 @@ class RemoteDataSource {
     }
   }
 
-  Future<void> saveEvent(EventModel event) async {
+  Future<EventModel?> saveEvent(EventModel event) async {
     try {
       final response = await _client.post(
         Uri.parse('${AppConfig.backendUrl}/events'),
@@ -76,7 +76,15 @@ class RemoteDataSource {
         body: jsonEncode(event.toMap()),
       );
 
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (response.body.isNotEmpty) {
+          final dynamic data = jsonDecode(response.body);
+          if (data is Map<String, dynamic>) {
+            return EventModel.fromMap(data);
+          }
+        }
+        return event;
+      } else {
         if (response.statusCode == 401) {
           throw UnauthorizedException();
         }
