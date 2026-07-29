@@ -18,12 +18,12 @@ Pré-requisitos: `specs/003-mobile-conectado-api-real` (camada data do mobile im
 
 ## Fase 3 — Validação de Regressão e Suíte Mobile
 
-- [ ] T3.1 — Rodar a suíte completa de testes do mobile (`flutter test`) e confirmar 100% dos testes passando sem falhas.
+- [x] T3.1 — Rodar a suíte completa de testes do mobile (`flutter test`) e confirmar 100% dos testes passando sem falhas.
   - Critério de teste: Execução de `flutter test` no terminal com zero falhas.
 
 ## Checklist de fechamento da feature
 
-- [ ] `flutter test` 100% verde e sem regressões.
-- [ ] O novo compromisso aparece imediatamente na lista e no calendário após confirmação.
-- [ ] `backlog.md` atualizado com o status desta tarefa.
-- [ ] `spec.md` e `plan.md` da baseline verificados e alinhados ao comportamento atualizado.
+- [x] `flutter test` 100% verde e sem regressões.
+- [x] O novo compromisso aparece imediatamente na lista e no calendário após confirmação.
+- [x] `backlog.md` atualizado com o status desta tarefa.
+- [x] `spec.md` e `plan.md` da baseline verificados e alinhados ao comportamento atualizado.

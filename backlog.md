@@ -27,7 +27,7 @@
 - Intenção: Garantir que a lista de compromissos da tela de Agenda seja atualizada imediatamente após a criação de um novo evento.
 - Impacto esperado: alto (usabilidade)
 - Depende de: nenhum
-- Status: em spec (specs/007-atualizar-lista-de-compromissos)
+- Status: concluído (specs/007-atualizar-lista-de-compromissos/)
 
 ---
 
