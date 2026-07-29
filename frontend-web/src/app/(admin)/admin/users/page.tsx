@@ -86,7 +86,7 @@ export default function AdminUsersPage() {
         try {
             await userService.delete(id);
             loadUsers();
-        } catch (error) {
+        } catch {
             alert('Erro ao excluir usuário');
         } finally {
             setIsDeleting(null);
