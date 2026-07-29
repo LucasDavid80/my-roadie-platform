@@ -11,7 +11,7 @@ Pré-requisitos: nenhum.
 
 ## Fase 2 — Lógica de Negócio e Controladora
 
-- [ ] T2.1 — Implementar `TransactionsService` em `backend/src/modules/transactions/transactions.service.ts`.
+- [x] T2.1 — Implementar `TransactionsService` em `backend/src/modules/transactions/transactions.service.ts`.
   - Critério: Métodos `create`, `findAll`, `findOne`, `update` e `remove` integrados ao `PrismaService`, lidando com conversão de `Decimal` e lançando `NotFoundException` para recursos ou chaves estrangeiras inexistentes.
 - [ ] T2.2 — Implementar `TransactionsController` em `backend/src/modules/transactions/transactions.controller.ts`.
   - Critério: Rotas HTTP REST em `/transactions` protegidas com `@UseGuards(JwtAuthGuard)` e retornando status adequados (201, 200, 204, 404).
