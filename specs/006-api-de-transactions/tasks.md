@@ -13,7 +13,7 @@ Pré-requisitos: nenhum.
 
 - [x] T2.1 — Implementar `TransactionsService` em `backend/src/modules/transactions/transactions.service.ts`.
   - Critério: Métodos `create`, `findAll`, `findOne`, `update` e `remove` integrados ao `PrismaService`, lidando com conversão de `Decimal` e lançando `NotFoundException` para recursos ou chaves estrangeiras inexistentes.
-- [ ] T2.2 — Implementar `TransactionsController` em `backend/src/modules/transactions/transactions.controller.ts`.
+- [x] T2.2 — Implementar `TransactionsController` em `backend/src/modules/transactions/transactions.controller.ts`.
   - Critério: Rotas HTTP REST em `/transactions` protegidas com `@UseGuards(JwtAuthGuard)` e retornando status adequados (201, 200, 204, 404).
 - [ ] T2.3 — Registrar o `TransactionsModule` em `backend/src/app.module.ts`.
   - Critério: Aplicação NestJS inicializa e injeta dependências sem erros.
