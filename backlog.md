@@ -22,11 +22,6 @@
 - Depende de: nenhum
 - Status: concluído (specs/005-api-de-repertorio/)
 
-### API de Transactions
-- Intenção: expor `Transaction` via backend (financeiro da banda/evento).
-- Impacto esperado: alto, mas sensível — exige atenção extra a testes e autorização.
-- Depende de: nenhum
-- Status: ideia
 
 ---
 
