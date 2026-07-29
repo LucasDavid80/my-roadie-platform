@@ -62,7 +62,7 @@ Não siga para a próxima task sem eu confirmar.
 ## 2. Rodar e revisar testes (com cobertura)
 
 ```
-Leia constitution.md §5 (meta de cobertura 70-80%) antes de responder.
+Leia constitution.md §5 (meta de cobertura 80-90%) antes de responder.
 
 Rode a suíte de testes de <backend | frontend-web | mobile> com cobertura:
 - backend: npm test -- --coverage
@@ -72,7 +72,7 @@ Rode a suíte de testes de <backend | frontend-web | mobile> com cobertura:
 Reporte:
 1. O número REAL de cobertura (nunca estimado) por categoria
    (statements/branches/functions/lines).
-2. Quais arquivos ficaram abaixo de 70% e por quê, em uma frase cada.
+2. Quais arquivos ficaram abaixo de 80% e por quê, em uma frase cada.
 3. NÃO escreva teste novo ainda — só reporte. Se eu pedir para subir
    a cobertura, isso vira um prompt separado (ver seção 3).
 
@@ -103,7 +103,7 @@ desse arquivo especificamente.
 ```
 Simule o CI localmente antes de eu abrir a PR:
 
-1. Rode `act --secret-file .secrets` na raiz do repo (backend/frontend-web
+1. Rode `act pull_request --secret-file .secrets` na raiz do repo (backend/frontend-web
    conforme os jobs definidos em .github/workflows/ci.yml).
 2. Se algum job falhar, me diga qual job, qual step, e a causa provável
    — não tente corrigir automaticamente sem eu confirmar o diagnóstico.

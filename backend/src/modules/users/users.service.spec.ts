@@ -64,6 +64,24 @@ describe('UsersService', () => {
     });
   });
 
+  describe('findAll', () => {
+    it('deve retornar a lista de usuários', async () => {
+      const users = await service.findAll();
+      expect(users).toEqual([mockUser]);
+      expect(prisma.user.findMany).toHaveBeenCalled();
+    });
+  });
+
+  describe('findByEmail', () => {
+    it('deve buscar um usuário pelo email', async () => {
+      const user = await service.findByEmail('lucas@myroadie.br');
+      expect(user).toEqual(mockUser);
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { email: 'lucas@myroadie.br' },
+      });
+    });
+  });
+
   describe('findOne', () => {
     it('deve retornar um usuário se o ID existir', async () => {
       const found = await service.findOne('uuid-123');

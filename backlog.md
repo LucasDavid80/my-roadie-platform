@@ -20,7 +20,7 @@
 - Intenção: expor `RepertoireSong` via backend para gestão de repertório por banda.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Status: em spec → specs/005-api-de-repertorio/
+- Status: concluído (specs/005-api-de-repertorio/)
 
 ### API de Transactions
 - Intenção: expor `Transaction` via backend (financeiro da banda/evento).
