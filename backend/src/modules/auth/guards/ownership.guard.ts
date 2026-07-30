@@ -31,9 +31,10 @@ export class OwnershipGuard implements CanActivate {
   ): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
-    const targetId = request.params.id;
+    const rawTargetId = request.params.id;
+    const targetId = Array.isArray(rawTargetId) ? rawTargetId[0] : rawTargetId;
 
-    if (!user) return false;
+    if (!user || !targetId) return false;
 
     // Se for ADMIN, permite tudo
     if (user.role === Role.ADMIN) return true;
