@@ -22,13 +22,13 @@ Pré-requisitos: `frontend-web` e `mobile` configurados com dependências, Supab
 
 - [x] T3.1 — Criar/atualizar a suíte de testes unitários e de integração no Vitest (`frontend-web/src/components/features/auth/RegisterForm.spec.tsx` ou equivalente) cobrindo cenários positivos e negativos.
   - Critério: `npm test` no `frontend-web` roda com 100% dos testes aprovados.
-- [ ] T3.2 — Criar/atualizar a suíte de testes no Flutter (`mobile/test/presentation/screens/register_screen_test.dart` e `mobile/test/data/datasources/auth_remote_datasource_test.dart`) validando renderização, submissão e tratamento de erro.
+- [x] T3.2 — Criar/atualizar a suíte de testes no Flutter (`mobile/test/presentation/screens/register_screen_test.dart` e `mobile/test/data/datasources/auth_remote_datasource_test.dart`) validando renderização, submissão e tratamento de erro.
   - Critério: `flutter test` no `mobile` executa com 100% dos 55+ testes verdes.
 
 ## Checklist de fechamento da feature
 
-- [ ] Rota `/register` acessível e funcional no `frontend-web`
-- [ ] Cadastro pelo aplicativo mobile cria o usuário no Supabase Auth e o registro no PostgreSQL (via NestJS)
-- [ ] Formulários de cadastro e login exibem mensagens claras de erro em vermelho quando houver falhas
-- [ ] `npm test` no `frontend-web` e `flutter test` no `mobile` 100% verdes sem falhas
-- [ ] Entrada em `backlog.md` atualizada para "concluído"
+- [x] Rota `/register` acessível e funcional no `frontend-web`
+- [x] Cadastro pelo aplicativo mobile cria o usuário no Supabase Auth e o registro no PostgreSQL (via NestJS)
+- [x] Formulários de cadastro e login exibem mensagens claras de erro em vermelho quando houver falhas
+- [x] `npm test` no `frontend-web` e `flutter test` no `mobile` 100% verdes sem falhas
+- [x] Entrada em `backlog.md` atualizada para "concluído"

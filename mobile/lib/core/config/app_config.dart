@@ -3,15 +3,24 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 class AppConfig {
-  static const String supabaseUrl = String.fromEnvironment(
+  static String _supabaseUrl = const String.fromEnvironment(
     'SUPABASE_URL',
     defaultValue: '',
   );
 
-  static const String supabaseAnonKey = String.fromEnvironment(
+  static String _supabaseAnonKey = const String.fromEnvironment(
     'SUPABASE_ANON_KEY',
     defaultValue: '',
   );
+
+  static String get supabaseUrl => _supabaseUrl;
+  static String get supabaseAnonKey => _supabaseAnonKey;
+
+  @visibleForTesting
+  static set supabaseUrl(String value) => _supabaseUrl = value;
+
+  @visibleForTesting
+  static set supabaseAnonKey(String value) => _supabaseAnonKey = value;
 
   static String get defaultBackendUrl {
     if (!kIsWeb && Platform.isAndroid) {
