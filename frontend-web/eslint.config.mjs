@@ -17,6 +17,7 @@ const eslintConfig = defineConfig([
     "dist/**",
     // Custom ignores:
     "node_modules/**",
+    "coverage/**",
   ]),
 ]);
 

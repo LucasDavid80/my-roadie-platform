@@ -42,17 +42,17 @@ Trocar qualquer item desta tabela é uma decisão de arquitetura, não uma decis
 - Frontend Web: Vitest.
 - Mobile: `flutter_test`.
 - **Padrão mínimo por tarefa que toca lógica de negócio:** pelo menos 1 caso de sucesso e 1 caso de erro/borda cobertos por teste. Para módulos críticos (auth, guards, transações financeiras), o padrão sobe para no mínimo 3 casos positivos e 3 negativos.
-- **Meta de cobertura: 70-80% em cada uma das três partes** (backend, frontend-web, mobile), medida separadamente — cobertura alta em um app não compensa cobertura baixa em outro.
+- **Meta de cobertura: 80% ou mais em cada uma das três partes** (backend, frontend-web, mobile), medida separadamente — cobertura alta em um app não compensa cobertura baixa em outro.
   - **Backend (Jest):** configurar `coverageThreshold` no `jest.config` (ou seção `jest` do `package.json`):
     ```json
     "coverageThreshold": {
-      "global": { "branches": 70, "functions": 75, "lines": 75, "statements": 75 }
+      "global": { "branches": 80, "functions": 85, "lines": 85, "statements": 85 }
     }
     ```
     Rodar com `npm test -- --coverage`.
-  - **Frontend Web (Vitest):** habilitar `test.coverage` no `vitest.config.ts` com provider `v8` (ou `istanbul`) e `thresholds` equivalentes (70-80%). Rodar com `npm test -- --coverage`.
+  - **Frontend Web (Vitest):** habilitar `test.coverage` no `vitest.config.ts` com provider `v8` (ou `istanbul`) e `thresholds` equivalentes (80% ou mais). Rodar com `npm test -- --coverage`.
   - **Mobile (Flutter):** `flutter test --coverage` gera `coverage/lcov.info`; usar `lcov`/`genhtml` (ou um step de CI que leia o lcov) para falhar o build abaixo do limiar. Vale excluir arquivos gerados (`*.g.dart`, `*.freezed.dart`) do cálculo.
-  - **CI:** os três jobs de teste (`test` no backend, equivalente no frontend-web, e o step de mobile) devem falhar o pipeline se a cobertura cair abaixo de 70%; 80% é a meta a perseguir, 70% é o piso que não se cruza.
+  - **CI:** os três jobs de teste (`test` no backend, equivalente no frontend-web, e o step de mobile) devem falhar o pipeline se a cobertura cair abaixo de 80%; 100% é a meta a perseguir, 80% é o piso que não se cruza.
   - Cobertura é um piso de qualidade, não o objetivo em si — não escrever teste vazio só para bater número; se uma linha é difícil de cobrir de forma significativa, prefira refletir isso numa revisão de design em vez de simular cobertura.
 - CI local: usar `act --secret-file .secrets` para simular o GitHub Actions antes de abrir PR.
 - Lint/testes devem passar localmente antes de pedir review — não delegar isso só ao CI.

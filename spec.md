@@ -30,7 +30,9 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **auth** — login via Supabase Auth, estratégia JWT, guards (`JwtAuthGuard`, `RolesGuard`, `OwnershipGuard`).
 - ✅ **users** — CRUD completo (`POST /users`, `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`), com testes unitários e e2e.
 - ✅ **events** — CRUD de eventos com DTOs de criação/atualização e testes.
-- ⚠️ **Task, RepertoireSong, Transaction** — **existem apenas no `schema.prisma`**. Não há módulo NestJS (`controller`/`service`/`dto`) para nenhum dos três ainda. Ou seja: as regras descritas em `docs/business-rules/rules.md` para tarefas, repertório e transações são o *comportamento pretendido*, não o *comportamento disponível via API* hoje.
+- ✅ **tasks** — CRUD completo de tarefas (`POST /tasks`, `GET /tasks`, `GET /tasks/:id`, `PATCH /tasks/:id`, `DELETE /tasks/:id`), com DTOs validados via `class-validator`, proteção via `JwtAuthGuard`, e cobertura de testes unitários e E2E.
+- ✅ **repertoire** — CRUD completo de músicas do repertório (`POST /repertoire`, `GET /repertoire`, `GET /repertoire/:id`, `PATCH /repertoire/:id`, `DELETE /repertoire/:id`), com DTOs validados via `class-validator`, proteção via `JwtAuthGuard`, e cobertura de testes unitários e E2E.
+- ✅ **transactions** — CRUD completo de lançamentos financeiros (`POST /transactions`, `GET /transactions`, `GET /transactions/:id`, `PATCH /transactions/:id`, `DELETE /transactions/:id`), com DTOs validados via `class-validator`, proteção via `JwtAuthGuard`, e cobertura de testes unitários e E2E.
 
 ### Frontend Web (`frontend-web/src/`)
 - Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`.
@@ -54,9 +56,10 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 ## 6. Fora do escopo desta baseline (não construído ainda)
 
 - Módulo de **logística** — citado como exemplo em `docs/architecture/backend.md` (`ex: events, users, logistics`), mas não existe nenhum código para isso. É uma menção aspiracional, não uma feature.
-- Exposição via API de **Task, RepertoireSong e Transaction** (ver seção 4).
+- Exposição via API de **Transaction** (resolvido na spec 006; API de Tasks na spec 004, API de Repertoire na spec 005).
 - Integração do mobile com a API real (resolvido na spec 003).
 
 ## 7. Critério de "pronto" desta baseline
 
-Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — se qualquer item da seção 4 mudar (ex.: alguém implementar o módulo de Tasks), este arquivo deve ser atualizado no mesmo PR que implementa a mudança.
+Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a entrega do módulo de Transactions (Spec 006). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
+
