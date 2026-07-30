@@ -20,7 +20,7 @@ Pré-requisitos: `frontend-web` e `mobile` configurados com dependências, Supab
 
 ## Fase 3 — Suítes de Testes e Validação em Ambos os Repositórios
 
-- [ ] T3.1 — Criar/atualizar a suíte de testes unitários e de integração no Vitest (`frontend-web/src/components/features/auth/RegisterForm.spec.tsx` ou equivalente) cobrindo cenários positivos e negativos.
+- [x] T3.1 — Criar/atualizar a suíte de testes unitários e de integração no Vitest (`frontend-web/src/components/features/auth/RegisterForm.spec.tsx` ou equivalente) cobrindo cenários positivos e negativos.
   - Critério: `npm test` no `frontend-web` roda com 100% dos testes aprovados.
 - [ ] T3.2 — Criar/atualizar a suíte de testes no Flutter (`mobile/test/presentation/screens/register_screen_test.dart` e `mobile/test/data/datasources/auth_remote_datasource_test.dart`) validando renderização, submissão e tratamento de erro.
   - Critério: `flutter test` no `mobile` executa com 100% dos 55+ testes verdes.

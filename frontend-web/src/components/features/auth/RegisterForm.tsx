@@ -26,12 +26,11 @@ export function RegisterForm() {
             router.push('/login');
         } catch (error: unknown) {
             let message = 'Erro ao criar conta';
-            if (error instanceof Error) {
+            if (typeof error === 'object' && error !== null && 'response' in error) {
+                const response = (error as { response?: { data?: { message?: string } } }).response;
+                message = response?.data?.message || (error as Error).message || 'Erro ao criar conta';
+            } else if (error instanceof Error) {
                 message = error.message;
-            } else if (typeof error === 'object' && error !== null) {
-                const err = error as Record<string, unknown>;
-                const response = err.response as { data?: { message?: string } } | undefined;
-                message = response?.data?.message ?? (err.message as string | undefined) ?? 'Erro ao criar conta';
             }
             setAuthError(message);
         }
