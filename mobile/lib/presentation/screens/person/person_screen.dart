@@ -81,12 +81,17 @@ class PersonScreen extends ConsumerWidget {
           ),
         ),
         onPressed: () async {
-          await ref.read(userProvider.notifier).saveProfile();
+          final success = await ref.read(userProvider.notifier).saveProfile();
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Perfil salvo com sucesso!'),
-                backgroundColor: AppColors.primary,
+              SnackBar(
+                content: Text(
+                  success
+                      ? 'Perfil salvo com sucesso!'
+                      : 'Erro ao salvar perfil. Tente novamente.',
+                ),
+                backgroundColor:
+                    success ? AppColors.primary : AppColors.erro,
               ),
             );
           }

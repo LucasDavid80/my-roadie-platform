@@ -13,7 +13,7 @@ Pré-requisitos: `mobile` configurado com biblioteca do Flutter, Riverpod e suí
 
 - [x] T2.1 — Refatorar `UserNotifier` em `mobile/lib/presentation/controllers/user_controller.dart` garantindo a inicialização imutável e segura do `UserEntity` com listas não nulas para `instruments` e `styles`.
   - Critério: `userProvider` inicia com estado válido garantindo que seleções de `MultiSelectionWidget` não disparem erro por `null`.
-- [ ] T2.2 — Adicionar tratamento de erros e exceções de requisição em `fetchProfile` e `saveProfile` com fallbacks seguros.
+- [x] T2.2 — Adicionar tratamento de erros e exceções de requisição em `fetchProfile` e `saveProfile` com fallbacks seguros.
   - Critério: Exceções de rede ou HTTP 404/500 são tratadas no estado sem propagar tela vermelha de exceção *unhandled*.
 
 ## Fase 3 — Cobertura de Testes de Widget no Flutter (`flutter_test`)
