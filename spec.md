@@ -38,6 +38,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`.
 - Serviços de API e contexto de autenticação (`AuthContext`) existem na estrutura.
 - A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios), eliminando os placeholders.
+- ✅ **Autenticação via Supabase Auth:** Módulo `src/lib/supabase.ts` centraliza a instância do Supabase. `AuthContext` efetua autenticação real via `supabase.auth.signInWithPassword`, e `LoginForm` exibe mensagens de erro amigáveis em caso de credenciais inválidas ou erro de rede (Spec 008).
 
 ### Mobile (`mobile/lib/`)
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
