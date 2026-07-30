@@ -48,7 +48,7 @@
 - Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
 - Impacto esperado: alto (bug crítico/bloqueante)
 - Depende de: nenhum
-- Status: ideia
+- Status: em spec → specs/009-correcao-area-de-perfil/
 
 ### Validar e testar fluxo de Login com API Real
 - Intenção: Verificar a estabilidade do fluxo de login contra a API de autenticação real e criar testes adicionais de integração.
