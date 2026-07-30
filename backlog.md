@@ -23,10 +23,10 @@
 - Depende de: nenhum
 - Status: concluído (specs/005-api-de-repertorio/)
 
-### Atualização da lista de compromissos após criação
-- Intenção: Garantir que a lista de compromissos da tela de Agenda seja atualizada imediatamente após a criação de um novo evento.
-- Impacto esperado: alto (usabilidade)
-- Depende de: nenhum
+### Atualizar Lista de Compromissos após Criação
+- Intenção: Atualizar reativamente a lista de compromissos e o calendário no mobile imediatamente após criação/edição de eventos.
+- Impacto esperado: alto
+- Depende de: Mobile conectado à API real (spec 003)
 - Status: concluído (specs/007-atualizar-lista-de-compromissos/)
 
 ---

@@ -34,6 +34,8 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 - Clean Architecture: `domain/` → `data/` → `presentation/`.
 - Estado atual: as telas de auth, agenda e perfil estão conectadas à API real do backend através do `remote_datasource` e dos repositories.
+- Atualização reativa de compromissos: `AgendaController` sincroniza eventos retornados da API e notifica a UI de forma imutável após criação/edição (Spec 007).
+
 
 
 ## 5. Testes
