@@ -42,7 +42,7 @@
 - Intenção: Impedir o bypass de login com dados aleatórios, conectando o botão de submissão do `LoginForm` ao `authProvider` real.
 - Impacto esperado: alto (crítico/segurança)
 - Depende de: nenhum
-- Status: ideia
+- Status: em spec → specs/008-conectar-form-de-login-authProvider/
 
 ### Correção de erro de tela vermelha na área de usuários/perfil
 - Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
