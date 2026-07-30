@@ -15,7 +15,7 @@ Pré-requisitos: `frontend-web` e `mobile` configurados com dependências, Supab
   - Critério: Chamada de `signUp` no Flutter retorna as credenciais criadas pelo Supabase Auth com o `supabaseId` válido.
 - [x] T2.2 — Conectar o fluxo de cadastro do `RegisterForm` / `userProvider` no mobile para invocar a API NestJS (`POST /users`) criando o registro do perfil no PostgreSQL imediatamente após o retorno do Supabase Auth.
   - Critério: Cadastro realizado pelo aplicativo cria as credenciais no Supabase Auth e insere com sucesso a linha do usuário na tabela `User` do PostgreSQL.
-- [ ] T2.3 — Implementar tratamento estrito de erros no formulário de cadastro do mobile (`RegisterForm`), bloqueando redirecionamentos e exibindo `SnackBar` vermelha para credenciais falhas (ex.: e-mail em uso, senha curta).
+- [x] T2.3 — Implementar tratamento estrito de erros no formulário de cadastro do mobile (`RegisterForm`), bloqueando redirecionamentos e exibindo `SnackBar` vermelha para credenciais falhas (ex.: e-mail em uso, senha curta).
   - Critério: Cadastro com dados inválidos exibe alerta de erro e mantém o usuário na tela sem falsos alertas de sucesso.
 
 ## Fase 3 — Suítes de Testes e Validação em Ambos os Repositórios

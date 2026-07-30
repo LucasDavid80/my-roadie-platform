@@ -44,6 +44,26 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
       return;
     }
 
+    if (!email.contains('@') || !email.contains('.')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, informe um e-mail válido'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('A senha deve ter pelo menos 6 caracteres'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -75,14 +95,36 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
               backgroundColor: Colors.green,
             ),
           );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Falha ao realizar cadastro. Tente novamente.'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       }
     } catch (e) {
       if (mounted) {
-        final message = e.toString().replaceFirst(RegExp(r'^Exception:\s*'), '');
+        String rawMessage = e
+            .toString()
+            .replaceFirst(RegExp(r'^Exception:\s*'), '')
+            .replaceFirst(RegExp(r'^AuthException:\s*'), '');
+
+        String displayMessage = rawMessage;
+        final lower = rawMessage.toLowerCase();
+        if (lower.contains('already registered') ||
+            lower.contains('already in use') ||
+            lower.contains('já cadastrado')) {
+          displayMessage = 'E-mail já cadastrado';
+        } else if (lower.contains('at least 6 characters') ||
+            lower.contains('weak password')) {
+          displayMessage = 'A senha deve ter pelo menos 6 caracteres';
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(message),
+            content: Text(displayMessage),
             backgroundColor: Colors.red,
           ),
         );
