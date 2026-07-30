@@ -11,7 +11,7 @@ Pré-requisitos: `frontend-web` configurado com a biblioteca `@supabase/supabase
 
 ## Fase 2 — Integração do AuthContext com Supabase Auth
 
-- [ ] T2.1 — Atualizar a interface `SignInCredentials` em `src/contexts/AuthContext.tsx` tornando o campo `password` obrigatório.
+- [x] T2.1 — Atualizar a interface `SignInCredentials` em `src/contexts/AuthContext.tsx` tornando o campo `password` obrigatório.
   - Critério: Tipagem do TypeScript exige `email` e `password`.
 - [ ] T2.2 — Atualizar a função `signIn` em `src/contexts/AuthContext.tsx` para efetuar a autenticação via `supabase.auth.signInWithPassword({ email, password })`.
   - Critério: O fluxo de autenticação só avança caso a validação do Supabase Auth retorne sucesso.

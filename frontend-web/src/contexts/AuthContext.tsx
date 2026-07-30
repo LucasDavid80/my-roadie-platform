@@ -6,7 +6,7 @@ import { api } from '@/services/api';
 
 interface SignInCredentials {
     email: string;
-    password?: string;
+    password: string;
 }
 
 interface AuthContextData {
