@@ -1,5 +1,6 @@
 // lib/data/datasources/auth_remote_datasource.dart
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../core/config/app_config.dart';
 import 'remote_datasource.dart';
 
 class AuthRemoteDataSource {
@@ -22,6 +23,31 @@ class AuthRemoteDataSource {
     String? role,
     Map<String, dynamic>? data,
   }) async {
+    if (!AppConfig.isConfigured) {
+      final mockId = 'mock-user-${DateTime.now().millisecondsSinceEpoch}';
+      final userRole = role ?? 'MUSICIAN';
+      final userName = name ?? '';
+
+      if (_remoteDataSource != null) {
+        await _remoteDataSource.createUser(
+          email: email,
+          supabaseId: mockId,
+          name: userName,
+          role: userRole,
+        );
+      }
+
+      return AuthResponse(
+        user: User(
+          id: mockId,
+          appMetadata: {},
+          userMetadata: {'name': userName, 'role': userRole},
+          aud: 'authenticated',
+          createdAt: DateTime.now().toIso8601String(),
+        ),
+      );
+    }
+
     final metadata = <String, dynamic>{
       ...?data,
     };
