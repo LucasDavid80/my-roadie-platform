@@ -1,19 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import '../../../domain/entities/event_entity.dart';
 import '../../../domain/interfaces/i_agenda_repository.dart';
-import '../../../data/datasources/remote_datasource.dart';
 import '../../../data/repositories/agenda_repository_impl.dart';
 import 'auth_controller.dart';
 
 // Providers para injeção do repositório de agenda
-final remoteDataSourceProvider = Provider((ref) {
-  return RemoteDataSource(
-    client: http.Client(),
-    supabase: ref.read(supabaseClientProvider),
-  );
-});
-
 final agendaRepositoryProvider = Provider<IAgendaRepository>((ref) {
   return AgendaRepositoryImpl(ref.read(remoteDataSourceProvider));
 });

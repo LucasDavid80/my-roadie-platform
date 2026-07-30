@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_user_repository.dart';
 import 'package:agenda_musical/data/repositories/user_repository_impl.dart';
-import 'agenda_controller.dart';
 import 'auth_controller.dart';
 
 // Provider para injeção do repositório de usuário

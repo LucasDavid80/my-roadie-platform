@@ -1,13 +1,28 @@
 // lib/presentation/controllers/auth_controller.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/interfaces/i_auth_repository.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
-import 'agenda_controller.dart';
+import '../../data/datasources/remote_datasource.dart';
 
 // Providers para injeção
-final supabaseClientProvider = Provider((ref) => Supabase.instance.client);
+final supabaseClientProvider = Provider<SupabaseClient>((ref) {
+  try {
+    return Supabase.instance.client;
+  } catch (_) {
+    return SupabaseClient('http://localhost', 'anon-key');
+  }
+});
+
+final remoteDataSourceProvider = Provider<RemoteDataSource>((ref) {
+  return RemoteDataSource(
+    client: http.Client(),
+    supabase: ref.read(supabaseClientProvider),
+  );
+});
+
 final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(
       ref.read(supabaseClientProvider),
       ref.read(remoteDataSourceProvider),
