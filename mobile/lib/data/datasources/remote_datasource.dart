@@ -22,16 +22,16 @@ class ServerException implements Exception {
 
 class RemoteDataSource {
   final http.Client _client;
-  final SupabaseClient _supabase;
+  final SupabaseClient? _supabase;
 
   RemoteDataSource({
     required http.Client client,
-    required SupabaseClient supabase,
+    SupabaseClient? supabase,
   })  : _client = client,
         _supabase = supabase;
 
   Map<String, String> _getHeaders() {
-    final token = _supabase.auth.currentSession?.accessToken;
+    final token = _supabase?.auth.currentSession?.accessToken;
     final headers = {
       'Content-Type': 'application/json',
     };

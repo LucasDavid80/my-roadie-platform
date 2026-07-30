@@ -11,13 +11,13 @@ class AuthRepositoryImpl implements IAuthRepository {
   @override
   Future<User?> signIn(String email, String password) async {
     final response = await remoteDataSource.signIn(email: email, password: password);
-    return response.user;
+    return response?.user;
   }
 
   @override
   Future<User?> signUp(String email, String password) async {
     final response = await remoteDataSource.signUp(email: email, password: password);
-    return response.user;
+    return response?.user;
   }
 
   @override

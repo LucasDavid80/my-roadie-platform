@@ -10,7 +10,7 @@ import 'auth_controller.dart';
 final remoteDataSourceProvider = Provider((ref) {
   return RemoteDataSource(
     client: http.Client(),
-    supabase: ref.read(supabaseClientProvider),
+    supabase: ref.watch(supabaseClientProvider),
   );
 });
 

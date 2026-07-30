@@ -57,7 +57,7 @@ class PersonScreen extends ConsumerWidget {
             AvailabilityWidget(
               isAvailable: user.isAvailable, // Pega do estado
               onChanged: (val) =>
-                  userNotifier.updateAvailability(val!), // Avisa o cérebro
+                  userNotifier.updateAvailability(val ?? true), // Avisa o cérebro
             ),
 
             _buildSaveButton(context, ref), // Passamos o ref para o botão se necessário

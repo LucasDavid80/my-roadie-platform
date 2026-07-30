@@ -5,11 +5,25 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:agenda_musical/core/router.dart';
 
-void main() {
-  // Inicializa a formatação de data para o Brasil
-  initializeDateFormatting('pt_BR', null).then((_) {
-    runApp(const ProviderScope(child: MyApp()));
-  });
+import 'package:agenda_musical/core/config/app_config.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('pt_BR', null);
+
+  if (AppConfig.isConfigured) {
+    try {
+      await Supabase.initialize(
+        url: AppConfig.supabaseUrl,
+        publishableKey: AppConfig.supabaseAnonKey,
+      );
+    } catch (e) {
+      debugPrint('Erro ao inicializar Supabase: $e');
+    }
+  }
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

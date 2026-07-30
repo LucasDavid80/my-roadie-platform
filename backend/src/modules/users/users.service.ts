@@ -18,8 +18,10 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { id },
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [{ id }, { supabaseId: id }],
+      },
     });
     if (!user) {
       throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
@@ -34,11 +36,10 @@ export class UsersService {
   }
 
   async update(id: string, dto: UpdateUserDto) {
-    // Primeiro verifica se existe
-    await this.findOne(id);
+    const user = await this.findOne(id);
 
     return await this.prisma.user.update({
-      where: { id },
+      where: { id: user.id },
       data: dto,
     });
   }

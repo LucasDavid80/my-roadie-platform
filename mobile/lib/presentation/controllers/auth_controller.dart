@@ -6,9 +6,15 @@ import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 
 // Providers para injeção
-final supabaseClientProvider = Provider((ref) => Supabase.instance.client);
-final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(ref.read(supabaseClientProvider)));
-final authRepositoryProvider = Provider<IAuthRepository>((ref) => AuthRepositoryImpl(ref.read(authRemoteDataSourceProvider)));
+final supabaseClientProvider = Provider<SupabaseClient?>((ref) {
+  try {
+    return Supabase.instance.client;
+  } catch (_) {
+    return null;
+  }
+});
+final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(ref.watch(supabaseClientProvider)));
+final authRepositoryProvider = Provider<IAuthRepository>((ref) => AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider)));
 
 class AuthState {
   final User? user;
