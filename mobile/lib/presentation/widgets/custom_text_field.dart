@@ -43,6 +43,9 @@ class CustomTextField extends StatelessWidget {
           ),
           const SizedBox(height: 8.0),
           TextFormField(
+            key: controller == null && initialValue != null
+                ? ValueKey(initialValue)
+                : null,
             // Usamos TextFormField para facilitar validações futuras
             controller: controller,
             initialValue: controller == null ? initialValue : null,
