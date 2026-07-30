@@ -1,4 +1,6 @@
 // lib/core/config/app_config.dart
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 class AppConfig {
   static const String supabaseUrl = String.fromEnvironment(
@@ -11,10 +13,18 @@ class AppConfig {
     defaultValue: '',
   );
 
-  static const String backendUrl = String.fromEnvironment(
-    'BACKEND_URL',
-    defaultValue: 'http://localhost:3000',
-  );
+  static String get defaultBackendUrl {
+    if (!kIsWeb && Platform.isAndroid) {
+      return 'http://10.0.2.2:3000';
+    }
+    return 'http://localhost:3000';
+  }
+
+  static String get backendUrl => const String.fromEnvironment(
+        'BACKEND_URL',
+      ).isNotEmpty
+          ? const String.fromEnvironment('BACKEND_URL')
+          : defaultBackendUrl;
 
   static bool get isConfigured =>
       supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
