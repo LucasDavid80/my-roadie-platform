@@ -18,6 +18,7 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
   final _confirmPasswordController = TextEditingController();
   String _selectedRole = 'MUSICIAN';
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -34,43 +35,35 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
+    setState(() {
+      _errorMessage = null;
+    });
+
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, preencha todos os campos obrigatórios'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      setState(() {
+        _errorMessage = 'Por favor, preencha todos os campos obrigatórios';
+      });
       return;
     }
 
     if (!email.contains('@') || !email.contains('.')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, informe um e-mail válido'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      setState(() {
+        _errorMessage = 'Por favor, informe um e-mail válido';
+      });
       return;
     }
 
     if (password.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('A senha deve ter pelo menos 6 caracteres'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      setState(() {
+        _errorMessage = 'A senha deve ter pelo menos 6 caracteres';
+      });
       return;
     }
 
     if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('As senhas não coincidem'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      setState(() {
+        _errorMessage = 'As senhas não coincidem';
+      });
       return;
     }
 
@@ -96,12 +89,9 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
             ),
           );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Falha ao realizar cadastro. Tente novamente.'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          setState(() {
+            _errorMessage = 'Falha ao realizar cadastro. Tente novamente.';
+          });
         }
       }
     } catch (e) {
@@ -122,12 +112,9 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
           displayMessage = 'A senha deve ter pelo menos 6 caracteres';
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(displayMessage),
-            backgroundColor: Colors.red,
-          ),
-        );
+        setState(() {
+          _errorMessage = displayMessage;
+        });
       }
     } finally {
       if (mounted) {
@@ -173,7 +160,28 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
               'Junte-se ao MyRoadie hoje!',
               style: TextStyle(color: Colors.grey),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
+
+            if (_errorMessage != null) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.1),
+                  border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  _errorMessage!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             _buildInput('Nome Completo', Icons.person_outline, controller: _nameController),
             const SizedBox(height: 16),
             _buildInput('E-mail', Icons.email_outlined, controller: _emailController, keyboardType: TextInputType.emailAddress),
