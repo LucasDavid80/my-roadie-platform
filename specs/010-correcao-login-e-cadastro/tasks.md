@@ -11,7 +11,7 @@ Pré-requisitos: `frontend-web` e `mobile` configurados com dependências, Supab
 
 ## Fase 2 — Correção e Sincronização do Cadastro no App Mobile (`mobile/`)
 
-- [ ] T2.1 — Refatorar `AuthRemoteDataSource.signUp` e `AuthRepositoryImpl.signUp` em `mobile/lib/data/` para registrar as credenciais no Supabase Auth via `_supabase?.auth.signUp(email: email, password: password, data: {...})`.
+- [x] T2.1 — Refatorar `AuthRemoteDataSource.signUp` e `AuthRepositoryImpl.signUp` em `mobile/lib/data/` para registrar as credenciais no Supabase Auth via `_supabase?.auth.signUp(email: email, password: password, data: {...})`.
   - Critério: Chamada de `signUp` no Flutter retorna as credenciais criadas pelo Supabase Auth com o `supabaseId` válido.
 - [ ] T2.2 — Conectar o fluxo de cadastro do `RegisterForm` / `userProvider` no mobile para invocar a API NestJS (`POST /users`) criando o registro do perfil no PostgreSQL imediatamente após o retorno do Supabase Auth.
   - Critério: Cadastro realizado pelo aplicativo cria as credenciais no Supabase Auth e insere com sucesso a linha do usuário na tabela `User` do PostgreSQL.

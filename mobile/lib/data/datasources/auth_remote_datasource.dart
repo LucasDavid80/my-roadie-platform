@@ -13,10 +13,23 @@ class AuthRemoteDataSource {
     );
   }
 
-  Future<AuthResponse> signUp({required String email, required String password}) async {
+  Future<AuthResponse> signUp({
+    required String email,
+    required String password,
+    String? name,
+    String? role,
+    Map<String, dynamic>? data,
+  }) async {
+    final metadata = <String, dynamic>{
+      ...?data,
+    };
+    if (name != null) metadata['name'] = name;
+    if (role != null) metadata['role'] = role;
+
     return await _supabase.auth.signUp(
       email: email,
       password: password,
+      data: metadata.isNotEmpty ? metadata : null,
     );
   }
 
