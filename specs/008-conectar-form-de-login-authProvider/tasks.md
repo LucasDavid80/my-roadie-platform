@@ -22,7 +22,7 @@ Pré-requisitos: `frontend-web` configurado com a biblioteca `@supabase/supabase
 
 - [x] T3.1 — Atualizar `src/components/features/auth/LoginForm.tsx` garantindo o repasse de `email` e `password` ao `signIn`.
   - Critério: O formulário envia ambas as credenciais preenchidas pelo usuário.
-- [ ] T3.2 — Adicionar tratamento visual de mensagens de erro no `LoginForm.tsx` para falhas de autenticação (credenciais inválidas ou erro de conexão).
+- [x] T3.2 — Adicionar tratamento visual de mensagens de erro no `LoginForm.tsx` para falhas de autenticação (credenciais inválidas ou erro de conexão).
   - Critério: Exibir feedback amigável e legível na UI quando o Supabase Auth rejeitar as credenciais.
 
 ## Fase 4 — Cobertura de Testes Unitários e de Integração (Vitest)
