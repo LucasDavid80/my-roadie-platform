@@ -29,14 +29,14 @@ Pré-requisitos: `frontend-web` configurado com a biblioteca `@supabase/supabase
 
 - [x] T4.1 — Atualizar suíte de testes em `src/contexts/AuthContext.spec.tsx` com mocks do Supabase Auth cobrindo no mínimo 3 casos positivos e 3 casos negativos conforme `constitution.md` §5.
   - Critério: 3 cenários de sucesso (login com token, estado atualizado, redirecionamento) e 3 de erro (senha incorreta, usuário inexistente, erro de rede) cobertos e passando.
-- [ ] T4.2 — Atualizar `LoginForm.spec.tsx` e `LoginIntegration.spec.tsx` para validar a integração do componente com a nova lógica do `AuthContext`.
+- [x] T4.2 — Atualizar `LoginForm.spec.tsx` e `LoginIntegration.spec.tsx` para validar a integração do componente com a nova lógica do `AuthContext`.
   - Critério: Suíte completa do Vitest (`npm test`) rodando no `frontend-web` com 100% dos testes verdes.
 
 ## Checklist de fechamento da feature
 
-- [ ] Instância centralizada do Supabase criada em `src/lib/supabase.ts`
-- [ ] `AuthContext` efetuando autenticação real via `supabase.auth.signInWithPassword`
-- [ ] `LoginForm` exibindo erros de autenticação na UI de forma amigável
-- [ ] Mínimo de 3 casos positivos e 3 casos negativos cobertos em testes no Vitest (`constitution.md` §5)
-- [ ] `npm test` no `frontend-web` 100% verde sem falhas ou regressões
-- [ ] Entrada em `backlog.md` atualizada com o status correspondente
+- [x] Instância centralizada do Supabase criada em `src/lib/supabase.ts`
+- [x] `AuthContext` efetuando autenticação real via `supabase.auth.signInWithPassword`
+- [x] `LoginForm` exibindo erros de autenticação na UI de forma amigável
+- [x] Mínimo de 3 casos positivos e 3 casos negativos cobertos em testes no Vitest (`constitution.md` §5)
+- [x] `npm test` no `frontend-web` 100% verde sem falhas ou regressões
+- [x] Entrada em `backlog.md` atualizada com o status correspondente
