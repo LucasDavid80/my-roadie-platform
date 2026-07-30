@@ -6,7 +6,7 @@ Pré-requisitos: `frontend-web` e `mobile` configurados com dependências, Supab
 
 - [x] T1.1 — Disponibilizar a rota de cadastro `/register` no App Router do `frontend-web` (`src/app/(auth)/register/page.tsx`) e ajustar os links de navegação entre a tela de Login e a tela de Cadastro.
   - Critério: Clicar em "Criar conta" ou acessar `/register` no navegador exibe o formulário de cadastro Web sem erros 404 ou de roteamento.
-- [ ] T1.2 — Integrar o formulário de cadastro Web (`RegisterForm.tsx`) ao `supabase.auth.signUp` e à API do backend NestJS (`POST /users`), salvando as credenciais no Supabase Auth e o perfil no PostgreSQL.
+- [x] T1.2 — Integrar o formulário de cadastro Web (`RegisterForm.tsx`) ao `supabase.auth.signUp` e à API do backend NestJS (`POST /users`), salvando as credenciais no Supabase Auth e o perfil no PostgreSQL.
   - Critério: Submeter o formulário cria a conta no Supabase Auth, insere a linha na tabela `User` do banco de dados e redireciona para a aplicação com feedback de sucesso.
 
 ## Fase 2 — Correção e Sincronização do Cadastro no App Mobile (`mobile/`)

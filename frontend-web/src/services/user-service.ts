@@ -5,21 +5,28 @@ import { UserEntity } from '@/types/user';
 
 export const userService = {
     signUp: async (data: RegisterFormData) => {
-        // 1. Registra no Supabase Auth (email + senha)
+        const userRole = data.role || 'MUSICIAN';
+        // 1. Registra no Supabase Auth (email + senha + metadata)
         const { data: authData, error } = await supabase.auth.signUp({
             email: data.email,
             password: data.password,
+            options: {
+                data: {
+                    name: data.name,
+                    role: userRole,
+                },
+            },
         });
 
         if (error) throw new Error(error.message);
         if (!authData.user) throw new Error('Erro ao criar conta no Supabase');
 
-        // 2. Cria o perfil no seu backend com o supabaseId retornado
+        // 2. Cria o perfil no backend NestJS com o supabaseId retornado
         const response = await api.post('/users', {
             name: data.name,
             email: data.email,
             supabaseId: authData.user.id, // ID gerado pelo Supabase
-            role: 'MUSICIAN',
+            role: userRole,
         });
 
         return response.data;
