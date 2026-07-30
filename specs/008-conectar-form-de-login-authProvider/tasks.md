@@ -6,7 +6,7 @@ Pré-requisitos: `frontend-web` configurado com a biblioteca `@supabase/supabase
 
 - [x] T1.1 — Criar o módulo `src/lib/supabase.ts` instanciando e exportando o cliente Supabase utilizando as variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
   - Critério: Cliente `supabase` exportado e reutilizável pelo projeto.
-- [ ] T1.2 — Refatorar `src/services/user-service.ts` para utilizar o cliente de `src/lib/supabase.ts`.
+- [x] T1.2 — Refatorar `src/services/user-service.ts` para utilizar o cliente de `src/lib/supabase.ts`.
   - Critério: `userService` importando a instância centralizada em vez de instanciar o cliente localmente.
 
 ## Fase 2 — Integração do AuthContext com Supabase Auth

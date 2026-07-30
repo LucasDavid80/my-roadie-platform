@@ -1,12 +1,7 @@
 import { api } from './api';
 import { RegisterFormData } from '@/components/features/auth/register-schema';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import { UserEntity } from '@/types/user';
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export const userService = {
     signUp: async (data: RegisterFormData) => {
