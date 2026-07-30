@@ -36,5 +36,8 @@ class AppConfig {
           : defaultBackendUrl;
 
   static bool get isConfigured =>
-      supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
+      supabaseUrl.isNotEmpty &&
+      supabaseAnonKey.isNotEmpty &&
+      !supabaseUrl.contains('placeholder') &&
+      !supabaseAnonKey.contains('placeholder');
 }

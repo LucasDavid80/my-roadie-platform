@@ -10,6 +10,18 @@ class AuthRemoteDataSource {
   AuthRemoteDataSource(this._supabase, [this._remoteDataSource]);
 
   Future<AuthResponse> signIn({required String email, required String password}) async {
+    if (!AppConfig.isConfigured) {
+      final mockId = 'mock-user-1';
+      return AuthResponse(
+        user: User(
+          id: mockId,
+          appMetadata: {},
+          userMetadata: {'name': 'Usuário Teste', 'role': 'MUSICIAN'},
+          aud: 'authenticated',
+          createdAt: DateTime.now().toIso8601String(),
+        ),
+      );
+    }
     return await _supabase.auth.signInWithPassword(
       email: email,
       password: password,

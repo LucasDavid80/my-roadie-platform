@@ -7,17 +7,23 @@ import '../../domain/models/event_model.dart';
 
 class UnauthorizedException implements Exception {
   final String message;
-  UnauthorizedException([this.message = 'Unauthorized']);
+  UnauthorizedException([this.message = 'Não autorizado']);
+  @override
+  String toString() => message;
 }
 
 class NetworkException implements Exception {
   final String message;
-  NetworkException([this.message = 'Network error occurred']);
+  NetworkException([this.message = 'Erro de conexão com o servidor']);
+  @override
+  String toString() => message;
 }
 
 class ServerException implements Exception {
   final String message;
-  ServerException([this.message = 'Server error occurred']);
+  ServerException([this.message = 'Erro no servidor']);
+  @override
+  String toString() => message;
 }
 
 class RemoteDataSource {
