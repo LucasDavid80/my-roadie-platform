@@ -7,12 +7,24 @@ import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 import '../../data/datasources/remote_datasource.dart';
 
+import '../../core/config/app_config.dart';
+
 // Providers para injeção
 final supabaseClientProvider = Provider<SupabaseClient>((ref) {
   try {
     return Supabase.instance.client;
   } catch (_) {
-    return SupabaseClient('http://localhost', 'anon-key');
+    return SupabaseClient(
+      AppConfig.supabaseUrl.isNotEmpty
+          ? AppConfig.supabaseUrl
+          : 'https://placeholder.supabase.co',
+      AppConfig.supabaseAnonKey.isNotEmpty
+          ? AppConfig.supabaseAnonKey
+          : 'placeholder-anon-key',
+      authOptions: const FlutterAuthClientOptions(
+        authFlowType: AuthFlowType.implicit,
+      ),
+    );
   }
 });
 
