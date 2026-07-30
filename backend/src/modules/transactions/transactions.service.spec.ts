@@ -225,7 +225,9 @@ describe('TransactionsService', () => {
       };
 
       const updatedTransaction = { ...mockTransaction, ...updateDto };
-      jest.spyOn(prisma.transaction, 'update').mockResolvedValue(updatedTransaction);
+      jest
+        .spyOn(prisma.transaction, 'update')
+        .mockResolvedValue(updatedTransaction);
 
       const result = await service.update('transaction-uuid-1', updateDto);
 
