@@ -30,7 +30,8 @@ void main() {
     mockAgendaRepository = MockAgendaRepository();
     // Default mocks
     when(() => mockAgendaRepository.getEvents()).thenAnswer((_) async => []);
-    when(() => mockAgendaRepository.saveEvent(any())).thenAnswer((_) async => {});
+    when(() => mockAgendaRepository.saveEvent(any()))
+        .thenAnswer((invocation) async => invocation.positionalArguments.first as EventEntity);
     when(() => mockAgendaRepository.deleteEvent(any())).thenAnswer((_) async => {});
 
     container = ProviderContainer(
@@ -71,6 +72,69 @@ void main() {
     expect(state.length, 1);
     expect(state.first.id, '1');
     expect(state.first.title, 'Show Test');
+  });
+
+  test('Should add a new event using the persisted EventEntity returned by repository (T1.1)', () async {
+    final tempEvent = EventEntity(
+      id: 'temp-id-123',
+      title: 'Show com ID Temporario',
+      type: 'Show',
+      date: DateTime.now(),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Pub',
+      fee: 500.0,
+      notes: '',
+    );
+
+    final persistedEvent = EventEntity(
+      id: 'real-uuid-from-api-456',
+      title: 'Show com ID Temporario',
+      type: 'Show',
+      date: tempEvent.date,
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Pub',
+      fee: 500.0,
+      notes: '',
+    );
+
+    when(() => mockAgendaRepository.saveEvent(tempEvent))
+        .thenAnswer((_) async => persistedEvent);
+
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(tempEvent);
+
+    final state = container.read(agendaProvider);
+    expect(state.length, 1);
+    expect(state.first.id, 'real-uuid-from-api-456');
+  });
+
+  test('Should preserve original state and throw exception when saveEvent fails (T1.2)', () async {
+    final eventToFail = EventEntity(
+      id: 'fail-123',
+      title: 'Show que falha',
+      type: 'Show',
+      date: DateTime.now(),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Pub',
+      fee: 500.0,
+      notes: '',
+    );
+
+    when(() => mockAgendaRepository.saveEvent(eventToFail))
+        .thenThrow(Exception('Erro API'));
+
+    final initialList = container.read(agendaProvider);
+
+    expect(
+      () => container.read(agendaProvider.notifier).addOrUpdateEvent(eventToFail),
+      throwsA(isA<Exception>()),
+    );
+
+    final state = container.read(agendaProvider);
+    expect(state, equals(initialList));
+    expect(state.any((e) => e.id == 'fail-123'), false);
   });
 
   test('Should update an existing event', () async {

@@ -83,13 +83,14 @@ void main() {
     test('saveEvent should call saveEvent on datasource (positive case)', () async {
       // arrange
       when(() => mockRemoteDataSource.saveEvent(any()))
-          .thenAnswer((_) async => {});
+          .thenAnswer((_) async => tEventModel);
 
       // act
-      await repository.saveEvent(tEventEntity);
+      final result = await repository.saveEvent(tEventEntity);
 
       // assert
       verify(() => mockRemoteDataSource.saveEvent(any())).called(1);
+      expect(result.id, equals(tEventEntity.id));
     });
 
     test('deleteEvent should call deleteEvent on datasource (positive case)', () async {

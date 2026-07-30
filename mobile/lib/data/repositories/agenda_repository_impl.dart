@@ -15,7 +15,7 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   }
 
   @override
-  Future<void> saveEvent(EventEntity event) async {
+  Future<EventEntity> saveEvent(EventEntity event) async {
     final model = EventModel(
       id: event.id,
       title: event.title,
@@ -27,7 +27,8 @@ class AgendaRepositoryImpl implements IAgendaRepository {
       fee: event.fee,
       notes: event.notes,
     );
-    await remoteDataSource.saveEvent(model);
+    final savedModel = await remoteDataSource.saveEvent(model);
+    return savedModel ?? event;
   }
 
   @override

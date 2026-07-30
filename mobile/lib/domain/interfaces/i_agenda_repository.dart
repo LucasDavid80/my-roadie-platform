@@ -3,6 +3,6 @@ import '../entities/event_entity.dart';
 
 abstract class IAgendaRepository {
   Future<List<EventEntity>> getEvents();
-  Future<void> saveEvent(EventEntity event);
+  Future<EventEntity> saveEvent(EventEntity event);
   Future<void> deleteEvent(String id);
 }

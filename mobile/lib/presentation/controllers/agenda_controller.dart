@@ -40,18 +40,18 @@ class AgendaController extends Notifier<List<EventEntity>> {
 
   Future<void> addOrUpdateEvent(EventEntity event) async {
     try {
-      await _repository.saveEvent(event);
-      final index = state.indexWhere((e) => e.id == event.id);
+      final savedEvent = await _repository.saveEvent(event);
+      final index = state.indexWhere((e) => e.id == savedEvent.id || e.id == event.id);
       if (index != -1) {
         state = [
           for (final e in state)
-            if (e.id == event.id) event else e,
+            if (e.id == savedEvent.id || e.id == event.id) savedEvent else e,
         ];
       } else {
-        state = [...state, event];
+        state = [...state, savedEvent];
       }
     } catch (e) {
-      // Trata erros de forma segura
+      rethrow;
     }
   }
 

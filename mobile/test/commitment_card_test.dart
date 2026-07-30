@@ -17,7 +17,7 @@ void main() {
     notes: 'Levar cabos',
   );
 
-  Widget createTestWidget({required EventEntity event, required Function(EventEntity) onConfirm}) {
+  Widget createTestWidget({required EventEntity event, required Future<void> Function(EventEntity) onConfirm}) {
     return MaterialApp(
       home: Scaffold(
         body: CommitmentCard(
@@ -31,7 +31,7 @@ void main() {
   testWidgets('Should display event information correctly', (WidgetTester tester) async {
     await tester.pumpWidget(createTestWidget(
       event: testEvent,
-      onConfirm: (_) {},
+      onConfirm: (e) async {},
     ));
 
     expect(find.text('Show de Rock'), findsOneWidget);
@@ -44,7 +44,7 @@ void main() {
   testWidgets('Should open edit modal when edit button is tapped', (WidgetTester tester) async {
     await tester.pumpWidget(createTestWidget(
       event: testEvent,
-      onConfirm: (_) {},
+      onConfirm: (e) async {},
     ));
 
     // Encontra o botão de editar (ícone edit_outlined)

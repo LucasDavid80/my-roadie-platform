@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class CommitmentCard extends StatelessWidget {
   final EventEntity event;
-  final Function(EventEntity) onConfirm;
+  final Future<void> Function(EventEntity) onConfirm;
 
   const CommitmentCard({
     super.key,
