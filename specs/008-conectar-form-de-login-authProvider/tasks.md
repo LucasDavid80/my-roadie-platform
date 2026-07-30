@@ -15,7 +15,7 @@ Pré-requisitos: `frontend-web` configurado com a biblioteca `@supabase/supabase
   - Critério: Tipagem do TypeScript exige `email` e `password`.
 - [x] T2.2 — Atualizar a função `signIn` em `src/contexts/AuthContext.tsx` para efetuar a autenticação via `supabase.auth.signInWithPassword({ email, password })`.
   - Critério: O fluxo de autenticação só avança caso a validação do Supabase Auth retorne sucesso.
-- [ ] T2.3 — Manter a sincronização do estado local (`user`), persistência do token (`@MyRoadie:token`) e dados do perfil (`@MyRoadie:user`) no `localStorage`.
+- [x] T2.3 — Manter a sincronização do estado local (`user`), persistência do token (`@MyRoadie:token`) e dados do perfil (`@MyRoadie:user`) no `localStorage`.
   - Critério: Usuário autenticado obtém a sessão e atualiza `isAuthenticated = true` no contexto.
 
 ## Fase 3 — Tratamento de Erros no Formulário de Login (`LoginForm`)
