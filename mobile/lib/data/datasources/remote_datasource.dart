@@ -173,4 +173,43 @@ class RemoteDataSource {
       throw NetworkException(e.toString());
     }
   }
+
+  Future<UserModel> createUser({
+    required String email,
+    required String supabaseId,
+    required String name,
+    required String role,
+  }) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('${AppConfig.backendUrl}/users'),
+        headers: _getHeaders(),
+        body: jsonEncode({
+          'email': email,
+          'supabaseId': supabaseId,
+          'name': name,
+          'role': role,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return UserModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        throw UnauthorizedException();
+      } else {
+        final dynamic body = jsonDecode(response.body);
+        final String message = body is Map && body['message'] != null
+            ? body['message'].toString()
+            : 'Failed to create user: ${response.statusCode}';
+        throw ServerException(message);
+      }
+    } on http.ClientException {
+      throw NetworkException();
+    } catch (e) {
+      if (e is UnauthorizedException || e is ServerException) {
+        rethrow;
+      }
+      throw NetworkException(e.toString());
+    }
+  }
 }

@@ -4,10 +4,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/interfaces/i_auth_repository.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
+import 'agenda_controller.dart';
 
 // Providers para injeção
 final supabaseClientProvider = Provider((ref) => Supabase.instance.client);
-final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(ref.read(supabaseClientProvider)));
+final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(
+      ref.read(supabaseClientProvider),
+      ref.read(remoteDataSourceProvider),
+    ));
 final authRepositoryProvider = Provider<IAuthRepository>((ref) => AuthRepositoryImpl(ref.read(authRemoteDataSourceProvider)));
 
 class AuthState {
@@ -43,6 +47,28 @@ class AuthController extends Notifier<AuthState> {
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
       return false;
+    }
+  }
+
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    String? name,
+    String? role,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final user = await _repository.signUp(
+        email,
+        password,
+        name: name,
+        role: role,
+      );
+      state = state.copyWith(user: user, isLoading: false);
+      return user != null;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
     }
   }
 
