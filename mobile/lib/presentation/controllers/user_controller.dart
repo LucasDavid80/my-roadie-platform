@@ -17,11 +17,15 @@ class UserNotifier extends Notifier<UserEntity> {
   UserEntity build() {
     final authState = ref.watch(authProvider);
     final userId = authState.user?.id;
-    if (userId != null) {
-      Future.microtask(() => fetchProfile(userId));
-      return UserEntity(id: userId);
-    }
-    return UserEntity(id: '1'); // Fallback para ID default
+    final validUserId = (userId != null && userId.isNotEmpty) ? userId : '1';
+
+    Future.microtask(() => fetchProfile(validUserId));
+
+    return UserEntity(
+      id: validUserId,
+      instruments: const [],
+      styles: const [],
+    );
   }
 
   Future<void> fetchProfile(String userId) async {
@@ -57,14 +61,22 @@ class UserNotifier extends Notifier<UserEntity> {
 
   void toggleInstrument(String item) {
     final current = List<String>.from(state.instruments);
-    current.contains(item) ? current.remove(item) : current.add(item);
-    state = state.copyWith(instruments: current);
+    if (current.contains(item)) {
+      current.remove(item);
+    } else {
+      current.add(item);
+    }
+    state = state.copyWith(instruments: List<String>.unmodifiable(current));
   }
 
   void toggleStyle(String item) {
     final current = List<String>.from(state.styles);
-    current.contains(item) ? current.remove(item) : current.add(item);
-    state = state.copyWith(styles: current);
+    if (current.contains(item)) {
+      current.remove(item);
+    } else {
+      current.add(item);
+    }
+    state = state.copyWith(styles: List<String>.unmodifiable(current));
   }
 
   void updateAvailability(bool val) => state = state.copyWith(isAvailable: val);
