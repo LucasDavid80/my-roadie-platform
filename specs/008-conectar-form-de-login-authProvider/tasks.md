@@ -27,7 +27,7 @@ Pré-requisitos: `frontend-web` configurado com a biblioteca `@supabase/supabase
 
 ## Fase 4 — Cobertura de Testes Unitários e de Integração (Vitest)
 
-- [ ] T4.1 — Atualizar suíte de testes em `src/contexts/AuthContext.spec.tsx` com mocks do Supabase Auth cobrindo no mínimo 3 casos positivos e 3 casos negativos conforme `constitution.md` §5.
+- [x] T4.1 — Atualizar suíte de testes em `src/contexts/AuthContext.spec.tsx` com mocks do Supabase Auth cobrindo no mínimo 3 casos positivos e 3 casos negativos conforme `constitution.md` §5.
   - Critério: 3 cenários de sucesso (login com token, estado atualizado, redirecionamento) e 3 de erro (senha incorreta, usuário inexistente, erro de rede) cobertos e passando.
 - [ ] T4.2 — Atualizar `LoginForm.spec.tsx` e `LoginIntegration.spec.tsx` para validar a integração do componente com a nova lógica do `AuthContext`.
   - Critério: Suíte completa do Vitest (`npm test`) rodando no `frontend-web` com 100% dos testes verdes.
