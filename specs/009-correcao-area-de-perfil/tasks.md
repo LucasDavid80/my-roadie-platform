@@ -6,7 +6,7 @@ Pré-requisitos: `mobile` configurado com biblioteca do Flutter, Riverpod e suí
 
 - [x] T1.1 — Refatorar `mobile/lib/presentation/screens/person/widgets/photo_widget.dart` removendo parâmetros incompatíveis de layout (`spacing` no `Row`) e garantindo árvore de renderização segura.
   - Critério: `PhotoWidget` constrói e renderiza sem erros de layout ou exceções visuais.
-- [ ] T1.2 — Atualizar `mobile/lib/presentation/screens/person/widgets/info_widget.dart` e `custom_text_field.dart` garantindo o repasse seguro dos valores do `UserEntity` para evitar exceções em `double.tryParse` ou conversão de texto nulo.
+- [x] T1.2 — Atualizar `mobile/lib/presentation/screens/person/widgets/info_widget.dart` e `custom_text_field.dart` garantindo o repasse seguro dos valores do `UserEntity` para evitar exceções em `double.tryParse` ou conversão de texto nulo.
   - Critério: Todos os campos do perfil exibem e atualizam os dados preenchidos no estado de forma segura.
 
 ## Fase 2 — Estabilização do Estado no Riverpod (`user_controller.dart`)

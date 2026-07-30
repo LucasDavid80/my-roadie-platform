@@ -45,7 +45,7 @@ class CustomTextField extends StatelessWidget {
           TextFormField(
             // Usamos TextFormField para facilitar validações futuras
             controller: controller,
-            initialValue: initialValue,
+            initialValue: controller == null ? initialValue : null,
             maxLines: maxLines,
             keyboardType: keyboardType,
             onChanged: onChanged,

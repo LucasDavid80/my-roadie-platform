@@ -9,8 +9,9 @@ class InfoWidget extends ConsumerWidget {
   const InfoWidget({super.key});
 
   @override
-  // Adicionamos o WidgetRef ref para "conversar" com os providers
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -45,6 +46,7 @@ class InfoWidget extends ConsumerWidget {
           CustomTextField(
             label: AppStrings.labelArtistName,
             hint: AppStrings.hintArtistName,
+            initialValue: user.name,
             isRequired: true,
             onChanged: (val) => ref.read(userProvider.notifier).updateName(val),
           ),
@@ -52,6 +54,7 @@ class InfoWidget extends ConsumerWidget {
           CustomTextField(
             label: AppStrings.labelExperience,
             hint: AppStrings.hintExperience,
+            initialValue: user.experience,
             keyboardType: TextInputType.number,
             onChanged: (val) =>
                 ref.read(userProvider.notifier).updateExperience(val),
@@ -60,6 +63,7 @@ class InfoWidget extends ConsumerWidget {
           CustomTextField(
             label: AppStrings.labelPhone,
             hint: AppStrings.hintPhone,
+            initialValue: user.phone,
             keyboardType: TextInputType.phone,
             onChanged: (val) =>
                 ref.read(userProvider.notifier).updatePhone(val),
@@ -68,6 +72,7 @@ class InfoWidget extends ConsumerWidget {
           CustomTextField(
             label: AppStrings.labelInstagram,
             hint: AppStrings.hintInstagram,
+            initialValue: user.instagram,
             keyboardType: TextInputType.url,
             onChanged: (val) =>
                 ref.read(userProvider.notifier).updateInstagram(val),
@@ -76,12 +81,14 @@ class InfoWidget extends ConsumerWidget {
           CustomTextField(
             label: AppStrings.labelCity,
             hint: AppStrings.hintCity,
+            initialValue: user.city,
             onChanged: (val) => ref.read(userProvider.notifier).updateCity(val),
           ),
 
           CustomTextField(
             label: AppStrings.labelState,
             hint: AppStrings.hintState,
+            initialValue: user.federativeUnit,
             onChanged: (val) =>
                 ref.read(userProvider.notifier).updateFederativeUnit(val),
           ),
@@ -89,15 +96,23 @@ class InfoWidget extends ConsumerWidget {
           CustomTextField(
             label: AppStrings.labelMinimumFee,
             hint: AppStrings.hintMinimumFee,
+            initialValue: user.minCache > 0
+                ? (user.minCache % 1 == 0
+                    ? user.minCache.toInt().toString()
+                    : user.minCache.toString())
+                : '',
             keyboardType: TextInputType.number,
-            onChanged: (val) => ref
-                .read(userProvider.notifier)
-                .updateMinimumFee(double.tryParse(val) ?? 0.0),
+            onChanged: (val) {
+              final cleaned = val.replaceAll(',', '.').trim();
+              final parsed = double.tryParse(cleaned) ?? 0.0;
+              ref.read(userProvider.notifier).updateMinimumFee(parsed);
+            },
           ),
 
           CustomTextField(
             label: AppStrings.labelVideoLink,
             hint: AppStrings.hintVideoLink,
+            initialValue: user.youtubeLink,
             keyboardType: TextInputType.url,
             onChanged: (val) =>
                 ref.read(userProvider.notifier).updateVideoLink(val),
@@ -106,6 +121,7 @@ class InfoWidget extends ConsumerWidget {
           CustomTextField(
             label: AppStrings.labelBio,
             hint: AppStrings.hintBio,
+            initialValue: user.bio,
             maxLines: 4, // Caixa maior para biografia
             onChanged: (val) => ref.read(userProvider.notifier).updateBio(val),
           ),
