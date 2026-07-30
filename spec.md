@@ -44,6 +44,8 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
 - ✅ **Camada de dados implementada:** `data/datasources/remote_datasource.dart`, `data/repositories/agenda_repository_impl.dart` e `data/repositories/user_repository_impl.dart` estão implementados e testados, conectando a interface mobile aos endpoints correspondentes de Events e Users do backend real.
 - ✅ **Reatividade de compromissos:** A lista de compromissos e o calendário na tela de Agenda atualizam imediatamente no aplicativo mobile após a criação/edição de eventos (Spec 007).
+- ✅ **Estabilidade e renderização da área de Perfil:** `PersonScreen`, `PhotoWidget`, `InfoWidget` e `UserNotifier` refatorados para garantir renderização segura, ausência de exceções unhandled/red screen, inicialização imutável do estado e tratamento de erros de rede (Spec 009).
+
 
 
 ## 5. Regras de negócio confirmadas (das que já têm API)

@@ -35,6 +35,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/008-conectar-form-de-login-authProvider/)
 
+### Correção de erro de tela vermelha na área de usuários/perfil
+- Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
+- Impacto esperado: alto (bug crítico/bloqueante)
+- Depende de: nenhum
+- Status: concluído (specs/009-correcao-area-de-perfil/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -43,12 +49,6 @@
 
 ### Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
-
-### Correção de erro de tela vermelha na área de usuários/perfil
-- Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
-- Impacto esperado: alto (bug crítico/bloqueante)
-- Depende de: nenhum
-- Status: em spec → specs/009-correcao-area-de-perfil/
 
 ### Validar e testar fluxo de Login com API Real
 - Intenção: Verificar a estabilidade do fluxo de login contra a API de autenticação real e criar testes adicionais de integração.

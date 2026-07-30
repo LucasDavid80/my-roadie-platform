@@ -18,12 +18,12 @@ Pré-requisitos: `mobile` configurado com biblioteca do Flutter, Riverpod e suí
 
 ## Fase 3 — Cobertura de Testes de Widget no Flutter (`flutter_test`)
 
-- [ ] T3.1 — Criar a suíte de testes de widget `mobile/test/presentation/screens/person_screen_test.dart` validando a navegação e renderização completa de `PersonScreen` sob `ProviderScope`.
+- [x] T3.1 — Criar a suíte de testes de widget `mobile/test/presentation/screens/person_screen_test.dart` validando a navegação e renderização completa de `PersonScreen` sob `ProviderScope`.
   - Critério: `flutter test` no `mobile` executa com 100% dos testes verdes validando a tela de perfil sem exceções em tela.
 
 ## Checklist de fechamento da feature
 
-- [ ] Navegação para a rota `/profile` abre a tela `PersonScreen` sem tela vermelha de exceção
-- [ ] Todos os campos do formulário de perfil exibem e atualizam os dados de forma legível e segura
-- [ ] `flutter test` no `mobile` 100% verde sem falhas ou regressões
-- [ ] Entrada em `backlog.md` atualizada com o status correspondente
+- [x] Navegação para a rota `/profile` abre a tela `PersonScreen` sem tela vermelha de exceção
+- [x] Todos os campos do formulário de perfil exibem e atualizam os dados de forma legível e segura
+- [x] `flutter test` no `mobile` 100% verde sem falhas ou regressões
+- [x] Entrada em `backlog.md` atualizada com o status correspondente
