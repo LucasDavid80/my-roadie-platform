@@ -3,9 +3,12 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  Inject,
+  Optional,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { Request } from 'express';
+import { UsersService } from '../../users/users.service';
 
 interface RequestWithUser extends Request {
   user: {
@@ -17,7 +20,15 @@ interface RequestWithUser extends Request {
 
 @Injectable()
 export class OwnershipGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
+  constructor(
+    @Optional()
+    @Inject(UsersService)
+    private readonly usersService?: UsersService,
+  ) {}
+
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
     const targetId = request.params.id;
@@ -27,8 +38,25 @@ export class OwnershipGuard implements CanActivate {
     // Se for ADMIN, permite tudo
     if (user.role === Role.ADMIN) return true;
 
-    // Se o ID do usuário logado for igual ao ID do alvo, permite
+    // Se o ID da sessão for diretamente igual ao targetId
     if (user.userId === targetId) return true;
+
+    // Buscar o usuário no banco para comparar id e supabaseId
+    if (this.usersService) {
+      return this.usersService
+        .findOne(targetId)
+        .then((targetUser) => {
+          if (
+            targetUser.id === user.userId ||
+            targetUser.supabaseId === user.userId
+          ) {
+            return true;
+          }
+          throw new ForbiddenException(
+            'Você não tem permissão para realizar esta ação neste recurso.',
+          );
+        });
+    }
 
     throw new ForbiddenException(
       'Você não tem permissão para realizar esta ação neste recurso.',
