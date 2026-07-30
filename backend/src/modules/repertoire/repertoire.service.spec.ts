@@ -197,7 +197,7 @@ describe('RepertoireService', () => {
     it('deve retornar uma música com campos opcionais nulos se ela existir', async () => {
       jest
         .spyOn(prisma.repertoireSong, 'findUnique')
-        .mockResolvedValue(mockMinimalSong as any);
+        .mockResolvedValue(mockMinimalSong);
 
       const result = await service.findOne('song-uuid-456');
 
@@ -230,7 +230,9 @@ describe('RepertoireService', () => {
     it('deve atualizar o título e posição de uma música existente', async () => {
       const updateDto = { title: 'Título Atualizado', position: 2 };
       const updatedSong = { ...mockSong, ...updateDto };
-      jest.spyOn(prisma.repertoireSong, 'update').mockResolvedValue(updatedSong);
+      jest
+        .spyOn(prisma.repertoireSong, 'update')
+        .mockResolvedValue(updatedSong);
 
       const result = await service.update('song-uuid-123', updateDto);
 
@@ -243,9 +245,15 @@ describe('RepertoireService', () => {
     });
 
     it('deve atualizar artista, tom e notas de uma música existente', async () => {
-      const updateDto = { artist: 'Novo Artista', key: 'G', notes: 'Nova nota' };
+      const updateDto = {
+        artist: 'Novo Artista',
+        key: 'G',
+        notes: 'Nova nota',
+      };
       const updatedSong = { ...mockSong, ...updateDto };
-      jest.spyOn(prisma.repertoireSong, 'update').mockResolvedValue(updatedSong);
+      jest
+        .spyOn(prisma.repertoireSong, 'update')
+        .mockResolvedValue(updatedSong);
 
       const result = await service.update('song-uuid-123', updateDto);
 
@@ -266,7 +274,9 @@ describe('RepertoireService', () => {
     });
 
     it('deve repassar erro do banco se a atualização falhar no Prisma', async () => {
-      jest.spyOn(prisma.repertoireSong, 'findUnique').mockResolvedValue(mockSong);
+      jest
+        .spyOn(prisma.repertoireSong, 'findUnique')
+        .mockResolvedValue(mockSong);
       jest
         .spyOn(prisma.repertoireSong, 'update')
         .mockRejectedValue(new Error('Falha no update do banco'));
@@ -290,10 +300,10 @@ describe('RepertoireService', () => {
     it('deve remover uma música com dados mínimos pelo ID', async () => {
       jest
         .spyOn(prisma.repertoireSong, 'findUnique')
-        .mockResolvedValue(mockMinimalSong as any);
+        .mockResolvedValue(mockMinimalSong);
       jest
         .spyOn(prisma.repertoireSong, 'delete')
-        .mockResolvedValue(mockMinimalSong as any);
+        .mockResolvedValue(mockMinimalSong);
 
       const result = await service.remove('song-uuid-456');
 
@@ -312,7 +322,9 @@ describe('RepertoireService', () => {
     });
 
     it('deve repassar erro do banco se a remoção falhar no Prisma', async () => {
-      jest.spyOn(prisma.repertoireSong, 'findUnique').mockResolvedValue(mockSong);
+      jest
+        .spyOn(prisma.repertoireSong, 'findUnique')
+        .mockResolvedValue(mockSong);
       jest
         .spyOn(prisma.repertoireSong, 'delete')
         .mockRejectedValue(new Error('Falha ao deletar no banco'));

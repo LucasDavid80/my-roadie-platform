@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
+    const [authError, setAuthError] = useState<string | null>(null);
     const router = useRouter();
     const { signIn } = useAuth();
 
@@ -23,16 +24,31 @@ export function LoginForm() {
     });
 
     const onSubmit = async (data: LoginFormData) => {
+        setAuthError(null);
         try {
             await signIn({ email: data.email, password: data.password });
             router.push('/dashboard');
-        } catch {
-            alert('Falha no login. Verifique suas credenciais.');
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Falha na autenticação';
+            if (
+                message.toLowerCase().includes('invalid') ||
+                message.toLowerCase().includes('credentials') ||
+                message.toLowerCase().includes('falha na autenticação')
+            ) {
+                setAuthError('E-mail ou senha incorretos');
+            } else {
+                setAuthError(message);
+            }
         }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            {authError && (
+                <div role="alert" className="p-3 bg-red-500/10 border border-red-500/30 text-red-500 text-sm rounded-xl text-center">
+                    {authError}
+                </div>
+            )}
             {/* CAMPO E-MAIL */}
             <div className="flex flex-col gap-1">
                 <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all

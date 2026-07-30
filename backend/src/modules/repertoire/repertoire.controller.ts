@@ -38,10 +38,7 @@ export class RepertoireController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateDto: UpdateRepertoireSongDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateDto: UpdateRepertoireSongDto) {
     return this.repertoireService.update(id, updateDto);
   }
 

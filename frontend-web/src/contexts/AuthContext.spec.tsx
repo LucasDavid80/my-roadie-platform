@@ -1,8 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Mock } from 'vitest';
-import { render, act } from '@testing-library/react';
+import { render, act, renderHook } from '@testing-library/react';
 import { AuthProvider, useAuth } from './AuthContext';
 import { api } from '@/services/api';
+import { supabase } from '@/lib/supabase';
+import { ReactNode } from 'react';
 
 // Mock do axios/api
 vi.mock('@/services/api', () => ({
@@ -11,14 +13,26 @@ vi.mock('@/services/api', () => ({
     },
 }));
 
-// Componente de teste para consumir o hook
+// Mock do cliente Supabase
+vi.mock('@/lib/supabase', () => ({
+    supabase: {
+        auth: {
+            signInWithPassword: vi.fn(),
+        },
+    },
+}));
+
+const wrapper = ({ children }: { children: ReactNode }) => (
+    <AuthProvider>{children}</AuthProvider>
+);
+
 function TestComponent() {
     const { user, signIn, signOut, isAuthenticated } = useAuth();
     return (
         <div>
             <div data-testid="user">{user?.name}</div>
             <div data-testid="auth">{isAuthenticated.toString()}</div>
-            <button onClick={() => signIn({ email: 'test@test.com' })}>Login</button>
+            <button onClick={() => signIn({ email: 'test@test.com', password: 'password123' })}>Login</button>
             <button onClick={signOut}>Logout</button>
         </div>
     );
@@ -40,28 +54,132 @@ describe('AuthContext', () => {
         expect(getByTestId('auth').textContent).toBe('false');
     });
 
-    it('deve realizar login e salvar no localStorage', async () => {
-        const mockResponse = {
-            data: {
-                access_token: 'token-123',
-                user: { id: '1', name: 'Test User', email: 'test@test.com', role: 'ADMIN' }
-            }
-        };
-        (api.post as Mock).mockResolvedValue(mockResponse);
+    describe('Casos Positivos', () => {
+        it('1. deve realizar login com credenciais válidas via Supabase Auth e armazenar token e perfil no localStorage', async () => {
+            (supabase.auth.signInWithPassword as Mock).mockResolvedValue({
+                data: { user: { id: 'supabase-123' } },
+                error: null,
+            });
+            (api.post as Mock).mockResolvedValue({
+                data: {
+                    access_token: 'token-jwt-123',
+                    user: { id: '1', name: 'Test User', email: 'test@test.com', role: 'MUSICIAN' },
+                },
+            });
 
-        const { getByTestId, getByText } = render(
-            <AuthProvider>
-                <TestComponent />
-            </AuthProvider>
-        );
+            const { result } = renderHook(() => useAuth(), { wrapper });
 
-        await act(async () => {
-            getByText('Login').click();
+            await act(async () => {
+                await result.current.signIn({ email: 'test@test.com', password: 'password123' });
+            });
+
+            expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
+                email: 'test@test.com',
+                password: 'password123',
+            });
+            expect(localStorage.getItem('@MyRoadie:token')).toBe('token-jwt-123');
+            expect(localStorage.getItem('@MyRoadie:user')).toContain('Test User');
         });
 
-        expect(getByTestId('auth').textContent).toBe('true');
-        expect(getByTestId('user').textContent).toBe('Test User');
-        expect(localStorage.getItem('@MyRoadie:token')).toBe('token-123');
+        it('2. deve definir o estado user e marcar isAuthenticated = true com credenciais válidas', async () => {
+            (supabase.auth.signInWithPassword as Mock).mockResolvedValue({
+                data: { user: { id: 'supabase-123' } },
+                error: null,
+            });
+            (api.post as Mock).mockResolvedValue({
+                data: {
+                    access_token: 'token-jwt-123',
+                    user: { id: '1', name: 'Musico Silva', email: 'musico@test.com', role: 'MUSICIAN' },
+                },
+            });
+
+            const { getByTestId, getByText } = render(
+                <AuthProvider>
+                    <TestComponent />
+                </AuthProvider>
+            );
+
+            await act(async () => {
+                getByText('Login').click();
+            });
+
+            expect(getByTestId('auth').textContent).toBe('true');
+            expect(getByTestId('user').textContent).toBe('Musico Silva');
+        });
+
+        it('3. deve resolver a chamada de signIn permitindo avanço de fluxo após login validado', async () => {
+            (supabase.auth.signInWithPassword as Mock).mockResolvedValue({
+                data: { user: { id: 'supabase-123' } },
+                error: null,
+            });
+            (api.post as Mock).mockResolvedValue({
+                data: {
+                    access_token: 'token-jwt-456',
+                    user: { id: '2', name: 'Roadie Santos', email: 'roadie@test.com', role: 'ROADIE' },
+                },
+            });
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+
+            await act(async () => {
+                await expect(
+                    result.current.signIn({ email: 'roadie@test.com', password: 'password123' })
+                ).resolves.toBeUndefined();
+            });
+        });
+    });
+
+    describe('Casos Negativos', () => {
+        it('1. deve lançar erro e não autenticar em caso de senha incorreta no Supabase Auth', async () => {
+            (supabase.auth.signInWithPassword as Mock).mockResolvedValue({
+                data: null,
+                error: { message: 'Invalid login credentials' },
+            });
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+
+            await expect(
+                result.current.signIn({ email: 'test@test.com', password: 'wrongpassword' })
+            ).rejects.toThrow('Invalid login credentials');
+
+            expect(result.current.isAuthenticated).toBe(false);
+            expect(localStorage.getItem('@MyRoadie:token')).toBeNull();
+            expect(api.post).not.toHaveBeenCalled();
+        });
+
+        it('2. deve lançar erro e não autenticar em caso de usuário não encontrado', async () => {
+            (supabase.auth.signInWithPassword as Mock).mockResolvedValue({
+                data: null,
+                error: { message: 'User not found' },
+            });
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+
+            await expect(
+                result.current.signIn({ email: 'naoexistente@test.com', password: 'password123' })
+            ).rejects.toThrow('User not found');
+
+            expect(result.current.isAuthenticated).toBe(false);
+            expect(localStorage.getItem('@MyRoadie:token')).toBeNull();
+            expect(api.post).not.toHaveBeenCalled();
+        });
+
+        it('3. deve tratar falhas de conexão/rede no Supabase Auth sem quebrar o estado do contexto', async () => {
+            (supabase.auth.signInWithPassword as Mock).mockResolvedValue({
+                data: null,
+                error: { message: 'Network error connecting to Supabase Auth' },
+            });
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+
+            await expect(
+                result.current.signIn({ email: 'test@test.com', password: 'password123' })
+            ).rejects.toThrow('Network error connecting to Supabase Auth');
+
+            expect(result.current.isAuthenticated).toBe(false);
+            expect(localStorage.getItem('@MyRoadie:token')).toBeNull();
+            expect(api.post).not.toHaveBeenCalled();
+        });
     });
 
     it('deve realizar logout e limpar o localStorage', async () => {

@@ -23,6 +23,10 @@ describe('RepertoireController', () => {
   const mockMinimalSong = {
     id: 'song-uuid-456',
     title: 'Música Mínima',
+    artist: null,
+    key: null,
+    position: 0,
+    notes: null,
     bandId: 'band-uuid-123',
   };
 
@@ -78,9 +82,7 @@ describe('RepertoireController', () => {
         title: 'Música Mínima',
         bandId: 'band-uuid-123',
       };
-      jest
-        .spyOn(service, 'create')
-        .mockResolvedValueOnce(mockMinimalSong as any);
+      jest.spyOn(service, 'create').mockResolvedValueOnce(mockMinimalSong);
 
       const result = await controller.create(dto);
 
@@ -111,9 +113,7 @@ describe('RepertoireController', () => {
         .spyOn(service, 'create')
         .mockRejectedValueOnce(new BadRequestException('Dados inválidos'));
 
-      await expect(controller.create(dto)).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(controller.create(dto)).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -161,9 +161,7 @@ describe('RepertoireController', () => {
     });
 
     it('deve retornar outra música pelo ID correspondente', async () => {
-      jest
-        .spyOn(service, 'findOne')
-        .mockResolvedValueOnce(mockMinimalSong as any);
+      jest.spyOn(service, 'findOne').mockResolvedValueOnce(mockMinimalSong);
 
       const result = await controller.findOne('song-uuid-456');
 
@@ -252,9 +250,7 @@ describe('RepertoireController', () => {
     });
 
     it('deve remover outra música confirmando a delegação ao service', async () => {
-      jest
-        .spyOn(service, 'remove')
-        .mockResolvedValueOnce(mockMinimalSong as any);
+      jest.spyOn(service, 'remove').mockResolvedValueOnce(mockMinimalSong);
 
       const result = await controller.remove('song-uuid-456');
 

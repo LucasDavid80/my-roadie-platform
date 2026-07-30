@@ -3,10 +3,11 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { UserEntity } from '@/types/user';
 import { api } from '@/services/api';
+import { supabase } from '@/lib/supabase';
 
 interface SignInCredentials {
     email: string;
-    password?: string;
+    password: string;
 }
 
 interface AuthContextData {
@@ -35,7 +36,17 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
     });
     const isAuthenticated = !!user;
 
-    async function signIn({ email }: SignInCredentials) {
+    async function signIn({ email, password }: SignInCredentials) {
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (error) {
+            console.error('Erro na autenticação com Supabase:', error);
+            throw new Error(error.message || 'Falha na autenticação');
+        }
+
         try {
             const response = await api.post('/auth/login', { email });
             const { access_token, user: userData } = response.data;

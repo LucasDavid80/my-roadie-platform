@@ -29,6 +29,12 @@
 - Depende de: Mobile conectado à API real (spec 003)
 - Status: concluído (specs/007-atualizar-lista-de-compromissos/)
 
+### Conectar formulário de Login ao authProvider real (Supabase)
+- Intenção: Impedir o bypass de login com dados aleatórios, conectando o botão de submissão do `LoginForm` ao `authProvider` real.
+- Impacto esperado: alto (crítico/segurança)
+- Depende de: nenhum
+- Status: concluído (specs/008-conectar-form-de-login-authProvider/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -37,12 +43,6 @@
 
 ### Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
-
-### Conectar formulário de Login ao authProvider real (Supabase)
-- Intenção: Impedir o bypass de login com dados aleatórios, conectando o botão de submissão do `LoginForm` ao `authProvider` real.
-- Impacto esperado: alto (crítico/segurança)
-- Depende de: nenhum
-- Status: ideia
 
 ### Correção de erro de tela vermelha na área de usuários/perfil
 - Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
