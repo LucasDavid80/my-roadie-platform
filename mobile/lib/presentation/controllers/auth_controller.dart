@@ -44,10 +44,20 @@ class AuthController extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final user = await _repository.signIn(email, password);
-      state = state.copyWith(user: user, isLoading: false);
-      return true;
+      if (user != null) {
+        state = state.copyWith(user: user, isLoading: false);
+        return true;
+      }
+      state = state.copyWith(
+        isLoading: false,
+        error: 'E-mail ou senha incorretos. Verifique suas credenciais.',
+      );
+      return false;
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Falha na autenticação. Verifique seu e-mail e senha.',
+      );
       return false;
     }
   }

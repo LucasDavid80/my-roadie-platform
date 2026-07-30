@@ -121,10 +121,22 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       final email = _emailController.text.trim();
       final password = _passController.text;
 
-      await ref.read(authProvider.notifier).login(email, password);
+      final success =
+          await ref.read(authProvider.notifier).login(email, password);
 
       if (mounted) {
-        context.go('/');
+        if (success) {
+          context.go('/');
+        } else {
+          final errorMsg =
+              ref.read(authProvider).error ?? 'Falha na autenticação';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMsg),
+              backgroundColor: AppColors.erro,
+            ),
+          );
+        }
       }
     }
   }
