@@ -35,12 +35,6 @@
 - Depende de: nenhum
 - Status: concluído (specs/008-conectar-form-de-login-authProvider/)
 
-### Correção da Tela de Cadastro (Web/Mobile) e Sincronização no Supabase Auth
-- Intenção: Garantir que o cadastro crie a conta no Supabase Auth e o perfil no PostgreSQL via API NestJS com tratamento de erro legível.
-- Impacto esperado: alto (crítico/estabilização)
-- Depende de: nenhum
-- Status: concluído (specs/010-correcao-login-e-cadastro/)
-
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
