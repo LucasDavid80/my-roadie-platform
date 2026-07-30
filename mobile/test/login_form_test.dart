@@ -1,13 +1,16 @@
 import 'package:agenda_musical/presentation/screens/auth/widgets/login_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Widget createTestWidget() {
-    return const MaterialApp(
-      home: Scaffold(
-        body: SingleChildScrollView(
-          child: LoginForm(),
+    return const ProviderScope(
+      child: MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: LoginForm(),
+          ),
         ),
       ),
     );

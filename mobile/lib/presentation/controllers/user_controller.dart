@@ -16,7 +16,7 @@ class UserNotifier extends Notifier<UserEntity> {
   @override
   UserEntity build() {
     final authState = ref.watch(authProvider);
-    final userId = authState.user?.id;
+    final userId = authState.user?.id ?? authState.user?.email;
     final validUserId = (userId != null && userId.isNotEmpty) ? userId : '1';
 
     Future.microtask(() => fetchProfile(validUserId));

@@ -20,7 +20,7 @@ export class UsersService {
   async findOne(id: string) {
     const user = await this.prisma.user.findFirst({
       where: {
-        OR: [{ id }, { supabaseId: id }],
+        OR: [{ id }, { supabaseId: id }, { email: id }],
       },
     });
     if (!user) {

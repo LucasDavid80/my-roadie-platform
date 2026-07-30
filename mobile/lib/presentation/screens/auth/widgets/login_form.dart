@@ -1,15 +1,17 @@
 import 'package:agenda_musical/core/constants/app_colors.dart';
+import 'package:agenda_musical/presentation/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   bool _obscurePassword = true;
@@ -17,6 +19,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -94,15 +98,17 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 elevation: 2,
               ),
-              onPressed: _doLogin,
-              child: const Text(
-                'ENTRAR',
-                style: TextStyle(
-                  color: AppColors.background,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
+              onPressed: authState.isLoading ? null : _doLogin,
+              child: authState.isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text(
+                      'ENTRAR',
+                      style: TextStyle(
+                        color: AppColors.background,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
             ),
           ),
         ],
@@ -110,11 +116,16 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _doLogin() {
+  void _doLogin() async {
     if (_formKey.currentState!.validate()) {
-      // Aqui entraria a lógica de API/Firebase
-      // Por enquanto, apenas navega para a Home
-      context.go('/');
+      final email = _emailController.text.trim();
+      final password = _passController.text;
+
+      await ref.read(authProvider.notifier).login(email, password);
+
+      if (mounted) {
+        context.go('/');
+      }
     }
   }
 }
