@@ -15,6 +15,8 @@ Pré-requisitos: `mobile` configurado com biblioteca do Flutter, Riverpod e suí
   - Critério: `userProvider` inicia com estado válido garantindo que seleções de `MultiSelectionWidget` não disparem erro por `null`.
 - [x] T2.2 — Adicionar tratamento de erros e exceções de requisição em `fetchProfile` e `saveProfile` com fallbacks seguros.
   - Critério: Exceções de rede ou HTTP 404/500 são tratadas no estado sem propagar tela vermelha de exceção *unhandled*.
+- [x] T2.3 — Garantir o carregamento dos dados do perfil do banco de dados/API toda vez que a tela `PersonScreen` for acessada.
+  - Critério: `PersonScreen` executa `fetchProfile()` no `initState` via `addPostFrameCallback`, atualizando o estado do perfil a cada navegação.
 
 ## Fase 3 — Cobertura de Testes de Widget no Flutter (`flutter_test`)
 

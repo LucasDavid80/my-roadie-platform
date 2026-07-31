@@ -28,10 +28,16 @@ class UserNotifier extends Notifier<UserEntity> {
     );
   }
 
-  Future<void> fetchProfile(String userId) async {
+  Future<void> fetchProfile([String? userId]) async {
+    final authState = ref.read(authProvider);
+    final currentUserId = authState.user?.id ?? authState.user?.email;
+    final targetId = (userId != null && userId.isNotEmpty)
+        ? userId
+        : ((currentUserId != null && currentUserId.isNotEmpty) ? currentUserId : state.id);
+    if (targetId.isEmpty) return;
     try {
       final userProfile =
-          await ref.read(userRepositoryProvider).getUser(userId);
+          await ref.read(userRepositoryProvider).getUser(targetId);
       state = userProfile;
     } catch (e) {
       // Mantém a instância atual do estado como fallback seguro sem lançar unhandled exception

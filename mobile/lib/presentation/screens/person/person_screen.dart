@@ -9,13 +9,24 @@ import 'package:agenda_musical/presentation/widgets/my_roadie_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PersonScreen extends ConsumerWidget {
+class PersonScreen extends ConsumerStatefulWidget {
   const PersonScreen({super.key});
 
   @override
-  // 3. Adicionar o WidgetRef ref aqui
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Agora o ref funciona!
+  ConsumerState<PersonScreen> createState() => _PersonScreenState();
+}
+
+class _PersonScreenState extends ConsumerState<PersonScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userProvider.notifier).fetchProfile();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
     final userNotifier = ref.read(userProvider.notifier);
 
@@ -37,30 +48,29 @@ class PersonScreen extends ConsumerWidget {
             const ProfileHeader(),
             const SizedBox(height: 16),
             const PhotoWidget(),
-            const InfoWidget(), // O InfoWidget já deve ser um ConsumerWidget também!
-            // Conectando os dados reais do Riverpod nos Widgets:
+            const InfoWidget(),
             MultiSelectionWidget(
               title: 'Instrumentos *',
               options: instrumentos,
-              selectedItems: user.instruments, // Pega do estado
+              selectedItems: user.instruments,
               onToggle: (item) =>
-                  userNotifier.toggleInstrument(item), // Avisa o cérebro
+                  userNotifier.toggleInstrument(item),
             ),
 
             MultiSelectionWidget(
               title: 'Estilos Musicais *',
               options: estilos,
-              selectedItems: user.styles, // Pega do estado
+              selectedItems: user.styles,
               onToggle: (item) => userNotifier.toggleStyle(item),
             ),
 
             AvailabilityWidget(
-              isAvailable: user.isAvailable, // Pega do estado
+              isAvailable: user.isAvailable,
               onChanged: (val) =>
-                  userNotifier.updateAvailability(val ?? true), // Avisa o cérebro
+                  userNotifier.updateAvailability(val ?? true),
             ),
 
-            _buildSaveButton(context, ref), // Passamos o ref para o botão se necessário
+            _buildSaveButton(context),
             const SizedBox(height: 40),
           ],
         ),
@@ -68,8 +78,7 @@ class PersonScreen extends ConsumerWidget {
     );
   }
 
-  // Ajustei o botão para receber o ref se você quiser disparar alguma ação
-  Widget _buildSaveButton(BuildContext context, WidgetRef ref) {
+  Widget _buildSaveButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton.icon(

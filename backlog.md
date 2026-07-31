@@ -39,7 +39,7 @@
 - Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
 - Impacto esperado: alto (bug crítico/bloqueante)
 - Depende de: nenhum
-- Status: em progresso (specs/009-correcao-area-de-perfil/)
+- Status: concluído (specs/009-correcao-area-de-perfil/)
 
 ---
 
