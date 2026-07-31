@@ -2,6 +2,7 @@
 
 import { LoginForm } from '@/components/features/auth/LoginForm';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function LoginPage() {
     return (
@@ -36,9 +37,9 @@ export default function LoginPage() {
 
                 <div className="mt-8 text-center text-slate-600">
                     Ainda não tem conta?{' '}
-                    <button className="text-primary font-bold hover:underline">
+                    <Link href="/register" className="text-primary font-bold hover:underline">
                         Cadastre-se
-                    </button>
+                    </Link>
                 </div>
             </div>
         </main>

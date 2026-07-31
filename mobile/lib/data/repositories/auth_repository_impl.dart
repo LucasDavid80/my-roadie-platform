@@ -15,8 +15,13 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   @override
-  Future<User?> signUp(String email, String password) async {
-    final response = await remoteDataSource.signUp(email: email, password: password);
+  Future<User?> signUp(String email, String password, {String? name, String? role}) async {
+    final response = await remoteDataSource.signUp(
+      email: email,
+      password: password,
+      name: name,
+      role: role,
+    );
     return response.user;
   }
 

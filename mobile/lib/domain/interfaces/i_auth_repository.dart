@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class IAuthRepository {
   Future<User?> signIn(String email, String password);
-  Future<User?> signUp(String email, String password);
+  Future<User?> signUp(String email, String password, {String? name, String? role});
   Future<void> signOut();
   User? get currentUser;
   String? get currentToken;

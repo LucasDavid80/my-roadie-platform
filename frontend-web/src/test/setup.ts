@@ -22,6 +22,9 @@ vi.mock('@supabase/supabase-js', () => ({
     }),
 }));
 
+// Mock do window.alert para o jsdom
+window.alert = vi.fn();
+
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());

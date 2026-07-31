@@ -38,11 +38,11 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`.
 - Serviços de API e contexto de autenticação (`AuthContext`) existem na estrutura.
 - A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios), eliminando os placeholders.
-- ✅ **Autenticação via Supabase Auth:** Módulo `src/lib/supabase.ts` centraliza a instância do Supabase. `AuthContext` efetua autenticação real via `supabase.auth.signInWithPassword`, e `LoginForm` exibe mensagens de erro amigáveis em caso de credenciais inválidas ou erro de rede (Spec 008).
+- ✅ **Autenticação e Cadastro via Supabase Auth:** Módulo `src/lib/supabase.ts` centraliza a instância do Supabase. `AuthContext` efetua autenticação real via `supabase.auth.signInWithPassword`, e `LoginForm` exibe mensagens de erro amigáveis (Spec 008). Rota `/register` acessível e integrada ao `supabase.auth.signUp` e à API do backend NestJS (`POST /users`) com mensagens de erro (Spec 010).
 
 ### Mobile (`mobile/lib/`)
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
-- ✅ **Camada de dados implementada:** `data/datasources/remote_datasource.dart`, `data/repositories/agenda_repository_impl.dart` e `data/repositories/user_repository_impl.dart` estão implementados e testados, conectando a interface mobile aos endpoints correspondentes de Events e Users do backend real.
+- ✅ **Camada de dados e cadastro sincronizado:** `data/datasources/remote_datasource.dart`, `data/repositories/agenda_repository_impl.dart`, `data/repositories/user_repository_impl.dart` e `auth_remote_datasource.dart` conectam a interface mobile aos endpoints do backend e ao Supabase Auth (`POST /users`), garantindo a criação de perfis no PostgreSQL com tratamento de erros na UI (Spec 010).
 - ✅ **Reatividade de compromissos:** A lista de compromissos e o calendário na tela de Agenda atualizam imediatamente no aplicativo mobile após a criação/edição de eventos (Spec 007).
 
 

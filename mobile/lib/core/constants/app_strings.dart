@@ -15,7 +15,7 @@ class AppStrings {
   static const String labelInstagram = "Instagram";
 
   // Dicas (Hints)
-  static const String hintArtistName = "Ex: Lucas David Oliveira";
+  static const String hintArtistName = "Ex: Nome artistico";
   static const String hintVideoLink = "https://youtube.com/...";
   static const String hintMinimumFee = "Ex: 500";
   static const String hintBio =
