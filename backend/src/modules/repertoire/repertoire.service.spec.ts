@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RepertoireService } from './repertoire.service';
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BandAccessService } from '../band-access/band-access.service';
@@ -372,6 +372,104 @@ describe('RepertoireService', () => {
       await expect(service.remove('song-uuid-123', mockUser)).rejects.toThrow(
         'Falha ao deletar no banco',
       );
+    });
+  });
+
+  describe('Autorização por Banda (Fase 2 - T2.3)', () => {
+    const adminUser: CurrentUserPayload = {
+      userId: 'admin-uuid',
+      email: 'admin@example.com',
+      role: Role.ADMIN,
+    };
+
+    const nonMemberUser: CurrentUserPayload = {
+      userId: 'non-member-uuid',
+      email: 'outsider@example.com',
+      role: Role.MUSICIAN,
+    };
+
+    // --- 3 Positivos ---
+    it('1. Positivo: membro da banda consegue criar, ler e atualizar música com sucesso', async () => {
+      const dto = { title: 'Música do Membro', bandId: 'band-uuid-123' };
+      const created = await service.create(dto, mockUser);
+      expect(created).toBeDefined();
+
+      const found = await service.findOne('song-uuid-123', mockUser);
+      expect(found).toEqual(mockSong);
+
+      const updated = await service.update('song-uuid-123', { title: 'Novo Título' }, mockUser);
+      expect(updated).toBeDefined();
+    });
+
+    it('2. Positivo: ADMIN consegue criar e acessar recursos de banda sem ser membro', async () => {
+      jest.spyOn(bandAccessService, 'assertMembership').mockResolvedValueOnce(undefined);
+
+      const dto = { title: 'Música Admin', bandId: 'band-outra' };
+      const result = await service.create(dto, adminUser);
+      expect(result).toBeDefined();
+      expect(bandAccessService.assertMembership).toHaveBeenCalledWith(
+        adminUser.userId,
+        adminUser.role,
+        'band-outra',
+      );
+    });
+
+    it('3. Positivo: findAll sem bandId para ADMIN retorna todas as músicas', async () => {
+      jest.spyOn(prisma.repertoireSong, 'findMany').mockResolvedValueOnce([mockSong]);
+
+      const result = await service.findAll(adminUser);
+      expect(prisma.repertoireSong.findMany).toHaveBeenCalledWith({
+        orderBy: { position: 'asc' },
+      });
+      expect(result).toEqual([mockSong]);
+    });
+
+    // --- 3 Negativos ---
+    it('1. Negativo: não-membro tentando criar música na banda recebe ForbiddenException (403)', async () => {
+      jest
+        .spyOn(bandAccessService, 'assertMembership')
+        .mockRejectedValueOnce(
+          new ForbiddenException(
+            'Você não tem permissão para acessar os recursos desta banda',
+          ),
+        );
+
+      const dto = { title: 'Música Não Autorizada', bandId: 'band-outra' };
+
+      await expect(service.create(dto, nonMemberUser)).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+
+    it('2. Negativo: não-membro tentando editar/remover música de outra banda recebe ForbiddenException (403)', async () => {
+      jest
+        .spyOn(bandAccessService, 'assertMembership')
+        .mockRejectedValueOnce(
+          new ForbiddenException(
+            'Você não tem permissão para acessar os recursos desta banda',
+          ),
+        );
+
+      await expect(
+        service.update(
+          'song-uuid-123',
+          { title: 'Tentativa Invasão' },
+          nonMemberUser,
+        ),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('3. Negativo: findAll sem bandId de usuário sem nenhuma banda retorna lista vazia', async () => {
+      jest.spyOn(bandAccessService, 'getUserBandIds').mockResolvedValueOnce([]);
+      jest.spyOn(prisma.repertoireSong, 'findMany').mockResolvedValueOnce([]);
+
+      const result = await service.findAll(nonMemberUser);
+
+      expect(result).toEqual([]);
+      expect(prisma.repertoireSong.findMany).toHaveBeenCalledWith({
+        where: { bandId: { in: [] } },
+        orderBy: { position: 'asc' },
+      });
     });
   });
 });
