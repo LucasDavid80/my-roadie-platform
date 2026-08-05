@@ -131,16 +131,16 @@ describe('RepertoireController', () => {
 
   describe('findAll', () => {
     it('deve retornar a lista de músicas chamando o service sem bandId', async () => {
-      const result = await controller.findAll();
+      const result = await controller.findAll(mockUser);
 
-      expect(service.findAll).toHaveBeenCalledWith(undefined);
+      expect(service.findAll).toHaveBeenCalledWith(mockUser, undefined);
       expect(result).toEqual([mockSong]);
     });
 
     it('deve passar o bandId ao service quando fornecido via query', async () => {
-      const result = await controller.findAll('band-uuid-123');
+      const result = await controller.findAll(mockUser, 'band-uuid-123');
 
-      expect(service.findAll).toHaveBeenCalledWith('band-uuid-123');
+      expect(service.findAll).toHaveBeenCalledWith(mockUser, 'band-uuid-123');
       expect(result).toEqual([mockSong]);
     });
 
@@ -149,18 +149,21 @@ describe('RepertoireController', () => {
         .spyOn(service, 'findAll')
         .mockRejectedValueOnce(new Error('Erro interno do serviço'));
 
-      await expect(controller.findAll('band-uuid-123')).rejects.toThrow(
-        'Erro interno do serviço',
-      );
+      await expect(
+        controller.findAll(mockUser, 'band-uuid-123'),
+      ).rejects.toThrow('Erro interno do serviço');
     });
 
     it('deve retornar lista vazia se o service não encontrar músicas para a banda', async () => {
       jest.spyOn(service, 'findAll').mockResolvedValueOnce([]);
 
-      const result = await controller.findAll('band-sem-musicas');
+      const result = await controller.findAll(mockUser, 'band-sem-musicas');
 
       expect(result).toEqual([]);
-      expect(service.findAll).toHaveBeenCalledWith('band-sem-musicas');
+      expect(service.findAll).toHaveBeenCalledWith(
+        mockUser,
+        'band-sem-musicas',
+      );
     });
   });
 

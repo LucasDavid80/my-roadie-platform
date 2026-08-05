@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Role } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BandAccessService } from '../band-access/band-access.service';
 import { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
@@ -41,10 +42,28 @@ export class RepertoireService {
     });
   }
 
-  async findAll(bandId?: string) {
-    const where = bandId ? { bandId } : {};
+  async findAll(user: CurrentUserPayload, bandId?: string) {
+    if (bandId) {
+      await this.bandAccessService.assertMembership(
+        user.userId,
+        user.role,
+        bandId,
+      );
+      return await this.prisma.repertoireSong.findMany({
+        where: { bandId },
+        orderBy: { position: 'asc' },
+      });
+    }
+
+    if (user.role === Role.ADMIN) {
+      return await this.prisma.repertoireSong.findMany({
+        orderBy: { position: 'asc' },
+      });
+    }
+
+    const bandIds = await this.bandAccessService.getUserBandIds(user.userId);
     return await this.prisma.repertoireSong.findMany({
-      where,
+      where: { bandId: { in: bandIds } },
       orderBy: { position: 'asc' },
     });
   }

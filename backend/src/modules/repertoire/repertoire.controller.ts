@@ -35,8 +35,11 @@ export class RepertoireController {
   }
 
   @Get()
-  findAll(@Query('bandId') bandId?: string) {
-    return this.repertoireService.findAll(bandId);
+  findAll(
+    @CurrentUser() user: CurrentUserPayload,
+    @Query('bandId') bandId?: string,
+  ) {
+    return this.repertoireService.findAll(user, bandId);
   }
 
   @Get(':id')

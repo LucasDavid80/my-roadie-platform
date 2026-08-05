@@ -168,19 +168,27 @@ describe('RepertoireService', () => {
   });
 
   describe('findAll', () => {
-    it('deve retornar todas as músicas do repertório ordenadas por posição quando nenhum bandId for informado', async () => {
-      const result = await service.findAll();
+    it('deve retornar as músicas das bandas do usuário ordenadas por posição quando nenhum bandId for informado', async () => {
+      const result = await service.findAll(mockUser);
 
+      expect(bandAccessService.getUserBandIds).toHaveBeenCalledWith(
+        mockUser.userId,
+      );
       expect(prisma.repertoireSong.findMany).toHaveBeenCalledWith({
-        where: {},
+        where: { bandId: { in: ['band-uuid-123'] } },
         orderBy: { position: 'asc' },
       });
       expect(result).toEqual([mockSong]);
     });
 
-    it('deve filtrar músicas por bandId quando fornecido', async () => {
-      const result = await service.findAll('band-uuid-123');
+    it('deve filtrar músicas por bandId quando fornecido e usuário for membro', async () => {
+      const result = await service.findAll(mockUser, 'band-uuid-123');
 
+      expect(bandAccessService.assertMembership).toHaveBeenCalledWith(
+        mockUser.userId,
+        mockUser.role,
+        'band-uuid-123',
+      );
       expect(prisma.repertoireSong.findMany).toHaveBeenCalledWith({
         where: { bandId: 'band-uuid-123' },
         orderBy: { position: 'asc' },
@@ -193,7 +201,7 @@ describe('RepertoireService', () => {
         .spyOn(prisma.repertoireSong, 'findMany')
         .mockRejectedValue(new Error('Erro ao listar no banco'));
 
-      await expect(service.findAll('band-uuid-123')).rejects.toThrow(
+      await expect(service.findAll(mockUser, 'band-uuid-123')).rejects.toThrow(
         'Erro ao listar no banco',
       );
     });
@@ -201,7 +209,7 @@ describe('RepertoireService', () => {
     it('deve retornar lista vazia se nenhuma música for encontrada para a banda', async () => {
       jest.spyOn(prisma.repertoireSong, 'findMany').mockResolvedValue([]);
 
-      const result = await service.findAll('band-sem-musicas');
+      const result = await service.findAll(mockUser, 'band-sem-musicas');
 
       expect(result).toEqual([]);
       expect(prisma.repertoireSong.findMany).toHaveBeenCalledWith({

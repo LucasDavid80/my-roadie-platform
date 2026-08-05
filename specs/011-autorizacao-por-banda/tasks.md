@@ -16,7 +16,7 @@ Pré-requisitos: nenhum. É correção sobre módulos já entregues (specs 004, 
 ## Fase 2 — Aplicar em Repertoire
 
 - [x] T2.1 — `create`/`findOne`/`update`/`remove` chamando `assertMembership`.
-- [ ] T2.2 — `findAll` sem `bandId` filtrando por `getUserBandIds`, nunca retornando tudo.
+- [x] T2.2 — `findAll` sem `bandId` filtrando por `getUserBandIds`, nunca retornando tudo.
 - [ ] T2.3 — Testes: 3 positivos + 3 negativos cobrindo os 4 cenários do critério de sucesso da spec.
 
 ## Fase 3 — Aplicar em Transactions
