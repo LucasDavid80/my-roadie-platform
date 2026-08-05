@@ -26,14 +26,14 @@ Pré-requisitos: nenhum. É correção sobre módulos já entregues (specs 004, 
 
 ## Fase 4 — Aplicar em Tasks
 
-- [ ] T4.1 — `create` resolvendo `event.bandId` antes de checar.
-- [ ] T4.2 — `findOne`/`update`/`remove` buscando task com `event` incluso, checando `task.event.bandId`.
-- [ ] T4.3 — `findAll` sem `eventId` filtrando por bandas do usuário via relação `event.bandId`.
-- [ ] T4.4 — Testes: 3 positivos + 3 negativos.
+- [x] T4.1 — `create` resolvendo `event.bandId` antes de checar.
+- [x] T4.2 — `findOne`/`update`/`remove` buscando task com `event` incluso, checando `task.event.bandId`.
+- [x] T4.3 — `findAll` sem `eventId` filtrando por bandas do usuário via relação `event.bandId`.
+- [x] T4.4 — Testes: 3 positivos + 3 negativos.
 
 ## Fase 5 — Verificar clientes (frontend-web / mobile)
 
-- [ ] T5.1 — Grepar `frontend-web/src` e `mobile/lib` por chamadas a `/repertoire` e `/transactions` sem `bandId`; ajustar se alguma tela depender do comportamento antigo (vazamento).
+- [x] T5.1 — Grepar `frontend-web/src` e `mobile/lib` por chamadas a `/repertoire` e `/transactions` sem `bandId`; ajustar se alguma tela depender do comportamento antigo (vazamento).
 - [ ] T5.2 — Rodar `npm test`/`flutter test` desses dois clientes e confirmar que nada quebrou por causa da nova restrição.
 
 ## Checklist de fechamento da feature
