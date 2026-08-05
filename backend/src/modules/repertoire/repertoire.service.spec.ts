@@ -1,11 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RepertoireService } from './repertoire.service';
 import { NotFoundException } from '@nestjs/common';
+import { Role } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { BandAccessService } from '../band-access/band-access.service';
+import { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
 
 describe('RepertoireService', () => {
   let service: RepertoireService;
   let prisma: PrismaService;
+  let bandAccessService: BandAccessService;
+
+  const mockUser: CurrentUserPayload = {
+    userId: 'user-uuid-123',
+    email: 'musician@example.com',
+    role: Role.MUSICIAN,
+  };
 
   const mockBand = {
     id: 'band-uuid-123',
@@ -34,6 +44,11 @@ describe('RepertoireService', () => {
     bandId: 'band-uuid-123',
   };
 
+  const mockBandAccessService = {
+    assertMembership: jest.fn().mockResolvedValue(undefined),
+    getUserBandIds: jest.fn().mockResolvedValue(['band-uuid-123']),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -53,11 +68,16 @@ describe('RepertoireService', () => {
             },
           },
         },
+        {
+          provide: BandAccessService,
+          useValue: mockBandAccessService,
+        },
       ],
     }).compile();
 
     service = module.get<RepertoireService>(RepertoireService);
     prisma = module.get<PrismaService>(PrismaService);
+    bandAccessService = module.get<BandAccessService>(BandAccessService);
   });
 
   it('deve estar definido', () => {
@@ -75,8 +95,13 @@ describe('RepertoireService', () => {
         notes: 'Intro no violão',
       };
 
-      const result = await service.create(dto);
+      const result = await service.create(dto, mockUser);
 
+      expect(bandAccessService.assertMembership).toHaveBeenCalledWith(
+        mockUser.userId,
+        mockUser.role,
+        dto.bandId,
+      );
       expect(prisma.band.findUnique).toHaveBeenCalledWith({
         where: { id: dto.bandId },
       });
@@ -99,7 +124,7 @@ describe('RepertoireService', () => {
         bandId: 'band-uuid-123',
       };
 
-      await service.create(dto);
+      await service.create(dto, mockUser);
 
       expect(prisma.repertoireSong.create).toHaveBeenCalledWith({
         data: {
@@ -121,7 +146,9 @@ describe('RepertoireService', () => {
         bandId: 'band-inexistente',
       };
 
-      await expect(service.create(dto)).rejects.toThrow(NotFoundException);
+      await expect(service.create(dto, mockUser)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('deve repassar erro do banco de dados se a criação no Prisma falhar', async () => {
@@ -134,7 +161,7 @@ describe('RepertoireService', () => {
         bandId: 'band-uuid-123',
       };
 
-      await expect(service.create(dto)).rejects.toThrow(
+      await expect(service.create(dto, mockUser)).rejects.toThrow(
         'Erro de conexão no banco',
       );
     });
@@ -186,11 +213,16 @@ describe('RepertoireService', () => {
 
   describe('findOne', () => {
     it('deve retornar uma música completa pelo ID se ela existir', async () => {
-      const result = await service.findOne('song-uuid-123');
+      const result = await service.findOne('song-uuid-123', mockUser);
 
       expect(prisma.repertoireSong.findUnique).toHaveBeenCalledWith({
         where: { id: 'song-uuid-123' },
       });
+      expect(bandAccessService.assertMembership).toHaveBeenCalledWith(
+        mockUser.userId,
+        mockUser.role,
+        mockSong.bandId,
+      );
       expect(result).toEqual(mockSong);
     });
 
@@ -199,7 +231,7 @@ describe('RepertoireService', () => {
         .spyOn(prisma.repertoireSong, 'findUnique')
         .mockResolvedValue(mockMinimalSong);
 
-      const result = await service.findOne('song-uuid-456');
+      const result = await service.findOne('song-uuid-456', mockUser);
 
       expect(prisma.repertoireSong.findUnique).toHaveBeenCalledWith({
         where: { id: 'song-uuid-456' },
@@ -210,7 +242,7 @@ describe('RepertoireService', () => {
     it('deve lançar NotFoundException se a música não for encontrada', async () => {
       jest.spyOn(prisma.repertoireSong, 'findUnique').mockResolvedValue(null);
 
-      await expect(service.findOne('id-inexistente')).rejects.toThrow(
+      await expect(service.findOne('id-inexistente', mockUser)).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -220,7 +252,7 @@ describe('RepertoireService', () => {
         .spyOn(prisma.repertoireSong, 'findUnique')
         .mockRejectedValue(new Error('Erro na busca'));
 
-      await expect(service.findOne('song-uuid-123')).rejects.toThrow(
+      await expect(service.findOne('song-uuid-123', mockUser)).rejects.toThrow(
         'Erro na busca',
       );
     });
@@ -234,7 +266,7 @@ describe('RepertoireService', () => {
         .spyOn(prisma.repertoireSong, 'update')
         .mockResolvedValue(updatedSong);
 
-      const result = await service.update('song-uuid-123', updateDto);
+      const result = await service.update('song-uuid-123', updateDto, mockUser);
 
       expect(prisma.repertoireSong.update).toHaveBeenCalledWith({
         where: { id: 'song-uuid-123' },
@@ -255,7 +287,7 @@ describe('RepertoireService', () => {
         .spyOn(prisma.repertoireSong, 'update')
         .mockResolvedValue(updatedSong);
 
-      const result = await service.update('song-uuid-123', updateDto);
+      const result = await service.update('song-uuid-123', updateDto, mockUser);
 
       expect(prisma.repertoireSong.update).toHaveBeenCalledWith({
         where: { id: 'song-uuid-123' },
@@ -269,7 +301,7 @@ describe('RepertoireService', () => {
       jest.spyOn(prisma.repertoireSong, 'findUnique').mockResolvedValue(null);
 
       await expect(
-        service.update('id-inexistente', { title: 'Novo Título' }),
+        service.update('id-inexistente', { title: 'Novo Título' }, mockUser),
       ).rejects.toThrow(NotFoundException);
     });
 
@@ -282,14 +314,14 @@ describe('RepertoireService', () => {
         .mockRejectedValue(new Error('Falha no update do banco'));
 
       await expect(
-        service.update('song-uuid-123', { title: 'Novo Título' }),
+        service.update('song-uuid-123', { title: 'Novo Título' }, mockUser),
       ).rejects.toThrow('Falha no update do banco');
     });
   });
 
   describe('remove', () => {
     it('deve remover uma música existente pelo ID', async () => {
-      const result = await service.remove('song-uuid-123');
+      const result = await service.remove('song-uuid-123', mockUser);
 
       expect(prisma.repertoireSong.delete).toHaveBeenCalledWith({
         where: { id: 'song-uuid-123' },
@@ -305,7 +337,7 @@ describe('RepertoireService', () => {
         .spyOn(prisma.repertoireSong, 'delete')
         .mockResolvedValue(mockMinimalSong);
 
-      const result = await service.remove('song-uuid-456');
+      const result = await service.remove('song-uuid-456', mockUser);
 
       expect(prisma.repertoireSong.delete).toHaveBeenCalledWith({
         where: { id: 'song-uuid-456' },
@@ -316,7 +348,7 @@ describe('RepertoireService', () => {
     it('deve lançar NotFoundException ao tentar remover uma música inexistente', async () => {
       jest.spyOn(prisma.repertoireSong, 'findUnique').mockResolvedValue(null);
 
-      await expect(service.remove('id-inexistente')).rejects.toThrow(
+      await expect(service.remove('id-inexistente', mockUser)).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -329,7 +361,7 @@ describe('RepertoireService', () => {
         .spyOn(prisma.repertoireSong, 'delete')
         .mockRejectedValue(new Error('Falha ao deletar no banco'));
 
-      await expect(service.remove('song-uuid-123')).rejects.toThrow(
+      await expect(service.remove('song-uuid-123', mockUser)).rejects.toThrow(
         'Falha ao deletar no banco',
       );
     });
