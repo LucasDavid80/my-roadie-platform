@@ -10,7 +10,7 @@ Pré-requisitos: nenhum. É correção sobre módulos já entregues (specs 004, 
 
 ## Fase 1 — BandAccessService
 
-- [ ] T1.1 — Criar `band-access.module.ts` + `band-access.service.ts` com `getUserBandIds` e `assertMembership`.
+- [x] T1.1 — Criar `band-access.module.ts` + `band-access.service.ts` com `getUserBandIds` e `assertMembership`.
   - Critério: 3 casos positivos (membro passa, admin passa, mais de uma banda) + 3 negativos (não-membro, bandId inexistente, userId inexistente) em `band-access.service.spec.ts`.
 
 ## Fase 2 — Aplicar em Repertoire
