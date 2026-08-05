@@ -21,7 +21,7 @@ Pré-requisitos: nenhum. É correção sobre módulos já entregues (specs 004, 
 
 ## Fase 3 — Aplicar em Transactions
 
-- [ ] T3.1 — Mesmo padrão da Fase 2, preservando os filtros existentes (`userId`, `eventId`, `type`).
+- [x] T3.1 — Mesmo padrão da Fase 2, preservando os filtros existentes (`userId`, `eventId`, `type`).
 - [ ] T3.2 — Testes: 3 positivos + 3 negativos.
 
 ## Fase 4 — Aplicar em Tasks

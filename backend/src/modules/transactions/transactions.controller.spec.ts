@@ -1,15 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
-import { TransactionType } from '@prisma/client';
+import { Role, TransactionType } from '@prisma/client';
 import { TransactionsController } from './transactions.controller';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
 
 describe('TransactionsController', () => {
   let controller: TransactionsController;
   let service: TransactionsService;
+
+  const mockUserPayload: CurrentUserPayload = {
+    userId: 'user-uuid-1',
+    email: 'test@example.com',
+    role: Role.MUSICIAN,
+  };
 
   const mockTransaction = {
     id: 'transaction-uuid-1',
@@ -65,9 +72,9 @@ describe('TransactionsController', () => {
         eventId: 'event-uuid-1',
       };
 
-      const result = await controller.create(dto);
+      const result = await controller.create(dto, mockUserPayload);
 
-      expect(service.create).toHaveBeenCalledWith(dto);
+      expect(service.create).toHaveBeenCalledWith(dto, mockUserPayload);
       expect(result).toEqual(mockTransaction);
     });
 
@@ -85,46 +92,53 @@ describe('TransactionsController', () => {
         .spyOn(service, 'create')
         .mockRejectedValueOnce(new NotFoundException('Banda não encontrada'));
 
-      await expect(controller.create(dto)).rejects.toThrow(NotFoundException);
+      await expect(controller.create(dto, mockUserPayload)).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('findAll', () => {
     it('deve retornar a lista de transações chamando o service sem filtros', async () => {
-      const result = await controller.findAll();
+      const result = await controller.findAll(mockUserPayload);
 
-      expect(service.findAll).toHaveBeenCalledWith({
-        bandId: undefined,
-        userId: undefined,
-        eventId: undefined,
-        type: undefined,
-      });
+      expect(service.findAll).toHaveBeenCalledWith(
+        {
+          bandId: undefined,
+          userId: undefined,
+          eventId: undefined,
+          type: undefined,
+        },
+        mockUserPayload,
+      );
       expect(result).toEqual([mockTransaction]);
     });
 
     it('deve passar os filtros ao service quando fornecidos via query', async () => {
       const result = await controller.findAll(
+        mockUserPayload,
         'band-uuid-1',
         'user-uuid-1',
         'event-uuid-1',
         TransactionType.INCOME,
       );
 
-      expect(service.findAll).toHaveBeenCalledWith({
-        bandId: 'band-uuid-1',
-        userId: 'user-uuid-1',
-        eventId: 'event-uuid-1',
-        type: TransactionType.INCOME,
-      });
+      expect(service.findAll).toHaveBeenCalledWith(
+        {
+          bandId: 'band-uuid-1',
+          userId: 'user-uuid-1',
+          eventId: 'event-uuid-1',
+          type: TransactionType.INCOME,
+        },
+        mockUserPayload,
+      );
       expect(result).toEqual([mockTransaction]);
     });
   });
 
   describe('findOne', () => {
     it('deve retornar a transação pelo ID chamando o service', async () => {
-      const result = await controller.findOne('transaction-uuid-1');
+      const result = await controller.findOne('transaction-uuid-1', mockUserPayload);
 
-      expect(service.findOne).toHaveBeenCalledWith('transaction-uuid-1');
+      expect(service.findOne).toHaveBeenCalledWith('transaction-uuid-1', mockUserPayload);
       expect(result).toEqual(mockTransaction);
     });
 
@@ -135,7 +149,7 @@ describe('TransactionsController', () => {
           new NotFoundException('Transação não encontrada'),
         );
 
-      await expect(controller.findOne('id-inexistente')).rejects.toThrow(
+      await expect(controller.findOne('id-inexistente', mockUserPayload)).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -151,9 +165,9 @@ describe('TransactionsController', () => {
 
       jest.spyOn(service, 'update').mockResolvedValueOnce(updatedTransaction);
 
-      const result = await controller.update('transaction-uuid-1', dto);
+      const result = await controller.update('transaction-uuid-1', dto, mockUserPayload);
 
-      expect(service.update).toHaveBeenCalledWith('transaction-uuid-1', dto);
+      expect(service.update).toHaveBeenCalledWith('transaction-uuid-1', dto, mockUserPayload);
       expect(result.description).toBe('Nova Descrição');
     });
 
@@ -165,16 +179,16 @@ describe('TransactionsController', () => {
         );
 
       await expect(
-        controller.update('id-inexistente', { description: 'Teste' }),
+        controller.update('id-inexistente', { description: 'Teste' }, mockUserPayload),
       ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('remove', () => {
     it('deve remover a transação chamando o service com o ID', async () => {
-      const result = await controller.remove('transaction-uuid-1');
+      const result = await controller.remove('transaction-uuid-1', mockUserPayload);
 
-      expect(service.remove).toHaveBeenCalledWith('transaction-uuid-1');
+      expect(service.remove).toHaveBeenCalledWith('transaction-uuid-1', mockUserPayload);
       expect(result).toEqual(mockTransaction);
     });
 
@@ -185,9 +199,10 @@ describe('TransactionsController', () => {
           new NotFoundException('Transação não encontrada'),
         );
 
-      await expect(controller.remove('id-inexistente')).rejects.toThrow(
+      await expect(controller.remove('id-inexistente', mockUserPayload)).rejects.toThrow(
         NotFoundException,
       );
     });
   });
 });
+
