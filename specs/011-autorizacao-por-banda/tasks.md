@@ -5,7 +5,7 @@ Pré-requisitos: nenhum. É correção sobre módulos já entregues (specs 004, 
 ## Fase 0 — Confirmar antes de codar
 
 - [x] T0.1 — Ler `jwt.strategy.ts` e confirmar o formato de `req.user` (campos `id`/`role`), reaproveitando o padrão já usado por `OwnershipGuard`.
-- [ ] T0.2 — Confirmar nomes de campo do `BandMember` no `schema.prisma`.
+- [x] T0.2 — Confirmar nomes de campo do `BandMember` no `schema.prisma`.
 - [ ] T0.3 — Confirmar se existe `@CurrentUser()` (ou equivalente) já usado em `users`/`events`; se não existir, criar um só, reaproveitado pelos três módulos.
 
 ## Fase 1 — BandAccessService
