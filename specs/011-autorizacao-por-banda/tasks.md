@@ -34,7 +34,7 @@ Pré-requisitos: nenhum. É correção sobre módulos já entregues (specs 004, 
 ## Fase 5 — Verificar clientes (frontend-web / mobile)
 
 - [x] T5.1 — Grepar `frontend-web/src` e `mobile/lib` por chamadas a `/repertoire` e `/transactions` sem `bandId`; ajustar se alguma tela depender do comportamento antigo (vazamento).
-- [ ] T5.2 — Rodar `npm test`/`flutter test` desses dois clientes e confirmar que nada quebrou por causa da nova restrição.
+- [x] T5.2 — Rodar `npm test`/`flutter test` desses dois clientes e confirmar que nada quebrou por causa da nova restrição.
 
 ## Checklist de fechamento da feature
 
