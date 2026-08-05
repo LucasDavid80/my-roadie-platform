@@ -39,15 +39,15 @@ Pré-requisitos: nenhum. É correção sobre módulos já entregues (specs 004, 
 ## Fase 6 — Ajustes de E2E e Documentação
 
 - [x] T6.1 — Corrigir mocks e instanciação de `BandAccessService` nos testes E2E do backend (`repertoire.e2e-spec.ts`, `tasks.e2e-spec.ts`, `transactions.e2e-spec.ts`).
-- [ ] T6.2 — Atualizar `spec.md` (raiz), `plan.md` (raiz) e `backlog.md` ao concluir a feature.
+- [x] T6.2 — Atualizar `spec.md` (raiz), `plan.md` (raiz) e `backlog.md` ao concluir a feature.
 
 ## Checklist de fechamento da feature
 
-- [ ] Testes unitários (`npm test`) e E2E (`npm run test:e2e`) do backend 100% verdes
-- [ ] `band-access.service.spec.ts` com 3 positivos + 3 negativos
-- [ ] Cada um dos três módulos com 3 positivos + 3 negativos cobrindo autorização
-- [ ] Nenhum `findAll` retorna dado de banda que o usuário não participa
-- [ ] Frontend-web e mobile testados contra a nova restrição (Fase 5)
-- [ ] `spec.md`/`plan.md` da baseline (raiz) atualizados removendo esta lacuna de `plan.md` §8
-- [ ] `backlog.md` — se essa lacuna tiver entrada própria, marcada como resolvida
+- [x] Testes unitários (`npm test`) e E2E (`npm run test:e2e`) do backend 100% verdes
+- [x] `band-access.service.spec.ts` com 3 positivos + 3 negativos
+- [x] Cada um dos três módulos com 3 positivos + 3 negativos cobrindo autorização
+- [x] Nenhum `findAll` retorna dado de banda que o usuário não participa
+- [x] Frontend-web e mobile testados contra a nova restrição (Fase 5)
+- [x] `spec.md`/`plan.md` da baseline (raiz) atualizados removendo esta lacuna de `plan.md` §8
+- [x] `backlog.md` — se essa lacuna tiver entrada própria, marcada como resolvida
 
