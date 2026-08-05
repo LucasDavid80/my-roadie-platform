@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Role, TransactionType } from '@prisma/client';
 import { TransactionsService } from './transactions.service';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -307,5 +307,142 @@ describe('TransactionsService', () => {
       );
     });
   });
+
+  describe('Autorização por Banda (Fase 3 - T3.2)', () => {
+    const adminUser: CurrentUserPayload = {
+      userId: 'admin-uuid',
+      email: 'admin@example.com',
+      role: Role.ADMIN,
+    };
+
+    const nonMemberUser: CurrentUserPayload = {
+      userId: 'non-member-uuid',
+      email: 'outsider@example.com',
+      role: Role.MUSICIAN,
+    };
+
+    // --- 3 Positivos ---
+    it('1. Positivo: membro da banda consegue criar, ler, atualizar e remover transação com sucesso', async () => {
+      const dto: CreateTransactionDto = {
+        description: 'Cachê do Show',
+        amount: 1000,
+        type: TransactionType.INCOME,
+        date: '2026-08-01T00:00:00.000Z',
+        bandId: 'band-uuid-1',
+        userId: 'user-uuid-1',
+      };
+
+      const created = await service.create(dto, mockUserPayload);
+      expect(created).toBeDefined();
+
+      const found = await service.findOne('transaction-uuid-1', mockUserPayload);
+      expect(found).toEqual(mockTransaction);
+
+      const updated = await service.update(
+        'transaction-uuid-1',
+        { description: 'Descrição Atualizada' },
+        mockUserPayload,
+      );
+      expect(updated).toBeDefined();
+
+      const removed = await service.remove('transaction-uuid-1', mockUserPayload);
+      expect(removed).toBeDefined();
+    });
+
+    it('2. Positivo: ADMIN consegue criar e acessar recursos financeiros de banda sem ser membro', async () => {
+      jest.spyOn(bandAccessService, 'assertMembership').mockResolvedValueOnce(undefined);
+
+      const dto: CreateTransactionDto = {
+        description: 'Equipamento Admin',
+        amount: 500,
+        type: TransactionType.EXPENSE,
+        date: '2026-08-01T00:00:00.000Z',
+        bandId: 'band-outra',
+        userId: 'user-uuid-1',
+      };
+
+      const result = await service.create(dto, adminUser);
+      expect(result).toBeDefined();
+      expect(bandAccessService.assertMembership).toHaveBeenCalledWith(
+        adminUser.userId,
+        adminUser.role,
+        'band-outra',
+      );
+    });
+
+    it('3. Positivo: findAll sem bandId para ADMIN retorna todas as transações sem filtrar por banda', async () => {
+      jest.spyOn(prisma.transaction, 'findMany').mockResolvedValueOnce([mockTransaction]);
+
+      const result = await service.findAll({}, adminUser);
+      expect(prisma.transaction.findMany).toHaveBeenCalledWith({
+        where: {},
+        orderBy: { date: 'desc' },
+      });
+      expect(result).toEqual([mockTransaction]);
+    });
+
+    // --- 3 Negativos ---
+    it('1. Negativo: não-membro tentando criar transação na banda recebe ForbiddenException (403)', async () => {
+      jest
+        .spyOn(bandAccessService, 'assertMembership')
+        .mockRejectedValueOnce(
+          new ForbiddenException(
+            'Você não tem permissão para acessar os recursos desta banda',
+          ),
+        );
+
+      const dto: CreateTransactionDto = {
+        description: 'Transação não autorizada',
+        amount: 300,
+        type: TransactionType.EXPENSE,
+        date: '2026-08-01T00:00:00.000Z',
+        bandId: 'band-outra',
+        userId: 'user-uuid-1',
+      };
+
+      await expect(service.create(dto, nonMemberUser)).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+
+    it('2. Negativo: não-membro tentando editar/remover transação de outra banda recebe ForbiddenException (403)', async () => {
+      jest
+        .spyOn(prisma.transaction, 'findUnique')
+        .mockResolvedValue(mockTransaction);
+      jest
+        .spyOn(bandAccessService, 'assertMembership')
+        .mockRejectedValue(
+          new ForbiddenException(
+            'Você não tem permissão para acessar os recursos desta banda',
+          ),
+        );
+
+      await expect(
+        service.update(
+          'transaction-uuid-1',
+          { description: 'Tentativa Invasão' },
+          nonMemberUser,
+        ),
+      ).rejects.toThrow(ForbiddenException);
+
+      await expect(
+        service.remove('transaction-uuid-1', nonMemberUser),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('3. Negativo: findAll sem bandId de usuário sem nenhuma banda retorna lista vazia', async () => {
+      jest.spyOn(bandAccessService, 'getUserBandIds').mockResolvedValueOnce([]);
+      jest.spyOn(prisma.transaction, 'findMany').mockResolvedValueOnce([]);
+
+      const result = await service.findAll({}, nonMemberUser);
+
+      expect(result).toEqual([]);
+      expect(prisma.transaction.findMany).toHaveBeenCalledWith({
+        where: { bandId: { in: [] } },
+        orderBy: { date: 'desc' },
+      });
+    });
+  });
 });
+
 
