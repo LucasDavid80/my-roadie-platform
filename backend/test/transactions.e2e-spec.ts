@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { ExecutionContext, INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { JwtAuthGuard } from '../src/modules/auth/guards/jwt-auth.guard';
-import { TransactionType } from '@prisma/client';
+import { TransactionType, Role } from '@prisma/client';
 
 describe('TransactionsController (e2e)', () => {
   const mockBandId = '11111111-1111-4111-8111-111111111111';
@@ -53,6 +53,34 @@ describe('TransactionsController (e2e)', () => {
           if (where.id === mockEventId) return Promise.resolve(mockEvent);
           return Promise.resolve(null);
         }),
+    },
+    bandMember: {
+      findFirst: jest
+        .fn()
+        .mockImplementation(
+          ({ where }: { where: { bandId?: string; userId?: string } }) => {
+            if (where.bandId === mockBandId && where.userId === mockUserId) {
+              return Promise.resolve({
+                id: 'bm-1',
+                bandId: mockBandId,
+                userId: mockUserId,
+              });
+            }
+            return Promise.resolve(null);
+          },
+        ),
+      findMany: jest
+        .fn()
+        .mockImplementation(
+          ({ where }: { where?: { userId?: string } } = {}) => {
+            if (where && where.userId === mockUserId) {
+              return Promise.resolve([
+                { id: 'bm-1', bandId: mockBandId, userId: mockUserId },
+              ]);
+            }
+            return Promise.resolve([]);
+          },
+        ),
     },
     transaction: {
       create: jest.fn().mockResolvedValue(mockTransaction),
@@ -122,7 +150,17 @@ describe('TransactionsController (e2e)', () => {
         .overrideProvider(PrismaService)
         .useValue(mockPrismaService)
         .overrideGuard(JwtAuthGuard)
-        .useValue({ canActivate: () => true })
+        .useValue({
+          canActivate: (context: ExecutionContext) => {
+            const req = context.switchToHttp().getRequest();
+            req.user = {
+              userId: mockUserId,
+              email: 'test@example.com',
+              role: Role.ADMIN,
+            };
+            return true;
+          },
+        })
         .compile();
 
       app = moduleFixture.createNestApplication();
