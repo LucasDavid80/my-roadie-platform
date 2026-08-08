@@ -15,10 +15,8 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import {
-  CurrentUser,
-  CurrentUserPayload,
-} from '../auth/decorators/current-user.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
 
 @Controller('tasks')
 @UseGuards(JwtAuthGuard)
@@ -43,10 +41,7 @@ export class TasksController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
+  findOne(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.tasksService.findOne(id, user);
   }
 
@@ -61,10 +56,7 @@ export class TasksController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
-    @Param('id') id: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
+  remove(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.tasksService.remove(id, user);
   }
 }

@@ -13,10 +13,8 @@ import {
 } from '@nestjs/common';
 import { TransactionType } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import {
-  CurrentUser,
-  CurrentUserPayload,
-} from '../auth/decorators/current-user.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionsService } from './transactions.service';
@@ -50,10 +48,7 @@ export class TransactionsController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
+  findOne(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.transactionsService.findOne(id, user);
   }
 
@@ -68,11 +63,7 @@ export class TransactionsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
-    @Param('id') id: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
+  remove(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.transactionsService.remove(id, user);
   }
 }
-

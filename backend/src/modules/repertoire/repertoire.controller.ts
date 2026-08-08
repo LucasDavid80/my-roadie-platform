@@ -15,10 +15,8 @@ import { RepertoireService } from './repertoire.service';
 import { CreateRepertoireSongDto } from './dto/create-repertoire-song.dto';
 import { UpdateRepertoireSongDto } from './dto/update-repertoire-song.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import {
-  CurrentUser,
-  CurrentUserPayload,
-} from '../auth/decorators/current-user.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
 
 @Controller('repertoire')
 @UseGuards(JwtAuthGuard)
@@ -43,10 +41,7 @@ export class RepertoireController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
+  findOne(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.repertoireService.findOne(id, user);
   }
 
@@ -61,10 +56,7 @@ export class RepertoireController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
-    @Param('id') id: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
+  remove(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.repertoireService.remove(id, user);
   }
 }
