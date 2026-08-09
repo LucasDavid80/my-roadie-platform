@@ -173,9 +173,7 @@ describe('TasksService', () => {
     });
 
     it('deve retornar lista vazia quando o usuário não pertencer a nenhuma banda', async () => {
-      jest
-        .spyOn(bandAccessService, 'getUserBandIds')
-        .mockResolvedValueOnce([]);
+      jest.spyOn(bandAccessService, 'getUserBandIds').mockResolvedValueOnce([]);
       jest.spyOn(prisma.task, 'findMany').mockResolvedValueOnce([]);
 
       const result = await service.findAll(mockNonMemberUser);

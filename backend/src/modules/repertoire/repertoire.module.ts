@@ -11,4 +11,3 @@ import { BandAccessModule } from '../band-access/band-access.module';
   exports: [RepertoireService],
 })
 export class RepertoireModule {}
-

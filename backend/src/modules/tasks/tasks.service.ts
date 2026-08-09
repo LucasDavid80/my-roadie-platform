@@ -46,9 +46,7 @@ export class TasksService {
       });
 
       if (!event) {
-        throw new NotFoundException(
-          `Evento com ID ${eventId} não encontrado`,
-        );
+        throw new NotFoundException(`Evento com ID ${eventId} não encontrado`);
       }
 
       await this.bandAccessService.assertMembership(

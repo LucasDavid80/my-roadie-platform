@@ -158,7 +158,9 @@ describe('TransactionsService', () => {
         userId: 'user-uuid-1',
       };
 
-      await expect(service.create(dto, mockUserPayload)).rejects.toThrow(NotFoundException);
+      await expect(service.create(dto, mockUserPayload)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('deve lançar NotFoundException se o usuário não for encontrado ao criar transação', async () => {
@@ -173,7 +175,9 @@ describe('TransactionsService', () => {
         userId: 'user-inexistente',
       };
 
-      await expect(service.create(dto, mockUserPayload)).rejects.toThrow(NotFoundException);
+      await expect(service.create(dto, mockUserPayload)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('deve lançar NotFoundException se o evento informado não for encontrado', async () => {
@@ -189,7 +193,9 @@ describe('TransactionsService', () => {
         eventId: 'event-inexistente',
       };
 
-      await expect(service.create(dto, mockUserPayload)).rejects.toThrow(NotFoundException);
+      await expect(service.create(dto, mockUserPayload)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -232,7 +238,10 @@ describe('TransactionsService', () => {
 
   describe('findOne', () => {
     it('deve retornar uma transação pelo ID se ela existir e usuário for membro da banda', async () => {
-      const result = await service.findOne('transaction-uuid-1', mockUserPayload);
+      const result = await service.findOne(
+        'transaction-uuid-1',
+        mockUserPayload,
+      );
 
       expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
         where: { id: 'transaction-uuid-1' },
@@ -248,9 +257,9 @@ describe('TransactionsService', () => {
     it('deve lançar NotFoundException se a transação não existir', async () => {
       jest.spyOn(prisma.transaction, 'findUnique').mockResolvedValue(null);
 
-      await expect(service.findOne('id-inexistente', mockUserPayload)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.findOne('id-inexistente', mockUserPayload),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -266,7 +275,11 @@ describe('TransactionsService', () => {
         .spyOn(prisma.transaction, 'update')
         .mockResolvedValue(updatedTransaction);
 
-      const result = await service.update('transaction-uuid-1', updateDto, mockUserPayload);
+      const result = await service.update(
+        'transaction-uuid-1',
+        updateDto,
+        mockUserPayload,
+      );
 
       expect(prisma.transaction.update).toHaveBeenCalled();
       expect(result.description).toBe('Nova Descrição');
@@ -276,7 +289,11 @@ describe('TransactionsService', () => {
       jest.spyOn(prisma.transaction, 'findUnique').mockResolvedValue(null);
 
       await expect(
-        service.update('id-inexistente', { description: 'Teste' }, mockUserPayload),
+        service.update(
+          'id-inexistente',
+          { description: 'Teste' },
+          mockUserPayload,
+        ),
       ).rejects.toThrow(NotFoundException);
     });
 
@@ -284,14 +301,21 @@ describe('TransactionsService', () => {
       jest.spyOn(prisma.event, 'findUnique').mockResolvedValue(null);
 
       await expect(
-        service.update('transaction-uuid-1', { eventId: 'event-inexistente' }, mockUserPayload),
+        service.update(
+          'transaction-uuid-1',
+          { eventId: 'event-inexistente' },
+          mockUserPayload,
+        ),
       ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('remove', () => {
     it('deve remover uma transação existente pelo ID', async () => {
-      const result = await service.remove('transaction-uuid-1', mockUserPayload);
+      const result = await service.remove(
+        'transaction-uuid-1',
+        mockUserPayload,
+      );
 
       expect(prisma.transaction.delete).toHaveBeenCalledWith({
         where: { id: 'transaction-uuid-1' },
@@ -302,9 +326,9 @@ describe('TransactionsService', () => {
     it('deve lançar NotFoundException ao tentar remover uma transação inexistente', async () => {
       jest.spyOn(prisma.transaction, 'findUnique').mockResolvedValue(null);
 
-      await expect(service.remove('id-inexistente', mockUserPayload)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.remove('id-inexistente', mockUserPayload),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -335,7 +359,10 @@ describe('TransactionsService', () => {
       const created = await service.create(dto, mockUserPayload);
       expect(created).toBeDefined();
 
-      const found = await service.findOne('transaction-uuid-1', mockUserPayload);
+      const found = await service.findOne(
+        'transaction-uuid-1',
+        mockUserPayload,
+      );
       expect(found).toEqual(mockTransaction);
 
       const updated = await service.update(
@@ -345,12 +372,17 @@ describe('TransactionsService', () => {
       );
       expect(updated).toBeDefined();
 
-      const removed = await service.remove('transaction-uuid-1', mockUserPayload);
+      const removed = await service.remove(
+        'transaction-uuid-1',
+        mockUserPayload,
+      );
       expect(removed).toBeDefined();
     });
 
     it('2. Positivo: ADMIN consegue criar e acessar recursos financeiros de banda sem ser membro', async () => {
-      jest.spyOn(bandAccessService, 'assertMembership').mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(bandAccessService, 'assertMembership')
+        .mockResolvedValueOnce(undefined);
 
       const dto: CreateTransactionDto = {
         description: 'Equipamento Admin',
@@ -371,7 +403,9 @@ describe('TransactionsService', () => {
     });
 
     it('3. Positivo: findAll sem bandId para ADMIN retorna todas as transações sem filtrar por banda', async () => {
-      jest.spyOn(prisma.transaction, 'findMany').mockResolvedValueOnce([mockTransaction]);
+      jest
+        .spyOn(prisma.transaction, 'findMany')
+        .mockResolvedValueOnce([mockTransaction]);
 
       const result = await service.findAll({}, adminUser);
       expect(prisma.transaction.findMany).toHaveBeenCalledWith({
@@ -444,5 +478,3 @@ describe('TransactionsService', () => {
     });
   });
 });
-
-

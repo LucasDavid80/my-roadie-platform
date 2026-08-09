@@ -4,7 +4,7 @@ import { RegisterForm } from './RegisterForm';
 import { supabase } from '@/lib/supabase';
 import { server } from '@/test/mocks/server';
 import { http, HttpResponse } from 'msw';
-import { Mock } from 'vitest';
+import type { User, AuthError } from '@supabase/supabase-js';
 
 const mockPush = vi.fn();
 vi.mock('next/navigation', () => ({
@@ -19,7 +19,7 @@ describe('Register Integration', () => {
     describe('Casos Positivos', () => {
         it('deve realizar cadastro com sucesso e redirecionar para a tela de login', async () => {
             vi.spyOn(supabase.auth, 'signUp').mockResolvedValueOnce({
-                data: { user: { id: 'mock-supabase-id' } as any, session: null },
+                data: { user: { id: 'mock-supabase-id' } as unknown as User, session: null },
                 error: null,
             });
 
@@ -47,7 +47,7 @@ describe('Register Integration', () => {
 
         it('deve cadastrar usuário com perfil ROADIE selecionado', async () => {
             const signUpSpy = vi.spyOn(supabase.auth, 'signUp').mockResolvedValueOnce({
-                data: { user: { id: 'mock-supabase-id-roadie' } as any, session: null },
+                data: { user: { id: 'mock-supabase-id-roadie' } as unknown as User, session: null },
                 error: null,
             });
 
@@ -91,7 +91,7 @@ describe('Register Integration', () => {
         it('deve exibir erro na UI se o Supabase Auth retornar erro de e-mail em uso', async () => {
             vi.spyOn(supabase.auth, 'signUp').mockResolvedValueOnce({
                 data: { user: null, session: null },
-                error: { message: 'User already registered' } as any,
+                error: { message: 'User already registered' } as unknown as AuthError,
             });
 
             render(<RegisterForm />);
@@ -118,7 +118,7 @@ describe('Register Integration', () => {
 
         it('deve exibir mensagem de erro da API do backend em caso de falha HTTP 400', async () => {
             vi.spyOn(supabase.auth, 'signUp').mockResolvedValueOnce({
-                data: { user: { id: 'mock-supabase-id' } as any, session: null },
+                data: { user: { id: 'mock-supabase-id' } as unknown as User, session: null },
                 error: null,
             });
 

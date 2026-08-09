@@ -1,10 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ExecutionContext, INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  ExecutionContext,
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { JwtAuthGuard } from '../src/modules/auth/guards/jwt-auth.guard';
+import { CurrentUserPayload } from '../src/modules/auth/decorators/current-user.decorator';
 
 describe('TasksController (e2e)', () => {
   const mockEventId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
@@ -146,7 +151,9 @@ describe('TasksController (e2e)', () => {
         .overrideGuard(JwtAuthGuard)
         .useValue({
           canActivate: (context: ExecutionContext) => {
-            const req = context.switchToHttp().getRequest();
+            const req = context
+              .switchToHttp()
+              .getRequest<{ user?: CurrentUserPayload }>();
             req.user = {
               userId: 'user-uuid-1',
               email: 'test@example.com',

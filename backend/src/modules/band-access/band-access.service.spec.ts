@@ -41,7 +41,9 @@ describe('BandAccessService', () => {
 
   describe('Casos Positivos', () => {
     it('1. membro passa: deve permitir acesso se o usuário for membro da banda', async () => {
-      jest.spyOn(prisma.bandMember, 'findFirst').mockResolvedValue(mockBandMember);
+      jest
+        .spyOn(prisma.bandMember, 'findFirst')
+        .mockResolvedValue(mockBandMember);
 
       await expect(
         service.assertMembership('user-123', 'MUSICIAN', 'band-456'),
@@ -63,10 +65,12 @@ describe('BandAccessService', () => {
     });
 
     it('3. mais de uma banda: deve retornar array com os IDs de todas as bandas do usuario', async () => {
-      jest.spyOn(prisma.bandMember, 'findMany').mockResolvedValue([
-        { bandId: 'band-1' },
-        { bandId: 'band-2' },
-      ] as any);
+      jest
+        .spyOn(prisma.bandMember, 'findMany')
+        .mockResolvedValue([
+          { bandId: 'band-1' },
+          { bandId: 'band-2' },
+        ] as unknown as [{ bandId: string }, { bandId: string }]);
 
       const result = await service.getUserBandIds('user-123');
 

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Role, TransactionType } from '@prisma/client';
+import { Prisma, Role, TransactionType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BandAccessService } from '../band-access/band-access.service';
 import { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
@@ -79,7 +79,7 @@ export class TransactionsService {
     filters: FindAllTransactionsFilters = {},
     user: CurrentUserPayload,
   ) {
-    const where: any = {};
+    const where: Prisma.TransactionWhereInput = {};
 
     if (filters.bandId) {
       await this.bandAccessService.assertMembership(
@@ -182,4 +182,3 @@ export class TransactionsService {
     });
   }
 }
-

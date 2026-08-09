@@ -397,12 +397,18 @@ describe('RepertoireService', () => {
       const found = await service.findOne('song-uuid-123', mockUser);
       expect(found).toEqual(mockSong);
 
-      const updated = await service.update('song-uuid-123', { title: 'Novo Título' }, mockUser);
+      const updated = await service.update(
+        'song-uuid-123',
+        { title: 'Novo Título' },
+        mockUser,
+      );
       expect(updated).toBeDefined();
     });
 
     it('2. Positivo: ADMIN consegue criar e acessar recursos de banda sem ser membro', async () => {
-      jest.spyOn(bandAccessService, 'assertMembership').mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(bandAccessService, 'assertMembership')
+        .mockResolvedValueOnce(undefined);
 
       const dto = { title: 'Música Admin', bandId: 'band-outra' };
       const result = await service.create(dto, adminUser);
@@ -415,7 +421,9 @@ describe('RepertoireService', () => {
     });
 
     it('3. Positivo: findAll sem bandId para ADMIN retorna todas as músicas', async () => {
-      jest.spyOn(prisma.repertoireSong, 'findMany').mockResolvedValueOnce([mockSong]);
+      jest
+        .spyOn(prisma.repertoireSong, 'findMany')
+        .mockResolvedValueOnce([mockSong]);
 
       const result = await service.findAll(adminUser);
       expect(prisma.repertoireSong.findMany).toHaveBeenCalledWith({
