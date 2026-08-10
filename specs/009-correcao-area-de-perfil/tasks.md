@@ -7,7 +7,7 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 - [x] T0.1 — Adicionar `debugPrint` com erro + stack trace em `fetchProfile` e `saveProfile` (`user_controller.dart`).
 - [x] T0.2 — Hot restart (`R`), reproduzir carregamento do perfil, colar o log real.
 - [x] T0.3 — Hot restart (`R`), reproduzir tentativa de salvar, colar o log real.
-- [ ] T0.4 — Documentar em 2-3 frases a causa raiz confirmada (status HTTP + mensagem exata), em `plan.md`.
+- [x] T0.4 — Documentar em 2-3 frases a causa raiz confirmada (status HTTP + mensagem exata), em `plan.md`.
 
 ## Fase 1 — Corrigir a causa raiz
 
