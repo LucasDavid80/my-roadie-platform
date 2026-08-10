@@ -97,7 +97,7 @@ class _PersonScreenState extends ConsumerState<PersonScreen> {
                 content: Text(
                   result.isSuccess
                       ? 'Perfil salvo com sucesso!'
-                      : 'Erro ao salvar perfil. Tente novamente.',
+                      : (result.errorMessage ?? 'Erro ao salvar perfil. Tente novamente.'),
                 ),
                 backgroundColor:
                     result.isSuccess ? AppColors.primary : AppColors.erro,
