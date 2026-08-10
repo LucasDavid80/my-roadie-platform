@@ -24,7 +24,6 @@ class AuthRepositoryImpl implements IAuthRepository {
     );
     return response?.user;
   }
-  }
 
   @override
   Future<void> signOut() async {

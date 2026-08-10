@@ -1,3 +1,4 @@
+import 'package:agenda_musical/presentation/controllers/auth_controller.dart';
 import 'package:agenda_musical/presentation/screens/auth/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,8 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Widget createTestWidget() {
-    return const ProviderScope(
-      child: MaterialApp(
+    return ProviderScope(
+      overrides: [
+        supabaseClientProvider.overrideWithValue(null),
+      ],
+      child: const MaterialApp(
         home: Scaffold(
           body: SingleChildScrollView(
             child: LoginForm(),
@@ -22,7 +26,8 @@ void main() {
     // Encontra o botão de entrar e clica
     final loginButton = find.text('ENTRAR');
     await tester.tap(loginButton);
-    await tester.pump(); // Reconstrói o widget com os erros
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pump();
 
     // Verifica se as mensagens de erro de validação aparecem
     expect(find.text('E-mail inválido'), findsOneWidget);
@@ -37,6 +42,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField).last, '123456');
     
     await tester.tap(find.text('ENTRAR'));
+    FocusManager.instance.primaryFocus?.unfocus();
     await tester.pump();
 
     expect(find.text('E-mail inválido'), findsOneWidget);
@@ -51,6 +57,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField).last, '123');
     
     await tester.tap(find.text('ENTRAR'));
+    FocusManager.instance.primaryFocus?.unfocus();
     await tester.pump();
 
     expect(find.text('E-mail inválido'), findsNothing);
