@@ -1,20 +1,45 @@
 // lib/presentation/controllers/auth_controller.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/interfaces/i_auth_repository.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
+import '../../data/datasources/remote_datasource.dart';
+
+import '../../core/config/app_config.dart';
 
 // Providers para injeção
 final supabaseClientProvider = Provider<SupabaseClient?>((ref) {
   try {
     return Supabase.instance.client;
   } catch (_) {
-    return null;
+    return SupabaseClient(
+      AppConfig.supabaseUrl.isNotEmpty
+          ? AppConfig.supabaseUrl
+          : 'https://placeholder.supabase.co',
+      AppConfig.supabaseAnonKey.isNotEmpty
+          ? AppConfig.supabaseAnonKey
+          : 'placeholder-anon-key',
+      authOptions: const FlutterAuthClientOptions(
+        authFlowType: AuthFlowType.implicit,
+      ),
+    );
   }
 });
-final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(ref.watch(supabaseClientProvider)));
-final authRepositoryProvider = Provider<IAuthRepository>((ref) => AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider)));
+
+final remoteDataSourceProvider = Provider<RemoteDataSource>((ref) {
+  return RemoteDataSource(
+    client: http.Client(),
+    supabase: ref.read(supabaseClientProvider),
+  );
+});
+
+final authRemoteDataSourceProvider = Provider((ref) => AuthRemoteDataSource(
+      ref.read(supabaseClientProvider),
+      ref.read(remoteDataSourceProvider),
+    ));
+final authRepositoryProvider = Provider<IAuthRepository>((ref) => AuthRepositoryImpl(ref.read(authRemoteDataSourceProvider)));
 
 class AuthState {
   final User? user;
@@ -59,6 +84,28 @@ class AuthController extends Notifier<AuthState> {
         error: 'Falha na autenticação. Verifique seu e-mail e senha.',
       );
       return false;
+    }
+  }
+
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    String? name,
+    String? role,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final user = await _repository.signUp(
+        email,
+        password,
+        name: name,
+        role: role,
+      );
+      state = state.copyWith(user: user, isLoading: false);
+      return user != null;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
     }
   }
 

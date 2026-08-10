@@ -19,6 +19,7 @@
 - Evitar prompts amplos do tipo `/goal` que disparam múltiplos subagentes em paralelo — preferir tarefas escopadas por fase/task para não estourar a cota do plano Pro.
 - Este repositório é um monorepo com três apps (`backend`, `frontend-web`, `mobile`) tratados como serviços independentes — não assumir que um comando rodado na raiz afeta os três.
 - Nunca pule fases do `tasks.md`. Implemente uma fase por vez e aguarde confirmação antes de avançar para a próxima.
+- Tasks que envolvem autorização/controle de acesso (guards, checagem de ownership/membership) entram na mesma categoria de revisão manual obrigatória que as que tocam infraestrutura externa — não fecham sozinhas com "testes passando" como único critério.
 
 ## Comandos essenciais
 

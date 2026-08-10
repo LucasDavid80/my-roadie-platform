@@ -7,17 +7,23 @@ import '../../domain/models/event_model.dart';
 
 class UnauthorizedException implements Exception {
   final String message;
-  UnauthorizedException([this.message = 'Unauthorized']);
+  UnauthorizedException([this.message = 'Não autorizado']);
+  @override
+  String toString() => message;
 }
 
 class NetworkException implements Exception {
   final String message;
-  NetworkException([this.message = 'Network error occurred']);
+  NetworkException([this.message = 'Erro de conexão com o servidor']);
+  @override
+  String toString() => message;
 }
 
 class ServerException implements Exception {
   final String message;
-  ServerException([this.message = 'Server error occurred']);
+  ServerException([this.message = 'Erro no servidor']);
+  @override
+  String toString() => message;
 }
 
 class RemoteDataSource {
@@ -163,6 +169,45 @@ class RemoteDataSource {
         throw UnauthorizedException();
       } else {
         throw ServerException('Failed to update user profile: ${response.statusCode}');
+      }
+    } on http.ClientException {
+      throw NetworkException();
+    } catch (e) {
+      if (e is UnauthorizedException || e is ServerException) {
+        rethrow;
+      }
+      throw NetworkException(e.toString());
+    }
+  }
+
+  Future<UserModel> createUser({
+    required String email,
+    required String supabaseId,
+    required String name,
+    required String role,
+  }) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('${AppConfig.backendUrl}/users'),
+        headers: _getHeaders(),
+        body: jsonEncode({
+          'email': email,
+          'supabaseId': supabaseId,
+          'name': name,
+          'role': role,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return UserModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        throw UnauthorizedException();
+      } else {
+        final dynamic body = jsonDecode(response.body);
+        final String message = body is Map && body['message'] != null
+            ? body['message'].toString()
+            : 'Failed to create user: ${response.statusCode}';
+        throw ServerException(message);
       }
     } on http.ClientException {
       throw NetworkException();

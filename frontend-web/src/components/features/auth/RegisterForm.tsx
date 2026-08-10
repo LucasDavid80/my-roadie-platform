@@ -1,37 +1,49 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Lock, User } from 'lucide-react';
+import { Mail, Lock, User, Briefcase } from 'lucide-react';
 import { registerSchema, RegisterFormData } from './register-schema';
 import { useRouter } from 'next/navigation';
 import { userService } from '@/services/user-service';
 
 export function RegisterForm() {
+    const [authError, setAuthError] = useState<string | null>(null);
     const router = useRouter();
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterFormData>({
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(registerSchema),
+        defaultValues: {
+            role: 'MUSICIAN',
+        },
     });
 
     const onSubmit = async (data: RegisterFormData) => {
+        setAuthError(null);
         try {
             await userService.signUp(data);
             alert('Conta criada com sucesso! Agora faça seu login.');
             router.push('/login');
         } catch (error: unknown) {
-            if (typeof error === 'object' && error !== null) {
-                const err = error as Record<string, unknown>;
-                const response = err.response as { data?: { message?: string } } | undefined;
-                const message = response?.data?.message ?? 'Erro ao criar conta';
-                alert(message);
-            } else {
-                alert('Erro ao criar conta');
+            let message = 'Erro ao criar conta';
+            if (typeof error === 'object' && error !== null && 'response' in error) {
+                const response = (error as { response?: { data?: { message?: string } } }).response;
+                message = response?.data?.message || (error as { message?: string }).message || 'Erro ao criar conta';
+            } else if (error instanceof Error) {
+                message = error.message;
             }
+            setAuthError(message);
         }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            {authError && (
+                <div role="alert" className="p-3 bg-red-500/10 border border-red-500/30 text-red-500 text-sm rounded-xl text-center">
+                    {authError}
+                </div>
+            )}
+
             {/* NOME COMPLETO */}
             <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus-within:bg-white focus-within:border-primary transition-all">
@@ -39,7 +51,6 @@ export function RegisterForm() {
                     <input
                         {...register('name')}
                         placeholder="Nome Completo"
-
                         className="flex-1 bg-transparent outline-none text-text-dark"
                     />
                 </div>
@@ -57,6 +68,22 @@ export function RegisterForm() {
                     />
                 </div>
                 {errors.email && <span className="text-xs text-red-500 ml-1">{errors.email.message}</span>}
+            </div>
+
+            {/* CARGO (ROLE) */}
+            <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus-within:bg-white focus-within:border-primary transition-all">
+                    <Briefcase className="text-primary w-5 h-5" />
+                    <select
+                        {...register('role')}
+                        aria-label="Perfil de usuário"
+                        className="flex-1 bg-transparent outline-none text-text-dark cursor-pointer"
+                    >
+                        <option value="MUSICIAN">Músico</option>
+                        <option value="ROADIE">Roadie</option>
+                    </select>
+                </div>
+                {errors.role && <span className="text-xs text-red-500 ml-1">{errors.role.message}</span>}
             </div>
 
             {/* SENHA */}
@@ -87,13 +114,13 @@ export function RegisterForm() {
                 {errors.confirmPassword && <span className="text-xs text-red-500 ml-1">{errors.confirmPassword.message}</span>}
             </div>
 
-            {/* BOTÃO CADASTRAR (Cores Secondary conforme o Flutter) */}
+            {/* BOTÃO CADASTRAR */}
             <button
                 type="submit"
                 className="w-full h-12.5 bg-secondary text-white font-bold rounded-xl shadow-md hover:brightness-110 active:scale-[0.98] transition-all mt-4"
                 disabled={isSubmitting}
             >
-                CADASTRAR
+                {isSubmitting ? 'CADASTRANDO...' : 'CADASTRAR'}
             </button>
         </form>
     );

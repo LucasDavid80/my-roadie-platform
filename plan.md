@@ -14,19 +14,19 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 2. Backend
 
-- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`, `transactions`).
+- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`, `transactions`, `band-access`).
 - Persistência: Prisma Client sobre Postgres (Supabase). `DATABASE_URL` via env.
 - Fluxo de schema: editar `prisma/schema.prisma` → migration → `npx prisma generate` → atualizar `docs/database/erd.md`.
-- Autenticação: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts`) e guards.
+- Autenticação e Autorização: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts`), guards (`OwnershipGuard`, `JwtAuthGuard`) e `BandAccessService` (`getUserBandIds`, `assertMembership`) para verificação de pertencimento via `BandMember` nos módulos de `tasks`, `repertoire` e `transactions` (Spec 011).
 
-**Lacunas de módulos zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e expostos via API NestJS.
+**Lacunas de módulos e autorização por banda zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e com autorização por banda fechada via `BandAccessService` (spec 011).
 
 ## 3. Frontend Web
 
 - Next.js App Router, Route Groups `(auth)`, `(dashboard)` e `(admin)`.
 - `src/services/` concentra chamadas HTTP; sempre remover `id`/`createdAt`/`updatedAt` antes de `POST`/`PATCH`.
 - Tipos de `src/types/` devem espelhar os DTOs do backend.
-- Instância centralizada do Supabase em `src/lib/supabase.ts`. Autenticação integrada ao Supabase Auth via `signInWithPassword` no `AuthContext` com tratamento de erros e mensagens amigáveis no `LoginForm` (Spec 008).
+- Instância centralizada do Supabase em `src/lib/supabase.ts`. Autenticação integrada ao Supabase Auth via `signInWithPassword` no `AuthContext` (Spec 008) e cadastro integrado ao Supabase Auth + API NestJS (`POST /users`) no `RegisterForm` (Spec 010).
 
 **Decisão fechada:** A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios).
 
@@ -35,6 +35,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 - Clean Architecture: `domain/` → `data/` → `presentation/`.
 - Estado atual: as telas de auth, agenda e perfil estão conectadas à API real do backend através do `remote_datasource` e dos repositories.
+- Cadastro sincronizado: `AuthRemoteDataSource.signUp` registra as credenciais no Supabase Auth e em seguida invoca `RemoteDataSource.createUser` (`POST /users`), garantindo a criação de usuário no PostgreSQL com feedback de erro amigável na UI (Spec 010).
 - Atualização reativa de compromissos: `AgendaController` sincroniza eventos retornados da API e notifica a UI de forma imutável após criação/edição (Spec 007).
 - Estabilização do Perfil (`PersonScreen`): `PhotoWidget` e `InfoWidget` ajustados para layout seguro e parse seguro de tipos; `UserNotifier` inicializado com coleções não nulas e captura de erros HTTP com fallbacks (Spec 009).
 

@@ -41,6 +41,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/009-correcao-area-de-perfil/)
 
+### Autorização por Banda (Tasks, Repertoire, Transactions)
+- Intenção: Garantir que os módulos tasks, repertoire e transactions verifiquem associação com a Band dona do recurso via BandMember, corrigindo vulnerabilidade de segurança.
+- Impacto esperado: alto (crítico/segurança)
+- Depende de: nenhum
+- Status: concluído (specs/011-autorizacao-por-banda/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -68,7 +74,7 @@
 - Depende de: nenhum
 - Status: ideia
 
-### Habilitar rolagem na tela de Agenda
+### Habilitar rolagem na tela de Agenda (spec 011)
 - Intenção: Ajustar o layout da tela de Agenda no mobile para permitir rolagem, evitando que o calendário trave a tela verticalmente.
 - Impacto esperado: alto (usabilidade)
 - Depende de: nenhum

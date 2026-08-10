@@ -235,3 +235,9 @@ aproveite para refatorar mais nada ao redor).
 - Sempre rode um prompt por vez e confira o resultado antes do próximo — mesmo dentro da mesma fase.
 - Se o agente tentar "adiantar" tasks futuras sem você pedir, interrompa e reforce o escopo do prompt 1.
 - Prompts 6 e 7 exigem sua confirmação explícita antes de qualquer ação em infraestrutura real — não pule essa etapa mesmo com pressa.
+- **Fechamento é sempre chat novo.** Qualquer prompt de checklist (7, 8) roda numa
+  conversa separada da que implementou a fase — evita o agente "confirmar o próprio
+  trabalho" em vez de verificar de fato. Foi assim que os checkboxes falsos da spec
+  002 e 006 passaram batido.
+- 1 chat por fase, não por task (perde continuidade útil) nem por spec inteira
+  (degrada com o acúmulo de contexto).
