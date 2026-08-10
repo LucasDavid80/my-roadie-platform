@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_user_repository.dart';
@@ -38,8 +39,9 @@ class UserNotifier extends Notifier<UserEntity> {
       final userProfile =
           await ref.read(userRepositoryProvider).getUser(targetId);
       state = userProfile;
-    } catch (e) {
-      // Mantém a instância atual do estado como fallback seguro sem lançar unhandled exception
+    } catch (e, stack) {
+      debugPrint('fetchProfile ERRO: $e');
+      debugPrintStack(stackTrace: stack);
     }
   }
 
@@ -50,8 +52,9 @@ class UserNotifier extends Notifier<UserEntity> {
           await ref.read(userRepositoryProvider).updateUser(state.id, state);
       state = updated;
       return true;
-    } catch (e) {
-      // Retorna false permitindo feedback ao usuário sem crashar a UI
+    } catch (e, stack) {
+      debugPrint('saveProfile ERRO: $e');
+      debugPrintStack(stackTrace: stack);
       return false;
     }
   }

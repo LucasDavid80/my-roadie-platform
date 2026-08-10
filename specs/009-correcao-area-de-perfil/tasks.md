@@ -1,31 +1,40 @@
-# Tasks — 009: Correção de erro de tela vermelha na área de usuários/perfil
+# Tasks — 009: Correção de Carregamento e Salvamento do Perfil (Mobile)
 
-Pré-requisitos: `mobile` configurado com biblioteca do Flutter, Riverpod e suíte de testes `flutter_test`.
+Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já concluídas; rede e auth já confirmadas funcionando nesta investigação.
 
-## Fase 1 — Diagnóstico e Correção nos Widgets da Tela de Perfil
+## Fase 0 — Expor erro real (obrigatória, não pular, não avançar sem isso)
 
-- [x] T1.1 — Refatorar `mobile/lib/presentation/screens/person/widgets/photo_widget.dart` removendo parâmetros incompatíveis de layout (`spacing` no `Row`) e garantindo árvore de renderização segura.
-  - Critério: `PhotoWidget` constrói e renderiza sem erros de layout ou exceções visuais.
-- [x] T1.2 — Atualizar `mobile/lib/presentation/screens/person/widgets/info_widget.dart` e `custom_text_field.dart` garantindo o repasse seguro dos valores do `UserEntity` para evitar exceções em `double.tryParse` ou conversão de texto nulo.
-  - Critério: Todos os campos do perfil exibem e atualizam os dados preenchidos no estado de forma segura.
+- [x] T0.1 — Adicionar `debugPrint` com erro + stack trace em `fetchProfile` e `saveProfile` (`user_controller.dart`).
+- [ ] T0.2 — Hot restart (`R`), reproduzir carregamento do perfil, colar o log real.
+- [ ] T0.3 — Hot restart (`R`), reproduzir tentativa de salvar, colar o log real.
+- [ ] T0.4 — Documentar em 2-3 frases a causa raiz confirmada (status HTTP + mensagem exata), em `plan.md`.
 
-## Fase 2 — Estabilização do Estado no Riverpod (`user_controller.dart`)
+## Fase 1 — Corrigir a causa raiz
 
-- [x] T2.1 — Refatorar `UserNotifier` em `mobile/lib/presentation/controllers/user_controller.dart` garantindo a inicialização imutável e segura do `UserEntity` com listas não nulas para `instruments` e `styles`.
-  - Critério: `userProvider` inicia com estado válido garantindo que seleções de `MultiSelectionWidget` não disparem erro por `null`.
-- [x] T2.2 — Adicionar tratamento de erros e exceções de requisição em `fetchProfile` e `saveProfile` com fallbacks seguros.
-  - Critério: Exceções de rede ou HTTP 404/500 são tratadas no estado sem propagar tela vermelha de exceção *unhandled*.
-- [x] T2.3 — Garantir o carregamento dos dados do perfil do banco de dados/API toda vez que a tela `PersonScreen` for acessada.
-  - Critério: `PersonScreen` executa `fetchProfile()` no `initState` via `addPostFrameCallback`, atualizando o estado do perfil a cada navegação.
+- [ ] T1.1 — (definir só depois da Fase 0 — não detalhar antes, ver `plan.md` para as hipóteses a checar contra o log real)
 
-## Fase 3 — Cobertura de Testes de Widget no Flutter (`flutter_test`)
+## Fase 2 — Erro real exposto na UI
 
-- [x] T3.1 — Criar a suíte de testes de widget `mobile/test/presentation/screens/person_screen_test.dart` validando a navegação e renderização completa de `PersonScreen` sob `ProviderScope`.
-  - Critério: `flutter test` no `mobile` executa com 100% dos testes verdes validando a tela de perfil sem exceções em tela.
+- [ ] T2.1 — Substituir o retorno booleano puro de `saveProfile` por estado com mensagem de erro real.
+- [ ] T2.2 — SnackBar/UI de erro exibe a mensagem real, não mais um texto genérico.
+
+## Fase 3 — Testes automatizados
+
+- [ ] T3.1 — Teste unit de `saveProfile`: sucesso e falha (mock do repository), cobrindo o novo estado de erro.
+- [ ] T3.2 — Teste unit/widget de `fetchProfile`: conta sem dado vs. conta com dado salvo.
+- [ ] T3.3 — `flutter test` completo, 100% verde.
+
+## Fase 4 — Verificação manual real (dispositivo físico)
+
+- [ ] T4.1 — Conta nova sem dado: preencher perfil, salvar, sair da tela, voltar — dado aparece.
+- [ ] T4.2 — Conta com dado existente: editar campo, salvar, sair, voltar — dado atualizado aparece.
 
 ## Checklist de fechamento da feature
 
-- [x] Navegação para a rota `/profile` abre a tela `PersonScreen` sem tela vermelha de exceção
-- [x] Todos os campos do formulário de perfil exibem e atualizam os dados de forma legível e segura
-- [x] `flutter test` no `mobile` 100% verde sem falhas ou regressões
-- [x] Entrada em `backlog.md` atualizada com o status correspondente
+- [ ] Causa raiz documentada com evidência real (log/status HTTP), não hipótese não verificada
+- [ ] Salvar perfil funciona sem erro para conta autenticada válida
+- [ ] Erro real (não genérico) aparece na UI quando algo de fato falha
+- [ ] `flutter test` 100% verde
+- [ ] Verificação manual (Fase 4) feita em dispositivo físico, não só teste automatizado
+- [ ] `backlog.md` — entrada correspondente marcada como resolvida
+- [ ] `spec.md`/`plan.md` da baseline (raiz) atualizados se necessário
