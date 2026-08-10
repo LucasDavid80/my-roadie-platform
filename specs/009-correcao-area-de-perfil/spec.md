@@ -1,30 +1,40 @@
-# Spec — 009: Correção de erro de tela vermelha na área de usuários/perfil
+# Spec — 009: Correção de Carregamento e Salvamento do Perfil (Mobile)
 
 ## Objetivo
 
-Garantir a estabilidade da navegação e renderização da tela de perfil de usuário (`PersonScreen`) no aplicativo móvel (`mobile`), eliminando a tela vermelha de erro (*Red Screen of Death* / exceção *unhandled*) disparada ao acessar a rota `/profile` ou ao clicar na aba de perfil.
+Garantir que a tela de perfil no mobile carregue e salve os dados do usuário corretamente, com erro real exposto quando algo falhar — hoje o app falha silenciosamente (carregamento e salvamento), o que impediu diagnosticar a causa real por várias rodadas.
 
-## Motivação
+## Contexto — o que já está confirmado (não reinvestigar)
 
-Atualmente, ao tentar acessar a área de perfil no aplicativo móvel, a aplicação enfrenta uma falha de renderização que trava a interface do usuário com a tela vermelha de exceção do Flutter. Essa falha impede o usuário de visualizar, atualizar ou salvar suas informações de perfil profissional (como instrumentos, estilos musicais, dados de contato e cachê mínimo). Garantir o acesso estável a essa tela é crítico para a usabilidade e funcionamento do app.
+- Não há mais crash/"tela vermelha" ao acessar a tela de perfil.
+- Conectividade mobile → backend funciona (testado via navegador do celular contra `http://<ip-local>:3000/users`, retornou `401 Unauthorized` — confirma que o backend está alcançável e o `JwtAuthGuard` responde corretamente).
+- Backend escuta em `0.0.0.0` (`main.ts`), acessível pela rede local.
+- Login funciona e a navegação até o perfil não quebra.
+- `UsersService.findOne` já busca por `id`, `supabaseId` ou `email` — não é problema de formato de identificador.
+
+## O que ainda não está confirmado — é o que esta spec resolve
+
+- Campos do perfil aparecem vazios ao carregar. Causa desconhecida: pode ser que a conta testada nunca teve dado salvo, **ou** o `fetchProfile` está falhando e escondendo o erro (o `catch (e) {}` atual não expõe nada).
+- Salvar o perfil mostra SnackBar de erro. Causa real desconhecida pelo mesmo motivo — `saveProfile` também engole a exceção.
 
 ## Escopo
 
-- Corrigir os problemas de renderização nos widgets da tela de perfil (`PersonScreen`, `PhotoWidget`, `InfoWidget`, `MultiSelectionWidget` e `AvailabilityWidget`).
-- Garantir a inicialização imutável e segura de todos os campos da entidade `UserEntity` no gerenciador de estado (`UserNotifier` / `userProvider` via Riverpod).
-- Garantir que campos nulos ou falhas de parse de dados não interrompam a renderização da interface nem disparem exceções *unhandled*.
-- Tratar falhas de comunicação com a API remota no carregamento (`fetchProfile`) e salvamento (`saveProfile`) do perfil com mensagens amigáveis de feedback em tela.
-- Implementar testes de widget no Flutter (`flutter test`) em `mobile/test/presentation/screens/person_screen_test.dart` para validar a renderização sem erros.
+1. Expor o erro real de `fetchProfile` e `saveProfile` — log + estado de erro utilizável pela UI. Isso é pré-requisito, não opcional, porque sem isso qualquer correção anterior foi (e seria) chute.
+2. Corrigir a causa raiz encontrada depois que o erro real aparecer (backend ou client — não presumir qual lado antes de saber).
+3. Expor esse erro real na UI (SnackBar com a mensagem de verdade, não um texto genérico), cumprindo o que a spec original já pedia e nunca foi de fato entregue.
+4. Confirmar de ponta a ponta: conta nova sem dado consegue preencher e salvar pela primeira vez; conta com dado existente consegue editar e ver a mudança persistir.
 
-## Fora de Escopo
+## Fora de escopo
 
-- Alterações na tela de perfil do painel Web (`frontend-web`).
-- Alterações nos endpoints de perfil na API do backend NestJS.
-- Adição de novos campos de formulário que não existam atualmente na entidade `UserEntity`.
+- Upload de foto de perfil (botão "Enviar Foto" não funcional — bug separado, não é parte desta causa).
+- Redesign visual da tela.
+- Mudança no modelo `UserEntity` ou no schema do backend, a menos que seja comprovadamente a causa raiz.
 
-## Critérios de Sucesso
+## Critério de sucesso
 
-- [ ] **Navegação**: Clicar no ícone de perfil na barra superior (`MyRoadieAppBar`) ou navegar para a rota `/profile` carrega a tela `PersonScreen` instantaneamente sem tela vermelha ou erro no console.
-- [ ] **Renderização**: Todos os campos do perfil (nome, experiência, telefone, Instagram, cidade, UF, cachê mínimo, instrumentos, estilos e disponibilidade) renderizam seus valores padrão/iniciais de forma segura.
-- [ ] **Persistência**: Alterar os dados e clicar em "Salvar Perfil" atualiza o estado sem disparar exceções não tratadas e exibe a mensagem de confirmação (*SnackBar*).
-- [ ] **Testes**: A suíte de testes do mobile (`flutter test`) executa com 100% de aprovação, validando a integridade da tela de perfil.
+- [ ] O erro real de qualquer falha em `fetchProfile`/`saveProfile` aparece no log de debug (status HTTP + mensagem), não é mais engolido silenciosamente.
+- [ ] Editar um campo do perfil e salvar funciona sem erro para uma conta autenticada válida.
+- [ ] Sair da tela de perfil e voltar mostra o dado que acabou de ser salvo.
+- [ ] Uma conta nova (criada via spec 010, sem dado de perfil ainda) consegue preencher e salvar o perfil pela primeira vez.
+- [ ] Quando salvar falhar de verdade (ex.: sem rede), a UI mostra uma mensagem compreensível, não um erro genérico nem falha silenciosa.
+- [ ] `flutter test` 100% verde, incluindo teste novo cobrindo salvar com sucesso e com falha.
