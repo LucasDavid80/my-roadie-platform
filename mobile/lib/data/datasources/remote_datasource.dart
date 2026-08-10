@@ -37,11 +37,16 @@ class RemoteDataSource {
         _supabase = supabase;
 
   Map<String, String> _getHeaders() {
-    final token = _supabase?.auth.currentSession?.accessToken;
-    final headers = {
+    String? token = _supabase?.auth.currentSession?.accessToken;
+    if (token == null || token.isEmpty) {
+      try {
+        token = Supabase.instance.client.auth.currentSession?.accessToken;
+      } catch (_) {}
+    }
+    final headers = <String, String>{
       'Content-Type': 'application/json',
     };
-    if (token != null) {
+    if (token != null && token.isNotEmpty) {
       headers['Authorization'] = 'Bearer $token';
     }
     return headers;

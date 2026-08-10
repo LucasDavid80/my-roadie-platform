@@ -11,7 +11,7 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 
 ## Fase 1 — Corrigir a causa raiz
 
-- [ ] T1.1 — (definir só depois da Fase 0 — não detalhar antes, ver `plan.md` para as hipóteses a checar contra o log real)
+- [x] T1.1 — Corrigir a injeção do token JWT em RemoteDataSource._getHeaders() para utilizar a sessão ativa do Supabase.
 
 ## Fase 2 — Erro real exposto na UI
 
