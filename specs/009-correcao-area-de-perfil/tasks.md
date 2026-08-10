@@ -15,7 +15,7 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 
 ## Fase 2 — Erro real exposto na UI
 
-- [ ] T2.1 — Substituir o retorno booleano puro de `saveProfile` por estado com mensagem de erro real.
+- [x] T2.1 — Substituir o retorno booleano puro de `saveProfile` por estado com mensagem de erro real.
 - [ ] T2.2 — SnackBar/UI de erro exibe a mensagem real, não mais um texto genérico.
 
 ## Fase 3 — Testes automatizados

@@ -3,7 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_user_repository.dart';
 import 'package:agenda_musical/data/repositories/user_repository_impl.dart';
+import 'package:agenda_musical/data/datasources/remote_datasource.dart';
 import 'auth_controller.dart';
+
+class SaveProfileResult {
+  final bool isSuccess;
+  final String? errorMessage;
+
+  const SaveProfileResult({
+    required this.isSuccess,
+    this.errorMessage,
+  });
+
+  factory SaveProfileResult.success() =>
+      const SaveProfileResult(isSuccess: true);
+
+  factory SaveProfileResult.failure(String message) =>
+      SaveProfileResult(isSuccess: false, errorMessage: message);
+}
 
 // Provider para injeção do repositório de usuário
 final userRepositoryProvider = Provider<IUserRepository>((ref) {
@@ -45,17 +62,32 @@ class UserNotifier extends Notifier<UserEntity> {
     }
   }
 
-  Future<bool> saveProfile() async {
-    if (state.id.isEmpty) return false;
+  Future<SaveProfileResult> saveProfile() async {
+    if (state.id.isEmpty) {
+      return SaveProfileResult.failure('ID do usuário não fornecido');
+    }
     try {
       final updated =
           await ref.read(userRepositoryProvider).updateUser(state.id, state);
       state = updated;
-      return true;
+      return SaveProfileResult.success();
     } catch (e, stack) {
       debugPrint('saveProfile ERRO: $e');
       debugPrintStack(stackTrace: stack);
-      return false;
+      String message = 'Erro ao salvar perfil';
+      if (e is UnauthorizedException) {
+        message = e.message;
+      } else if (e is NetworkException) {
+        message = e.message;
+      } else if (e is ServerException) {
+        message = e.message;
+      } else {
+        final errStr = e.toString().replaceFirst(RegExp(r'^Exception:\s*'), '');
+        if (errStr.isNotEmpty) {
+          message = errStr;
+        }
+      }
+      return SaveProfileResult.failure(message);
     }
   }
 

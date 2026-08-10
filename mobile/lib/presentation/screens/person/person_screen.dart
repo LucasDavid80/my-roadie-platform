@@ -90,17 +90,17 @@ class _PersonScreenState extends ConsumerState<PersonScreen> {
           ),
         ),
         onPressed: () async {
-          final success = await ref.read(userProvider.notifier).saveProfile();
+          final result = await ref.read(userProvider.notifier).saveProfile();
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  success
+                  result.isSuccess
                       ? 'Perfil salvo com sucesso!'
                       : 'Erro ao salvar perfil. Tente novamente.',
                 ),
                 backgroundColor:
-                    success ? AppColors.primary : AppColors.erro,
+                    result.isSuccess ? AppColors.primary : AppColors.erro,
               ),
             );
           }
