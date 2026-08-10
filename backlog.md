@@ -35,6 +35,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/008-conectar-form-de-login-authProvider/)
 
+### Autorização por Banda (Tasks, Repertoire, Transactions)
+- Intenção: Garantir que os módulos tasks, repertoire e transactions verifiquem associação com a Band dona do recurso via BandMember, corrigindo vulnerabilidade de segurança.
+- Impacto esperado: alto (crítico/segurança)
+- Depende de: nenhum
+- Status: concluído (specs/011-autorizacao-por-banda/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -44,7 +50,7 @@
 ### Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
 
-### Correção de erro de tela vermelha na área de usuários/perfil
+### Correção de erro de tela vermelha na área de usuários/perfil (spec 009)
 - Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
 - Impacto esperado: alto (bug crítico/bloqueante)
 - Depende de: nenhum
@@ -62,7 +68,7 @@
 - Depende de: nenhum
 - Status: ideia
 
-### Habilitar rolagem na tela de Agenda
+### Habilitar rolagem na tela de Agenda (spec 011)
 - Intenção: Ajustar o layout da tela de Agenda no mobile para permitir rolagem, evitando que o calendário trave a tela verticalmente.
 - Impacto esperado: alto (usabilidade)
 - Depende de: nenhum

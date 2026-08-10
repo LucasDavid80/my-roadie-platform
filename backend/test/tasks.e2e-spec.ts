@@ -1,10 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  ExecutionContext,
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { JwtAuthGuard } from '../src/modules/auth/guards/jwt-auth.guard';
+import { CurrentUserPayload } from '../src/modules/auth/decorators/current-user.decorator';
 
 describe('TasksController (e2e)', () => {
   const mockEventId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
@@ -40,6 +45,37 @@ describe('TasksController (e2e)', () => {
           return Promise.resolve(null);
         }),
     },
+    bandMember: {
+      findFirst: jest
+        .fn()
+        .mockImplementation(
+          ({ where }: { where: { bandId?: string; userId?: string } }) => {
+            if (
+              where.bandId === 'band-uuid-1' &&
+              where.userId === 'user-uuid-1'
+            ) {
+              return Promise.resolve({
+                id: 'bm-1',
+                bandId: 'band-uuid-1',
+                userId: 'user-uuid-1',
+              });
+            }
+            return Promise.resolve(null);
+          },
+        ),
+      findMany: jest
+        .fn()
+        .mockImplementation(
+          ({ where }: { where?: { userId?: string } } = {}) => {
+            if (where && where.userId === 'user-uuid-1') {
+              return Promise.resolve([
+                { id: 'bm-1', bandId: 'band-uuid-1', userId: 'user-uuid-1' },
+              ]);
+            }
+            return Promise.resolve([]);
+          },
+        ),
+    },
     task: {
       create: jest.fn().mockResolvedValue(mockTask),
       findMany: jest
@@ -56,7 +92,8 @@ describe('TasksController (e2e)', () => {
       findUnique: jest
         .fn()
         .mockImplementation(({ where }: { where: { id: string } }) => {
-          if (where.id === mockTaskId) return Promise.resolve(mockTask);
+          if (where.id === mockTaskId)
+            return Promise.resolve({ ...mockTask, event: mockEvent });
           return Promise.resolve(null);
         }),
       update: jest.fn().mockResolvedValue({
@@ -112,7 +149,19 @@ describe('TasksController (e2e)', () => {
         .overrideProvider(PrismaService)
         .useValue(mockPrismaService)
         .overrideGuard(JwtAuthGuard)
-        .useValue({ canActivate: () => true })
+        .useValue({
+          canActivate: (context: ExecutionContext) => {
+            const req = context
+              .switchToHttp()
+              .getRequest<{ user?: CurrentUserPayload }>();
+            req.user = {
+              userId: 'user-uuid-1',
+              email: 'test@example.com',
+              role: 'ADMIN',
+            };
+            return true;
+          },
+        })
         .compile();
 
       app = moduleFixture.createNestApplication();

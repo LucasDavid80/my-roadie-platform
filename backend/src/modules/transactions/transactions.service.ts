@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TransactionType } from '@prisma/client';
+import { Prisma, Role, TransactionType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { BandAccessService } from '../band-access/band-access.service';
+import { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
@@ -13,9 +15,21 @@ export interface FindAllTransactionsFilters {
 
 @Injectable()
 export class TransactionsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly bandAccessService: BandAccessService,
+  ) {}
 
-  async create(createTransactionDto: CreateTransactionDto) {
+  async create(
+    createTransactionDto: CreateTransactionDto,
+    user: CurrentUserPayload,
+  ) {
+    await this.bandAccessService.assertMembership(
+      user.userId,
+      user.role,
+      createTransactionDto.bandId,
+    );
+
     const band = await this.prisma.band.findUnique({
       where: { id: createTransactionDto.bandId },
     });
@@ -26,11 +40,11 @@ export class TransactionsService {
       );
     }
 
-    const user = await this.prisma.user.findUnique({
+    const dbUser = await this.prisma.user.findUnique({
       where: { id: createTransactionDto.userId },
     });
 
-    if (!user) {
+    if (!dbUser) {
       throw new NotFoundException(
         `Usuário com ID ${createTransactionDto.userId} não encontrado`,
       );
@@ -61,15 +75,26 @@ export class TransactionsService {
     });
   }
 
-  async findAll(filters: FindAllTransactionsFilters = {}) {
-    const where: {
-      bandId?: string;
-      userId?: string;
-      eventId?: string;
-      type?: TransactionType;
-    } = {};
+  async findAll(
+    filters: FindAllTransactionsFilters = {},
+    user: CurrentUserPayload,
+  ) {
+    const where: Prisma.TransactionWhereInput = {};
 
-    if (filters.bandId) where.bandId = filters.bandId;
+    if (filters.bandId) {
+      await this.bandAccessService.assertMembership(
+        user.userId,
+        user.role,
+        filters.bandId,
+      );
+      where.bandId = filters.bandId;
+    } else if (user.role === Role.ADMIN) {
+      // ADMIN sem bandId especificado tem acesso global
+    } else {
+      const bandIds = await this.bandAccessService.getUserBandIds(user.userId);
+      where.bandId = { in: bandIds };
+    }
+
     if (filters.userId) where.userId = filters.userId;
     if (filters.eventId) where.eventId = filters.eventId;
     if (filters.type) where.type = filters.type;
@@ -80,7 +105,7 @@ export class TransactionsService {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, user: CurrentUserPayload) {
     const transaction = await this.prisma.transaction.findUnique({
       where: { id },
     });
@@ -91,11 +116,21 @@ export class TransactionsService {
       );
     }
 
+    await this.bandAccessService.assertMembership(
+      user.userId,
+      user.role,
+      transaction.bandId,
+    );
+
     return transaction;
   }
 
-  async update(id: string, updateTransactionDto: UpdateTransactionDto) {
-    await this.findOne(id);
+  async update(
+    id: string,
+    updateTransactionDto: UpdateTransactionDto,
+    user: CurrentUserPayload,
+  ) {
+    await this.findOne(id, user);
 
     if (updateTransactionDto.eventId) {
       const event = await this.prisma.event.findUnique({
@@ -139,8 +174,8 @@ export class TransactionsService {
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(id: string, user: CurrentUserPayload) {
+    await this.findOne(id, user);
 
     return await this.prisma.transaction.delete({
       where: { id },

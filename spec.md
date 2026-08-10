@@ -30,9 +30,10 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **auth** — login via Supabase Auth, estratégia JWT, guards (`JwtAuthGuard`, `RolesGuard`, `OwnershipGuard`).
 - ✅ **users** — CRUD completo (`POST /users`, `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`), com testes unitários e e2e.
 - ✅ **events** — CRUD de eventos com DTOs de criação/atualização e testes.
-- ✅ **tasks** — CRUD completo de tarefas (`POST /tasks`, `GET /tasks`, `GET /tasks/:id`, `PATCH /tasks/:id`, `DELETE /tasks/:id`), com DTOs validados via `class-validator`, proteção via `JwtAuthGuard`, e cobertura de testes unitários e E2E.
-- ✅ **repertoire** — CRUD completo de músicas do repertório (`POST /repertoire`, `GET /repertoire`, `GET /repertoire/:id`, `PATCH /repertoire/:id`, `DELETE /repertoire/:id`), com DTOs validados via `class-validator`, proteção via `JwtAuthGuard`, e cobertura de testes unitários e E2E.
-- ✅ **transactions** — CRUD completo de lançamentos financeiros (`POST /transactions`, `GET /transactions`, `GET /transactions/:id`, `PATCH /transactions/:id`, `DELETE /transactions/:id`), com DTOs validados via `class-validator`, proteção via `JwtAuthGuard`, e cobertura de testes unitários e E2E.
+- ✅ **tasks** — CRUD completo de tarefas (`POST /tasks`, `GET /tasks`, `GET /tasks/:id`, `PATCH /tasks/:id`, `DELETE /tasks/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
+- ✅ **repertoire** — CRUD completo de músicas do repertório (`POST /repertoire`, `GET /repertoire`, `GET /repertoire/:id`, `PATCH /repertoire/:id`, `DELETE /repertoire/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
+- ✅ **transactions** — CRUD completo de lançamentos financeiros (`POST /transactions`, `GET /transactions`, `GET /transactions/:id`, `PATCH /transactions/:id`, `DELETE /transactions/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
+- ✅ **band-access** — Módulo reutilizável `BandAccessModule` / `BandAccessService` com `getUserBandIds` e `assertMembership`, garantindo autorização restrita por associação em `BandMember` nos módulos `tasks`, `repertoire` e `transactions` (Spec 011).
 
 ### Frontend Web (`frontend-web/src/`)
 - Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`.
@@ -53,6 +54,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 3. Um usuário só atualiza/deleta o próprio perfil, a menos que seja `ADMIN`.
 4. Eventos pertencem a uma Band; edição/exclusão é restrita a criador, membro com permissão, ou `ADMIN`.
 5. `ValidationPipe` com whitelist rígida: payloads com campos extras (`id`, `createdAt`, `updatedAt`) são rejeitados com 400.
+6. Recursos dos módulos `tasks`, `repertoire` e `transactions` exigem associação à `Band` dona via `BandMember` (`403 Forbidden` para não-membros), exceto para `ADMIN` (acesso global). `GET` sem `bandId` filtra automaticamente pelas bandas do usuário (Spec 011).
 
 ## 6. Fora do escopo desta baseline (não construído ainda)
 

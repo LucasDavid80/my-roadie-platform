@@ -11,7 +11,7 @@ import { userService } from '@/services/user-service';
 export function RegisterForm() {
     const [authError, setAuthError] = useState<string | null>(null);
     const router = useRouter();
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterFormData>({
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(registerSchema),
         defaultValues: {
             role: 'MUSICIAN',
@@ -28,7 +28,7 @@ export function RegisterForm() {
             let message = 'Erro ao criar conta';
             if (typeof error === 'object' && error !== null && 'response' in error) {
                 const response = (error as { response?: { data?: { message?: string } } }).response;
-                message = response?.data?.message || (error as Error).message || 'Erro ao criar conta';
+                message = response?.data?.message || (error as { message?: string }).message || 'Erro ao criar conta';
             } else if (error instanceof Error) {
                 message = error.message;
             }
