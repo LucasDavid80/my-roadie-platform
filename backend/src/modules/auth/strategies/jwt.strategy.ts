@@ -14,13 +14,16 @@ interface JwtPayload {
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     const supabaseUrl =
-      process.env.SUPABASE_URL ||
-      'https://hpgvbizdmhxukyoqjvmo.supabase.co';
+      process.env.SUPABASE_URL || 'https://hpgvbizdmhxukyoqjvmo.supabase.co';
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKeyProvider: (request: any, rawJwtToken: any, done: any) => {
+      secretOrKeyProvider: (
+        request: unknown,
+        rawJwtToken: unknown,
+        done: (err: any, secret?: string | Buffer) => void,
+      ) => {
         const jwksProvider = passportJwtSecret({
           cache: true,
           rateLimit: true,
@@ -28,14 +31,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           jwksUri: `${supabaseUrl}/auth/v1/.well-known/jwks.json`,
         });
 
-        jwksProvider(request, rawJwtToken, (err, secret) => {
-          if (err || !secret) {
-            const fallbackSecret =
-              process.env.JWT_SECRET || 'SECRET_KEY_MYROADIE_2026';
-            return done(null, fallbackSecret);
-          }
-          return done(null, secret);
-        });
+        jwksProvider(
+          request,
+          rawJwtToken,
+          (err: Error | null, secret?: string | Buffer) => {
+            if (err || !secret) {
+              const fallbackSecret =
+                process.env.JWT_SECRET || 'SECRET_KEY_MYROADIE_2026';
+              done(null, fallbackSecret);
+              return;
+            }
+            done(null, secret);
+          },
+        );
       },
     });
   }
@@ -48,4 +56,3 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     };
   }
 }
-

@@ -20,6 +20,14 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 import { OwnershipGuard } from '../auth/guards/ownership.guard';
 
+interface AuthenticatedRequest {
+  user?: {
+    userId: string;
+    email: string;
+    role?: Role;
+  };
+}
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -42,7 +50,7 @@ export class UsersController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string, @Req() req: any) {
+  findOne(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
     return this.usersService.findOne(id, req?.user);
   }
 
@@ -51,7 +59,7 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     return this.usersService.update(id, updateUserDto, req?.user);
   }

@@ -34,18 +34,22 @@ export class UsersService {
       searchConditions.push({ supabaseId: reqUser.userId });
     }
 
-    let user = await this.prisma.user.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: {
         OR: searchConditions,
       },
     });
 
     if (!user) {
-      if (reqUser && (id === reqUser.userId || id === reqUser.email || id === 'me')) {
+      if (
+        reqUser &&
+        (id === reqUser.userId || id === reqUser.email || id === 'me')
+      ) {
         const validRoles = Object.values(Role);
-        const userRole = (reqUser.role && validRoles.includes(reqUser.role as Role))
-          ? (reqUser.role as Role)
-          : Role.MUSICIAN;
+        const userRole =
+          reqUser.role && validRoles.includes(reqUser.role)
+            ? reqUser.role
+            : Role.MUSICIAN;
 
         return await this.prisma.user.create({
           data: {
@@ -87,23 +91,24 @@ export class UsersService {
       searchConditions.push({ supabaseId: reqUser.userId });
     }
 
-    let user = await this.prisma.user.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: {
         OR: searchConditions,
       },
     });
 
     if (!user) {
-      const userEmail =
-        dto.email || reqUser?.email || `${id}@supabase.user`;
+      const userEmail = dto.email || reqUser?.email || `${id}@supabase.user`;
       const validRoles = Object.values(Role);
-      const userRole = (dto.role && validRoles.includes(dto.role as Role))
-        ? (dto.role as Role)
-        : (reqUser?.role && validRoles.includes(reqUser.role as Role))
-          ? (reqUser.role as Role)
-          : Role.MUSICIAN;
+      const userRole =
+        dto.role && validRoles.includes(dto.role as Role)
+          ? (dto.role as Role)
+          : reqUser?.role && validRoles.includes(reqUser.role)
+            ? reqUser.role
+            : Role.MUSICIAN;
 
-      const { role: _, ...restDto } = dto;
+      const restDto = { ...dto };
+      delete restDto.role;
 
       return await this.prisma.user.create({
         data: {
