@@ -6,6 +6,8 @@ import 'package:agenda_musical/presentation/controllers/user_controller.dart';
 import 'package:agenda_musical/presentation/controllers/auth_controller.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_user_repository.dart';
+import 'package:agenda_musical/data/datasources/remote_datasource.dart';
+
 
 class MockUserRepository extends Mock implements IUserRepository {}
 class MockUser extends Mock implements User {}
@@ -113,4 +115,47 @@ void main() {
     expect(user.minCache, 1000.0);
     expect(user.id, '1'); // Should still be '1'
   });
+
+  group('saveProfile', () {
+    test('Should return success result and update state when saveProfile succeeds', () async {
+      container.read(userProvider.notifier).updateName('Updated Name');
+
+      final result = await container.read(userProvider.notifier).saveProfile();
+
+      expect(result.isSuccess, isTrue);
+      expect(result.errorMessage, isNull);
+      expect(container.read(userProvider).name, 'Updated Name');
+      verify(() => mockUserRepository.updateUser('1', any())).called(1);
+    });
+
+    test('Should return failure result with exact message when repository throws UnauthorizedException', () async {
+      when(() => mockUserRepository.updateUser('1', any()))
+          .thenThrow(UnauthorizedException('Sessão expirada'));
+
+      final result = await container.read(userProvider.notifier).saveProfile();
+
+      expect(result.isSuccess, isFalse);
+      expect(result.errorMessage, 'Sessão expirada');
+    });
+
+    test('Should return failure result with exact message when repository throws NetworkException', () async {
+      when(() => mockUserRepository.updateUser('1', any()))
+          .thenThrow(NetworkException('Erro de conexão com o servidor'));
+
+      final result = await container.read(userProvider.notifier).saveProfile();
+
+      expect(result.isSuccess, isFalse);
+      expect(result.errorMessage, 'Erro de conexão com o servidor');
+    });
+
+    test('Should return failure result when user id is empty', () async {
+      container.read(userProvider.notifier).state = UserEntity(id: '');
+
+      final result = await container.read(userProvider.notifier).saveProfile();
+
+      expect(result.isSuccess, isFalse);
+      expect(result.errorMessage, 'ID do usuário não fornecido');
+    });
+  });
 }
+
