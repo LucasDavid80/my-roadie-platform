@@ -35,12 +35,6 @@
 - Depende de: nenhum
 - Status: concluído (specs/008-conectar-form-de-login-authProvider/)
 
-### Correção de erro de tela vermelha na área de usuários/perfil
-- Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
-- Impacto esperado: alto (bug crítico/bloqueante)
-- Depende de: nenhum
-- Status: concluído (specs/009-correcao-area-de-perfil/)
-
 ### Autorização por Banda (Tasks, Repertoire, Transactions)
 - Intenção: Garantir que os módulos tasks, repertoire e transactions verifiquem associação com a Band dona do recurso via BandMember, corrigindo vulnerabilidade de segurança.
 - Impacto esperado: alto (crítico/segurança)
