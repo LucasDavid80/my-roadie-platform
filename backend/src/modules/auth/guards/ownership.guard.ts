@@ -40,12 +40,13 @@ export class OwnershipGuard implements CanActivate {
     // Se o ID da sessão for diretamente igual ao targetId
     if (user.userId === targetId) return true;
 
-    // Buscar o usuário no banco para comparar id e supabaseId
+    // Buscar o usuário no banco para comparar id, supabaseId e email
     if (this.usersService) {
-      return this.usersService.findOne(targetId).then((targetUser) => {
+      return this.usersService.findOne(targetId, user).then((targetUser) => {
         if (
           targetUser.id === user.userId ||
-          targetUser.supabaseId === user.userId
+          targetUser.supabaseId === user.userId ||
+          (user.email && targetUser.email === user.email)
         ) {
           return true;
         }

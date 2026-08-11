@@ -116,9 +116,14 @@ export class UsersService {
       });
     }
 
+    const updateData: Prisma.UserUpdateInput = { ...dto };
+    if (reqUser?.userId && user.supabaseId !== reqUser.userId) {
+      updateData.supabaseId = reqUser.userId;
+    }
+
     return await this.prisma.user.update({
       where: { id: user.id },
-      data: dto,
+      data: updateData,
     });
   }
 
