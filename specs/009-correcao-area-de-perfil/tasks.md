@@ -31,14 +31,14 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 ## Fase 4 — Verificação manual real (dispositivo físico)
 
 - [x] T4.1 — Conta nova sem dado: preencher perfil, salvar, sair da tela, voltar — dado aparece.
-- [ ] T4.2 — Conta com dado existente: editar campo, salvar, sair, voltar — dado atualizado aparece.
+- [x] T4.2 — Conta com dado existente: editar campo, salvar, sair, voltar — dado atualizado aparece.
 
 ## Checklist de fechamento da feature
 
-- [ ] Causa raiz documentada com evidência real (log/status HTTP), não hipótese não verificada
-- [ ] Salvar perfil funciona sem erro para conta autenticada válida
-- [ ] Erro real (não genérico) aparece na UI quando algo de fato falha
-- [ ] `flutter test` 100% verde
-- [ ] Verificação manual (Fase 4) feita em dispositivo físico, não só teste automatizado
-- [ ] `backlog.md` — entrada correspondente marcada como resolvida
-- [ ] `spec.md`/`plan.md` da baseline (raiz) atualizados se necessário
+- [x] Causa raiz documentada com evidência real (log/status HTTP), não hipótese não verificada
+- [x] Salvar perfil funciona sem erro para conta autenticada válida
+- [x] Erro real (não genérico) aparece na UI quando algo de fato falha
+- [x] `flutter test` 100% verde
+- [x] Verificação manual (Fase 4) feita em dispositivo físico, não só teste automatizado
+- [x] `backlog.md` — entrada correspondente marcada como resolvida
+- [x] `spec.md`/`plan.md` da baseline (raiz) atualizados se necessário

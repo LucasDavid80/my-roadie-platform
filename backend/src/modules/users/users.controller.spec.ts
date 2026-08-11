@@ -67,7 +67,7 @@ describe('UsersController', () => {
       const id = 'abc-123';
       const result = await controller.findOne(id);
 
-      expect(service.findOne).toHaveBeenCalledWith(id);
+      expect(service.findOne).toHaveBeenCalledWith(id, undefined);
       expect(result.id).toBe(id);
     });
 
@@ -89,8 +89,9 @@ describe('UsersController', () => {
     it('deve chamar o update do service com ID e DTO corretos', async () => {
       const id = '1';
       const dto = { name: 'Novo Nome' };
-      await controller.update(id, dto);
-      expect(service.update).toHaveBeenCalledWith(id, dto);
+      const req = { user: undefined };
+      await controller.update(id, dto, req);
+      expect(service.update).toHaveBeenCalledWith(id, dto, undefined);
     });
 
     // TESTE DE CENÁRIO NEGATIVO: quando o Service falhar na atualização

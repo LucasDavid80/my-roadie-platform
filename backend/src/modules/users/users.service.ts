@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User, Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
@@ -17,15 +17,49 @@ export class UsersService {
     return await this.prisma.user.findMany();
   }
 
-  async findOne(id: string) {
-    const user = await this.prisma.user.findFirst({
+  async findOne(
+    id: string,
+    reqUser?: { userId: string; email: string; role?: Role },
+  ) {
+    const searchConditions: Prisma.UserWhereInput[] = [
+      { id },
+      { supabaseId: id },
+      { email: id },
+    ];
+
+    if (reqUser?.email) {
+      searchConditions.push({ email: reqUser.email });
+    }
+    if (reqUser?.userId) {
+      searchConditions.push({ supabaseId: reqUser.userId });
+    }
+
+    let user = await this.prisma.user.findFirst({
       where: {
-        OR: [{ id }, { supabaseId: id }, { email: id }],
+        OR: searchConditions,
       },
     });
+
     if (!user) {
+      if (reqUser && (id === reqUser.userId || id === reqUser.email || id === 'me')) {
+        const validRoles = Object.values(Role);
+        const userRole = (reqUser.role && validRoles.includes(reqUser.role as Role))
+          ? (reqUser.role as Role)
+          : Role.MUSICIAN;
+
+        return await this.prisma.user.create({
+          data: {
+            supabaseId: reqUser.userId || id,
+            email: reqUser.email,
+            name: '',
+            role: userRole,
+          },
+        });
+      }
+
       throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
     }
+
     return user;
   }
 
@@ -35,8 +69,52 @@ export class UsersService {
     });
   }
 
-  async update(id: string, dto: UpdateUserDto) {
-    const user = await this.findOne(id);
+  async update(
+    id: string,
+    dto: UpdateUserDto,
+    reqUser?: { userId: string; email: string; role?: Role },
+  ) {
+    const searchConditions: Prisma.UserWhereInput[] = [
+      { id },
+      { supabaseId: id },
+      { email: id },
+    ];
+
+    if (reqUser?.email) {
+      searchConditions.push({ email: reqUser.email });
+    }
+    if (reqUser?.userId) {
+      searchConditions.push({ supabaseId: reqUser.userId });
+    }
+
+    let user = await this.prisma.user.findFirst({
+      where: {
+        OR: searchConditions,
+      },
+    });
+
+    if (!user) {
+      const userEmail =
+        dto.email || reqUser?.email || `${id}@supabase.user`;
+      const validRoles = Object.values(Role);
+      const userRole = (dto.role && validRoles.includes(dto.role as Role))
+        ? (dto.role as Role)
+        : (reqUser?.role && validRoles.includes(reqUser.role as Role))
+          ? (reqUser.role as Role)
+          : Role.MUSICIAN;
+
+      const { role: _, ...restDto } = dto;
+
+      return await this.prisma.user.create({
+        data: {
+          supabaseId: id,
+          email: userEmail,
+          name: dto.name || '',
+          role: userRole,
+          ...restDto,
+        },
+      });
+    }
 
     return await this.prisma.user.update({
       where: { id: user.id },
