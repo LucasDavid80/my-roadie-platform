@@ -26,7 +26,7 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
     1) Login e navegação até perfil verificando pelo menos 3 campos preenchidos; 
     2) Login, navegação até perfil com 3 campos preenchidos, edição de um campo, salvamento e verificação da alteração.
 
-- [ ] T3.4 — `flutter test` completo, 100% verde.
+- [x] T3.4 — `flutter test` completo, 100% verde.
 
 ## Fase 4 — Verificação manual real (dispositivo físico)
 
