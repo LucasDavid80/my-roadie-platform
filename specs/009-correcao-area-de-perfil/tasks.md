@@ -30,7 +30,7 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 
 ## Fase 4 — Verificação manual real (dispositivo físico)
 
-- [ ] T4.1 — Conta nova sem dado: preencher perfil, salvar, sair da tela, voltar — dado aparece.
+- [x] T4.1 — Conta nova sem dado: preencher perfil, salvar, sair da tela, voltar — dado aparece.
 - [ ] T4.2 — Conta com dado existente: editar campo, salvar, sair, voltar — dado atualizado aparece.
 
 ## Checklist de fechamento da feature
