@@ -21,7 +21,7 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 ## Fase 3 — Testes automatizados
 
 - [x] T3.1 — Teste unit de `saveProfile`: sucesso e falha (mock do repository), cobrindo o novo estado de erro.
-- [ ] T3.2 — Teste unit/widget de `fetchProfile`: conta sem dado vs. conta com dado salvo.
+- [x] T3.2 — Teste unit/widget de `fetchProfile`: conta sem dado vs. conta com dado salvo.
 - [ ] T3.3 — `flutter test` completo, 100% verde.
 
 ## Fase 4 — Verificação manual real (dispositivo físico)

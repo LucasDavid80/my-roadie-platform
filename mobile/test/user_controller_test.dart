@@ -157,5 +157,67 @@ void main() {
       expect(result.errorMessage, 'ID do usuário não fornecido');
     });
   });
+
+  group('fetchProfile', () {
+    test('Should populate state with empty/default fields for new account without saved profile data', () async {
+      final newProfile = UserEntity(
+        id: 'user_new',
+        name: '',
+        phone: '',
+        instruments: const [],
+        styles: const [],
+      );
+      when(() => mockUserRepository.getUser('user_new')).thenAnswer((_) async => newProfile);
+
+      await container.read(userProvider.notifier).fetchProfile('user_new');
+
+      final user = container.read(userProvider);
+      expect(user.id, 'user_new');
+      expect(user.name, isEmpty);
+      expect(user.phone, isEmpty);
+      expect(user.instruments, isEmpty);
+      expect(user.styles, isEmpty);
+    });
+
+
+    test('Should populate state with existing profile data when account has saved data', () async {
+      final existingProfile = UserEntity(
+        id: 'user_existing',
+        name: 'Maria Silva',
+        phone: '11988887777',
+        city: 'Campinas',
+        federativeUnit: 'SP',
+        minCache: 800.0,
+        instruments: const ['Vocal', 'Violão'],
+        styles: const ['MPB', 'Samba'],
+        isAvailable: true,
+      );
+      when(() => mockUserRepository.getUser('user_existing')).thenAnswer((_) async => existingProfile);
+
+      await container.read(userProvider.notifier).fetchProfile('user_existing');
+
+      final user = container.read(userProvider);
+      expect(user.id, 'user_existing');
+      expect(user.name, 'Maria Silva');
+      expect(user.phone, '11988887777');
+      expect(user.city, 'Campinas');
+      expect(user.federativeUnit, 'SP');
+      expect(user.minCache, 800.0);
+      expect(user.instruments, equals(['Vocal', 'Violão']));
+      expect(user.styles, equals(['MPB', 'Samba']));
+      expect(user.isAvailable, isTrue);
+    });
+
+    test('Should catch exception gracefully when fetchProfile repository call fails', () async {
+      when(() => mockUserRepository.getUser('user_error'))
+          .thenThrow(ServerException('Erro no servidor'));
+
+      await expectLater(
+        container.read(userProvider.notifier).fetchProfile('user_error'),
+        completes,
+      );
+    });
+  });
 }
+
 
