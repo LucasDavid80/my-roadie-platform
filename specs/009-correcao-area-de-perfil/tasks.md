@@ -36,6 +36,7 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 ## Fase 5 — Tarefas Extras
 
 - [x] T5.1 — Configurar `keyboardType: TextInputType.emailAddress` e `autofillHints: const [AutofillHints.email]` no campo de e-mail do `LoginForm` (`login_form.dart`).
+- [x] T5.2 — Refatorar `InfoWidget` (`info_widget.dart`) para utilizar `TextEditingController`s persistentes, eliminando a perda de foco e fechamento do teclado durante a digitação.
 
 ## Checklist de fechamento da feature
 
