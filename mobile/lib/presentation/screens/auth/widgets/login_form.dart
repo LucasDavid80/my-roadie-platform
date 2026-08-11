@@ -28,6 +28,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           // E-MAIL
           TextFormField(
             controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            autofillHints: const [AutofillHints.email],
             decoration: InputDecoration(
               labelText: 'E-mail',
               prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),

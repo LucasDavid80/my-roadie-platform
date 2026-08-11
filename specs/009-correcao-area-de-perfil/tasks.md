@@ -33,6 +33,10 @@ Pré-requisitos: nenhum. Specs 010 (auth) e 011 (autorização por banda) já co
 - [x] T4.1 — Conta nova sem dado: preencher perfil, salvar, sair da tela, voltar — dado aparece.
 - [x] T4.2 — Conta com dado existente: editar campo, salvar, sair, voltar — dado atualizado aparece.
 
+## Fase 5 — Tarefas Extras
+
+- [x] T5.1 — Configurar `keyboardType: TextInputType.emailAddress` e `autofillHints: const [AutofillHints.email]` no campo de e-mail do `LoginForm` (`login_form.dart`).
+
 ## Checklist de fechamento da feature
 
 - [x] Causa raiz documentada com evidência real (log/status HTTP), não hipótese não verificada
