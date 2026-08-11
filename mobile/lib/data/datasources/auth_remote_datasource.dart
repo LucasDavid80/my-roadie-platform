@@ -22,7 +22,7 @@ class AuthRemoteDataSource {
         ),
       );
     }
-    return await _supabase!.auth.signInWithPassword(
+    return await _supabase.auth.signInWithPassword(
       email: email,
       password: password,
     );
@@ -41,7 +41,7 @@ class AuthRemoteDataSource {
       final userName = name ?? '';
 
       if (_remoteDataSource != null) {
-        await _remoteDataSource!.createUser(
+        await _remoteDataSource.createUser(
           email: email,
           supabaseId: mockId,
           name: userName,
@@ -66,7 +66,7 @@ class AuthRemoteDataSource {
     if (name != null) metadata['name'] = name;
     if (role != null) metadata['role'] = role;
 
-    final response = await _supabase!.auth.signUp(
+    final response = await _supabase.auth.signUp(
       email: email,
       password: password,
       data: metadata.isNotEmpty ? metadata : null,
@@ -77,7 +77,7 @@ class AuthRemoteDataSource {
       final userRole = role ?? (user.userMetadata?['role']?.toString() ?? 'MUSICIAN');
       final userName = name ?? (user.userMetadata?['name']?.toString() ?? '');
 
-      await _remoteDataSource!.createUser(
+      await _remoteDataSource.createUser(
         email: email,
         supabaseId: user.id,
         name: userName,
