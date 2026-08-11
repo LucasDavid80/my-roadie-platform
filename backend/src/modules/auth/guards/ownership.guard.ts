@@ -26,9 +26,7 @@ export class OwnershipGuard implements CanActivate {
     private readonly usersService?: UsersService,
   ) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
     const rawTargetId = request.params.id;
@@ -44,19 +42,17 @@ export class OwnershipGuard implements CanActivate {
 
     // Buscar o usuário no banco para comparar id e supabaseId
     if (this.usersService) {
-      return this.usersService
-        .findOne(targetId)
-        .then((targetUser) => {
-          if (
-            targetUser.id === user.userId ||
-            targetUser.supabaseId === user.userId
-          ) {
-            return true;
-          }
-          throw new ForbiddenException(
-            'Você não tem permissão para realizar esta ação neste recurso.',
-          );
-        });
+      return this.usersService.findOne(targetId).then((targetUser) => {
+        if (
+          targetUser.id === user.userId ||
+          targetUser.supabaseId === user.userId
+        ) {
+          return true;
+        }
+        throw new ForbiddenException(
+          'Você não tem permissão para realizar esta ação neste recurso.',
+        );
+      });
     }
 
     throw new ForbiddenException(
