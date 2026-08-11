@@ -65,6 +65,10 @@ Trocar o retorno booleano puro de `saveProfile` por um estado que carregue a men
 
 - Unit test de `saveProfile`: sucesso e falha, mockando o repository, cobrindo o novo estado de erro.
 - Unit/widget test de `fetchProfile`: conta sem dado vs. conta com dado salvo.
+- Integration/widget test da UI de Perfil:
+  1. Login e navegação até a página de perfil com verificação de pelo menos 3 campos preenchidos.
+  2. Login, navegação até a página de perfil com 3 campos preenchidos, edição de um campo, salvamento e asserção da alteração correta.
+
 
 ## Fase 4 — Verificação manual real (não só teste automatizado)
 
