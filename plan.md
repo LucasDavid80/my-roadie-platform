@@ -37,7 +37,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Estado atual: as telas de auth, agenda e perfil estão conectadas à API real do backend através do `remote_datasource` e dos repositories.
 - Cadastro sincronizado: `AuthRemoteDataSource.signUp` registra as credenciais no Supabase Auth e em seguida invoca `RemoteDataSource.createUser` (`POST /users`), garantindo a criação de usuário no PostgreSQL com feedback de erro amigável na UI (Spec 010).
 - Atualização reativa de compromissos: `AgendaController` sincroniza eventos retornados da API e notifica a UI de forma imutável após criação/edição (Spec 007).
-- Estabilização do Perfil (`PersonScreen`): `PhotoWidget` e `InfoWidget` ajustados para layout seguro e parse seguro de tipos; `UserNotifier` inicializado com coleções não nulas e captura de erros HTTP com fallbacks (Spec 009).
+- ✅ **Correção de Carregamento e Salvamento do Perfil (`PersonScreen`):** Solucionada causa raiz de erros HTTP 401 Unauthorized com injeção do JWT de sessão do Supabase em `RemoteDataSource._getHeaders()`. `UserNotifier` refatorado para propagar mensagens de erro reais (`errorMessage`) na UI via SnackBar. Adicionados testes unitários, de widget e de integração (`profile_flow_integration_test.dart`) cobrindo o ciclo completo de visualização e edição do perfil (Spec 009).
 
 
 
