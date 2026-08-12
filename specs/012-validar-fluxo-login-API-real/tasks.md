@@ -15,7 +15,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: `JwtStrategy` valida com sucesso tokens com algoritmo ES256 e HS256 sem falhas de mismatch.
 - [x] T1.2 — Refatorar o método `handleRequest` no `JwtAuthGuard` para capturar exceções do `passport-jwt`, gerar logs explicativos no servidor e retornar `UnauthorizedException` com mensagens descritivas (`TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`) em substituição ao 401 mascarado.
   - Critério: Requisições com falha de token geram log descritivo no console e retornos JSON com código de erro amigável.
-- [ ] T1.3 — Criar/atualizar testes unitários do backend (`jwt.strategy.spec.ts`, `jwt-auth.guard.spec.ts`).
+- [x] T1.3 — Criar/atualizar testes unitários do backend (`jwt.strategy.spec.ts`, `jwt-auth.guard.spec.ts`).
   - Critério: Mínimo de 3 casos positivos (token ES256 válido, token HS256 válido, payload parseado) e 3 casos negativos (mismatch de algoritmo, token expirado, token sem Bearer) rodando com 100% de aprovação no Jest (`npm test`).
 
 ## Fase 2 — Frontend-Web: Deduplicação de `fetchProfile` e Feedback Visual de Erro
