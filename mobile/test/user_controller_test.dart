@@ -213,9 +213,26 @@ void main() {
           .thenThrow(ServerException('Erro no servidor'));
 
       await expectLater(
-        container.read(userProvider.notifier).fetchProfile('user_error'),
+        container.read(userProvider.notifier).fetchProfile('user_error', true),
         completes,
       );
+    });
+
+    test('Should ignore redundant consecutive calls to fetchProfile for the same user ID (deduplication T3.1)', () async {
+      final dedupeProfile = UserEntity(id: 'user_dedupe', name: 'João Dedupe');
+      when(() => mockUserRepository.getUser('user_dedupe')).thenAnswer((_) async => dedupeProfile);
+
+      final notifier = container.read(userProvider.notifier);
+
+      final future1 = notifier.fetchProfile('user_dedupe');
+      final future2 = notifier.fetchProfile('user_dedupe');
+      final future3 = notifier.fetchProfile('user_dedupe');
+
+      await Future.wait([future1, future2, future3]);
+
+      await notifier.fetchProfile('user_dedupe');
+
+      verify(() => mockUserRepository.getUser('user_dedupe')).called(1);
     });
   });
 }
