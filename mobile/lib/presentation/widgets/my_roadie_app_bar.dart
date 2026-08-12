@@ -1,6 +1,5 @@
 import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class MyRoadieAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -26,7 +25,15 @@ class MyRoadieAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: 70,
       leading: Padding(
         padding: const EdgeInsets.only(left: 16.0, top: 8, bottom: 8),
-        child: SvgPicture.asset('assets/images/logo.svg', fit: BoxFit.contain),
+        child: Image.asset(
+          'assets/images/logo.png',
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) => const Icon(
+            Icons.music_note,
+            color: AppColors.primary,
+            size: 32,
+          ),
+        ),
       ),
 
       title: Row(

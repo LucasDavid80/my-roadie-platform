@@ -19,26 +19,40 @@ class UserModel extends UserEntity {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    double parseDouble(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
+    List<String> parseStringList(dynamic value) {
+      if (value == null) return const [];
+      if (value is List) {
+        return value
+            .map((e) => e?.toString() ?? '')
+            .where((s) => s.isNotEmpty)
+            .toList();
+      }
+      return const [];
+    }
+
     return UserModel(
-      id: json['id'] as String,
-      name: json['name'] as String? ?? '',
-      experience: json['experience'] as String? ?? '',
-      phone: json['phone'] as String? ?? '',
-      instagram: json['instagram'] as String? ?? '',
-      city: json['city'] as String? ?? '',
-      federativeUnit: json['federativeUnit'] as String? ?? '',
-      minCache: (json['minCache'] as num?)?.toDouble() ?? 0.0,
-      youtubeLink: json['youtubeLink'] as String? ?? '',
-      bio: json['bio'] as String? ?? '',
-      instruments: (json['instruments'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      styles: (json['styles'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      isAvailable: json['isAvailable'] as bool? ?? true,
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      experience: json['experience']?.toString() ?? '',
+      phone: json['phone']?.toString() ?? '',
+      instagram: json['instagram']?.toString() ?? '',
+      city: json['city']?.toString() ?? '',
+      federativeUnit: json['federativeUnit']?.toString() ?? '',
+      minCache: parseDouble(json['minCache']),
+      youtubeLink: json['youtubeLink']?.toString() ?? '',
+      bio: json['bio']?.toString() ?? '',
+      instruments: parseStringList(json['instruments']),
+      styles: parseStringList(json['styles']),
+      isAvailable: json['isAvailable'] is bool
+          ? json['isAvailable'] as bool
+          : true,
     );
   }
 

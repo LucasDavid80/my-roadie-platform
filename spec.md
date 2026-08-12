@@ -45,6 +45,8 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
 - ✅ **Camada de dados e cadastro sincronizado:** `data/datasources/remote_datasource.dart`, `data/repositories/agenda_repository_impl.dart`, `data/repositories/user_repository_impl.dart` e `auth_remote_datasource.dart` conectam a interface mobile aos endpoints do backend e ao Supabase Auth (`POST /users`), garantindo a criação de perfis no PostgreSQL com tratamento de erros na UI (Spec 010).
 - ✅ **Reatividade de compromissos:** A lista de compromissos e o calendário na tela de Agenda atualizam imediatamente no aplicativo mobile após a criação/edição de eventos (Spec 007).
+- ✅ **Carregamento e Salvamento do Perfil Mobile:** Injeção do JWT de sessão do Supabase no `RemoteDataSource._getHeaders()` para evitar erros HTTP 401 Unauthorized, com `UserNotifier`/`PersonScreen` expondo mensagens de erro reais na UI em vez de falhas silenciosas, com testes unitários, de widget e de integração para o fluxo de carregamento e edição do perfil (Spec 009).
+
 
 
 ## 5. Regras de negócio confirmadas (das que já têm API)

@@ -31,6 +31,7 @@ describe('UsersService', () => {
             user: {
               create: jest.fn().mockResolvedValue(mockUser),
               findUnique: jest.fn().mockResolvedValue(mockUser),
+              findFirst: jest.fn().mockResolvedValue(mockUser),
               findMany: jest.fn().mockResolvedValue([mockUser]),
               update: jest.fn().mockResolvedValue(mockUser),
               delete: jest.fn().mockResolvedValue(mockUser),
@@ -89,7 +90,7 @@ describe('UsersService', () => {
     });
 
     it('deve lançar NotFoundException se o usuário não for encontrado', async () => {
-      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(null);
       await expect(service.findOne('id-inexistente')).rejects.toThrow(
         NotFoundException,
       );

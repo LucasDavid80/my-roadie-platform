@@ -64,9 +64,9 @@ void main() {
         role: 'MUSICIAN',
       );
 
-      expect(result.user, isNotNull);
-      expect(result.user?.userMetadata?['name'], 'Lucas Teste');
-      expect(result.user?.userMetadata?['role'], 'MUSICIAN');
+      expect(result?.user, isNotNull);
+      expect(result?.user?.userMetadata?['name'], 'Lucas Teste');
+      expect(result?.user?.userMetadata?['role'], 'MUSICIAN');
 
       verify(() => mockRemoteDataSource.createUser(
             email: 'lucas@test.com',
@@ -108,7 +108,7 @@ void main() {
         role: 'ROADIE',
       );
 
-      expect(result.user?.id, 'supa-user-123');
+      expect(result?.user?.id, 'supa-user-123');
 
       verify(() => mockGoTrueClient.signUp(
             email: 'roadie@test.com',
@@ -209,7 +209,7 @@ void main() {
         password: 'password123',
       );
 
-      expect(result.user?.id, 'user-789');
+      expect(result?.user?.id, 'user-789');
     });
 
     test('should throw AuthException on invalid credentials (negative)', () async {

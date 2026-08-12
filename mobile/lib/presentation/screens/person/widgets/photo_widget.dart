@@ -37,7 +37,6 @@ class PhotoWidget extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 24.0,
             children: [
               Container(
                 width: 120,
@@ -51,9 +50,10 @@ class PhotoWidget extends StatelessWidget {
                 child: Icon(
                   Icons.music_note,
                   size: 60,
-                  color: AppColors.background,
+                  color: AppColors.primary,
                 ),
               ),
+              const SizedBox(width: 24.0),
               Column(
                 children: [
                   ElevatedButton(
@@ -66,6 +66,7 @@ class PhotoWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(Icons.upload, color: AppColors.background),
+                        const SizedBox(width: 8.0),
                         Text(
                           "Enviar Foto",
                           style: TextStyle(color: AppColors.background),
@@ -73,6 +74,7 @@ class PhotoWidget extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 8.0),
                   Text('Recomendado: 400x400px'),
                 ],
               ),

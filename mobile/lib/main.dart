@@ -9,15 +9,19 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('pt_BR', null);
 
   if (AppConfig.isConfigured) {
-    await Supabase.initialize(
-      url: AppConfig.supabaseUrl,
-      publishableKey: AppConfig.supabaseAnonKey,
-    );
+    try {
+      await Supabase.initialize(
+        url: AppConfig.supabaseUrl,
+        publishableKey: AppConfig.supabaseAnonKey,
+      );
+    } catch (e) {
+      debugPrint('Erro ao inicializar Supabase: $e');
+    }
   }
 
-  await initializeDateFormatting('pt_BR', null);
   runApp(const ProviderScope(child: MyApp()));
 }
 

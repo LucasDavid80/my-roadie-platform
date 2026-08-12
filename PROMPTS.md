@@ -29,6 +29,7 @@ antes de fazer qualquer coisa.
 Execute apenas a <Fase X / task TX.X> de tasks.md.
 Não implemente nada fora do que está descrito em spec.md.
 Siga exatamente o "como" descrito em plan.md — não invente uma abordagem diferente.
+Antes de qualquer alteração me explique o que irá fazer e o porque.
 
 Ao terminar, marque o checkbox da task em tasks.md e pare.
 Não siga para a próxima task sem eu confirmar.
@@ -103,11 +104,12 @@ desse arquivo especificamente.
 ```
 Simule o CI localmente antes de eu abrir a PR:
 
-1. Rode `act pull_request --secret-file .secrets` na raiz do repo (backend/frontend-web
-   conforme os jobs definidos em .github/workflows/ci.yml).
+1. Rode `act pull_request --secret-file .secrets` na raiz do repo (backend/frontend-web e mobile
+   conforme os jobs definidos em .github/workflows/ci.yml).
 2. Se algum job falhar, me diga qual job, qual step, e a causa provável
-   — não tente corrigir automaticamente sem eu confirmar o diagnóstico.
+   — não tente corrigir automaticamente sem eu confirmar o diagnóstico.
 3. Se todos os jobs passarem, confirme isso e não faça mais nada.
+4. Rode todos ou o máximo de jobs possíveis.
 ```
 
 ## 5. Lint e formatação

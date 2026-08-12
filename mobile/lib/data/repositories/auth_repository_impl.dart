@@ -11,7 +11,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   @override
   Future<User?> signIn(String email, String password) async {
     final response = await remoteDataSource.signIn(email: email, password: password);
-    return response.user;
+    return response?.user;
   }
 
   @override
@@ -22,7 +22,7 @@ class AuthRepositoryImpl implements IAuthRepository {
       name: name,
       role: role,
     );
-    return response.user;
+    return response?.user;
   }
 
   @override

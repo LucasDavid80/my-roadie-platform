@@ -50,9 +50,9 @@
 ### Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
 
-### Correção de erro de tela vermelha na área de usuários/perfil (spec 009)
-- Intenção: Corrigir a quebra de renderização (tela vermelha) ao clicar/entrar na área de perfil/usuários no app mobile.
-- Impacto esperado: alto (bug crítico/bloqueante)
+### Correção da tela de cadastro na Web e sincronização no Supabase Auth (Mobile)
+- Intenção: Corrigir o acesso à tela de cadastro no frontend-web e investigar/garantir a persistência real da conta no Supabase Auth durante o cadastro no app mobile.
+- Impacto esperado: alto (bug crítico/cadastro)
 - Depende de: nenhum
 - Status: ideia
 

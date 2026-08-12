@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/config/app_config.dart';
@@ -26,22 +27,45 @@ class ServerException implements Exception {
   String toString() => message;
 }
 
+String _extractErrorMessage(String body) {
+  if (body.isEmpty) return 'Não autorizado';
+  try {
+    final dynamic decoded = jsonDecode(body);
+    if (decoded is Map && decoded['message'] != null) {
+      final msg = decoded['message'];
+      // Nest costuma mandar message como String ou List<String>
+      if (msg is List) return msg.join('; ');
+      return msg.toString();
+    }
+  } catch (_) {
+    // corpo não é JSON — devolve como veio
+  }
+  return body;
+}
+
 class RemoteDataSource {
   final http.Client _client;
-  final SupabaseClient _supabase;
+  final SupabaseClient? _supabase;
 
-  RemoteDataSource({
-    required http.Client client,
-    required SupabaseClient supabase,
-  })  : _client = client,
-        _supabase = supabase;
+  RemoteDataSource({required http.Client client, SupabaseClient? supabase})
+    : _client = client,
+      _supabase = supabase;
 
   Map<String, String> _getHeaders() {
-    final token = _supabase.auth.currentSession?.accessToken;
-    final headers = {
-      'Content-Type': 'application/json',
-    };
-    if (token != null) {
+    String? token = _supabase?.auth.currentSession?.accessToken;
+    if (token == null || token.isEmpty) {
+      try {
+        token = Supabase.instance.client.auth.currentSession?.accessToken;
+      } catch (_) {}
+    }
+
+    debugPrint('DEBUG AUTH TOKEN PRESENTE: ${token != null && token.isNotEmpty}');
+    if (token != null && token.length > 20) {
+      debugPrint('DEBUG AUTH TOKEN (início): ${token.substring(0, 20)}...');
+    }
+
+    final headers = <String, String>{'Content-Type': 'application/json'};
+    if (token != null && token.isNotEmpty) {
       headers['Authorization'] = 'Bearer $token';
     }
     return headers;
@@ -133,17 +157,28 @@ class RemoteDataSource {
 
   Future<UserModel> getUserProfile(String id) async {
     try {
+      final headers = _getHeaders();
+      final url = '${AppConfig.backendUrl}/users/$id';
+
+      debugPrint('DEBUG REQUEST URL: $url');
+      debugPrint('DEBUG REQUEST HEADERS: $headers');
+
       final response = await _client.get(
-        Uri.parse('${AppConfig.backendUrl}/users/$id'),
-        headers: _getHeaders(),
+        Uri.parse(url),
+        headers: headers,
       );
+
+      debugPrint('DEBUG RESPONSE STATUS: ${response.statusCode}');
+      debugPrint('DEBUG RESPONSE BODY: ${response.body}');
 
       if (response.statusCode == 200) {
         return UserModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 401) {
-        throw UnauthorizedException();
+        throw UnauthorizedException(_extractErrorMessage(response.body));
       } else {
-        throw ServerException('Failed to get user profile: ${response.statusCode}');
+        throw ServerException(
+          'Failed to get user profile: ${response.statusCode}',
+        );
       }
     } on http.ClientException {
       throw NetworkException();
@@ -166,9 +201,11 @@ class RemoteDataSource {
       if (response.statusCode == 200) {
         return UserModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 401) {
-        throw UnauthorizedException();
+        throw UnauthorizedException(_extractErrorMessage(response.body));
       } else {
-        throw ServerException('Failed to update user profile: ${response.statusCode}');
+        throw ServerException(
+          'Failed to update user profile: ${response.statusCode}',
+        );
       }
     } on http.ClientException {
       throw NetworkException();

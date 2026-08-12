@@ -9,6 +9,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -18,6 +19,14 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 import { OwnershipGuard } from '../auth/guards/ownership.guard';
+
+interface AuthenticatedRequest {
+  user?: {
+    userId: string;
+    email: string;
+    role?: Role;
+  };
+}
 
 @Controller('users')
 export class UsersController {
@@ -41,14 +50,18 @@ export class UsersController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  findOne(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+    return this.usersService.findOne(id, req?.user);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, OwnershipGuard)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.usersService.update(id, updateUserDto, req?.user);
   }
 
   @Delete(':id')

@@ -4,13 +4,13 @@ import '../../core/config/app_config.dart';
 import 'remote_datasource.dart';
 
 class AuthRemoteDataSource {
-  final SupabaseClient _supabase;
+  final SupabaseClient? _supabase;
   final RemoteDataSource? _remoteDataSource;
 
   AuthRemoteDataSource(this._supabase, [this._remoteDataSource]);
 
-  Future<AuthResponse> signIn({required String email, required String password}) async {
-    if (!AppConfig.isConfigured) {
+  Future<AuthResponse?> signIn({required String email, required String password}) async {
+    if (_supabase == null || !AppConfig.isConfigured) {
       final mockId = 'mock-user-1';
       return AuthResponse(
         user: User(
@@ -28,14 +28,14 @@ class AuthRemoteDataSource {
     );
   }
 
-  Future<AuthResponse> signUp({
+  Future<AuthResponse?> signUp({
     required String email,
     required String password,
     String? name,
     String? role,
     Map<String, dynamic>? data,
   }) async {
-    if (!AppConfig.isConfigured) {
+    if (_supabase == null || !AppConfig.isConfigured) {
       final mockId = 'mock-user-${DateTime.now().millisecondsSinceEpoch}';
       final userRole = role ?? 'MUSICIAN';
       final userName = name ?? '';
@@ -89,9 +89,25 @@ class AuthRemoteDataSource {
   }
 
   Future<void> signOut() async {
+    if (_supabase == null) return;
     await _supabase.auth.signOut();
   }
 
-  Session? get currentSession => _supabase.auth.currentSession;
-  User? get currentUser => _supabase.auth.currentUser;
+  Session? get currentSession {
+    if (_supabase == null) return null;
+    try {
+      return _supabase.auth.currentSession;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  User? get currentUser {
+    if (_supabase == null) return null;
+    try {
+      return _supabase.auth.currentUser;
+    } catch (_) {
+      return null;
+    }
+  }
 }
