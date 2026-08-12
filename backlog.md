@@ -35,6 +35,18 @@
 - Depende de: nenhum
 - Status: concluído (specs/008-conectar-form-de-login-authProvider/)
 
+### Correção de Carregamento e Salvamento do Perfil (Mobile)
+- Intenção: Garantir que a tela de perfil no mobile carregue e salve os dados do usuário corretamente com mensagens de erro reais na UI e token JWT válido.
+- Impacto esperado: alto (bug crítico/perfil)
+- Depende de: nenhum
+- Status: concluído (specs/009-correcao-area-de-perfil/)
+
+### Correção da tela de cadastro na Web e sincronização no Supabase Auth (Mobile)
+- Intenção: Corrigir o acesso à tela de cadastro no frontend-web (`/register`) e garantir o registro no Supabase Auth e PostgreSQL via NestJS durante o cadastro mobile.
+- Impacto esperado: alto (bug crítico/cadastro)
+- Depende de: nenhum
+- Status: concluído (specs/010-correcao-login-e-cadastro/)
+
 ### Autorização por Banda (Tasks, Repertoire, Transactions)
 - Intenção: Garantir que os módulos tasks, repertoire e transactions verifiquem associação com a Band dona do recurso via BandMember, corrigindo vulnerabilidade de segurança.
 - Impacto esperado: alto (crítico/segurança)
@@ -47,14 +59,14 @@
 
 ---
 
-### Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
+## Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
 
 ### Correção da tela de cadastro na Web e sincronização no Supabase Auth (Mobile)
 - Intenção: Corrigir o acesso à tela de cadastro no frontend-web e investigar/garantir a persistência real da conta no Supabase Auth durante o cadastro no app mobile.
 - Impacto esperado: alto (bug crítico/cadastro)
 - Depende de: nenhum
-- Status: ideia
+- Status: concluído (specs/010-correcao-login-e-cadastro/)
 
 ### Validar e testar fluxo de Login com API Real
 - Intenção: Verificar a estabilidade do fluxo de login contra a API de autenticação real e criar testes adicionais de integração.

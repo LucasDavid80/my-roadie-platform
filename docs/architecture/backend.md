@@ -38,8 +38,8 @@ O backend utiliza o **Prisma** para se comunicar com o Postgres do Supabase.
 
 ## 🔐 Autenticação e Segurança
 
-- A validação de tokens é feita via Strategy do NestJS, integrando-se ao **Supabase Auth**.
-- Rotas protegidas utilizam o decorator `@UseGuards(JwtAuthGuard)`.
+- A validação de tokens é feita via `JwtStrategy` do NestJS, integrando-se ao **Supabase Auth**. Suporta verificação de assinaturas assimétricas (RS256) via JWKS (`jwks-rsa`) consultando a chave pública (`/.well-known/jwks.json`) do Supabase, com fallback para chave secreta simétrica local (`JWT_SECRET`).
+- Rotas protegidas utilizam o decorator `@UseGuards(JwtAuthGuard)` e validação de propriedade com `OwnershipGuard` ou pertença por banda via `BandAccessService`.
 
 ## 🚀 Comandos Principais
 
