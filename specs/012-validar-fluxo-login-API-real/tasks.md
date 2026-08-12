@@ -46,7 +46,14 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 - [x] T4.2 — Medir e validar a cobertura de testes nos três projetos (Backend, Frontend-Web e Mobile).
   - Critério: Relatório de cobertura indicando >= 80% em cada um dos três projetos individualmente.
 
-## Fase 5 — Checklist de Fechamento da Feature
+## Fase 5 — Resolução de Pendências de Qualidade (ESLint) e Cobertura (Vitest) no Frontend-Web
+
+- [x] T5.1 — Corrigir todos os erros de ESLint (`@typescript-eslint/no-explicit-any`) nos arquivos de teste do frontend-web (`AuthContext.extra.spec.tsx` e `user-service.spec.ts`).
+  - Critério: `npm run lint` no `frontend-web` executa com 0 erros (código de saída 0).
+- [ ] T5.2 — Ajustar a configuração/execução de cobertura de testes no Vitest (`frontend-web`) para resolver os timeouts de worker no pool (`[vitest-pool]: Failed to start forks worker`) e gerar o relatório completo.
+  - Critério: `npm test -- --coverage` ou `npx vitest run --coverage` finaliza com sucesso e confirma cobertura de testes >= 80% no `frontend-web`.
+
+## Fase 6 — Checklist de Fechamento da Feature
 
 - [ ] `spec.md`, `plan.md` e `tasks.md` da spec 012 alinhados e sem pendências
 - [ ] Mismatch de algoritmo JWT (ES256/JWKS vs HS256) resolvido no backend
@@ -55,3 +62,4 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 - [ ] Testes unitários, de integração e E2E verdes nos três projetos com no mínimo 3 casos positivos e 3 negativos em auth
 - [ ] Meta de cobertura >= 80% atingida nos três projetos
 - [ ] Entrada em `backlog.md` atualizada para "em spec → specs/012-validar-fluxo-login-API-real/"
+
