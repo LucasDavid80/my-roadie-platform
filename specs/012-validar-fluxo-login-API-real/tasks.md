@@ -11,7 +11,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 ## Fase 1 — Backend (NestJS): Suporte JWKS/ES256, Logging e Respostas 401 Detalhadas
 
-- [ ] T1.1 — Atualizar a `JwtStrategy` do NestJS para suportar verificação de tokens JWT assinados via ES256 (com suporte a JWKS do Supabase Auth) e fallback seguro para HS256 em desenvolvimento local.
+- [x] T1.1 — Atualizar a `JwtStrategy` do NestJS para suportar verificação de tokens JWT assinados via ES256 (com suporte a JWKS do Supabase Auth) e fallback seguro para HS256 em desenvolvimento local.
   - Critério: `JwtStrategy` valida com sucesso tokens com algoritmo ES256 e HS256 sem falhas de mismatch.
 - [ ] T1.2 — Refatorar o método `handleRequest` no `JwtAuthGuard` para capturar exceções do `passport-jwt`, gerar logs explicativos no servidor e retornar `UnauthorizedException` com mensagens descritivas (`TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`) em substituição ao 401 mascarado.
   - Critério: Requisições com falha de token geram log descritivo no console e retornos JSON com código de erro amigável.
