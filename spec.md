@@ -27,7 +27,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 ## 4. O que está de fato implementado hoje (verificado no código)
 
 ### Backend (`backend/src/modules/`)
-- ✅ **auth** — login via Supabase Auth, estratégia JWT, guards (`JwtAuthGuard`, `RolesGuard`, `OwnershipGuard`).
+- ✅ **auth** — login via Supabase Auth, estratégia JWT com validação dinâmica de algoritmos ES256 (JWKS) e HS256 em `JwtStrategy`, `JwtAuthGuard` com logs estruturados e exceções 401 descritivas (`TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`) (Spec 012).
 - ✅ **users** — CRUD completo (`POST /users`, `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`), com testes unitários e e2e.
 - ✅ **events** — CRUD de eventos com DTOs de criação/atualização e testes.
 - ✅ **tasks** — CRUD completo de tarefas (`POST /tasks`, `GET /tasks`, `GET /tasks/:id`, `PATCH /tasks/:id`, `DELETE /tasks/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
@@ -40,23 +40,24 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - Serviços de API e contexto de autenticação (`AuthContext`) existem na estrutura.
 - A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios), eliminando os placeholders.
 - ✅ **Autenticação e Cadastro via Supabase Auth:** Módulo `src/lib/supabase.ts` centraliza a instância do Supabase. `AuthContext` efetua autenticação real via `supabase.auth.signInWithPassword`, e `LoginForm` exibe mensagens de erro amigáveis (Spec 008). Rota `/register` acessível e integrada ao `supabase.auth.signUp` e à API do backend NestJS (`POST /users`) com mensagens de erro (Spec 010).
+- ✅ **Deduplicação de `fetchProfile` e Mensagens 401:** `AuthContext` deduplica o carregamento de perfil via `useRef` garantindo disparo único de `fetchProfile`, com `LoginForm` exibindo feedbacks descritivos de erro da API (Spec 012).
 
 ### Mobile (`mobile/lib/`)
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
 - ✅ **Camada de dados e cadastro sincronizado:** `data/datasources/remote_datasource.dart`, `data/repositories/agenda_repository_impl.dart`, `data/repositories/user_repository_impl.dart` e `auth_remote_datasource.dart` conectam a interface mobile aos endpoints do backend e ao Supabase Auth (`POST /users`), garantindo a criação de perfis no PostgreSQL com tratamento de erros na UI (Spec 010).
 - ✅ **Reatividade de compromissos:** A lista de compromissos e o calendário na tela de Agenda atualizam imediatamente no aplicativo mobile após a criação/edição de eventos (Spec 007).
 - ✅ **Carregamento e Salvamento do Perfil Mobile:** Injeção do JWT de sessão do Supabase no `RemoteDataSource._getHeaders()` para evitar erros HTTP 401 Unauthorized, com `UserNotifier`/`PersonScreen` expondo mensagens de erro reais na UI em vez de falhas silenciosas, com testes unitários, de widget e de integração para o fluxo de carregamento e edição do perfil (Spec 009).
-
-
+- ✅ **Deduplicação de `fetchProfile` e Tratamento Visual de Erro:** `UserNotifier` com trava de requisição prevenindo execuções síncronas redundantes de `fetchProfile`, com exibição de erros 401 legíveis ao usuário via UI/SnackBar (Spec 012).
 
 ## 5. Regras de negócio confirmadas (das que já têm API)
 
 1. Conta é criada no Supabase Auth e depois o perfil é criado no backend usando o `supabaseId`.
-2. Rotas protegidas exigem JWT válido.
+2. Rotas protegidas exigem JWT válido (com verificação de algoritmo ES256/JWKS e HS256, gerando exceções descritivas como `TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN` e `MISSING_BEARER` no `JwtAuthGuard`).
 3. Um usuário só atualiza/deleta o próprio perfil, a menos que seja `ADMIN`.
 4. Eventos pertencem a uma Band; edição/exclusão é restrita a criador, membro com permissão, ou `ADMIN`.
 5. `ValidationPipe` com whitelist rígida: payloads com campos extras (`id`, `createdAt`, `updatedAt`) são rejeitados com 400.
 6. Recursos dos módulos `tasks`, `repertoire` e `transactions` exigem associação à `Band` dona via `BandMember` (`403 Forbidden` para não-membros), exceto para `ADMIN` (acesso global). `GET` sem `bandId` filtra automaticamente pelas bandas do usuário (Spec 011).
+7. O carregamento de perfil (`fetchProfile`) é executado estritamente uma única vez por ciclo de autenticação na Web e no Mobile, evitando chamadas duplicadas ao backend.
 
 ## 6. Fora do escopo desta baseline (não construído ainda)
 

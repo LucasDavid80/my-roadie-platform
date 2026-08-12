@@ -55,11 +55,11 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 ## Fase 6 — Checklist de Fechamento da Feature
 
-- [ ] `spec.md`, `plan.md` e `tasks.md` da spec 012 alinhados e sem pendências
-- [ ] Mismatch de algoritmo JWT (ES256/JWKS vs HS256) resolvido no backend
-- [ ] Erros 401 genéricos substituídos por logs detalhados e mensagens amigáveis em todas as camadas
-- [ ] Método `fetchProfile` executando **exatamente 1 vez** na Web e no Mobile
-- [ ] Testes unitários, de integração e E2E verdes nos três projetos com no mínimo 3 casos positivos e 3 negativos em auth
-- [ ] Meta de cobertura >= 80% atingida nos três projetos
-- [ ] Entrada em `backlog.md` atualizada para "em spec → specs/012-validar-fluxo-login-API-real/"
+- [x] `spec.md`, `plan.md` e `tasks.md` da spec 012 alinhados e sem pendências
+- [x] Mismatch de algoritmo JWT (ES256/JWKS vs HS256) resolvido no backend
+- [x] Erros 401 genéricos substituídos por logs detalhados e mensagens amigáveis em todas as camadas
+- [x] Método `fetchProfile` executando **exatamente 1 vez** na Web e no Mobile
+- [x] Testes unitários, de integração e E2E verdes nos três projetos com no mínimo 3 casos positivos e 3 negativos em auth
+- [x] Meta de cobertura >= 80% atingida nos três projetos
+- [x] Entrada em `backlog.md` atualizada para "concluído (specs/012-validar-fluxo-login-API-real/)"
 

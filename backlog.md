@@ -17,11 +17,41 @@
 
 ## 📌 Status Atual de Specs (Baseline)
 
+### Auditoria de Infraestrutura
+- Intenção: Medir cobertura real de testes em todas as frentes e confirmar a stack do frontend-web.
+- Impacto esperado: médio (governança)
+- Depende de: nenhum
+- Status: concluído (specs/001-auditoria-infraestrutura/)
+
+### Isolar rotas de admin em Route Group próprio
+- Intenção: Separar `(admin)` de `(dashboard)` na Web com guard de papel dedicado (`ADMIN`), conforme `constitution.md` §9.
+- Impacto esperado: médio (segurança/arquitetura)
+- Depende de: nenhum
+- Status: concluído (specs/002-isolar-rotas-admin/)
+
+### Conectar Mobile à API real
+- Intenção: Integrar as telas de perfil e agenda do app mobile aos endpoints reais do backend NestJS.
+- Impacto esperado: alto
+- Depende de: nenhum
+- Status: concluído (specs/003-mobile-conectado-api-real/)
+
+### API de Tasks
+- Intenção: Criar o módulo NestJS de gerenciamento de tarefas (`Task`) vinculadas a eventos.
+- Impacto esperado: alto
+- Depende de: nenhum
+- Status: concluído (specs/004-api-de-tasks/)
+
 ### API de Repertoire
 - Intenção: Expor `RepertoireSong` via backend para gestão de repertório por banda.
 - Impacto esperado: médio
 - Depende de: nenhum
 - Status: concluído (specs/005-api-de-repertorio/)
+
+### API de Transactions
+- Intenção: Expor `Transaction` via backend para gestão financeira por banda.
+- Impacto esperado: alto
+- Depende de: nenhum
+- Status: concluído (specs/006-api-de-transactions/)
 
 ### Atualizar Lista de Compromissos após Criação
 - Intenção: Atualizar reativamente a lista de compromissos e o calendário no mobile imediatamente após criação/edição de eventos.
@@ -53,6 +83,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/011-autorizacao-por-banda/)
 
+### Validar e testar fluxo de Login com API Real
+- Intenção: Verificar a estabilidade do fluxo de login contra a API de autenticação real e criar testes adicionais de integração.
+- Impacto esperado: alto
+- Depende de: Conectar formulário de Login ao authProvider real (Supabase)
+- Status: concluído (specs/012-validar-fluxo-login-API-real/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -68,19 +104,13 @@
 - Depende de: nenhum
 - Status: concluído (specs/010-correcao-login-e-cadastro/)
 
-### Validar e testar fluxo de Login com API Real
-- Intenção: Verificar a estabilidade do fluxo de login contra a API de autenticação real e criar testes adicionais de integração.
-- Impacto esperado: alto
-- Depende de: Conectar formulário de Login ao authProvider real (Supabase)
-- Status: ideia
-
 ### Isolar rotas de admin em Route Group próprio
 - Intenção: Separar `(admin)` de `(dashboard)` na Web com guard de papel dedicado, conforme `constitution.md` §9.
 - Impacto esperado: médio (segurança/arquitetura)
 - Depende de: nenhum
-- Status: ideia
+- Status: concluído (specs/002-isolar-rotas-admin/)
 
-### Habilitar rolagem na tela de Agenda (spec 011)
+### Habilitar rolagem na tela de Agenda
 - Intenção: Ajustar o layout da tela de Agenda no mobile para permitir rolagem, evitando que o calendário trave a tela verticalmente.
 - Impacto esperado: alto (usabilidade)
 - Depende de: nenhum
