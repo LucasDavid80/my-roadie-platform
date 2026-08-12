@@ -48,6 +48,18 @@ Esta especificação define o plano técnico para auditar, refatorar e testar o 
   - Interceptar erros de requisição no cliente HTTP (`src/services/api.ts`) e no `AuthContext`.
   - Mapear exceções 401 e erros de credencial para mensagens claras na UI, exibindo feedbacks acionáveis ao usuário (ex.: "E-mail ou senha incorretos", "Sessão expirada").
 
+### 2.2.1 Diagnóstico Detalhado do Disparo Duplo de `fetchProfile` (Task T0.2)
+
+- **Frontend-Web (`frontend-web/src/contexts/AuthContext.tsx`)**:
+  - **Causa Raiz**: No fluxo de autenticação do React, ao efetuar login, o formulário invoca a rotina síncrona do `signIn`, enquanto o ouvinte `onAuthStateChange` do Supabase dispara simultaneamente o evento `SIGNED_IN` / `INITIAL_SESSION`.
+  - **Mecanismo de Duplicação**: Sem uma trava via `useRef` (`isFetchingProfileRef`), a inicialização e o redirecionamento de rotas para `/dashboard` acionam duas requisições consecutivas/paralelas de `fetchProfile` ao endpoint `/users/me`.
+
+- **App Mobile (`mobile/lib/presentation/controllers/user_controller.dart` & `person_screen.dart`)**:
+  - **Causa Raiz**:
+    1. No `UserNotifier.build()` (`user_controller.dart`), o controller monitora o estado de autenticação via `ref.watch(authProvider)`. Sempre que o `authProvider` altera seu estado (durante e após o login), o Riverpod re-executa a função `build()`, que por sua vez agenda `Future.microtask(() => fetchProfile(validUserId))` (Disparo 1).
+    2. Em paralelo, a tela de perfil/dados (`person_screen.dart`), ao ser montada após a navegação do login, executa explicitamente `ref.read(userProvider.notifier).fetchProfile()` no seu ciclo de vida (Disparo 2).
+  - **Mecanismo de Duplicação**: A falta de um booleano de controle (`_isFetching`) ou verificação de reidratação em andamento no `UserNotifier` faz com que o backend receba duas chamadas HTTP idênticas em um curto intervalo de tempo.
+
 ### 2.3 Mobile (`mobile/lib/`)
 
 - **Deduplicação de `fetchProfile` (`mobile/lib/presentation/controllers/` & `data/datasources/`)**:

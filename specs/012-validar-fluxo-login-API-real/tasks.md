@@ -6,7 +6,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 - [x] T0.1 — Auditar a implementação atual de `JwtStrategy` e `JwtAuthGuard` no NestJS (`backend/src/modules/auth/` ou `backend/src/auth/`) para identificar limitações de validação de algoritmo (ES256/JWKS vs HS256) e ponto de descarte silencioso de erros 401.
   - Critério: Mapeamento dos arquivos afetados e padrão de erros registrado no `plan.md`.
-- [ ] T0.2 — Mapear os fluxos de chamada da função `fetchProfile` no frontend-web (`AuthContext.tsx`) e no app mobile (`AuthRemoteDataSource`/`AuthNotifier`) para identificar a causa raiz do disparo duplo da requisição ao backend.
+- [x] T0.2 — Mapear os fluxos de chamada da função `fetchProfile` no frontend-web (`AuthContext.tsx`) e no app mobile (`AuthRemoteDataSource`/`AuthNotifier`) para identificar a causa raiz do disparo duplo da requisição ao backend.
   - Critério: Locais exatos de duplicação mapeados e documentados.
 
 ## Fase 1 — Backend (NestJS): Suporte JWKS/ES256, Logging e Respostas 401 Detalhadas
