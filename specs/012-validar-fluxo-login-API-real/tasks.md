@@ -21,7 +21,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 ## Fase 2 — Frontend-Web: Deduplicação de `fetchProfile` e Feedback Visual de Erro
 
-- [ ] T2.1 — Refatorar o `AuthContext.tsx` no `frontend-web` com travas de estado (`useRef`/flags de controle) para garantir que `fetchProfile` seja disparado **exatamente 1 vez** por ciclo de login ou reidratação de sessão.
+- [x] T2.1 — Refatorar o `AuthContext.tsx` no `frontend-web` com travas de estado (`useRef`/flags de controle) para garantir que `fetchProfile` seja disparado **exatamente 1 vez** por ciclo de login ou reidratação de sessão.
   - Critério: Verificação por log/spy de teste confirmando uma única chamada ao endpoint `/users/me` por login.
 - [ ] T2.2 — Atualizar o `LoginForm.tsx` e o `AuthContext.tsx` para tratar códigos e mensagens específicas de erro da API 401, exibindo alertas visuais amigáveis e orientações claras na UI do usuário.
   - Critério: Submissões inválidas ou sessão expirada exibem mensagens adequadas sem quebrar a aplicação.
