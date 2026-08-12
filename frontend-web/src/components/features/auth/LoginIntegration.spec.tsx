@@ -3,6 +3,7 @@ import { LoginForm } from './LoginForm';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { api } from '@/services/api';
 import { Mock } from 'vitest';
 
 const mockPush = vi.fn();
@@ -18,6 +19,13 @@ vi.mock('@/lib/supabase', () => ({
     },
 }));
 
+vi.mock('@/services/api', () => ({
+    api: {
+        post: vi.fn(),
+        get: vi.fn(),
+    },
+}));
+
 describe('Login Integration', () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -28,6 +36,12 @@ describe('Login Integration', () => {
         (supabase.auth.signInWithPassword as Mock).mockResolvedValue({
             data: { user: { id: 'mock-supabase-id' } },
             error: null,
+        });
+        (api.post as Mock).mockResolvedValue({
+            data: { access_token: 'mock-token', user: { id: '1', name: 'Lucas' } },
+        });
+        (api.get as Mock).mockResolvedValue({
+            data: { id: '1', name: 'Lucas' },
         });
 
         render(

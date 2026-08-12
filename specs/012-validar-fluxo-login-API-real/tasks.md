@@ -27,7 +27,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: Submissões inválidas ou sessão expirada exibem mensagens adequadas sem quebrar a aplicação.
 - [x] T2.3 — Atualizar testes no Vitest (`AuthContext.spec.tsx`, `LoginForm.spec.tsx`).
   - Critério: Teste validando disparo único de `fetchProfile` + 3 casos positivos e 3 negativos passando com 100% de sucesso no Vitest (`npm test`).
-- [ ] T2.4 - Rode `npm run lint`, e corrija os possíveis erros.
+- [x] T2.4 - Rode `npm run lint`, e corrija os possíveis erros.
 
 ## Fase 3 — Mobile: Deduplicação de `fetchProfile` e Feedback Visual de Erro
 
@@ -37,7 +37,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: UI exibe o motivo real do erro de autenticação para o usuário.
 - [ ] T3.3 — Criar/atualizar testes de unidade e widget no Flutter (`flutter test`).
   - Critério: Teste de widget/unidade verificando chamada única de `fetchProfile` + 3 casos positivos e 3 negativos com 100% dos testes verdes.
-- [ ] T1.4 - Rode `flutter analyze`, e corrija os possíveis erros.
+- [ ] T3.4 - Rode `flutter analyze`, e corrija os possíveis erros.
 
 ## Fase 4 — Testes de Integração E2E e Validação da Cobertura
 
