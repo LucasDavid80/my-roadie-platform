@@ -12,3 +12,18 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            const data = error.response.data;
+            if (data?.message) {
+                error.message = data.message;
+            } else if (data?.code) {
+                error.message = data.code;
+            }
+        }
+        return Promise.reject(error);
+    }
+);

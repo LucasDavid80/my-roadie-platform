@@ -55,13 +55,26 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
                 }
             }
             return null;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao buscar perfil:', error);
+            if (error?.response?.status === 401) {
+                signOut();
+                const code = error?.response?.data?.code;
+                const msg = error?.response?.data?.message || error?.message;
+                if (code === 'TOKEN_EXPIRED' || (typeof msg === 'string' && msg.includes('expirou'))) {
+                    throw new Error('Sessão expirada. Faça login novamente.');
+                }
+                throw new Error(msg || 'Não autorizado');
+            }
+            if (!error?.response) {
+                console.warn('Backend indisponível durante fetchProfile (erro de rede):', error?.message);
+                return user;
+            }
             throw error;
         } finally {
             isFetchingProfileRef.current = false;
         }
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         if (typeof supabase?.auth?.onAuthStateChange !== 'function') {
@@ -86,7 +99,7 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
     }, [fetchProfile]);
 
     async function signIn({ email, password }: SignInCredentials) {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data: supabaseAuthData, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
@@ -97,19 +110,40 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
         }
 
         try {
-            const response = await api.post('/auth/login', { email });
-            const { access_token, user: userData } = response.data;
-
-            localStorage.setItem('@MyRoadie:token', access_token);
-            if (userData) {
-                localStorage.setItem('@MyRoadie:user', JSON.stringify(userData));
-                setUser(userData);
+            if (typeof api.post === 'function') {
+                const response = await api.post('/auth/login', { email });
+                if (response?.data) {
+                    const { access_token, user: userData } = response.data;
+                    if (access_token) {
+                        localStorage.setItem('@MyRoadie:token', access_token);
+                    }
+                    if (userData) {
+                        localStorage.setItem('@MyRoadie:user', JSON.stringify(userData));
+                        setUser(userData);
+                    }
+                }
             }
 
             await fetchProfile();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro no login:', error);
-            throw new Error('Falha na autenticação');
+            if (error?.response?.status === 401) {
+                const apiMsg = error?.response?.data?.message || error?.message;
+                throw new Error(apiMsg || 'Falha na autenticação');
+            }
+            if (!error?.response && supabaseAuthData?.user) {
+                const fallbackUser: UserEntity = {
+                    id: supabaseAuthData.user.id,
+                    email: supabaseAuthData.user.email || email,
+                    name: (supabaseAuthData.user.user_metadata?.name as string) || email.split('@')[0],
+                    role: 'MUSICIAN',
+                };
+                setUser(fallbackUser);
+                localStorage.setItem('@MyRoadie:user', JSON.stringify(fallbackUser));
+                return;
+            }
+            const apiMsg = error?.response?.data?.message || error?.message;
+            throw new Error(apiMsg || 'Falha na autenticação');
         }
     }
 

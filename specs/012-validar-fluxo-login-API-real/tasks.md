@@ -23,7 +23,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 - [x] T2.1 — Refatorar o `AuthContext.tsx` no `frontend-web` com travas de estado (`useRef`/flags de controle) para garantir que `fetchProfile` seja disparado **exatamente 1 vez** por ciclo de login ou reidratação de sessão.
   - Critério: Verificação por log/spy de teste confirmando uma única chamada ao endpoint `/users/me` por login.
-- [ ] T2.2 — Atualizar o `LoginForm.tsx` e o `AuthContext.tsx` para tratar códigos e mensagens específicas de erro da API 401, exibindo alertas visuais amigáveis e orientações claras na UI do usuário.
+- [x] T2.2 — Atualizar o `LoginForm.tsx` e o `AuthContext.tsx` para tratar códigos e mensagens específicas de erro da API 401, exibindo alertas visuais amigáveis e orientações claras na UI do usuário.
   - Critério: Submissões inválidas ou sessão expirada exibem mensagens adequadas sem quebrar a aplicação.
 - [ ] T2.3 — Atualizar testes no Vitest (`AuthContext.spec.tsx`, `LoginForm.spec.tsx`).
   - Critério: Teste validando disparo único de `fetchProfile` + 3 casos positivos e 3 negativos passando com 100% de sucesso no Vitest (`npm test`).

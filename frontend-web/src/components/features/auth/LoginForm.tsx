@@ -29,13 +29,30 @@ export function LoginForm() {
             await signIn({ email: data.email, password: data.password });
             router.push('/dashboard');
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : 'Falha na autenticação';
+            let message = 'Falha na autenticação';
+            if (err instanceof Error) {
+                message = err.message;
+            } else if (typeof err === 'string') {
+                message = err;
+            }
+
+            const lower = message.toLowerCase();
             if (
-                message.toLowerCase().includes('invalid') ||
-                message.toLowerCase().includes('credentials') ||
-                message.toLowerCase().includes('falha na autenticação')
+                lower.includes('invalid') ||
+                lower.includes('credentials') ||
+                lower.includes('not found') ||
+                lower.includes('e-mail ou senha incorretos') ||
+                lower.includes('falha na autenticação')
             ) {
                 setAuthError('E-mail ou senha incorretos');
+            } else if (lower.includes('token_expired') || lower.includes('expirou') || lower.includes('sessão expirada')) {
+                setAuthError('Sessão expirada. Faça login novamente.');
+            } else if (lower.includes('invalid_signature') || lower.includes('assinatura')) {
+                setAuthError('Assinatura de token inválida. Faça login novamente.');
+            } else if (lower.includes('malformed_token') || lower.includes('formato do token')) {
+                setAuthError('Formato do token inválido.');
+            } else if (lower.includes('missing_bearer') || lower.includes('cabeçalho')) {
+                setAuthError('Cabeçalho de autorização ausente.');
             } else {
                 setAuthError(message);
             }
