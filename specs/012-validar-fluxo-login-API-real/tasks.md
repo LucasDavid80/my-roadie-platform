@@ -37,7 +37,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: UI exibe o motivo real do erro de autenticação para o usuário.
 - [x] T3.3 — Criar/atualizar testes de unidade e widget no Flutter (`flutter test`).
   - Critério: Teste de widget/unidade verificando chamada única de `fetchProfile` + 3 casos positivos e 3 negativos com 100% dos testes verdes.
-- [ ] T3.4 - Rode `flutter analyze`, e corrija os possíveis erros.
+- [x] T3.4 - Rode `flutter analyze`, e corrija os possíveis erros.
 
 ## Fase 4 — Testes de Integração E2E e Validação da Cobertura
 

@@ -92,7 +92,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               key: const Key('login_error_box'),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.erro.withOpacity(0.1),
+                color: AppColors.erro.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: AppColors.erro),
               ),
