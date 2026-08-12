@@ -50,7 +50,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 - [x] T5.1 — Corrigir todos os erros de ESLint (`@typescript-eslint/no-explicit-any`) nos arquivos de teste do frontend-web (`AuthContext.extra.spec.tsx` e `user-service.spec.ts`).
   - Critério: `npm run lint` no `frontend-web` executa com 0 erros (código de saída 0).
-- [ ] T5.2 — Ajustar a configuração/execução de cobertura de testes no Vitest (`frontend-web`) para resolver os timeouts de worker no pool (`[vitest-pool]: Failed to start forks worker`) e gerar o relatório completo.
+- [x] T5.2 — Ajustar a configuração/execução de cobertura de testes no Vitest (`frontend-web`) para resolver os timeouts de worker no pool (`[vitest-pool]: Failed to start forks worker`) e gerar o relatório completo.
   - Critério: `npm test -- --coverage` ou `npx vitest run --coverage` finaliza com sucesso e confirma cobertura de testes >= 80% no `frontend-web`.
 
 ## Fase 6 — Checklist de Fechamento da Feature
