@@ -43,7 +43,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 - [x] T4.1 — Executar e ajustar a suíte de testes E2E do backend (`auth.e2e-spec.ts` / `users.e2e-spec.ts`) validando a integração completa de autenticação.
   - Critério: Testes E2E executam sem erros (`npm run test:e2e`).
-- [ ] T4.2 — Medir e validar a cobertura de testes nos três projetos (Backend, Frontend-Web e Mobile).
+- [x] T4.2 — Medir e validar a cobertura de testes nos três projetos (Backend, Frontend-Web e Mobile).
   - Critério: Relatório de cobertura indicando >= 80% em cada um dos três projetos individualmente.
 
 ## Fase 5 — Checklist de Fechamento da Feature

@@ -116,6 +116,23 @@ void main() {
     expect(user.id, '1'); // Should still be '1'
   });
 
+  test('Should update experience, phone, instagram, video link and bio', () {
+    final notifier = container.read(userProvider.notifier);
+
+    notifier.updateExperience('PRO');
+    notifier.updatePhone('11999999999');
+    notifier.updateInstagram('@musico.teste');
+    notifier.updateVideoLink('https://youtube.com/watch?v=123');
+    notifier.updateBio('Bio do musico');
+
+    final user = container.read(userProvider);
+    expect(user.experience, 'PRO');
+    expect(user.phone, '11999999999');
+    expect(user.instagram, '@musico.teste');
+    expect(user.youtubeLink, 'https://youtube.com/watch?v=123');
+    expect(user.bio, 'Bio do musico');
+  });
+
   group('saveProfile', () {
     test('Should return success result and update state when saveProfile succeeds', () async {
       container.read(userProvider.notifier).updateName('Updated Name');
