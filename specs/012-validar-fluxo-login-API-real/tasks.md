@@ -33,7 +33,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
 
 - [x] T3.1 — Refatorar o gerenciamento de estado de autenticação no `mobile` (`AuthRemoteDataSource`/`AuthNotifier`/`AuthController`) prevenindo chamadas redundantes a `fetchProfile` durante escutas do `onAuthStateChange`.
   - Critério: Chamada única a `fetchProfile` por autenticação confirmada no ciclo de vida.
-- [ ] T3.2 — Tratar retornos de erro 401 e credenciais inválidas no formulário de login mobile, apresentando mensagens de erro acionáveis via UI (`SnackBar` ou mensagem em formulário).
+- [x] T3.2 — Tratar retornos de erro 401 e credenciais inválidas no formulário de login mobile, apresentando mensagens de erro acionáveis via UI (`SnackBar` ou mensagem em formulário).
   - Critério: UI exibe o motivo real do erro de autenticação para o usuário.
 - [ ] T3.3 — Criar/atualizar testes de unidade e widget no Flutter (`flutter test`).
   - Critério: Teste de widget/unidade verificando chamada única de `fetchProfile` + 3 casos positivos e 3 negativos com 100% dos testes verdes.
