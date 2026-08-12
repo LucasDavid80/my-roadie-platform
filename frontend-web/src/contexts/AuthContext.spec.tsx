@@ -10,6 +10,7 @@ import { ReactNode } from 'react';
 vi.mock('@/services/api', () => ({
     api: {
         post: vi.fn(),
+        get: vi.fn(),
     },
 }));
 
@@ -18,6 +19,10 @@ vi.mock('@/lib/supabase', () => ({
     supabase: {
         auth: {
             signInWithPassword: vi.fn(),
+            onAuthStateChange: vi.fn(() => ({
+                data: { subscription: { unsubscribe: vi.fn() } },
+            })),
+            signOut: vi.fn().mockResolvedValue({ error: null }),
         },
     },
 }));
@@ -66,6 +71,9 @@ describe('AuthContext', () => {
                     user: { id: '1', name: 'Test User', email: 'test@test.com', role: 'MUSICIAN' },
                 },
             });
+            (api.get as Mock).mockResolvedValue({
+                data: { id: '1', name: 'Test User', email: 'test@test.com', role: 'MUSICIAN' },
+            });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -91,6 +99,9 @@ describe('AuthContext', () => {
                     access_token: 'token-jwt-123',
                     user: { id: '1', name: 'Musico Silva', email: 'musico@test.com', role: 'MUSICIAN' },
                 },
+            });
+            (api.get as Mock).mockResolvedValue({
+                data: { id: '1', name: 'Musico Silva', email: 'musico@test.com', role: 'MUSICIAN' },
             });
 
             const { getByTestId, getByText } = render(
@@ -118,6 +129,9 @@ describe('AuthContext', () => {
                     user: { id: '2', name: 'Roadie Santos', email: 'roadie@test.com', role: 'ROADIE' },
                 },
             });
+            (api.get as Mock).mockResolvedValue({
+                data: { id: '2', name: 'Roadie Santos', email: 'roadie@test.com', role: 'ROADIE' },
+            });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -126,6 +140,31 @@ describe('AuthContext', () => {
                     result.current.signIn({ email: 'roadie@test.com', password: 'password123' })
                 ).resolves.toBeUndefined();
             });
+        });
+
+        it('4. deve garantir que fetchProfile seja disparado exatamente 1 vez por ciclo mesmo com chamadas simultâneas (deduplicação)', async () => {
+            (api.get as Mock).mockResolvedValue({
+                data: { id: '1', name: 'Perfil Único', email: 'perfil@test.com', role: 'MUSICIAN' },
+            });
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+
+            let profile1;
+            let profile2;
+
+            await act(async () => {
+                const res = await Promise.all([
+                    result.current.fetchProfile(),
+                    result.current.fetchProfile(),
+                ]);
+                profile1 = res[0];
+                profile2 = res[1];
+            });
+
+            expect(api.get).toHaveBeenCalledTimes(1);
+            expect(api.get).toHaveBeenCalledWith('/users/me');
+            expect(profile1).toEqual({ id: '1', name: 'Perfil Único', email: 'perfil@test.com', role: 'MUSICIAN' });
+            expect(profile2).toBeNull();
         });
     });
 
@@ -179,6 +218,24 @@ describe('AuthContext', () => {
             expect(result.current.isAuthenticated).toBe(false);
             expect(localStorage.getItem('@MyRoadie:token')).toBeNull();
             expect(api.post).not.toHaveBeenCalled();
+        });
+
+        it('4. deve deslogar e lançar erro de sessão expirada quando fetchProfile retornar 401 TOKEN_EXPIRED', async () => {
+            const error401 = {
+                response: {
+                    status: 401,
+                    data: { code: 'TOKEN_EXPIRED', message: 'O token de autenticação expirou. Faça login novamente.' },
+                },
+            };
+            (api.get as Mock).mockRejectedValue(error401);
+
+            const { result } = renderHook(() => useAuth(), { wrapper });
+
+            await act(async () => {
+                await expect(result.current.fetchProfile()).rejects.toThrow('Sessão expirada. Faça login novamente.');
+            });
+
+            expect(result.current.isAuthenticated).toBe(false);
         });
     });
 

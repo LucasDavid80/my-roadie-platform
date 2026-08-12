@@ -25,7 +25,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: Verificação por log/spy de teste confirmando uma única chamada ao endpoint `/users/me` por login.
 - [x] T2.2 — Atualizar o `LoginForm.tsx` e o `AuthContext.tsx` para tratar códigos e mensagens específicas de erro da API 401, exibindo alertas visuais amigáveis e orientações claras na UI do usuário.
   - Critério: Submissões inválidas ou sessão expirada exibem mensagens adequadas sem quebrar a aplicação.
-- [ ] T2.3 — Atualizar testes no Vitest (`AuthContext.spec.tsx`, `LoginForm.spec.tsx`).
+- [x] T2.3 — Atualizar testes no Vitest (`AuthContext.spec.tsx`, `LoginForm.spec.tsx`).
   - Critério: Teste validando disparo único de `fetchProfile` + 3 casos positivos e 3 negativos passando com 100% de sucesso no Vitest (`npm test`).
 - [ ] T2.4 - Rode `npm run lint`, e corrija os possíveis erros.
 
