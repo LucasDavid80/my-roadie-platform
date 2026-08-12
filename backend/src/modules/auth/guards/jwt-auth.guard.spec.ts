@@ -56,9 +56,10 @@ describe('JwtAuthGuard', () => {
 
       try {
         guard.handleRequest(null, false, info, mockContext);
-      } catch (err: any) {
+      } catch (err: unknown) {
         expect(err).toBeInstanceOf(UnauthorizedException);
-        const response = err.getResponse();
+        const unauthErr = err as UnauthorizedException;
+        const response = unauthErr.getResponse() as Record<string, unknown>;
         expect(response).toEqual({
           statusCode: 401,
           code: 'TOKEN_EXPIRED',
@@ -76,9 +77,10 @@ describe('JwtAuthGuard', () => {
 
       try {
         guard.handleRequest(null, false, info, mockContext);
-      } catch (err: any) {
+      } catch (err: unknown) {
         expect(err).toBeInstanceOf(UnauthorizedException);
-        const response = err.getResponse();
+        const unauthErr = err as UnauthorizedException;
+        const response = unauthErr.getResponse() as Record<string, unknown>;
         expect(response).toEqual({
           statusCode: 401,
           code: 'INVALID_SIGNATURE',
@@ -97,9 +99,10 @@ describe('JwtAuthGuard', () => {
 
       try {
         guard.handleRequest(null, false, info, mockContext);
-      } catch (err: any) {
+      } catch (err: unknown) {
         expect(err).toBeInstanceOf(UnauthorizedException);
-        const response = err.getResponse();
+        const unauthErr = err as UnauthorizedException;
+        const response = unauthErr.getResponse() as Record<string, unknown>;
         expect(response).toEqual({
           statusCode: 401,
           code: 'MALFORMED_TOKEN',
@@ -114,9 +117,10 @@ describe('JwtAuthGuard', () => {
 
       try {
         guard.handleRequest(null, false, info, mockContext);
-      } catch (err: any) {
+      } catch (err: unknown) {
         expect(err).toBeInstanceOf(UnauthorizedException);
-        const response = err.getResponse();
+        const unauthErr = err as UnauthorizedException;
+        const response = unauthErr.getResponse() as Record<string, unknown>;
         expect(response).toEqual({
           statusCode: 401,
           code: 'MISSING_BEARER',
@@ -129,9 +133,10 @@ describe('JwtAuthGuard', () => {
     it('deve lançar UnauthorizedException com MISSING_BEARER quando info for null ou indefinido', () => {
       try {
         guard.handleRequest(null, false, null, mockContext);
-      } catch (err: any) {
+      } catch (err: unknown) {
         expect(err).toBeInstanceOf(UnauthorizedException);
-        const response = err.getResponse();
+        const unauthErr = err as UnauthorizedException;
+        const response = unauthErr.getResponse() as Record<string, unknown>;
         expect(response.code).toBe('MISSING_BEARER');
       }
     });

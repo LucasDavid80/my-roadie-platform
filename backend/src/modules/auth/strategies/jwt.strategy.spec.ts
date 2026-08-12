@@ -1,6 +1,14 @@
 import { JwtStrategy } from './jwt.strategy';
 import { Role } from '@prisma/client';
 
+interface StrategyWithProvider {
+  _secretOrKeyProvider: (
+    req: unknown,
+    rawJwtToken: unknown,
+    done: (err: Error | null, secret?: string | Buffer) => void,
+  ) => void;
+}
+
 describe('JwtStrategy', () => {
   let strategy: JwtStrategy;
 
@@ -48,12 +56,17 @@ describe('JwtStrategy', () => {
       ).toString('base64url');
       const mockToken = `${headerBase64}.payload.signature`;
 
-      const provider = (strategy as any)._secretOrKeyProvider;
-      provider(null, mockToken, (err: any, secret?: string | Buffer) => {
-        expect(err).toBeNull();
-        expect(secret).toBe('SECRET_KEY_MYROADIE_2026');
-        done();
-      });
+      const provider = (strategy as unknown as StrategyWithProvider)
+        ._secretOrKeyProvider;
+      provider(
+        null,
+        mockToken,
+        (err: Error | null, secret?: string | Buffer) => {
+          expect(err).toBeNull();
+          expect(secret).toBe('SECRET_KEY_MYROADIE_2026');
+          done();
+        },
+      );
     });
 
     it('deve resolver chave via JWKS para tokens com alg: ES256', (done) => {
@@ -62,23 +75,33 @@ describe('JwtStrategy', () => {
       ).toString('base64url');
       const mockToken = `${headerBase64}.payload.signature`;
 
-      const provider = (strategy as any)._secretOrKeyProvider;
-      provider(null, mockToken, (err: any, secret?: string | Buffer) => {
-        expect(err).toBeNull();
-        expect(secret).toBeDefined();
-        done();
-      });
+      const provider = (strategy as unknown as StrategyWithProvider)
+        ._secretOrKeyProvider;
+      provider(
+        null,
+        mockToken,
+        (err: Error | null, secret?: string | Buffer) => {
+          expect(err).toBeNull();
+          expect(secret).toBeDefined();
+          done();
+        },
+      );
     });
 
     it('deve realizar fallback seguro se a decodificação do cabeçalho falhar', (done) => {
       const mockToken = 'token-malformado-sem-pontos';
 
-      const provider = (strategy as any)._secretOrKeyProvider;
-      provider(null, mockToken, (err: any, secret?: string | Buffer) => {
-        expect(err).toBeNull();
-        expect(secret).toBeDefined();
-        done();
-      });
+      const provider = (strategy as unknown as StrategyWithProvider)
+        ._secretOrKeyProvider;
+      provider(
+        null,
+        mockToken,
+        (err: Error | null, secret?: string | Buffer) => {
+          expect(err).toBeNull();
+          expect(secret).toBeDefined();
+          done();
+        },
+      );
     });
   });
 });

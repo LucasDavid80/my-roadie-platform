@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKeyProvider: (
         request: unknown,
         rawJwtToken: unknown,
-        done: (err: any, secret?: string | Buffer) => void,
+        done: (err: Error | null, secret?: string | Buffer) => void,
       ) => {
         let alg: string | undefined;
         if (typeof rawJwtToken === 'string') {
@@ -32,7 +32,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             if (headerBase64) {
               const decodedHeader = JSON.parse(
                 Buffer.from(headerBase64, 'base64url').toString('utf8'),
-              );
+              ) as { alg?: string };
               alg = decodedHeader.alg;
             }
           } catch {
@@ -57,7 +57,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         jwksProvider(
           request,
           rawJwtToken,
-          null as any,
+          null as unknown as string,
           (err: Error | null, secret?: string | Buffer) => {
             if (err || !secret) {
               done(null, fallbackSecret);

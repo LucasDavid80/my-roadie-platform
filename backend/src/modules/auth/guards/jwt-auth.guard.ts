@@ -6,17 +6,29 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+interface JwtAuthInfo {
+  name?: string;
+  message?: string;
+}
+
+interface JwtAuthError {
+  message?: string;
+}
+
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   private readonly logger = new Logger(JwtAuthGuard.name);
 
   handleRequest<TUser = any>(
-    err: any,
-    user: any,
-    info: any,
-    context: ExecutionContext,
-    status?: any,
+    err: JwtAuthError | null,
+    user: TUser | false,
+    info: JwtAuthInfo | null,
+    _context: ExecutionContext,
+    _status?: unknown,
   ): TUser {
+    void _context;
+    void _status;
+
     if (err || !user) {
       let errorCode = 'UNAUTHORIZED';
       let message = 'Acesso não autorizado.';
@@ -28,7 +40,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         message = 'O token de autenticação expirou. Faça login novamente.';
       } else if (
         info?.name === 'JsonWebTokenError' &&
-        typeof infoMessage === 'string' &&
         infoMessage.toLowerCase().includes('signature')
       ) {
         errorCode = 'INVALID_SIGNATURE';
@@ -56,6 +67,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       });
     }
 
-    return user;
+    return user as TUser;
   }
 }

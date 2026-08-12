@@ -17,6 +17,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: Requisições com falha de token geram log descritivo no console e retornos JSON com código de erro amigável.
 - [x] T1.3 — Criar/atualizar testes unitários do backend (`jwt.strategy.spec.ts`, `jwt-auth.guard.spec.ts`).
   - Critério: Mínimo de 3 casos positivos (token ES256 válido, token HS256 válido, payload parseado) e 3 casos negativos (mismatch de algoritmo, token expirado, token sem Bearer) rodando com 100% de aprovação no Jest (`npm test`).
+- [x] T1.4 - Rode `npm run lint`, e corrija os possíveis erros.
 
 ## Fase 2 — Frontend-Web: Deduplicação de `fetchProfile` e Feedback Visual de Erro
 
@@ -26,6 +27,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: Submissões inválidas ou sessão expirada exibem mensagens adequadas sem quebrar a aplicação.
 - [ ] T2.3 — Atualizar testes no Vitest (`AuthContext.spec.tsx`, `LoginForm.spec.tsx`).
   - Critério: Teste validando disparo único de `fetchProfile` + 3 casos positivos e 3 negativos passando com 100% de sucesso no Vitest (`npm test`).
+- [ ] T2.4 - Rode `npm run lint`, e corrija os possíveis erros.
 
 ## Fase 3 — Mobile: Deduplicação de `fetchProfile` e Feedback Visual de Erro
 
@@ -35,6 +37,7 @@ Pré-requisitos: Conexão básica com Supabase Auth (specs 008, 009 e 010 conclu
   - Critério: UI exibe o motivo real do erro de autenticação para o usuário.
 - [ ] T3.3 — Criar/atualizar testes de unidade e widget no Flutter (`flutter test`).
   - Critério: Teste de widget/unidade verificando chamada única de `fetchProfile` + 3 casos positivos e 3 negativos com 100% dos testes verdes.
+- [ ] T1.4 - Rode `flutter analyze`, e corrija os possíveis erros.
 
 ## Fase 4 — Testes de Integração E2E e Validação da Cobertura
 
