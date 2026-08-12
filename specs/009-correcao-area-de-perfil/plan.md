@@ -46,7 +46,11 @@ Depois de aplicar isso: **hot restart** (tecla `R` no terminal do `flutter run` 
 Não avançar pra Fase 1 sem os dois logs reais em mãos.
 
 ### Causa raiz confirmada (Fase 0):
-Tanto `fetchProfile` quanto `saveProfile` falham lançando a exceção `UnauthorizedException` ("Não autorizado", status HTTP 401). Isso ocorre porque `RemoteDataSource._getHeaders()` faz chamadas à API sem o cabeçalho `Authorization: Bearer <token>` válido quando `_supabase?.auth.currentSession` é nulo (ou a sessão do Supabase expirou/não foi repassada), fazendo com que o `JwtAuthGuard` do backend NestJS recuse as requisições em `/users/$id`.
+Tanto `fetchProfile` quanto `saveProfile` falhavam lançando a exceção `UnauthorizedException` ("Não autorizado", status HTTP 401/403). A causa raiz envolvia dois fatores:
+1. **Client mobile**: `RemoteDataSource._getHeaders()` fazia chamadas à API sem o cabeçalho `Authorization: Bearer <token>` válido quando `_supabase?.auth.currentSession` não era repassado.
+2. **Backend NestJS**:
+   - Os tokens JWT gerados pelo Supabase Auth usam assinatura assimétrica RS256. A estratégia JWT do NestJS (`JwtStrategy`) esperava assinar/validar usando chave simétrica local (`JWT_SECRET`). Foi adicionada integração com `jwks-rsa` para buscar as chaves públicas do Supabase Auth (`/.well-known/jwks.json`) com fallback para o segredo local.
+   - O `OwnershipGuard` do NestJS rejeitava atualizações quando o ID da sessão vinha associado por e-mail ou `supabaseId` divergente do `id` do banco. O guard e o `UsersService` foram atualizados para validar autorização também por e-mail e sincronizar o `supabaseId` na tabela `User` durante o update.
 
 ## Fase 1 — Corrigir a causa raiz (detalhar só depois da Fase 0)
 
