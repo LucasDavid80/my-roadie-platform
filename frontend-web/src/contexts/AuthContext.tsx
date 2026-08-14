@@ -55,19 +55,20 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
                 }
             }
             return null;
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Erro ao buscar perfil:', error);
-            if (error?.response?.status === 401) {
+            const errObj = error as { response?: { status?: number; data?: { code?: string; message?: string } }; message?: string };
+            if (errObj?.response?.status === 401) {
                 signOut();
-                const code = error?.response?.data?.code;
-                const msg = error?.response?.data?.message || error?.message;
+                const code = errObj?.response?.data?.code;
+                const msg = errObj?.response?.data?.message || errObj?.message;
                 if (code === 'TOKEN_EXPIRED' || (typeof msg === 'string' && msg.includes('expirou'))) {
                     throw new Error('Sessão expirada. Faça login novamente.');
                 }
                 throw new Error(msg || 'Não autorizado');
             }
-            if (!error?.response) {
-                console.warn('Backend indisponível durante fetchProfile (erro de rede):', error?.message);
+            if (!errObj?.response) {
+                console.warn('Backend indisponível durante fetchProfile (erro de rede):', errObj?.message);
                 return user;
             }
             throw error;
@@ -125,24 +126,27 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
             }
 
             await fetchProfile();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Erro no login:', error);
-            if (error?.response?.status === 401) {
-                const apiMsg = error?.response?.data?.message || error?.message;
+            const errObj = error as { response?: { status?: number; data?: { code?: string; message?: string } }; message?: string };
+            if (errObj?.response?.status === 401) {
+                const apiMsg = errObj?.response?.data?.message || errObj?.message;
                 throw new Error(apiMsg || 'Falha na autenticação');
             }
-            if (!error?.response && supabaseAuthData?.user) {
+            if (!errObj?.response && supabaseAuthData?.user) {
                 const fallbackUser: UserEntity = {
                     id: supabaseAuthData.user.id,
                     email: supabaseAuthData.user.email || email,
                     name: (supabaseAuthData.user.user_metadata?.name as string) || email.split('@')[0],
                     role: 'MUSICIAN',
+                    supabaseId: supabaseAuthData.user.id,
+                    isAvailable: true,
                 };
                 setUser(fallbackUser);
                 localStorage.setItem('@MyRoadie:user', JSON.stringify(fallbackUser));
                 return;
             }
-            const apiMsg = error?.response?.data?.message || error?.message;
+            const apiMsg = errObj?.response?.data?.message || errObj?.message;
             throw new Error(apiMsg || 'Falha na autenticação');
         }
     }

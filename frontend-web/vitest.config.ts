@@ -5,12 +5,10 @@ import path from 'path';
 export default defineConfig({
     plugins: [react()],
     test: {
-        // Run in jsdom with single fork pool to avoid worker startup timeouts during coverage
         environment: 'jsdom',
-        pool: 'forks',
-        singleFork: true,
         globals: true,
         setupFiles: './src/test/setup.ts',
+        fileParallelism: false,
         exclude: ['**/node_modules/**', '**/tests/**', '**/dist/**'],
         coverage: {
             provider: 'v8',
