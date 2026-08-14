@@ -230,6 +230,72 @@ minha confirmação, aplique a correção mínima necessária (não
 aproveite para refatorar mais nada ao redor).
 ```
 
+## 12. Auditoria de fechamento (spec → código → docs, obrigatória após toda spec)
+
+```
+Esta é uma auditoria, não uma implementação — não altere nenhum
+código de produto neste prompt, só documentação e verificação.
+
+Rode em 3 etapas, uma de cada vez, sem pular:
+
+ETAPA 1 — Spec → Código:
+Leia specs/<pasta-da-feature>/tasks.md. Para cada item do checklist
+de fechamento, não confie no [x] — abra o(s) arquivo(s) reais
+envolvidos (view/grep) e confirme que o comportamento descrito
+existe de fato no código atual, não só que o arquivo existe.
+Reporte true/false com o caminho do arquivo que você checou como
+evidência.
+
+ETAPA 2 — Código → Spec (drift reverso):
+Rode `git log --oneline -- <arquivos tocados nesta spec>` desde o
+merge desta spec. Se qualquer um mudou depois do fechamento,
+explique o que mudou e se o motivo real (causa raiz, decisão
+técnica) está refletido no plan.md desta spec. Se não estiver,
+aponte isso — não corrija sozinho.
+
+ETAPA 3 — Spec → Docs cruzados:
+Confirme que esta spec está refletida como "concluído
+(specs/<pasta>/)" em backlog.md, e que spec.md/plan.md da raiz
+citam o comportamento novo. Aponte qualquer entrada desatualizada
+— inclusive em specs ANTERIORES, se você notar durante a leitura.
+
+Ao final das 3 etapas, liste tudo que está inconsistente (sem
+corrigir). Só depois da minha confirmação, corrija os arquivos de
+documentação (nunca código de produto) apontados.
+```
+
+## 13. Checkpoint periódico (auditoria cruzada de todas as specs)
+
+```
+Esta é uma auditoria de leitura — não altere código de produto neste
+prompt.
+
+Escopo: todas as specs em specs/ desde o último checkpoint (ver
+audits/INDEX.md para saber onde parou; se não houver nenhum, é o
+primeiro — cobre 001 até a mais recente).
+
+Para cada spec no escopo, rode as 3 etapas do prompt 12 (spec→código,
+código→spec, spec→docs cruzados) — mas resumidamente, focando só em
+achar inconsistência, não repetir toda a checagem linha a linha se
+já foi feita no fechamento dela.
+
+Além disso, cheque especificamente:
+1. backlog.md — toda entrada que corresponde a uma spec já concluída
+   está com "Status: concluído (specs/<pasta>/)"?
+2. plan.md e spec.md da raiz — algum item da seção de débito técnico
+   já foi resolvido por spec posterior mas continua listado como
+   pendente?
+3. Duas specs se contradizem em algum ponto (ex.: uma diz que X foi
+   descartado, outra assume que X é verdade)?
+
+Escreva o relatório em audits/checkpoint-<NN>.md com uma tabela:
+| Spec | Item verificado | Achado | Severidade |
+
+Ao final, adicione uma linha em audits/INDEX.md resumindo este
+checkpoint. NÃO corrija nada ainda — pare aqui e me mostre o
+relatório primeiro.
+```
+
 ---
 
 ## Notas de uso

@@ -20,6 +20,12 @@
 - Este repositório é um monorepo com três apps (`backend`, `frontend-web`, `mobile`) tratados como serviços independentes — não assumir que um comando rodado na raiz afeta os três.
 - Nunca pule fases do `tasks.md`. Implemente uma fase por vez e aguarde confirmação antes de avançar para a próxima.
 - Tasks que envolvem autorização/controle de acesso (guards, checagem de ownership/membership) entram na mesma categoria de revisão manual obrigatória que as que tocam infraestrutura externa — não fecham sozinhas com "testes passando" como único critério.
+- Toda vez que for fazer uma grande alteração no código — independente de onde seja (frontend, backend, banco de dados, pipeline, entre outros) — explicar antecipadamente qual alteração será feita e por quê, antes de executá-la.
+
+## Regras para código de testes
+
+- Código de testes deve ser alterado o mínimo possível: só pode ser modificado se uma lógica grande do código de produção for alterada, e mesmo assim somente quando não houver outra solução.
+- Qualquer alteração em código de testes, por menor que seja — inclusive apagar uma linha em branco ou aparentemente irrelevante — deve ser explicada antes de ser feita.
 
 ## Comandos essenciais
 
