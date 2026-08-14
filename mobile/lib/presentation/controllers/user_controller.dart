@@ -29,12 +29,18 @@ final userRepositoryProvider = Provider<IUserRepository>((ref) {
 
 // 1. Mudamos de StateNotifier para Notifier
 class UserNotifier extends Notifier<UserEntity> {
-  // 2. O valor inicial agora é passado dentro do método obrigatório build()
+  bool _isFetching = false;
+  String? _lastFetchedUserId;
+
   @override
   UserEntity build() {
     final authState = ref.watch(authProvider);
     final userId = authState.user?.id ?? authState.user?.email;
     final validUserId = (userId != null && userId.isNotEmpty) ? userId : '1';
+
+    if (_lastFetchedUserId != validUserId) {
+      _lastFetchedUserId = null;
+    }
 
     Future.microtask(() => fetchProfile(validUserId));
 
@@ -45,20 +51,31 @@ class UserNotifier extends Notifier<UserEntity> {
     );
   }
 
-  Future<void> fetchProfile([String? userId]) async {
+  Future<void> fetchProfile([String? userId, bool force = false]) async {
     final authState = ref.read(authProvider);
     final currentUserId = authState.user?.id ?? authState.user?.email;
     final targetId = (userId != null && userId.isNotEmpty)
         ? userId
         : ((currentUserId != null && currentUserId.isNotEmpty) ? currentUserId : state.id);
     if (targetId.isEmpty) return;
+
+    if (!force) {
+      if (_isFetching || _lastFetchedUserId == targetId) {
+        return;
+      }
+    }
+
+    _isFetching = true;
     try {
       final userProfile =
           await ref.read(userRepositoryProvider).getUser(targetId);
       state = userProfile;
+      _lastFetchedUserId = targetId;
     } catch (e, stack) {
       debugPrint('fetchProfile ERRO: $e');
       debugPrintStack(stackTrace: stack);
+    } finally {
+      _isFetching = false;
     }
   }
 

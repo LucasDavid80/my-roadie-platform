@@ -17,7 +17,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`, `transactions`, `band-access`).
 - Persistência: Prisma Client sobre Postgres (Supabase). `DATABASE_URL` via env.
 - Fluxo de schema: editar `prisma/schema.prisma` → migration → `npx prisma generate` → atualizar `docs/database/erd.md`.
-- Autenticação e Autorização: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts`), guards (`OwnershipGuard`, `JwtAuthGuard`) e `BandAccessService` (`getUserBandIds`, `assertMembership`) para verificação de pertencimento via `BandMember` nos módulos de `tasks`, `repertoire` e `transactions` (Spec 011).
+- Autenticação e Autorização: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts` com suporte dinâmico a ES256 via JWKS do Supabase e HS256 em dev local), guards (`JwtAuthGuard` com logs detalhados e exceções descritivas como `TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`, `OwnershipGuard`) e `BandAccessService` (`getUserBandIds`, `assertMembership`) para verificação de pertencimento via `BandMember` nos módulos de `tasks`, `repertoire` e `transactions` (Spec 011, Spec 012).
 
 **Lacunas de módulos e autorização por banda zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e com autorização por banda fechada via `BandAccessService` (spec 011).
 
@@ -26,7 +26,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Next.js App Router, Route Groups `(auth)`, `(dashboard)` e `(admin)`.
 - `src/services/` concentra chamadas HTTP; sempre remover `id`/`createdAt`/`updatedAt` antes de `POST`/`PATCH`.
 - Tipos de `src/types/` devem espelhar os DTOs do backend.
-- Instância centralizada do Supabase em `src/lib/supabase.ts`. Autenticação integrada ao Supabase Auth via `signInWithPassword` no `AuthContext` (Spec 008) e cadastro integrado ao Supabase Auth + API NestJS (`POST /users`) no `RegisterForm` (Spec 010).
+- Instância centralizada do Supabase em `src/lib/supabase.ts`. Autenticação integrada ao Supabase Auth via `signInWithPassword` no `AuthContext` (Spec 008) e cadastro integrado ao Supabase Auth + API NestJS (`POST /users`) no `RegisterForm` (Spec 010). `AuthContext` com trava `useRef` garantindo disparo único de `fetchProfile` e tratamento amigável de erros de autenticação na UI (Spec 012).
 
 **Decisão fechada:** A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios).
 
@@ -38,6 +38,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Cadastro sincronizado: `AuthRemoteDataSource.signUp` registra as credenciais no Supabase Auth e em seguida invoca `RemoteDataSource.createUser` (`POST /users`), garantindo a criação de usuário no PostgreSQL com feedback de erro amigável na UI (Spec 010).
 - Atualização reativa de compromissos: `AgendaController` sincroniza eventos retornados da API e notifica a UI de forma imutável após criação/edição (Spec 007).
 - ✅ **Correção de Carregamento e Salvamento do Perfil (`PersonScreen`):** Solucionada causa raiz de erros HTTP 401 Unauthorized com injeção do JWT de sessão do Supabase em `RemoteDataSource._getHeaders()`. `UserNotifier` refatorado para propagar mensagens de erro reais (`errorMessage`) na UI via SnackBar. Adicionados testes unitários, de widget e de integração (`profile_flow_integration_test.dart`) cobrindo o ciclo completo de visualização e edição do perfil (Spec 009).
+- ✅ **Deduplicação de `fetchProfile` e Tratamento Visual de Erros:** `UserNotifier` refatorado com trava de requisição prevenindo execuções síncronas redundantes de `fetchProfile`, com exibição visual de feedbacks de erro da API na UI (Spec 012).
 
 
 
@@ -49,13 +50,13 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Mobile: `flutter_test`, testes já cobrindo vários widgets/controllers em `mobile/test/`.
 - Banco de teste isolado (`DATABASE_URL_TEST`) para integração/e2e; migrations aplicadas antes de rodar.
 
-### Cobertura de Testes (Medição de 28/07/2026 — Spec 005)
+### Cobertura de Testes (Medição de 12/08/2026 — Spec 012)
 
 | App | % Statements | % Branches | % Functions | % Lines |
 |---|---|---|---|---|
-| Backend | 73.49% | 74.54% | 84.61% | 74.55% |
-| Frontend Web | 70.00% | 67.39% | 75.00% | 71.59% |
-| Mobile | - | - | - | 77.82% |
+| Backend | 92.83% | 71.76% | 92.10% | 92.04% |
+| Frontend Web | 81.08% | 54.37% | 88.88% | 81.42% |
+| Mobile | - | - | - | 83.67% |
 
 ## 6. CI/CD
 
@@ -77,8 +78,8 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 2. Mobile com camada de dados implementada e conectada (resolvido na spec 003).
 3. Decisões de stack do frontend-web não fechadas na documentação (resolvido na spec 001).
 4. Nenhum `spec.md`/`plan.md`/`tasks.md` formal existia antes desta migração — daqui em diante, toda feature nova segue o fluxo descrito em `constitution.md` §8.
-5. **Rotas admin não isoladas** — `constitution.md` §9 (atualizado após esta baseline) passou a exigir um Route Group `(admin)` próprio, separado de `(dashboard)`. O código hoje tem `admin` aninhado dentro de `(dashboard)`, sem guard de papel dedicado — está fora do padrão definido depois desta baseline ter sido escrita.
+5. **Rotas admin não isoladas** — Resolvido na spec 002 (rotas movidas para o Route Group `(admin)` com layout guard dedicado).
 6. **Cobertura de testes não medida contra a meta atual** — Resolvido na spec 001 (ver tabela de medição na seção 5).
 7. **Gaps de LGPD listados em `constitution.md` §10** (consentimento no cadastro, política de exclusão de conta, exportação de dados, log de acesso a dados sensíveis, confirmação de região/criptografia do Supabase) — nenhum desses está implementado hoje; são debt novo, não regressão.
 
-> Itens 5-7 nasceram de uma atualização da `constitution.md` feita **depois** desta baseline ter sido escrita — por isso o código ainda não reflete essas regras. Isso é esperado: a baseline descreve o estado no momento em que foi escrita, não persegue a constituição em tempo real. Quando esses itens forem resolvidos, atualizar este arquivo.
+> O item 7 nasceu de uma atualização da `constitution.md` feita **depois** desta baseline ter sido escrita — por isso o código ainda não reflete essas regras. Quando for resolvido, atualizar este arquivo.

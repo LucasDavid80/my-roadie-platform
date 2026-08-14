@@ -79,9 +79,39 @@ class AuthController extends Notifier<AuthState> {
       );
       return false;
     } catch (e) {
+      String errorMessage = 'Falha na autenticação. Verifique suas credenciais.';
+      if (e is AuthException) {
+        final msgLower = e.message.toLowerCase();
+        if (msgLower.contains('invalid login credentials') ||
+            msgLower.contains('invalid credentials')) {
+          errorMessage = 'E-mail ou senha incorretos. Verifique suas credenciais.';
+        } else if (msgLower.contains('email not confirmed')) {
+          errorMessage = 'E-mail não confirmado. Por favor, verifique sua caixa de entrada.';
+        } else {
+          errorMessage = e.message;
+        }
+      } else if (e is UnauthorizedException) {
+        errorMessage = e.message.isNotEmpty
+            ? e.message
+            : 'Sessão inválida ou expirada. Faça login novamente.';
+      } else if (e is NetworkException) {
+        errorMessage = e.message.isNotEmpty
+            ? e.message
+            : 'Erro de conexão com o servidor. Verifique sua internet.';
+      } else if (e is ServerException) {
+        errorMessage = e.message.isNotEmpty
+            ? e.message
+            : 'Erro no servidor. Tente novamente mais tarde.';
+      } else {
+        final errStr = e.toString().replaceFirst(RegExp(r'^Exception:\s*'), '');
+        if (errStr.isNotEmpty) {
+          errorMessage = errStr;
+        }
+      }
+
       state = state.copyWith(
         isLoading: false,
-        error: 'Falha na autenticação. Verifique seu e-mail e senha.',
+        error: errorMessage,
       );
       return false;
     }

@@ -86,6 +86,34 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             },
           ),
 
+          if (authState.error != null && authState.error!.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Container(
+              key: const Key('login_error_box'),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.erro.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.erro),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline, color: AppColors.erro, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      authState.error!,
+                      style: const TextStyle(
+                        color: AppColors.erro,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
           const SizedBox(height: 24),
 
           // BOTÃO LOGIN

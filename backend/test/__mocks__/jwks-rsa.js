@@ -1,3 +1,8 @@
 module.exports = {
-  passportJwtSecret: () => (req, header, payload, cb) => cb(null, 'secret'),
+  passportJwtSecret: () => (...args) => {
+    const cb = args[args.length - 1];
+    if (typeof cb === 'function') {
+      cb(null, 'secret');
+    }
+  },
 };

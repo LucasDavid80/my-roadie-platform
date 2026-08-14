@@ -8,7 +8,12 @@ export default defineConfig({
         environment: 'jsdom',
         globals: true,
         setupFiles: './src/test/setup.ts',
+        fileParallelism: false,
         exclude: ['**/node_modules/**', '**/tests/**', '**/dist/**'],
+        coverage: {
+            provider: 'v8',
+            reporter: ['text', 'lcov', 'clover'],
+        },
     },
     resolve: {
         alias: {

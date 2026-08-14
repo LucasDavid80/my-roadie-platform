@@ -116,6 +116,23 @@ void main() {
     expect(user.id, '1'); // Should still be '1'
   });
 
+  test('Should update experience, phone, instagram, video link and bio', () {
+    final notifier = container.read(userProvider.notifier);
+
+    notifier.updateExperience('PRO');
+    notifier.updatePhone('11999999999');
+    notifier.updateInstagram('@musico.teste');
+    notifier.updateVideoLink('https://youtube.com/watch?v=123');
+    notifier.updateBio('Bio do musico');
+
+    final user = container.read(userProvider);
+    expect(user.experience, 'PRO');
+    expect(user.phone, '11999999999');
+    expect(user.instagram, '@musico.teste');
+    expect(user.youtubeLink, 'https://youtube.com/watch?v=123');
+    expect(user.bio, 'Bio do musico');
+  });
+
   group('saveProfile', () {
     test('Should return success result and update state when saveProfile succeeds', () async {
       container.read(userProvider.notifier).updateName('Updated Name');
@@ -213,9 +230,26 @@ void main() {
           .thenThrow(ServerException('Erro no servidor'));
 
       await expectLater(
-        container.read(userProvider.notifier).fetchProfile('user_error'),
+        container.read(userProvider.notifier).fetchProfile('user_error', true),
         completes,
       );
+    });
+
+    test('Should ignore redundant consecutive calls to fetchProfile for the same user ID (deduplication T3.1)', () async {
+      final dedupeProfile = UserEntity(id: 'user_dedupe', name: 'João Dedupe');
+      when(() => mockUserRepository.getUser('user_dedupe')).thenAnswer((_) async => dedupeProfile);
+
+      final notifier = container.read(userProvider.notifier);
+
+      final future1 = notifier.fetchProfile('user_dedupe');
+      final future2 = notifier.fetchProfile('user_dedupe');
+      final future3 = notifier.fetchProfile('user_dedupe');
+
+      await Future.wait([future1, future2, future3]);
+
+      await notifier.fetchProfile('user_dedupe');
+
+      verify(() => mockUserRepository.getUser('user_dedupe')).called(1);
     });
   });
 }

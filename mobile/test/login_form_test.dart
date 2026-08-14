@@ -63,4 +63,34 @@ void main() {
     expect(find.text('E-mail inválido'), findsNothing);
     expect(find.text('Senha muito curta'), findsOneWidget);
   });
+
+  testWidgets('Should display inline error box when authState has error (T3.2)', (WidgetTester tester) async {
+    final customState = AuthState(error: 'Sessão inválida ou expirada. Faça login novamente.');
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authProvider.overrideWith(() => _FakeErrorAuthController(customState)),
+        ],
+        child: const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: LoginForm(),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byKey(const Key('login_error_box')), findsOneWidget);
+    expect(find.text('Sessão inválida ou expirada. Faça login novamente.'), findsOneWidget);
+  });
+}
+
+class _FakeErrorAuthController extends AuthController {
+  final AuthState _initialState;
+  _FakeErrorAuthController(this._initialState);
+
+  @override
+  AuthState build() => _initialState;
 }

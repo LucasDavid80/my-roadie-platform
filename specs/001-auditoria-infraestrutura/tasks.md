@@ -20,7 +20,7 @@ Pré-requisitos: nenhum. Esta é a primeira spec real do projeto.
 
 ## Checklist de fechamento da feature
 
-- [ ] `plan.md` (raiz) atualizado com tabela de cobertura real
-- [ ] `docs/architecture/frontend.md` sem placeholders entre colchetes
-- [ ] `backlog.md` atualizado (entrada de cobertura resolvida/removida)
-- [ ] Nenhum código de produto foi alterado nesta spec (escopo era só medir e documentar)
+- [x] `plan.md` (raiz) atualizado com tabela de cobertura real
+- [x] `docs/architecture/frontend.md` sem placeholders entre colchetes
+- [x] `backlog.md` atualizado (entrada de cobertura resolvida/removida)
+- [x] Nenhum código de produto foi alterado nesta spec (escopo era só medir e documentar)

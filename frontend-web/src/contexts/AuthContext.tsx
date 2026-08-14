@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useRef, useEffect, useCallback } from 'react';
 import { UserEntity } from '@/types/user';
 import { api } from '@/services/api';
 import { supabase } from '@/lib/supabase';
@@ -15,11 +15,14 @@ interface AuthContextData {
     isAuthenticated: boolean;
     signIn: (credentials: SignInCredentials) => Promise<void>;
     signOut: () => void;
+    fetchProfile: () => Promise<UserEntity | null>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
+    const isFetchingProfileRef = useRef(false);
+
     const [user, setUser] = useState<UserEntity | null>(() => {
         if (typeof window !== 'undefined') {
             const storedUser = localStorage.getItem('@MyRoadie:user');
@@ -36,8 +39,68 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
     });
     const isAuthenticated = !!user;
 
+    const fetchProfile = useCallback(async (): Promise<UserEntity | null> => {
+        if (isFetchingProfileRef.current) {
+            return null;
+        }
+        isFetchingProfileRef.current = true;
+        try {
+            if (typeof api.get === 'function') {
+                const response = await api.get('/users/me');
+                if (response?.data) {
+                    const userData = response.data;
+                    localStorage.setItem('@MyRoadie:user', JSON.stringify(userData));
+                    setUser(userData);
+                    return userData;
+                }
+            }
+            return null;
+        } catch (error: unknown) {
+            console.error('Erro ao buscar perfil:', error);
+            const errObj = error as { response?: { status?: number; data?: { code?: string; message?: string } }; message?: string };
+            if (errObj?.response?.status === 401) {
+                signOut();
+                const code = errObj?.response?.data?.code;
+                const msg = errObj?.response?.data?.message || errObj?.message;
+                if (code === 'TOKEN_EXPIRED' || (typeof msg === 'string' && msg.includes('expirou'))) {
+                    throw new Error('Sessão expirada. Faça login novamente.');
+                }
+                throw new Error(msg || 'Não autorizado');
+            }
+            if (!errObj?.response) {
+                console.warn('Backend indisponível durante fetchProfile (erro de rede):', errObj?.message);
+                return user;
+            }
+            throw error;
+        } finally {
+            isFetchingProfileRef.current = false;
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (typeof supabase?.auth?.onAuthStateChange !== 'function') {
+            return;
+        }
+
+        const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+            if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
+                try {
+                    await fetchProfile();
+                } catch (err) {
+                    console.error('Erro ao buscar perfil via onAuthStateChange:', err);
+                }
+            } else if (event === 'SIGNED_OUT') {
+                signOut();
+            }
+        });
+
+        return () => {
+            data?.subscription?.unsubscribe?.();
+        };
+    }, [fetchProfile]);
+
     async function signIn({ email, password }: SignInCredentials) {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data: supabaseAuthData, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
@@ -48,16 +111,43 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
         }
 
         try {
-            const response = await api.post('/auth/login', { email });
-            const { access_token, user: userData } = response.data;
+            if (typeof api.post === 'function') {
+                const response = await api.post('/auth/login', { email });
+                if (response?.data) {
+                    const { access_token, user: userData } = response.data;
+                    if (access_token) {
+                        localStorage.setItem('@MyRoadie:token', access_token);
+                    }
+                    if (userData) {
+                        localStorage.setItem('@MyRoadie:user', JSON.stringify(userData));
+                        setUser(userData);
+                    }
+                }
+            }
 
-            localStorage.setItem('@MyRoadie:token', access_token);
-            localStorage.setItem('@MyRoadie:user', JSON.stringify(userData));
-
-            setUser(userData);
-        } catch (error) {
+            await fetchProfile();
+        } catch (error: unknown) {
             console.error('Erro no login:', error);
-            throw new Error('Falha na autenticação');
+            const errObj = error as { response?: { status?: number; data?: { code?: string; message?: string } }; message?: string };
+            if (errObj?.response?.status === 401) {
+                const apiMsg = errObj?.response?.data?.message || errObj?.message;
+                throw new Error(apiMsg || 'Falha na autenticação');
+            }
+            if (!errObj?.response && supabaseAuthData?.user) {
+                const fallbackUser: UserEntity = {
+                    id: supabaseAuthData.user.id,
+                    email: supabaseAuthData.user.email || email,
+                    name: (supabaseAuthData.user.user_metadata?.name as string) || email.split('@')[0],
+                    role: 'MUSICIAN',
+                    supabaseId: supabaseAuthData.user.id,
+                    isAvailable: true,
+                };
+                setUser(fallbackUser);
+                localStorage.setItem('@MyRoadie:user', JSON.stringify(fallbackUser));
+                return;
+            }
+            const apiMsg = errObj?.response?.data?.message || errObj?.message;
+            throw new Error(apiMsg || 'Falha na autenticação');
         }
     }
 
@@ -65,13 +155,17 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
         localStorage.removeItem('@MyRoadie:token');
         localStorage.removeItem('@MyRoadie:user');
         setUser(null);
+        isFetchingProfileRef.current = false;
+        if (typeof supabase?.auth?.signOut === 'function') {
+            supabase.auth.signOut().catch(() => {});
+        }
     }
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut, fetchProfile }}>
             {children}
         </AuthContext.Provider>
     );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);
