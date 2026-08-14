@@ -57,7 +57,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         jwksProvider(
           request,
           rawJwtToken,
-          null as unknown as string,
           (err: Error | null, secret?: string | Buffer) => {
             if (err || !secret) {
               done(null, fallbackSecret);

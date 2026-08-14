@@ -63,7 +63,9 @@ describe('JwtStrategy', () => {
         mockToken,
         (err: Error | null, secret?: string | Buffer) => {
           expect(err).toBeNull();
-          expect(secret).toBe('SECRET_KEY_MYROADIE_2026');
+          expect(secret).toBe(
+            process.env.JWT_SECRET || 'SECRET_KEY_MYROADIE_2026',
+          );
           done();
         },
       );

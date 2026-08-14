@@ -30,35 +30,33 @@ describe('AuthController & JwtAuthGuard (e2e)', () => {
             return Promise.resolve(null);
           },
         ),
-      findFirst: jest
-        .fn()
-        .mockImplementation(
-          ({
-            where,
-          }: {
-            where?: {
-              email?: string;
-              OR?: Array<{ id?: string; supabaseId?: string; email?: string }>;
-            };
-          }) => {
-            if (where?.email === mockUser.email) {
+      findFirst: jest.fn().mockImplementation(
+        ({
+          where,
+        }: {
+          where?: {
+            email?: string;
+            OR?: Array<{ id?: string; supabaseId?: string; email?: string }>;
+          };
+        }) => {
+          if (where?.email === mockUser.email) {
+            return Promise.resolve(mockUser);
+          }
+          if (where?.OR && Array.isArray(where.OR)) {
+            const matched = where.OR.some(
+              (cond) =>
+                cond.id === mockUser.id ||
+                cond.email === mockUser.email ||
+                cond.supabaseId === mockUser.supabaseId ||
+                cond.supabaseId === mockUser.id,
+            );
+            if (matched) {
               return Promise.resolve(mockUser);
             }
-            if (where?.OR && Array.isArray(where.OR)) {
-              const matched = where.OR.some(
-                (cond) =>
-                  cond.id === mockUser.id ||
-                  cond.email === mockUser.email ||
-                  cond.supabaseId === mockUser.supabaseId ||
-                  cond.supabaseId === mockUser.id,
-              );
-              if (matched) {
-                return Promise.resolve(mockUser);
-              }
-            }
-            return Promise.resolve(null);
-          },
-        ),
+          }
+          return Promise.resolve(null);
+        },
+      ),
       create: jest
         .fn()
         .mockImplementation(({ data }: { data: Record<string, unknown> }) =>
