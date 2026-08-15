@@ -24,7 +24,7 @@ Atualmente, o formulário de login aceita qualquer e-mail e realiza a autentica�
 
 ## Critérios de Sucesso
 
-- [ ] Submeter o formulário de login com e-mail e senha válidos autentica o usuário com sucesso via `Supabase Auth` e redireciona para `/dashboard`.
-- [ ] Submeter credenciais inválidas (senha incorreta ou e-mail inexistente) é bloqueado pelo `Supabase Auth` e exibe mensagem de erro clara na UI sem quebrar a aplicação.
-- [ ] O token de acesso e as informações de perfil do usuário continuam sendo mantidos no `localStorage` e disponibilizados pelo `AuthContext`.
-- [ ] A suíte de testes do frontend-web (`npm test` via Vitest) passa com 100% dos testes verdes, cobrindo cenários positivos e de erro no fluxo de autenticação conforme o padrão de qualidade da constituição.
+- [x] Submeter o formulário de login com e-mail e senha válidos autentica o usuário com sucesso via `Supabase Auth` e redireciona para `/dashboard`.
+- [x] Submeter credenciais inválidas (senha incorreta ou e-mail inexistente) é bloqueado pelo `Supabase Auth` e exibe mensagem de erro clara na UI sem quebrar a aplicação.
+- [x] O token de acesso e as informações de perfil do usuário continuam sendo mantidos no `localStorage` e disponibilizados pelo `AuthContext`.
+- [x] A suíte de testes do frontend-web (`npm test` via Vitest) passa com 100% dos testes verdes, cobrindo cenários positivos e de erro no fluxo de autenticação conforme o padrão de qualidade da constituição.
