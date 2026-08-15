@@ -43,8 +43,8 @@ A validação rigorosa desse fluxo e a criação de testes focados nesses casos 
 
 ## Critérios de Sucesso
 
-- [ ] Login com credenciais válidas autentica com sucesso contra a API real e o Supabase Auth no frontend-web e no aplicativo mobile, carregando o perfil do usuário corretamente.
-- [ ] A validação de tokens na `JwtStrategy` do NestJS aceita e verifica corretamente tokens emitidos pelo Supabase Auth (suporte a ES256/JWKS e HS256) sem rejeições indevidas.
-- [ ] Requisições com tokens inválidos, expirados ou ausentes registram logs com a causa exata no NestJS e retornam respostas com detalhamento amigável (sem 401 genérico mascarado).
-- [ ] O método `fetchProfile` é acionado **exatamente 1 vez** durante a inicialização da sessão / processo de login no frontend-web e no aplicativo mobile.
-- [ ] Suítes de testes unitários e de integração no backend (`npm test`), frontend-web (`npm test`) e mobile (`flutter test`) rodam com 100% de sucesso, cobrindo pelo menos 3 casos positivos e 3 negativos por módulo (incluindo mismatch JWKS, 401 mascarado e duplicação de `fetchProfile`), mantendo a cobertura >= 80% em cada projeto.
+- [x] Login com credenciais válidas autentica com sucesso contra a API real e o Supabase Auth no frontend-web e no aplicativo mobile, carregando o perfil do usuário corretamente.
+- [x] A validação de tokens na `JwtStrategy` do NestJS aceita e verifica corretamente tokens emitidos pelo Supabase Auth (suporte a ES256/JWKS e HS256) sem rejeições indevidas.
+- [x] Requisições com tokens inválidos, expirados ou ausentes registram logs com a causa exata no NestJS e retornam respostas com detalhamento amigável (sem 401 genérico mascarado).
+- [x] O método `fetchProfile` é acionado **exatamente 1 vez** durante a inicialização da sessão / processo de login no frontend-web e no aplicativo mobile.
+- [x] Suítes de testes unitários e de integração no backend (`npm test`), frontend-web (`npm test`) e mobile (`flutter test`) rodam com 100% de sucesso, cobrindo pelo menos 3 casos positivos e 3 negativos por módulo (incluindo mismatch JWKS, 401 mascarado e duplicação de `fetchProfile`), mantendo a cobertura >= 80% em cada projeto.
