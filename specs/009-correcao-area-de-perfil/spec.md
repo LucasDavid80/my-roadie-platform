@@ -32,9 +32,9 @@ Garantir que a tela de perfil no mobile carregue e salve os dados do usuário co
 
 ## Critério de sucesso
 
-- [ ] O erro real de qualquer falha em `fetchProfile`/`saveProfile` aparece no log de debug (status HTTP + mensagem), não é mais engolido silenciosamente.
-- [ ] Editar um campo do perfil e salvar funciona sem erro para uma conta autenticada válida.
-- [ ] Sair da tela de perfil e voltar mostra o dado que acabou de ser salvo.
-- [ ] Uma conta nova (criada via spec 010, sem dado de perfil ainda) consegue preencher e salvar o perfil pela primeira vez.
-- [ ] Quando salvar falhar de verdade (ex.: sem rede), a UI mostra uma mensagem compreensível, não um erro genérico nem falha silenciosa.
-- [ ] `flutter test` 100% verde, incluindo teste novo cobrindo salvar com sucesso e com falha.
+- [x] O erro real de qualquer falha em `fetchProfile`/`saveProfile` aparece no log de debug (status HTTP + mensagem), não é mais engolido silenciosamente.
+- [x] Editar um campo do perfil e salvar funciona sem erro para uma conta autenticada válida.
+- [x] Sair da tela de perfil e voltar mostra o dado que acabou de ser salvo.
+- [x] Uma conta nova (criada via spec 010, sem dado de perfil ainda) consegue preencher e salvar o perfil pela primeira vez.
+- [x] Quando salvar falhar de verdade (ex.: sem rede), a UI mostra uma mensagem compreensível, não um erro genérico nem falha silenciosa.
+- [x] `flutter test` 100% verde, incluindo teste novo cobrindo salvar com sucesso e com falha.

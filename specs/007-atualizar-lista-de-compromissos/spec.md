@@ -23,7 +23,7 @@ Atualmente, ao adicionar um novo compromisso na tela de Agenda do app mobile, o 
 
 ## Critérios de Sucesso
 
-- [ ] Ao preencher e confirmar a criação de um compromisso no formulário `NewAppointmentWidget`, o novo evento é exibido imediatamente na lista de compromissos e marcado no calendário.
-- [ ] O evento persistido no estado possui o identificador (`id`) oficial retornado pela API do backend.
-- [ ] Caso ocorra um erro de rede/API ao salvar, o estado da lista não é corrompido e a exceção é tratada de forma segura na UI.
-- [ ] Suíte de testes do Flutter (`flutter test`) 100% verde com cobertura de casos positivos e de erro para o `AgendaController`.
+- [x] Ao preencher e confirmar a criação de um compromisso no formulário `NewAppointmentWidget`, o novo evento é exibido imediatamente na lista de compromissos e marcado no calendário.
+- [x] O evento persistido no estado possui o identificador (`id`) oficial retornado pela API do backend.
+- [x] Caso ocorra um erro de rede/API ao salvar, o estado da lista não é corrompido e a exceção é tratada de forma segura na UI.
+- [x] Suíte de testes do Flutter (`flutter test`) 100% verde com cobertura de casos positivos e de erro para o `AgendaController`.

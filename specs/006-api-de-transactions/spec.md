@@ -33,9 +33,9 @@ De acordo com a `constitution.md` §3 ("schema não é feature entregue"), uma e
 
 ## Critérios de Sucesso
 
-- [ ] Endpoints HTTP para criação, listagem com filtros, busca por ID, edição parcial e remoção de transações funcionando corretamente.
-- [ ] Validação rigorosa dos payloads via DTOs com `ValidationPipe` e `forbidNonWhitelisted: true`.
-- [ ] Requisições não autenticadas rejeitadas com HTTP 401 Unauthorized.
-- [ ] Testes unitários do `TransactionsService` e `TransactionsController` cobrindo ao menos 3 cenários positivos e 3 negativos (ex.: valor inválido, tipo desconhecido, banda/usuário inexistente, ID não encontrado).
-- [ ] Teste de integração E2E cobrindo todo o ciclo de vida de transações financeiras.
-- [ ] Manutenção do limiar mínimo de 80% de cobertura de código global no backend (`constitution.md` §5).
+- [x] Endpoints HTTP para criação, listagem com filtros, busca por ID, edição parcial e remoção de transações funcionando corretamente.
+- [x] Validação rigorosa dos payloads via DTOs com `ValidationPipe` e `forbidNonWhitelisted: true`.
+- [x] Requisições não autenticadas rejeitadas com HTTP 401 Unauthorized.
+- [x] Testes unitários do `TransactionsService` e `TransactionsController` cobrindo ao menos 3 cenários positivos e 3 negativos (ex.: valor inválido, tipo desconhecido, banda/usuário inexistente, ID não encontrado).
+- [x] Teste de integração E2E cobrindo todo o ciclo de vida de transações financeiras.
+- [x] Manutenção do limiar mínimo de 80% de cobertura de código global no backend (`constitution.md` §5).

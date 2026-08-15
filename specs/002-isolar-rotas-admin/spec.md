@@ -22,9 +22,9 @@ Hoje `admin` está aninhado dentro de `(dashboard)`, que só garante "tem sessã
 
 ## Critério de sucesso
 
-- [ ] `src/app/(admin)/` existe com layout próprio e guarda de papel.
-- [ ] `src/app/(dashboard)/admin/` não existe mais.
-- [ ] Acessar uma rota admin sem sessão → redireciona para `/login`.
-- [ ] Acessar uma rota admin logado como `MUSICIAN`/`ROADIE` → não entra (redirect ou 403).
-- [ ] Acessar uma rota admin logado como `ADMIN` → funciona normalmente.
-- [ ] URLs finais continuam as mesmas (Route Group não aparece na URL — conferir que nada quebrou por causa disso).
+- [x] `src/app/(admin)/` existe com layout próprio e guarda de papel.
+- [x] `src/app/(dashboard)/admin/` não existe mais.
+- [x] Acessar uma rota admin sem sessão → redireciona para `/login`.
+- [x] Acessar uma rota admin logado como `MUSICIAN`/`ROADIE` → não entra (redirect ou 403).
+- [x] Acessar uma rota admin logado como `ADMIN` → funciona normalmente.
+- [x] URLs finais continuam as mesmas (Route Group não aparece na URL — conferir que nada quebrou por causa disso).

@@ -24,7 +24,7 @@ Parte da implementação já existe no working directory (não commitada, feita 
 
 ## Critério de sucesso
 
-- [ ] `flutter test` passa 100% (os 3 testes de `login_form_test.dart` corrigidos, nenhuma regressão nova).
-- [ ] Agenda e perfil no mobile mostram dados vindos do backend, não mock.
-- [ ] `docs/architecture/mobile.md` (se existir) ou seção equivalente atualizada refletindo a camada `data/` implementada.
-- [ ] Cobertura do mobile medida novamente (a medição da 001 ficou inválida por causa dos testes quebrados) e registrada em `plan.md` raiz.
+- [x] `flutter test` passa 100% (os 3 testes de `login_form_test.dart` corrigidos, nenhuma regressão nova).
+- [x] Agenda e perfil no mobile mostram dados vindos do backend, não mock.
+- [x] `docs/architecture/mobile.md` (se existir) ou seção equivalente atualizada refletindo a camada `data/` implementada.
+- [x] Cobertura do mobile medida novamente (a medição da 001 ficou inválida por causa dos testes quebrados) e registrada em `plan.md` raiz.
