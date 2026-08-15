@@ -28,9 +28,9 @@ Fechar a lacuna de autorização identificada em revisão: os módulos `tasks`, 
 
 ## Critério de sucesso
 
-- [ ] Usuário não-membro de uma banda recebe `403 Forbidden` ao tentar criar/ler/editar/apagar task, repertório ou transação daquela banda.
-- [ ] Usuário membro consegue operar normalmente nos recursos da(s) banda(s) dele.
-- [ ] `ADMIN` continua com acesso irrestrito.
-- [ ] `GET /repertoire` e `GET /transactions` sem `bandId` não retornam mais dado de banda alheia.
-- [ ] Testes cobrindo os 4 pontos acima, nos três módulos.
-- [ ] `spec.md` da baseline (raiz) e `plan.md` §8 atualizados removendo esta lacuna da lista de débito.
+- [x] Usuário não-membro de uma banda recebe `403 Forbidden` ao tentar criar/ler/editar/apagar task, repertório ou transação daquela banda.
+- [x] Usuário membro consegue operar normalmente nos recursos da(s) banda(s) dele.
+- [x] `ADMIN` continua com acesso irrestrito.
+- [x] `GET /repertoire` e `GET /transactions` sem `bandId` não retornam mais dado de banda alheia.
+- [x] Testes cobrindo os 4 pontos acima, nos três módulos.
+- [x] `spec.md` da baseline (raiz) e `plan.md` §8 atualizados removendo esta lacuna da lista de débito.
