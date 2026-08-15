@@ -33,8 +33,8 @@ Conforme mapeado no `backlog.md` (Fase 1: Estabilização, Segurança & Bugs Cr�
 
 ## Critérios de Sucesso
 
-- [ ] Usuário consegue acessar a tela de cadastro na Web (`/register`), preencher os dados (nome, e-mail, senha, cargo) e criar uma nova conta.
-- [ ] Cadastro realizado na Web cria a conta no Supabase Auth e o registro correspondente na tabela `User` do PostgreSQL via API NestJS.
-- [ ] Cadastro efetuado pelo aplicativo mobile cria com sucesso as credenciais no Supabase Auth e grava o registro do usuário na tabela `User` no PostgreSQL.
-- [ ] Tentar cadastrar um e-mail já existente ou com senha inválida exibe uma mensagem de erro clara em ambos os apps (Web e Mobile).
-- [ ] Todos os testes unitários e de integração no frontend-web (`npm test`) e mobile (`flutter test`) passam com 100% de sucesso.
+- [x] Usuário consegue acessar a tela de cadastro na Web (`/register`), preencher os dados (nome, e-mail, senha, cargo) e criar uma nova conta.
+- [x] Cadastro realizado na Web cria a conta no Supabase Auth e o registro correspondente na tabela `User` do PostgreSQL via API NestJS.
+- [x] Cadastro efetuado pelo aplicativo mobile cria com sucesso as credenciais no Supabase Auth e grava o registro do usuário na tabela `User` no PostgreSQL.
+- [x] Tentar cadastrar um e-mail já existente ou com senha inválida exibe uma mensagem de erro clara em ambos os apps (Web e Mobile).
+- [x] Todos os testes unitários e de integração no frontend-web (`npm test`) e mobile (`flutter test`) passam com 100% de sucesso.
