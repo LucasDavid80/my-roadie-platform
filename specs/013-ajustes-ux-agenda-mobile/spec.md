@@ -32,9 +32,9 @@ Corrigir o bug de rolagem na tela de Agenda (`PrincipalScreen`) do app mobile: h
 
 ## Critério de sucesso
 
-- [ ] Um gesto de arraste vertical iniciado sobre a área do calendário rola a tela inteira (cabeçalho, infos, calendário e lista de compromissos), igual ao comportamento já observado fora do calendário.
-- [ ] Trocar de mês continua funcionando pelas setas do cabeçalho customizado.
-- [ ] Selecionar um dia no calendário (tap) continua funcionando e mostrando os compromissos daquele dia.
-- [ ] Nenhuma regressão nos testes existentes de `principal_screen_test.dart` e `agenda_controller_test.dart`.
-- [ ] Teste novo cobrindo a rolagem da tela com o calendário presente.
-- [ ] `backlog.md` atualizado marcando esta entrada como `concluído (specs/013-ajustes-ux-agenda-mobile/)`.
+- [x] Um gesto de arraste vertical iniciado sobre a área do calendário rola a tela inteira (cabeçalho, infos, calendário e lista de compromissos), igual ao comportamento já observado fora do calendário.
+- [x] Trocar de mês continua funcionando pelas setas do cabeçalho customizado.
+- [x] Selecionar um dia no calendário (tap) continua funcionando e mostrando os compromissos daquele dia.
+- [x] Nenhuma regressão nos testes existentes de `principal_screen_test.dart` e `agenda_controller_test.dart`.
+- [x] Teste novo cobrindo a rolagem da tela com o calendário presente.
+- [x] `backlog.md` atualizado marcando esta entrada como `concluído (specs/013-ajustes-ux-agenda-mobile/)`.

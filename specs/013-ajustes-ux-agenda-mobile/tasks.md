@@ -24,13 +24,13 @@ Pré-requisitos: nenhum. É correção sobre tela já entregue (spec 007 — Atu
 ## Fase 3 — Fechamento
 
 - [x] T3.1 — Atualizar `backlog.md`: mover a entrada "Habilitar rolagem na tela de Agenda" de `ideia` para `concluído (specs/013-ajustes-ux-agenda-mobile/)`.
-- [ ] T3.2 — Revisar `spec.md` desta pasta e marcar todos os itens do "Critério de sucesso" como concluídos, um a um, confirmando cada um manualmente antes de marcar.
+- [x] T3.2 — Revisar `spec.md` desta pasta e marcar todos os itens do "Critério de sucesso" como concluídos, um a um, confirmando cada um manualmente antes de marcar.
 
 ## Checklist de fechamento da feature
 
-- [ ] Drag vertical sobre o calendário rola a tela (T0.1 reproduzido → T1.1 corrigido)
-- [ ] Swipe horizontal e setas de navegação de mês continuam funcionando
-- [ ] Seleção de dia e marcadores de evento continuam funcionando
-- [ ] Teste automatizado novo cobrindo a rolagem (T2.1) passando
-- [ ] `flutter test` 100% verde, sem regressão em `principal_screen_test.dart` / `agenda_controller_test.dart`
-- [ ] `backlog.md` atualizado
+- [x] Drag vertical sobre o calendário rola a tela (T0.1 reproduzido → T1.1 corrigido)
+- [x] Swipe horizontal e setas de navegação de mês continuam funcionando
+- [x] Seleção de dia e marcadores de evento continuam funcionando
+- [x] Teste automatizado novo cobrindo a rolagem (T2.1) passando
+- [x] `flutter test` 100% verde, sem regressão em `principal_screen_test.dart` / `agenda_controller_test.dart`
+- [x] `backlog.md` atualizado
