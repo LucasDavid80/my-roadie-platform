@@ -2,6 +2,7 @@ import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_agenda_repository.dart';
 import 'package:agenda_musical/presentation/controllers/agenda_controller.dart';
 import 'package:agenda_musical/presentation/screens/principal/principal_screen.dart';
+import 'package:agenda_musical/presentation/screens/principal/widgets/custom_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -79,4 +80,67 @@ void main() {
     expect(find.text('Novo Show Reativo'), findsOneWidget);
     expect(find.text('Teatro Municipal'), findsOneWidget);
   });
+
+  testWidgets('Should scroll PrincipalScreen vertically when dragging over CustomCalendar (T2.1)', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    final now = DateTime.now();
+    final events = List.generate(
+      10,
+      (index) => EventEntity(
+        id: 'scroll-event-$index',
+        title: 'Show de Rolagem #$index',
+        type: 'Show',
+        date: now,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local #$index',
+        fee: 500.0,
+      ),
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        agendaRepositoryProvider.overrideWithValue(mockAgendaRepository),
+      ],
+    );
+
+    for (final event in events) {
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(event);
+    }
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(
+          home: PrincipalScreen(),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    final scrollableFinder = find.descendant(
+      of: find.byType(SingleChildScrollView),
+      matching: find.byType(Scrollable),
+    ).first;
+
+    final initialOffset = tester.state<ScrollableState>(scrollableFinder).position.pixels;
+    expect(initialOffset, equals(0.0));
+
+    final calendarFinder = find.byType(CustomCalendar);
+    expect(calendarFinder, findsOneWidget);
+
+    await tester.drag(calendarFinder, const Offset(0, -300));
+    await tester.pumpAndSettle();
+
+    final updatedOffset = tester.state<ScrollableState>(scrollableFinder).position.pixels;
+    expect(updatedOffset, greaterThan(initialOffset));
+  });
 }
+

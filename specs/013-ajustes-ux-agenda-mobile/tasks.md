@@ -17,7 +17,7 @@ Pré-requisitos: nenhum. É correção sobre tela já entregue (spec 007 — Atu
 
 ## Fase 2 — Teste automatizado de regressão
 
-- [ ] T2.1 — Escrever teste de widget que renderiza `PrincipalScreen` com eventos suficientes para o conteúdo exceder a altura da viewport, executa `tester.drag()` vertical a partir de um ponto dentro de `find.byType(CustomCalendar)`, e assevera que o offset do `Scrollable` da tela mudou.
+- [x] T2.1 — Escrever teste de widget que renderiza `PrincipalScreen` com eventos suficientes para o conteúdo exceder a altura da viewport, executa `tester.drag()` vertical a partir de um ponto dentro de `find.byType(CustomCalendar)`, e assevera que o offset do `Scrollable` da tela mudou.
   - Critério de teste: teste falha se revertido T1.1 (ou seja, comprovadamente cobre a regressão) e passa com a correção aplicada.
 - [ ] T2.2 — Rodar `flutter test` completo do módulo mobile e confirmar que `principal_screen_test.dart` e `agenda_controller_test.dart` continuam verdes.
 
