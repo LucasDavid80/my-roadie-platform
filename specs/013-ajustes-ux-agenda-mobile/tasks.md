@@ -12,7 +12,7 @@ Pré-requisitos: nenhum. É correção sobre tela já entregue (spec 007 — Atu
 
 - [x] T1.1 — Adicionar `availableGestures: AvailableGestures.horizontalSwipe` ao `TableCalendar` em `custom_calendar.dart`.
   - Critério de teste: rodar manualmente no emulador — drag vertical sobre o calendário agora rola a tela; swipe horizontal ainda troca de mês; tap num dia ainda seleciona e mostra os compromissos.
-- [ ] T1.2 — Testar manualmente a troca de mês pelas setas do `_buildCustomHeader` (`_buildArrowButton`) para confirmar que não foi afetada pela mudança.
+- [x] T1.2 — Testar manualmente a troca de mês pelas setas do `_buildCustomHeader` (`_buildArrowButton`) para confirmar que não foi afetada pela mudança.
   - Critério de teste: tocar seta esquerda/direita muda `_focusedDay` corretamente, igual antes da mudança.
 
 ## Fase 2 — Teste automatizado de regressão
