@@ -95,6 +95,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/013-ajustes-ux-agenda-mobile/)
 
+### Corrigir criação de compromisso no dispositivo físico
+- Intenção: Investigar e corrigir a falha em que um novo compromisso não é criado ao usar o app mobile em um aparelho físico (ativação de endpoints de eventos, sanitização de payload e feedback de erro na UI).
+- Impacto esperado: alto (bug crítico/agenda)
+- Depende de: Mobile conectado à API real (spec 003), Atualização da lista de compromissos após criação (spec 007)
+- Status: em spec (specs/014-corrigir-criacao-compromisso-dispositivo-fisico/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -103,6 +109,12 @@
 
 ## Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
+
+### Corrigir criação de compromisso no dispositivo físico
+- Intenção: Investigar e corrigir a falha em que um novo compromisso não é criado ao usar o app mobile em um aparelho físico (ativação de endpoints de eventos, sanitização de payload e feedback de erro na UI).
+- Impacto esperado: alto (bug crítico/agenda)
+- Depende de: Mobile conectado à API real (spec 003), Atualização da lista de compromissos após criação (spec 007)
+- Status: em spec (specs/014-corrigir-criacao-compromisso-dispositivo-fisico/)
 
 ### Correção da tela de cadastro na Web e sincronização no Supabase Auth (Mobile)
 - Intenção: Corrigir o acesso à tela de cadastro no frontend-web e investigar/garantir a persistência real da conta no Supabase Auth durante o cadastro no app mobile.
