@@ -48,6 +48,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
             firstDay: DateTime.utc(2020, 10, 16),
             lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: _focusedDay,
+            availableGestures: AvailableGestures.horizontalSwipe,
 
             // Lógica de seleção
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),

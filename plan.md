@@ -39,6 +39,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Atualização reativa de compromissos: `AgendaController` sincroniza eventos retornados da API e notifica a UI de forma imutável após criação/edição (Spec 007).
 - ✅ **Correção de Carregamento e Salvamento do Perfil (`PersonScreen`):** Solucionada causa raiz de erros HTTP 401 Unauthorized com injeção do JWT de sessão do Supabase em `RemoteDataSource._getHeaders()`. `UserNotifier` refatorado para propagar mensagens de erro reais (`errorMessage`) na UI via SnackBar. Adicionados testes unitários, de widget e de integração (`profile_flow_integration_test.dart`) cobrindo o ciclo completo de visualização e edição do perfil (Spec 009).
 - ✅ **Deduplicação de `fetchProfile` e Tratamento Visual de Erros:** `UserNotifier` refatorado com trava de requisição prevenindo execuções síncronas redundantes de `fetchProfile`, com exibição visual de feedbacks de erro da API na UI (Spec 012).
+- ✅ **Rolagem da Agenda sobre o calendário:** `CustomCalendar` configura o `TableCalendar` com `AvailableGestures.horizontalSwipe`, para que o gesto vertical seja tratado pelo `SingleChildScrollView` da `PrincipalScreen`. O teste de widget em `principal_screen_test.dart` confirma que um arraste iniciado sobre o calendário desloca a tela, sem alterar a seleção de dia, os marcadores de eventos ou a navegação mensal (Spec 013).
 
 
 
