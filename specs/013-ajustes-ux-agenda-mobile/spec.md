@@ -10,6 +10,13 @@ Corrigir o bug de rolagem na tela de Agenda (`PrincipalScreen`) do app mobile: h
 - A tela de Agenda é a tela inicial do app (`selectedScreen: 'calendar'`); um bug de rolagem ali afeta o primeiro contato do usuário com o produto a cada abertura.
 - Já há diagnóstico de causa raiz levantado em conversa anterior (ver `plan.md`), reduzindo o risco de retrabalho na Fase 0.
 
+## Diagnóstico e Comportamento Confirmado (T0.1)
+
+- Na `PrincipalScreen`, toda a tela é envolvida em um `SingleChildScrollView`.
+- O widget `CustomCalendar` utiliza `TableCalendar` com a configuração padrão `availableGestures: AvailableGestures.all`.
+- Por padrão, o `TableCalendar` registra um reconhecedor de gesto vertical para transição de formato (`CalendarFormat`), consumindo o evento de arrasto na *gesture arena* do Flutter quando o toque é iniciado sobre a área do calendário.
+- Como consequência, o `SingleChildScrollView` pai não recebe o gesto vertical, travando a rolagem da tela inteira ao arrastar sobre o calendário. Fora dessa área (cabeçalho, infos, lista de compromissos), a rolagem funciona normalmente.
+
 ## Escopo
 
 1. Permitir que o usuário role a tela de Agenda inteira (incluindo a área do calendário) sem o gesto ser interceptado pelo widget do calendário.
