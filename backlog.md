@@ -89,6 +89,12 @@
 - Depende de: Conectar formulário de Login ao authProvider real (Supabase)
 - Status: concluído (specs/012-validar-fluxo-login-API-real/)
 
+### Ajustes de UX na Agenda (Mobile)
+- Intenção: Ajustar o layout da tela de Agenda no mobile para permitir rolagem, evitando que o calendário trave a tela verticalmente.
+- Impacto esperado: alto (usabilidade)
+- Depende de: nenhum
+- Status: concluído (specs/013-ajustes-ux-agenda-mobile/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -114,7 +120,7 @@
 - Intenção: Ajustar o layout da tela de Agenda no mobile para permitir rolagem, evitando que o calendário trave a tela verticalmente.
 - Impacto esperado: alto (usabilidade)
 - Depende de: nenhum
-- Status: ideia
+- Status: concluído (specs/013-ajustes-ux-agenda-mobile/)
 
 ### Ajuste de layout horizontal do card "Novo Compromisso" e campos
 - Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.

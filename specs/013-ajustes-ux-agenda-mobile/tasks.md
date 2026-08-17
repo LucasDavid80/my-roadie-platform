@@ -23,7 +23,7 @@ Pré-requisitos: nenhum. É correção sobre tela já entregue (spec 007 — Atu
 
 ## Fase 3 — Fechamento
 
-- [ ] T3.1 — Atualizar `backlog.md`: mover a entrada "Habilitar rolagem na tela de Agenda" de `ideia` para `concluído (specs/013-ajustes-ux-agenda-mobile/)`.
+- [x] T3.1 — Atualizar `backlog.md`: mover a entrada "Habilitar rolagem na tela de Agenda" de `ideia` para `concluído (specs/013-ajustes-ux-agenda-mobile/)`.
 - [ ] T3.2 — Revisar `spec.md` desta pasta e marcar todos os itens do "Critério de sucesso" como concluídos, um a um, confirmando cada um manualmente antes de marcar.
 
 ## Checklist de fechamento da feature
