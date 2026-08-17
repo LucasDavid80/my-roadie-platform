@@ -5,7 +5,7 @@ Pré-requisitos: nenhum. É correção sobre tela já entregue (spec 007 — Atu
 ## Fase 0 — Confirmar diagnóstico antes de codar
 
 - [x] T0.1 — Reproduzir o bug manualmente (emulador/dispositivo): confirmar que o drag vertical iniciado sobre o `CustomCalendar` não rola a `PrincipalScreen`, e que fora dele rola normalmente.
-- [ ] T0.2 — Confirmar no código-fonte do `TableCalendar` (via `flutter pub deps` / código do pacote em `~/.pub-cache`) que o default de `availableGestures` é de fato `AvailableGestures.all` e que ele inclui um recognizer de swipe vertical para troca de `CalendarFormat`.
+- [x] T0.2 — Confirmar no código-fonte do `TableCalendar` (via `flutter pub deps` / código do pacote em `~/.pub-cache`) que o default de `availableGestures` é de fato `AvailableGestures.all` e que ele inclui um recognizer de swipe vertical para troca de `CalendarFormat`.
 - [ ] T0.3 — Confirmar que a tela não usa `CalendarFormat` diferente de mês em nenhum ponto (grep por `CalendarFormat` em `mobile/lib`), validando que desativar o swipe vertical não remove funcionalidade em uso.
 
 ## Fase 1 — Corrigir o gesto do calendário
