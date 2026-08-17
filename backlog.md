@@ -116,12 +116,6 @@
 - Depende de: nenhum
 - Status: concluído (specs/002-isolar-rotas-admin/)
 
-### Habilitar rolagem na tela de Agenda
-- Intenção: Ajustar o layout da tela de Agenda no mobile para permitir rolagem, evitando que o calendário trave a tela verticalmente.
-- Impacto esperado: alto (usabilidade)
-- Depende de: nenhum
-- Status: concluído (specs/013-ajustes-ux-agenda-mobile/)
-
 ### Ajuste de layout horizontal do card "Novo Compromisso" e campos
 - Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.
 - Impacto esperado: médio (visual/UI)

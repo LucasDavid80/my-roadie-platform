@@ -48,6 +48,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **Reatividade de compromissos:** A lista de compromissos e o calendário na tela de Agenda atualizam imediatamente no aplicativo mobile após a criação/edição de eventos (Spec 007).
 - ✅ **Carregamento e Salvamento do Perfil Mobile:** Injeção do JWT de sessão do Supabase no `RemoteDataSource._getHeaders()` para evitar erros HTTP 401 Unauthorized, com `UserNotifier`/`PersonScreen` expondo mensagens de erro reais na UI em vez de falhas silenciosas, com testes unitários, de widget e de integração para o fluxo de carregamento e edição do perfil (Spec 009).
 - ✅ **Deduplicação de `fetchProfile` e Tratamento Visual de Erro:** `UserNotifier` com trava de requisição prevenindo execuções síncronas redundantes de `fetchProfile`, com exibição de erros 401 legíveis ao usuário via UI/SnackBar (Spec 012).
+- ✅ **Rolagem da Agenda sobre o calendário:** `CustomCalendar` restringe o `TableCalendar` a `AvailableGestures.horizontalSwipe`, liberando o arraste vertical para o `SingleChildScrollView` da `PrincipalScreen`; a navegação horizontal, as setas do cabeçalho, a seleção de dias e os marcadores de eventos foram preservados e cobertos por teste de widget (Spec 013).
 
 ## 5. Regras de negócio confirmadas (das que já têm API)
 
@@ -67,5 +68,5 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 ## 7. Critério de "pronto" desta baseline
 
-Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a entrega do módulo de Transactions (Spec 006). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
+Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após os ajustes de UX da Agenda (Spec 013). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
 
