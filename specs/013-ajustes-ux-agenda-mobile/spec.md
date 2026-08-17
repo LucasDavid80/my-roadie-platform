@@ -10,12 +10,11 @@ Corrigir o bug de rolagem na tela de Agenda (`PrincipalScreen`) do app mobile: h
 - A tela de Agenda é a tela inicial do app (`selectedScreen: 'calendar'`); um bug de rolagem ali afeta o primeiro contato do usuário com o produto a cada abertura.
 - Já há diagnóstico de causa raiz levantado em conversa anterior (ver `plan.md`), reduzindo o risco de retrabalho na Fase 0.
 
-## Diagnóstico e Comportamento Confirmado (T0.1)
+## Diagnóstico e Validações Técnicas Confirmadas (Fase 0: T0.1, T0.2, T0.3)
 
-- Na `PrincipalScreen`, toda a tela é envolvida em um `SingleChildScrollView`.
-- O widget `CustomCalendar` utiliza `TableCalendar` com a configuração padrão `availableGestures: AvailableGestures.all`.
-- Por padrão, o `TableCalendar` registra um reconhecedor de gesto vertical para transição de formato (`CalendarFormat`), consumindo o evento de arrasto na *gesture arena* do Flutter quando o toque é iniciado sobre a área do calendário.
-- Como consequência, o `SingleChildScrollView` pai não recebe o gesto vertical, travando a rolagem da tela inteira ao arrastar sobre o calendário. Fora dessa área (cabeçalho, infos, lista de compromissos), a rolagem funciona normalmente.
+- **Reprodução do Bug (T0.1):** Na `PrincipalScreen`, toda a tela é envolvida em um `SingleChildScrollView`. O widget `CustomCalendar` utiliza `TableCalendar` com a configuração padrão `availableGestures: AvailableGestures.all`. Quando o toque é iniciado sobre a área do calendário, o evento de arrasto é interceptado na *gesture arena* do Flutter, impedindo que o `SingleChildScrollView` pai receba o gesto vertical e travando a rolagem da tela. Fora da área do calendário, a rolagem funciona normalmente.
+- **Inspeção do Pacote TableCalendar (T0.2):** No código-fonte do `table_calendar: 3.2.0` (`TableCalendarBase`), o parâmetro `availableGestures` é por padrão `AvailableGestures.all`, o que avalia `_canScrollVertically` como `true` e atribui o callback `_swipeCalendarFormat` ao `SimpleGestureDetector.onVerticalSwipe`. Ao configurar `availableGestures: AvailableGestures.horizontalSwipe`, `_canScrollVertically` torna-se `false` e desativa o `SimpleGestureDetector` vertical, liberando o eixo vertical para o scroll pai.
+- **Validação de Impacto Funcional (T0.3):** Uma varredura no código (`mobile/lib/` e `mobile/test/`) confirmou que não há nenhuma utilização de formatos alternativos de calendário (`CalendarFormat.twoWeeks` ou `CalendarFormat.week`). O app opera exclusivamente no modo mensal, portanto desabilitar a troca de formato via swipe vertical não gera efeitos colaterais nem perda de funcionalidade.
 
 ## Escopo
 
