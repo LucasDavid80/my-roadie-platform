@@ -40,9 +40,9 @@ Investigar e corrigir a falha em que a criação e sincronização de novos comp
 
 ## Critério de sucesso
 
-- [ ] `POST /events` no backend ativo, autenticado via JWT e persistindo eventos no banco de dados com testes unitários e E2E passando.
-- [ ] Mobile envia requisições de criação de eventos com payload compatível com o backend.
-- [ ] `NewAppointmentWidget` exibe SnackBar legível com mensagem descritiva caso a requisição falhe (erro 400, 401, 500 ou queda de rede), mantendo os dados preenchidos no formulário para reenvio.
-- [ ] Criação de compromisso funciona de ponta a ponta no dispositivo físico conectado ao backend local (via `adb reverse` ou IP configurado).
-- [ ] Todos os testes automatizados do backend e mobile passando sem regressões.
-- [ ] `backlog.md` atualizado com o status concluído ao finalizar a spec.
+- [x] `POST /events` no backend ativo, autenticado via JWT e persistindo eventos no banco de dados com testes unitários e E2E passando.
+- [x] Mobile envia requisições de criação de eventos com payload compatível com o backend.
+- [x] `NewAppointmentWidget` exibe SnackBar legível com mensagem descritiva caso a requisição falhe (erro 400, 401, 500 ou queda de rede), mantendo os dados preenchidos no formulário para reenvio.
+- [x] Criação de compromisso funciona de ponta a ponta no dispositivo físico conectado ao backend local (via `adb reverse` ou IP configurado).
+- [x] Todos os testes automatizados do backend e mobile passando sem regressões.
+- [x] `backlog.md` atualizado com o status concluído ao finalizar a spec.

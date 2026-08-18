@@ -31,12 +31,12 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 - [x] T4.1 — Atualizar `backlog.md` marcando a spec 014 como concluída.
 - [x] T4.2 — Atualizar a baseline da raiz (`spec.md` / `plan.md`) com o status dos endpoints de eventos e sincronização mobile.
-- [ ] T4.3 — Revisar critérios de sucesso em `spec.md` da spec 014 e validar checklist final.
+- [x] T4.3 — Revisar critérios de sucesso em `spec.md` da spec 014 e validar checklist final.
 
 ## Checklist de fechamento da feature
 
-- [ ] `POST /events` e `GET /events` ativos e testados no backend NestJS
-- [ ] `NewAppointmentWidget` com feedback visual de erro na UI
-- [ ] Payload de evento compatível entre Flutter e NestJS/Prisma
-- [ ] Testes automatizados do backend e mobile passando sem regressões
-- [ ] Baseline e backlog devidamente sincronizados
+- [x] `POST /events` e `GET /events` ativos e testados no backend NestJS
+- [x] `NewAppointmentWidget` com feedback visual de erro na UI
+- [x] Payload de evento compatível entre Flutter e NestJS/Prisma
+- [x] Testes automatizados do backend e mobile passando sem regressões
+- [x] Baseline e backlog devidamente sincronizados
