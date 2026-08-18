@@ -7,10 +7,10 @@ Investigar e corrigir a falha em que a criação e sincronização de novos comp
 ## Por quê
 
 - **Impacto alto (bug crítico/agenda)**: A agenda de eventos é a funcionalidade central do My Roadie. A incapacidade de criar compromissos em um aparelho físico inviabiliza o uso em campo por músicos e roadies.
-- **Diagnóstico preliminar**:
-  1. **Rotas de Eventos no Backend desabilitadas**: No arquivo `backend/src/modules/events/events.controller.ts`, todos os endpoints (`@Post`, `@Get`, etc.) estão comentados, resultando em respostas `404 Not Found` para qualquer requisição enviada a `/events`.
-  2. **Tratamento silencioso de erros na UI (`NewAppointmentWidget`)**: O bloco `catch (e)` ao submeter o formulário de novo compromisso engole qualquer exceção sem exibir mensagens (como SnackBar de erro ou indicação visual), dando a falsa impressão de travamento ou inoperância silenciosa.
-  3. **Discrepância de Payload (`EventModel.toMap` vs `CreateEventDto`)**: O `EventModel.toMap()` envia campos como `id` gerado localmente, enquanto o backend NestJS com `ValidationPipe(forbidNonWhitelisted: true)` e schema Prisma espera que o `id` seja gerado pelo banco de dados ou tratado via DTO validado.
+- **Diagnóstico preliminar & Validação (Fase 0)**:
+  1. **Rotas de Eventos no Backend desabilitadas (Erro 404)**: No arquivo `backend/src/modules/events/events.controller.ts`, todos os endpoints (`@Post`, `@Get`, etc.) estão comentados, resultando em respostas `404 Not Found` (`{"message": "Cannot POST /events", "error": "Not Found", "statusCode": 404}`) para qualquer requisição enviada a `/events`.
+  2. **Rejeição por Validação Global (Erro 400)**: Em `backend/src/main.ts`, o `ValidationPipe` está configurado com `whitelist: true` e `forbidNonWhitelisted: true`. O envio de campos não declarados no DTO (como o `id` gerado pelo cliente em `EventModel.toMap()`) é imediatamente rejeitado com `400 Bad Request` (`{"message": ["property id should not exist"], "error": "Bad Request", "statusCode": 400}`).
+  3. **Tratamento silencioso de erros na UI (`NewAppointmentWidget`)**: O bloco `catch (e)` ao submeter o formulário de novo compromisso engole qualquer exceção sem exibir mensagens (como SnackBar de erro ou indicação visual), dando a falsa impressão de travamento ou inoperância silenciosa.
   4. **Configuração de Rede em Dispositivos Físicos**: Em dispositivos físicos Android/iOS, `localhost` e `10.0.2.2` não alcançam o backend na máquina de desenvolvimento sem `--dart-define=BACKEND_URL` ou comando de proxy `adb reverse tcp:3000 tcp:3000`.
 
 ## Escopo

@@ -5,7 +5,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 ## Fase 0 — Diagnóstico & Validação Prévia
 
 - [x] T0.1 — Inspecionar `backend/src/modules/events/` e mapear campos necessários do schema Prisma (`prisma/schema.prisma`) para eventos.
-- [ ] T0.2 — Confirmar o comportamento da rota `POST /events` atual e testar a reprodução do erro 404 / 400.
+- [x] T0.2 — Confirmar o comportamento da rota `POST /events` atual e testar a reprodução do erro 404 / 400.
 - [ ] T0.3 — Inspecionar o fluxo de chamada de `NewAppointmentWidget` -> `AgendaController.addOrUpdateEvent` -> `AgendaRepositoryImpl` -> `RemoteDataSource.saveEvent`.
 
 ## Fase 1 — Backend: Habilitar e Estruturar Módulo de Eventos
