@@ -1,5 +1,6 @@
 import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // Para formatar a data
@@ -441,12 +442,16 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                       if (context.mounted) {
                                         Navigator.of(context).pop();
                                       }
-                                    } catch (e) {
+                                    } catch (error, stackTrace) {
+                                      debugPrint(
+                                        'Erro ao salvar compromisso: $error',
+                                      );
+                                      debugPrintStack(stackTrace: stackTrace);
                                       if (context.mounted) {
                                         setState(() {
                                           _isLoading = false;
                                         });
-                                        final rawMessage = e
+                                        final rawMessage = error
                                             .toString()
                                             .replaceFirst('Exception: ', '')
                                             .trim();
@@ -455,7 +460,13 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                             : 'Erro ao salvar compromisso. Tente novamente.';
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text(message),
+                                            behavior: SnackBarBehavior.floating,
+                                            duration: const Duration(seconds: 15),
+                                            content: Text(
+                                              'Erro ao salvar compromisso:\n$message',
+                                              maxLines: 6,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                             backgroundColor: AppColors.erro,
                                           ),
                                         );
