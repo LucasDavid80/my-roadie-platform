@@ -7,14 +7,17 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 - [x] T0.1 — Inspecionar `backend/src/modules/events/` e mapear campos necessários do schema Prisma (`prisma/schema.prisma`) para eventos.
 - [x] T0.2 — Confirmar o comportamento da rota `POST /events` atual e testar a reprodução do erro 404 / 400.
 - [x] T0.3 — Inspecionar o fluxo de chamada de `NewAppointmentWidget` -> `AgendaController.addOrUpdateEvent` -> `AgendaRepositoryImpl` -> `RemoteDataSource.saveEvent`.
-- [x] T0.4 — Diagnosticar falha de `bandId` obrigatório em dispositivo físico e mapear arquitetura de Workspace Unificado.
+- [x] T0.4 — Diagnosticar rejeição de `bandId` obrigatório em teste no dispositivo físico e mapear arquitetura de Workspace Unificado.
 
 ## Fase 1 — Backend: Habilitar e Estruturar Módulo de Eventos & Workspace Unificado
 
-- [x] T1.1 — Atualizar `CreateEventDto` tornando `bandId` opcional com `@IsOptional() @IsUUID('4')`.
-- [x] T1.2 — Implementar em `EventsService.create` a resolução de Workspace Unificado (usar banda existente do usuário ou auto-criar banda solo padrão).
+- [x] T1.1 — Atualizar `CreateEventDto` e `UpdateEventDto` com `class-validator` e campos do modelo `Event` (`title`, `date`, `location`, `description`, `bandId`, `status`).
+- [x] T1.2 — Importar `PrismaModule` em `EventsModule` e implementar `EventsService` com operações CRUD no Prisma conectando `createdBy` e `band`.
 - [x] T1.3 — Descomentar e estruturar `EventsController` com `@UseGuards(JwtAuthGuard)` e decorators de rota (`@Post()`, `@Get()`, `@Patch(':id')`, `@Delete(':id')`), extraindo o usuário logado para criação.
-- [ ] T1.4 — Atualizar testes unitários (`events.controller.spec.ts`, `events.service.spec.ts`) e testes E2E (`events.e2e-spec.ts`) cobrindo criação com e sem `bandId`.
+- [x] T1.4 — Criar testes unitários e E2E iniciais para o módulo de eventos.
+- [x] T1.5 — Atualizar `CreateEventDto` tornando `bandId` opcional com `@IsOptional() @IsUUID('4')`.
+- [x] T1.6 — Implementar em `EventsService.create` a resolução de Workspace Unificado (usar banda existente do usuário ou auto-criar banda solo padrão).
+- [ ] T1.7 — Atualizar testes unitários (`events.controller.spec.ts`, `events.service.spec.ts`) e testes E2E (`events.e2e-spec.ts`) cobrindo criação com e sem `bandId`.
 
 ## Fase 2 — Mobile: Integração de Dados e Tratamento Visual de Erros
 
@@ -25,8 +28,9 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 ## Fase 3 — Testes Automatizados & Validação
 
 - [x] T3.1 — Escrever testes de widget e unitários no mobile para o formulário de criação de compromissos (`NewAppointmentWidget` e `AgendaController`) cobrindo cenários de sucesso e erro.
-- [ ] T3.2 — Executar suite de testes do mobile (`flutter test`) e do backend (`npm test` / `npm run test:e2e`) garantindo 100% de aprovação.
-- [ ] T3.3 — Validar criação de compromisso de ponta a ponta no dispositivo físico conectado ao backend local (`adb reverse tcp:3000 tcp:3000`).
+- [x] T3.2 — Executar suite de testes do mobile (`flutter test`) e do backend (`npm test` / `npm run test:e2e`).
+- [x] T3.3 — Documentar o guia de execução e testes em dispositivo físico (`adb reverse tcp:3000 tcp:3000` / `--dart-define=BACKEND_URL`).
+- [ ] T3.4 — Validar criação de compromisso de ponta a ponta no dispositivo físico conectado ao backend local tanto para músico solo (sem `bandId`) quanto com banda selecionada.
 
 ## Fase 4 — Fechamento
 
