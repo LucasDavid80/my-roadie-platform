@@ -24,11 +24,67 @@ void main() {
 
     // Clica no botão de confirmar (Criar Compromisso)
     final confirmButton = find.text('Criar Compromisso');
-    await tester.tap(confirmButton, warnIfMissed: false);
-    await tester.pump();
+    await tester.ensureVisible(confirmButton);
+    await tester.tap(confirmButton);
+    await tester.pumpAndSettle();
 
-    // Como o título está vazio, o onConfirm não deve ser chamado
+    // Como o título está vazio, o onConfirm não deve ser chamado e o SnackBar deve ser exibido
     expect(confirmed, isFalse);
+    expect(find.text('Por favor, preencha o título e selecione uma data.'), findsOneWidget);
+  });
+
+  testWidgets('Should show error SnackBar and keep form open with input data when onConfirm throws exception', (WidgetTester tester) async {
+    final existingEvent = EventEntity(
+      id: '123',
+      title: 'Show Antigo',
+      type: 'Ensaio',
+      date: DateTime(2026, 5, 25),
+      startTime: '14:00',
+      endTime: '16:00',
+      location: 'Estúdio X',
+      fee: 200.0,
+      notes: 'Levar cabos',
+    );
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  child: NewAppointmentWidget(
+                    event: existingEvent,
+                    onConfirm: (e) async {
+                      throw Exception('Banda não encontrada');
+                    },
+                  ),
+                ),
+              );
+            },
+            child: const Text('Open Modal'),
+          ),
+        ),
+      ),
+    ));
+
+    // Opens dialog
+    await tester.tap(find.text('Open Modal'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NewAppointmentWidget), findsOneWidget);
+
+    // Click 'Salvar Alterações'
+    final saveButton = find.text('Salvar Alterações');
+    await tester.ensureVisible(saveButton);
+    await tester.tap(saveButton);
+    await tester.pumpAndSettle();
+
+    // O SnackBar com o erro deve ser exibido, o modal permanece aberto e os dados persistem no formulário
+    expect(find.text('Banda não encontrada'), findsOneWidget);
+    expect(find.byType(NewAppointmentWidget), findsOneWidget);
+    expect(find.text('Show Antigo'), findsOneWidget);
   });
 
   testWidgets('Should call onConfirm and close modal on confirm when editing (T2.1)', (WidgetTester tester) async {
