@@ -42,6 +42,14 @@ describe('EventsController (e2e)', () => {
           if (where.id === mockBandId) return Promise.resolve(mockBand);
           return Promise.resolve(null);
         }),
+      create: jest
+        .fn()
+        .mockImplementation(({ data }: { data: { name: string } }) =>
+          Promise.resolve({ id: 'auto-band-uuid', name: data.name }),
+        ),
+    },
+    user: {
+      findUnique: jest.fn().mockResolvedValue({ name: 'Admin User' }),
     },
     bandMember: {
       findFirst: jest
@@ -208,6 +216,21 @@ describe('EventsController (e2e)', () => {
             id: 'tentativa-id-cliente',
           })
           .expect(400);
+      });
+
+      it('deve retornar 201 ao criar um evento sem bandId (resolução automática de workspace)', () => {
+        return request(app.getHttpServer())
+          .post('/events')
+          .send({
+            title: 'Show Solo',
+            date: '2026-10-15T20:00:00.000Z',
+            location: 'Auditório',
+          })
+          .expect(201)
+          .expect((res) => {
+            const body = res.body as { id: string; title: string };
+            expect(body).toHaveProperty('id', mockEventId);
+          });
       });
     });
 

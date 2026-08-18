@@ -17,7 +17,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 - [x] T1.4 — Criar testes unitários e E2E iniciais para o módulo de eventos.
 - [x] T1.5 — Atualizar `CreateEventDto` tornando `bandId` opcional com `@IsOptional() @IsUUID('4')`.
 - [x] T1.6 — Implementar em `EventsService.create` a resolução de Workspace Unificado (usar banda existente do usuário ou auto-criar banda solo padrão).
-- [ ] T1.7 — Atualizar testes unitários (`events.controller.spec.ts`, `events.service.spec.ts`) e testes E2E (`events.e2e-spec.ts`) cobrindo criação com e sem `bandId`.
+- [x] T1.7 — Atualizar testes unitários (`events.controller.spec.ts`, `events.service.spec.ts`) e testes E2E (`events.e2e-spec.ts`) cobrindo criação com e sem `bandId`.
 
 ## Fase 2 — Mobile: Integração de Dados e Tratamento Visual de Erros
 

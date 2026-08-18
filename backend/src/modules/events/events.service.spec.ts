@@ -64,6 +64,12 @@ describe('EventsService', () => {
           useValue: {
             band: {
               findUnique: jest.fn().mockResolvedValue(mockBand),
+              create: jest.fn().mockResolvedValue(mockBand),
+            },
+            user: {
+              findUnique: jest
+                .fn()
+                .mockResolvedValue({ name: 'Lucas Musician' }),
             },
             event: {
               create: jest.fn().mockResolvedValue(mockEvent),
@@ -162,6 +168,98 @@ describe('EventsService', () => {
       await expect(service.create(dto, mockUser)).rejects.toThrow(
         NotFoundException,
       );
+    });
+
+    it('deve criar evento associando à primeira banda do usuário quando bandId não for informado e o usuário possuir banda', async () => {
+      jest
+        .spyOn(bandAccessService, 'getUserBandIds')
+        .mockResolvedValueOnce(['band-uuid-1']);
+
+      const dto: CreateEventDto = {
+        title: 'Show Solo com Banda Pré-existente',
+        date: '2026-10-15T20:00:00.000Z',
+        location: 'Auditório',
+      };
+
+      const result = await service.create(dto, mockUser);
+
+      expect(bandAccessService.getUserBandIds).toHaveBeenCalledWith(
+        mockUser.userId,
+      );
+      expect(prisma.event.create).toHaveBeenCalledWith({
+        data: {
+          title: dto.title,
+          date: new Date(dto.date),
+          location: dto.location,
+          description: undefined,
+          status: EventStatus.PENDING,
+          bandId: 'band-uuid-1',
+          createdById: mockUser.userId,
+        },
+        include: {
+          tasks: true,
+        },
+      });
+      expect(result).toEqual(mockEvent);
+    });
+
+    it('deve auto-provisionar nova banda solo padrão e criar evento quando bandId não for informado e o usuário não tiver banda', async () => {
+      jest
+        .spyOn(bandAccessService, 'getUserBandIds')
+        .mockResolvedValueOnce([]);
+
+      const autoCreatedBand = {
+        id: 'band-auto-created-uuid',
+        name: 'Projeto Solo - Lucas Musician',
+      };
+
+      jest
+        .spyOn(prisma.user, 'findUnique')
+        .mockResolvedValueOnce({ name: 'Lucas Musician' } as any);
+      jest
+        .spyOn(prisma.band, 'create')
+        .mockResolvedValueOnce(autoCreatedBand as any);
+
+      const dto: CreateEventDto = {
+        title: 'Primeiro Show Solo',
+        date: '2026-10-15T20:00:00.000Z',
+        location: 'Teatro Municipal',
+      };
+
+      const result = await service.create(dto, mockUser);
+
+      expect(bandAccessService.getUserBandIds).toHaveBeenCalledWith(
+        mockUser.userId,
+      );
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { id: mockUser.userId },
+        select: { name: true },
+      });
+      expect(prisma.band.create).toHaveBeenCalledWith({
+        data: {
+          name: 'Projeto Solo - Lucas Musician',
+          members: {
+            create: {
+              userId: mockUser.userId,
+            },
+          },
+        },
+      });
+      expect(prisma.event.create).toHaveBeenCalledWith({
+        data: {
+          title: dto.title,
+          date: new Date(dto.date),
+          location: dto.location,
+          description: undefined,
+          status: EventStatus.PENDING,
+          bandId: 'band-auto-created-uuid',
+          createdById: mockUser.userId,
+        },
+        include: {
+          tasks: true,
+        },
+      });
+      expect(result).toEqual(mockEvent);
     });
   });
 
