@@ -12,20 +12,38 @@ class EventModel extends EventEntity {
     required super.location,
     required super.fee,
     super.notes,
+    super.bandId,
   });
 
-  // Aqui entra a mágica para o Banco Local / Firebase
+  // Converte a partir da resposta da API ou banco local
   factory EventModel.fromMap(Map<String, dynamic> map) {
+    DateTime parsedDate;
+    if (map['date'] != null) {
+      parsedDate = DateTime.tryParse(map['date'].toString()) ?? DateTime.now();
+    } else {
+      parsedDate = DateTime.now();
+    }
+
+    double parsedFee = 0.0;
+    if (map['fee'] != null) {
+      if (map['fee'] is num) {
+        parsedFee = (map['fee'] as num).toDouble();
+      } else {
+        parsedFee = double.tryParse(map['fee'].toString()) ?? 0.0;
+      }
+    }
+
     return EventModel(
-      id: map['id'] ?? '',
-      title: map['title'] ?? '',
-      type: map['type'] ?? '',
-      date: DateTime.parse(map['date']),
-      startTime: map['startTime'] ?? '',
-      endTime: map['endTime'] ?? '',
-      location: map['location'] ?? '',
-      fee: (map['fee'] as num).toDouble(),
-      notes: map['notes'] ?? '',
+      id: map['id']?.toString() ?? '',
+      title: map['title']?.toString() ?? '',
+      type: map['type']?.toString() ?? 'Show',
+      date: parsedDate,
+      startTime: map['startTime']?.toString() ?? '',
+      endTime: map['endTime']?.toString() ?? '',
+      location: map['location']?.toString() ?? '',
+      fee: parsedFee,
+      notes: map['notes']?.toString() ?? map['description']?.toString() ?? '',
+      bandId: map['bandId']?.toString(),
     );
   }
 
@@ -40,6 +58,23 @@ class EventModel extends EventEntity {
       'location': location,
       'fee': fee,
       'notes': notes,
+      if (bandId != null) 'bandId': bandId,
     };
+  }
+
+  /// Gera o payload sanitizado para criação no backend (removendo id gerado pelo cliente)
+  Map<String, dynamic> toCreatePayload() {
+    final payload = <String, dynamic>{
+      'title': title,
+      'date': date.toIso8601String(),
+      'location': location,
+    };
+    if (notes.isNotEmpty) {
+      payload['description'] = notes;
+    }
+    if (bandId != null && bandId!.isNotEmpty) {
+      payload['bandId'] = bandId;
+    }
+    return payload;
   }
 }

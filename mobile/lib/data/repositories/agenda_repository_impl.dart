@@ -26,6 +26,7 @@ class AgendaRepositoryImpl implements IAgendaRepository {
       location: event.location,
       fee: event.fee,
       notes: event.notes,
+      bandId: event.bandId,
     );
     final savedModel = await remoteDataSource.saveEvent(model);
     return savedModel ?? event;

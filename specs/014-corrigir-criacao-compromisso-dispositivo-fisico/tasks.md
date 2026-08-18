@@ -17,7 +17,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 ## Fase 2 — Mobile: Integração de Dados e Tratamento Visual de Erros
 
-- [ ] T2.1 — Ajustar `RemoteDataSource.saveEvent` para enviar payload sanitizado (removendo `id` temporário no caso de criação e convertendo tipos de forma compatível).
+- [x] T2.1 — Ajustar `RemoteDataSource.saveEvent` para enviar payload sanitizado (removendo `id` temporário no caso de criação e convertendo tipos de forma compatível).
 - [ ] T2.2 — Adicionar tratamento visual de erro (ex.: `ScaffoldMessenger.of(context).showSnackBar`) em `NewAppointmentWidget` para exibir mensagens de erro amigáveis ao usuário quando a requisição falhar.
 - [ ] T2.3 — Assegurar que `AgendaController.addOrUpdateEvent` trate o retorno do backend e atualize a lista de eventos com a entidade persistida.
 
