@@ -25,7 +25,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 - [x] T3.1 — Escrever testes de widget e unitários no mobile para o formulário de criação de compromissos (`NewAppointmentWidget` e `AgendaController`) cobrindo cenários de sucesso e erro.
 - [x] T3.2 — Executar suite de testes do mobile (`flutter test`) e do backend (`npm test` / `npm run test:e2e`) garantindo 100% de aprovação.
-- [ ] T3.3 — Documentar o guia de execução e testes em dispositivo físico (`adb reverse tcp:3000 tcp:3000` / `--dart-define=BACKEND_URL`).
+- [x] T3.3 — Documentar o guia de execução e testes em dispositivo físico (`adb reverse tcp:3000 tcp:3000` / `--dart-define=BACKEND_URL`).
 
 ## Fase 4 — Fechamento
 
