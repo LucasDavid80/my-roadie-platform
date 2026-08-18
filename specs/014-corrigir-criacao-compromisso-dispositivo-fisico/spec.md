@@ -10,7 +10,11 @@ Investigar e corrigir a falha em que a criação e sincronização de novos comp
 - **Diagnóstico preliminar & Validação (Fase 0)**:
   1. **Rotas de Eventos no Backend desabilitadas (Erro 404)**: No arquivo `backend/src/modules/events/events.controller.ts`, todos os endpoints (`@Post`, `@Get`, etc.) estão comentados, resultando em respostas `404 Not Found` (`{"message": "Cannot POST /events", "error": "Not Found", "statusCode": 404}`) para qualquer requisição enviada a `/events`.
   2. **Rejeição por Validação Global (Erro 400)**: Em `backend/src/main.ts`, o `ValidationPipe` está configurado com `whitelist: true` e `forbidNonWhitelisted: true`. O envio de campos não declarados no DTO (como o `id` gerado pelo cliente em `EventModel.toMap()`) é imediatamente rejeitado com `400 Bad Request` (`{"message": ["property id should not exist"], "error": "Bad Request", "statusCode": 400}`).
-  3. **Tratamento silencioso de erros na UI (`NewAppointmentWidget`)**: O bloco `catch (e)` ao submeter o formulário de novo compromisso engole qualquer exceção sem exibir mensagens (como SnackBar de erro ou indicação visual), dando a falsa impressão de travamento ou inoperância silenciosa.
+  3. **Fluxo Mobile e Tratamento Silencioso de Exceções**: A cadeia de chamadas mobile é composta por:
+     - `NewAppointmentWidget` -> gera `newEvent` com `id: DateTime.now().toString()`, chama `widget.onConfirm(newEvent)` e possui um bloco `catch (e) {}` vazio que descarta silenciosamente qualquer exceção sem emitir `SnackBar` ou indicação visual;
+     - `AgendaController.addOrUpdateEvent` -> chama `_repository.saveEvent(event)` e propaga via `rethrow`;
+     - `AgendaRepositoryImpl.saveEvent` -> converte `EventEntity` em `EventModel` e chama `RemoteDataSource.saveEvent(model)`;
+     - `RemoteDataSource.saveEvent` -> serializa `event.toMap()` (enviando `id`) via `POST /events` com headers autenticados e lança `UnauthorizedException`, `ServerException` ou `NetworkException` quando o status difere de 200/201.
   4. **Configuração de Rede em Dispositivos Físicos**: Em dispositivos físicos Android/iOS, `localhost` e `10.0.2.2` não alcançam o backend na máquina de desenvolvimento sem `--dart-define=BACKEND_URL` ou comando de proxy `adb reverse tcp:3000 tcp:3000`.
 
 ## Escopo
