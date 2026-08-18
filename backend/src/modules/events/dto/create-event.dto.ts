@@ -26,8 +26,8 @@ export class CreateEventDto {
   description?: string;
 
   @IsUUID('4', { message: 'O bandId deve ser um UUID válido' })
-  @IsNotEmpty({ message: 'O bandId é obrigatório' })
-  bandId!: string;
+  @IsOptional()
+  bandId?: string;
 
   @IsEnum(EventStatus, {
     message:
