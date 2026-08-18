@@ -169,4 +169,144 @@ void main() {
     expect(find.text('Levar cabos'), findsOneWidget);
     expect(find.text('Ensaio'), findsOneWidget);
   });
+
+  testWidgets('Should create new event with full data, call onConfirm and close modal (T3.1 positive)', (WidgetTester tester) async {
+    bool confirmed = false;
+    EventEntity? createdEvent;
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  child: NewAppointmentWidget(
+                    onConfirm: (e) async {
+                      confirmed = true;
+                      createdEvent = e;
+                    },
+                  ),
+                ),
+              );
+            },
+            child: const Text('Open Modal'),
+          ),
+        ),
+      ),
+    ));
+
+    // Opens dialog
+    await tester.tap(find.text('Open Modal'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NewAppointmentWidget), findsOneWidget);
+    expect(find.text('Novo Compromisso'), findsOneWidget);
+
+    // Fill Title
+    await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Show no Parque');
+
+    // Pick Date
+    await tester.tap(find.text('Selecionar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    // Fill Location, Fee and Notes
+    await tester.enterText(find.widgetWithText(TextField, 'Endereço...'), 'Parque Ibirapuera');
+    await tester.enterText(find.widgetWithText(TextField, '0,00'), '1500,50');
+    await tester.enterText(find.widgetWithText(TextField, 'Anotações, setlist...'), 'Setlist de Rock');
+
+    // Click 'Criar Compromisso'
+    final createButton = find.text('Criar Compromisso');
+    await tester.ensureVisible(createButton);
+    await tester.tap(createButton);
+    await tester.pumpAndSettle();
+
+    expect(confirmed, isTrue);
+    expect(createdEvent, isNotNull);
+    expect(createdEvent!.title, 'Show no Parque');
+    expect(createdEvent!.location, 'Parque Ibirapuera');
+    expect(createdEvent!.fee, 1500.50);
+    expect(createdEvent!.notes, 'Setlist de Rock');
+    expect(createdEvent!.type, 'Show');
+    expect(createdEvent!.id.isNotEmpty, isTrue);
+    expect(find.byType(NewAppointmentWidget), findsNothing);
+  });
+
+  testWidgets('Should show validation error if title is filled but date is not selected (T3.1 validation)', (WidgetTester tester) async {
+    bool confirmed = false;
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          onConfirm: (e) async {
+            confirmed = true;
+          },
+        ),
+      ),
+    ));
+
+    // Fill Title only (no date selected)
+    await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Show Sem Data');
+
+    final createButton = find.text('Criar Compromisso');
+    await tester.ensureVisible(createButton);
+    await tester.tap(createButton);
+    await tester.pumpAndSettle();
+
+    expect(confirmed, isFalse);
+    expect(find.text('Por favor, preencha o título e selecione uma data.'), findsOneWidget);
+  });
+
+  testWidgets('Should show error SnackBar and preserve form input when creating new appointment fails (T3.1 error)', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  child: NewAppointmentWidget(
+                    onConfirm: (e) async {
+                      throw Exception('Falha de conexão com o servidor');
+                    },
+                  ),
+                ),
+              );
+            },
+            child: const Text('Open Modal'),
+          ),
+        ),
+      ),
+    ));
+
+    // Opens dialog
+    await tester.tap(find.text('Open Modal'));
+    await tester.pumpAndSettle();
+
+    // Fill fields
+    await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Show Festival');
+    await tester.tap(find.text('Selecionar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.widgetWithText(TextField, 'Endereço...'), 'Arena Show');
+    await tester.enterText(find.widgetWithText(TextField, '0,00'), '800,00');
+
+    // Click 'Criar Compromisso'
+    final createButton = find.text('Criar Compromisso');
+    await tester.ensureVisible(createButton);
+    await tester.tap(createButton);
+    await tester.pumpAndSettle();
+
+    // Verify error message and form state
+    expect(find.text('Falha de conexão com o servidor'), findsOneWidget);
+    expect(find.byType(NewAppointmentWidget), findsOneWidget);
+    expect(find.text('Show Festival'), findsOneWidget);
+    expect(find.text('Arena Show'), findsOneWidget);
+  });
 }
