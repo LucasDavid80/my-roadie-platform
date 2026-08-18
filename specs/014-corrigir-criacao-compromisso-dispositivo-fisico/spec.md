@@ -16,11 +16,12 @@ Investigar e corrigir a falha em que a criação e sincronização de novos comp
 ## Escopo
 
 1. **Backend (`backend/`)**:
-   - Ativar e estruturar o módulo `events` (`EventsController`, `EventsService`) com validação DTO (`CreateEventDto`, `UpdateEventDto`) e testes unitários/E2E.
-   - Garantir compatibilidade com `ValidationPipe` e persistência no PostgreSQL via Prisma.
-   - Vincular eventos ao usuário autenticado (`User.id` / `Band`).
+   - Ativar e estruturar o módulo `events` (`EventsController`, `EventsService`, `EventsModule` importando `PrismaModule`) com validação DTO (`CreateEventDto`, `UpdateEventDto`) e testes unitários/E2E.
+   - Campos do modelo `Event` no Prisma a serem suportados: `title` (String), `date` (DateTime), `location` (String), `description` (String?), `bandId` (UUID de `Band`), `createdById` (UUID de `User` via JWT), `status` (`EventStatus`: `PENDING`, `CONFIRMED`, `FINISHED`, `CANCELLED`).
+   - Garantir compatibilidade com `ValidationPipe` (`whitelist: true`, `forbidNonWhitelisted: true`) e persistência no PostgreSQL via Prisma.
+   - Vincular eventos automaticamente ao usuário autenticado (`createdById` via `@CurrentUser()` / `req.user.id`) e à banda selecionada (`bandId`).
 2. **Mobile (`mobile/`)**:
-   - Ajustar `RemoteDataSource` e `EventModel` para sanitizar payloads de criação/atualização (não enviar `id` provisório na criação se for autogerado).
+   - Ajustar `RemoteDataSource` e `EventModel` para sanitizar payloads de criação/atualização (não enviar `id` autogerado na criação e incluir `bandId`).
    - Adicionar tratamento visual explícito de erro no formulário `NewAppointmentWidget` e na tela `PrincipalScreen` (SnackBar informativo de erro de rede, validação ou não autorização).
    - Documentar e validar a instrução de conexão para dispositivos físicos (`adb reverse` ou `--dart-define=BACKEND_URL`).
 3. **Testes**:

@@ -10,9 +10,9 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 ## Fase 1 — Backend: Habilitar e Estruturar Módulo de Eventos
 
-- [ ] T1.1 — Atualizar `CreateEventDto` e `UpdateEventDto` com `class-validator` e campos do modelo `Event`.
-- [ ] T1.2 — Implementar `EventsService` com operações CRUD no Prisma (`create`, `findAll`, `findOne`, `update`, `remove`).
-- [ ] T1.3 — Descomentar e estruturar `EventsController` com `@UseGuards(JwtAuthGuard)` e decorators de rota (`@Post()`, `@Get()`, `@Patch(':id')`, `@Delete(':id')`).
+- [ ] T1.1 — Atualizar `CreateEventDto` e `UpdateEventDto` com `class-validator` e campos do modelo `Event` (`title`, `date`, `location`, `description`, `bandId`, `status`).
+- [ ] T1.2 — Importar `PrismaModule` em `EventsModule` e implementar `EventsService` com operações CRUD no Prisma conectando `createdBy` (via `createdById`) e `band`.
+- [ ] T1.3 — Descomentar e estruturar `EventsController` com `@UseGuards(JwtAuthGuard)` e decorators de rota (`@Post()`, `@Get()`, `@Patch(':id')`, `@Delete(':id')`), extraindo o usuário logado para criação.
 - [ ] T1.4 — Criar/atualizar testes unitários (`events.controller.spec.ts`, `events.service.spec.ts`) e testes E2E para o módulo de eventos.
 
 ## Fase 2 — Mobile: Integração de Dados e Tratamento Visual de Erros

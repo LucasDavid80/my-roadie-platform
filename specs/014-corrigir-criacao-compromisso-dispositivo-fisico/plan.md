@@ -33,12 +33,26 @@ O fluxo de criação de compromissos no app mobile falha silenciosamente quando 
 
 ## Arquitetura & Modificações Técnicas
 
+### Mapeamento de Campos e Contratos (Prisma ⇄ Backend DTO ⇄ Mobile)
+
+| Campo Prisma | Tipo Prisma | CreateEventDto | Mobile EventModel | Observações |
+| :--- | :--- | :--- | :--- | :--- |
+| `id` | `String (UUID)` | *Omitido no POST* | *Omitido no POST* | Gerado automaticamente pelo Prisma |
+| `title` | `String` | `@IsString() @IsNotEmpty()` | `String` | Título do compromisso / evento |
+| `date` | `DateTime` | `@IsDateString()` | `DateTime (ISO 8601)` | Data/hora do evento |
+| `location` | `String` | `@IsString() @IsNotEmpty()` | `String` | Local do evento |
+| `description` | `String?` | `@IsOptional() @IsString()` | `String? (notes)` | Descrição / anotações |
+| `bandId` | `String (UUID)` | `@IsUUID() @IsNotEmpty()` | `String` | FK da banda relacionada |
+| `status` | `EventStatus` | `@IsOptional() @IsEnum(EventStatus)` | *Default PENDING* | Status do compromisso |
+| `createdById` | `String (UUID)` | *Injetado via JWT no Service* | *Via Bearer Token* | Extraído do usuário autenticado |
+
 ### Backend (`backend/`)
-- `src/modules/events/dto/create-event.dto.ts`: Definir campos com decoradores do `class-validator`.
+- `src/modules/events/events.module.ts`: Importar `PrismaModule` para prover `PrismaService`.
+- `src/modules/events/dto/create-event.dto.ts`: Definir campos com decoradores do `class-validator` (`title`, `date`, `location`, `description`, `bandId`, `status`).
 - `src/modules/events/dto/update-event.dto.ts`: Usar `PartialType(CreateEventDto)`.
-- `src/modules/events/events.controller.ts`: Descomentar e proteger rotas com `JwtAuthGuard`.
-- `src/modules/events/events.service.ts`: Implementar métodos CRUD interagindo com `prisma.event`.
-- `src/modules/events/events.controller.spec.ts` & `events.service.spec.ts`: Cobertura de testes unitários.
+- `src/modules/events/events.controller.ts`: Descomentar e proteger rotas com `@UseGuards(JwtAuthGuard)` e injetar usuário autenticado via decorator.
+- `src/modules/events/events.service.ts`: Injetar `PrismaService` e implementar métodos CRUD interagindo com `prisma.event`, conectando `createdBy` e `band`.
+- `src/modules/events/events.controller.spec.ts` & `events.service.spec.ts`: Cobertura de testes unitários com mock do `PrismaService`.
 - `test/events.e2e-spec.ts`: Testes ponta a ponta das rotas de eventos.
 
 ### Mobile (`mobile/`)
