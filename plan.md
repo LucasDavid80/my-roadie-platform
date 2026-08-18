@@ -17,9 +17,9 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`, `transactions`, `band-access`).
 - Persistência: Prisma Client sobre Postgres (Supabase). `DATABASE_URL` via env.
 - Fluxo de schema: editar `prisma/schema.prisma` → migration → `npx prisma generate` → atualizar `docs/database/erd.md`.
-- Autenticação e Autorização: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts` com suporte dinâmico a ES256 via JWKS do Supabase e HS256 em dev local), guards (`JwtAuthGuard` com logs detalhados e exceções descritivas como `TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`, `OwnershipGuard`) e `BandAccessService` (`getUserBandIds`, `assertMembership`) para verificação de pertencimento via `BandMember` nos módulos de `tasks`, `repertoire` e `transactions` (Spec 011, Spec 012).
+- Autenticação e Autorização: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts` com suporte dinâmico a ES256 via JWKS do Supabase e HS256 em dev local), guards (`JwtAuthGuard` com logs detalhados e exceções descritivas como `TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`, `OwnershipGuard`) e `BandAccessService` (`getUserBandIds`, `assertMembership`) para verificação de pertencimento via `BandMember` nos módulos de `tasks`, `repertoire` e `transactions` (Spec 011, Spec 012). Módulo `events` autenticado e ativo com `EventsController` e `EventsService` integrados ao Prisma (Spec 014).
 
-**Lacunas de módulos e autorização por banda zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e com autorização por banda fechada via `BandAccessService` (spec 011).
+**Lacunas de módulos e autorização por banda zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e com autorização por banda fechada via `BandAccessService` (spec 011); módulo `Event` ativo com endpoints REST completos e testes unitários/E2E (spec 014).
 
 ## 3. Frontend Web
 
@@ -40,6 +40,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - ✅ **Correção de Carregamento e Salvamento do Perfil (`PersonScreen`):** Solucionada causa raiz de erros HTTP 401 Unauthorized com injeção do JWT de sessão do Supabase em `RemoteDataSource._getHeaders()`. `UserNotifier` refatorado para propagar mensagens de erro reais (`errorMessage`) na UI via SnackBar. Adicionados testes unitários, de widget e de integração (`profile_flow_integration_test.dart`) cobrindo o ciclo completo de visualização e edição do perfil (Spec 009).
 - ✅ **Deduplicação de `fetchProfile` e Tratamento Visual de Erros:** `UserNotifier` refatorado com trava de requisição prevenindo execuções síncronas redundantes de `fetchProfile`, com exibição visual de feedbacks de erro da API na UI (Spec 012).
 - ✅ **Rolagem da Agenda sobre o calendário:** `CustomCalendar` configura o `TableCalendar` com `AvailableGestures.horizontalSwipe`, para que o gesto vertical seja tratado pelo `SingleChildScrollView` da `PrincipalScreen`. O teste de widget em `principal_screen_test.dart` confirma que um arraste iniciado sobre o calendário desloca a tela, sem alterar a seleção de dia, os marcadores de eventos ou a navegação mensal (Spec 013).
+- ✅ **Criação de Compromissos e Feedback Visual na UI (`NewAppointmentWidget`):** `RemoteDataSource.saveEvent` sanitiza o payload de criação (removendo `id` local autogerado antes do `POST`), `AgendaController.addOrUpdateEvent` propaga exceções e `NewAppointmentWidget` exibe `SnackBar` com mensagens informativas de erro (rede, validação 400, auth 401 ou servidor 500) mantendo o formulário preenchido para reenvio. Compatibilidade com dispositivos físicos validada via `adb reverse tcp:3000 tcp:3000` ou `--dart-define=BACKEND_URL` (Spec 014).
 
 
 
