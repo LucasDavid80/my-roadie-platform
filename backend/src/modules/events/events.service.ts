@@ -14,20 +14,54 @@ export class EventsService {
   ) {}
 
   async create(createEventDto: CreateEventDto, user: CurrentUserPayload) {
-    await this.bandAccessService.assertMembership(
-      user.userId,
-      user.role,
-      createEventDto.bandId,
-    );
+    let resolvedBandId = createEventDto.bandId;
 
-    const band = await this.prisma.band.findUnique({
-      where: { id: createEventDto.bandId },
-    });
-
-    if (!band) {
-      throw new NotFoundException(
-        `Banda com ID ${createEventDto.bandId} não encontrada`,
+    if (resolvedBandId) {
+      await this.bandAccessService.assertMembership(
+        user.userId,
+        user.role,
+        resolvedBandId,
       );
+
+      const band = await this.prisma.band.findUnique({
+        where: { id: resolvedBandId },
+      });
+
+      if (!band) {
+        throw new NotFoundException(
+          `Banda com ID ${resolvedBandId} não encontrada`,
+        );
+      }
+    } else {
+      const userBandIds = await this.bandAccessService.getUserBandIds(
+        user.userId,
+      );
+
+      if (userBandIds.length > 0) {
+        resolvedBandId = userBandIds[0];
+      } else {
+        const dbUser = await this.prisma.user.findUnique({
+          where: { id: user.userId },
+          select: { name: true },
+        });
+
+        const bandName = dbUser?.name
+          ? `Projeto Solo - ${dbUser.name}`
+          : 'Minha Banda';
+
+        const newBand = await this.prisma.band.create({
+          data: {
+            name: bandName,
+            members: {
+              create: {
+                userId: user.userId,
+              },
+            },
+          },
+        });
+
+        resolvedBandId = newBand.id;
+      }
     }
 
     return await this.prisma.event.create({
@@ -37,7 +71,7 @@ export class EventsService {
         location: createEventDto.location,
         description: createEventDto.description,
         status: createEventDto.status ?? EventStatus.PENDING,
-        bandId: createEventDto.bandId,
+        bandId: resolvedBandId,
         createdById: user.userId,
       },
       include: {

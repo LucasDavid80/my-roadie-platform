@@ -12,7 +12,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 ## Fase 1 — Backend: Habilitar e Estruturar Módulo de Eventos & Workspace Unificado
 
 - [x] T1.1 — Atualizar `CreateEventDto` tornando `bandId` opcional com `@IsOptional() @IsUUID('4')`.
-- [ ] T1.2 — Implementar em `EventsService.create` a resolução de Workspace Unificado (usar banda existente do usuário ou auto-criar banda solo padrão).
+- [x] T1.2 — Implementar em `EventsService.create` a resolução de Workspace Unificado (usar banda existente do usuário ou auto-criar banda solo padrão).
 - [x] T1.3 — Descomentar e estruturar `EventsController` com `@UseGuards(JwtAuthGuard)` e decorators de rota (`@Post()`, `@Get()`, `@Patch(':id')`, `@Delete(':id')`), extraindo o usuário logado para criação.
 - [ ] T1.4 — Atualizar testes unitários (`events.controller.spec.ts`, `events.service.spec.ts`) e testes E2E (`events.e2e-spec.ts`) cobrindo criação com e sem `bandId`.
 
