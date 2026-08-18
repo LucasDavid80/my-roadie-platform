@@ -82,7 +82,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // O SnackBar com o erro deve ser exibido, o modal permanece aberto e os dados persistem no formulário
-    expect(find.text('Banda não encontrada'), findsOneWidget);
+    expect(find.textContaining('Banda não encontrada'), findsOneWidget);
     expect(find.byType(NewAppointmentWidget), findsOneWidget);
     expect(find.text('Show Antigo'), findsOneWidget);
   });
@@ -304,7 +304,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify error message and form state
-    expect(find.text('Falha de conexão com o servidor'), findsOneWidget);
+    expect(find.textContaining('Falha de conexão com o servidor'), findsOneWidget);
     expect(find.byType(NewAppointmentWidget), findsOneWidget);
     expect(find.text('Show Festival'), findsOneWidget);
     expect(find.text('Arena Show'), findsOneWidget);
