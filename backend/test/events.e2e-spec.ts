@@ -24,6 +24,10 @@ describe('EventsController (e2e)', () => {
     id: mockEventId,
     title: 'Show no Festival de Verão',
     date: new Date('2026-10-15T20:00:00.000Z').toISOString(),
+    startTime: '19:30',
+    endTime: '22:00',
+    type: 'Show',
+    fee: 1500,
     location: 'Concha Acústica',
     description: 'Apresentação principal do festival',
     status: 'PENDING',
@@ -95,6 +99,26 @@ describe('EventsController (e2e)', () => {
         title: 'Show Atualizado',
       }),
       delete: jest.fn().mockResolvedValue(mockEvent),
+    },
+    transaction: {
+      create: jest.fn().mockResolvedValue({
+        id: 'tx-uuid-1',
+        description: 'Cachê - Show no Festival de Verão',
+        amount: 1500,
+        type: 'INCOME',
+        date: new Date('2026-10-15T20:00:00.000Z'),
+        bandId: mockBandId,
+        userId: 'user-uuid-1',
+        eventId: mockEventId,
+      }),
+      findFirst: jest.fn().mockResolvedValue(null),
+      update: jest.fn().mockResolvedValue({
+        id: 'tx-uuid-1',
+        description: 'Cachê - Show Atualizado',
+        amount: 2000,
+        type: 'INCOME',
+      }),
+      delete: jest.fn().mockResolvedValue({ id: 'tx-uuid-1' }),
     },
   };
 
@@ -177,12 +201,16 @@ describe('EventsController (e2e)', () => {
     });
 
     describe('POST /events', () => {
-      it('deve retornar 201 ao criar um evento com payload válido', () => {
+      it('deve retornar 201 ao criar um evento com payload válido incluindo horários, tipo e cachê', () => {
         return request(app.getHttpServer())
           .post('/events')
           .send({
             title: 'Show no Festival de Verão',
             date: '2026-10-15T20:00:00.000Z',
+            startTime: '19:30',
+            endTime: '22:00',
+            type: 'Show',
+            fee: 1500,
             location: 'Concha Acústica',
             description: 'Apresentação principal do festival',
             bandId: mockBandId,
@@ -192,6 +220,7 @@ describe('EventsController (e2e)', () => {
             const body = res.body as { id: string; title: string };
             expect(body).toHaveProperty('id', mockEventId);
             expect(body.title).toBe('Show no Festival de Verão');
+            expect(mockPrismaService.transaction.create).toHaveBeenCalled();
           });
       });
 
@@ -280,11 +309,15 @@ describe('EventsController (e2e)', () => {
     });
 
     describe('PATCH /events/:id', () => {
-      it('deve retornar 200 ao atualizar um evento com dados válidos', () => {
+      it('deve retornar 200 ao atualizar um evento com dados válidos incluindo horários e cachê', () => {
         return request(app.getHttpServer())
           .patch(`/events/${mockEventId}`)
           .send({
             title: 'Show Atualizado',
+            startTime: '20:00',
+            endTime: '23:00',
+            type: 'Show',
+            fee: 2000,
           })
           .expect(200)
           .expect((res) => {
