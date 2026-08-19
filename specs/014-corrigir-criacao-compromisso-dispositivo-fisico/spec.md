@@ -49,3 +49,21 @@ Investigar e corrigir a falha em que a criação e sincronização de novos comp
 - [x] Criação de compromisso funciona de ponta a ponta no dispositivo físico conectado ao backend local (via `adb reverse` ou IP configurado).
 - [x] Todos os testes automatizados do backend e mobile passando sem regressões.
 - [x] `backlog.md` atualizado com o status concluído ao finalizar a spec.
+
+## Registro de validação manual em dispositivo físico
+
+- **Status:** validado pelo usuário em 19/08/2026.
+- **Resultado com `bandId` explícito:** criação do compromisso concluída com sucesso.
+- **Resultado sem `bandId`:** criação do compromisso concluída com sucesso, confirmando o fluxo de workspace solo.
+- **Responsável pela validação:** usuário do projeto, em seu próprio dispositivo físico.
+
+### Detalhes opcionais para preenchimento posterior
+
+| Campo | Valor |
+| --- | --- |
+| Modelo do dispositivo | _A preencher_ |
+| Sistema operacional e versão | _A preencher_ |
+| Método de conexão (`adb reverse` ou `BACKEND_URL`) | _A preencher_ |
+| Versão/build do aplicativo | _A preencher_ |
+| Ambiente/URL do backend | _A preencher_ |
+| Observações ou evidências adicionais | _A preencher_ |
