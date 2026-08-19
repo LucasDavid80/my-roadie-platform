@@ -9,13 +9,17 @@ void main() {
   setUpAll(() async {
     await initializeDateFormatting('pt_BR', null);
   });
-  Widget createTestWidget({required List<EventEntity> events}) {
+  Widget createTestWidget({
+    required List<EventEntity> events,
+    Future<void> Function(String)? onDelete,
+  }) {
     return MaterialApp(
       home: Scaffold(
         body: SingleChildScrollView(
           child: CommitmentsWidget(
             commitments: events,
             onConfirm: (e) async {},
+            onDelete: onDelete ?? (id) async {},
           ),
         ),
       ),

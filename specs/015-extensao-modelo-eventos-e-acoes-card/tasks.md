@@ -30,7 +30,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 - [x] T3.2 — Atualizar `CommitmentCard` substituindo o ícone estático por um `IconButton` funcional com modal de confirmação para exclusão de compromisso.
 - [x] T3.3 — Conectar o callback de exclusão em `CommitmentsWidget` e `PrincipalScreen` chamando `AgendaController.deleteEvent(id)` com feedback visual (`SnackBar`).
 - [x] T3.4 — Ajustar o layout horizontal, a renderização dinâmica do campo Cachê (exibido apenas para `Show` e `Gravação`) e o alinhamento centralizado do botão de submissão em `NewAppointmentWidget`.
-- [ ] T3.5 — Atualizar/criar testes unitários e de widget no Flutter (`agenda_controller_test.dart`, `commitment_card_test.dart`, `new_appointment_widget_test.dart`).
+- [x] T3.5 — Atualizar/criar testes unitários e de widget no Flutter (`agenda_controller_test.dart`, `commitment_card_test.dart`, `new_appointment_widget_test.dart`).
 
 ## Fase 4 — Validação Integrada & Testes Automatizados
 

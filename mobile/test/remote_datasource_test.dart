@@ -147,12 +147,14 @@ void main() {
       expect(result?.notes, 'Trazer cabos');
       expect(result?.bandId, 'band-uuid-1');
 
-      // Verifica sanitização do payload (sem 'id', 'fee', 'type', 'startTime', 'endTime')
+      // Verifica sanitização do payload (sem 'id', mas com fee, type, startTime, endTime)
       expect(capturedBody, isNotNull);
       final dynamic decodedPayload = jsonDecode(capturedBody!);
       expect(decodedPayload['id'], isNull);
-      expect(decodedPayload['fee'], isNull);
-      expect(decodedPayload['type'], isNull);
+      expect(decodedPayload['fee'], 500.0);
+      expect(decodedPayload['type'], 'Show');
+      expect(decodedPayload['startTime'], '20:00');
+      expect(decodedPayload['endTime'], '22:00');
       expect(decodedPayload['title'], 'Show Rock');
       expect(decodedPayload['description'], 'Trazer cabos');
       expect(decodedPayload['bandId'], 'band-uuid-1');
