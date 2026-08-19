@@ -11,7 +11,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 ## Fase 1 — Schema Prisma, Geração do Client & Tipos
 
-- [ ] T1.1 — Atualizar o modelo `Event` e a relação com `Transaction` em `backend/prisma/schema.prisma` com `startTime`, `endTime`, `type`, `fee` e `onDelete: Cascade`.
+- [x] T1.1 — Atualizar o modelo `Event` e a relação com `Transaction` em `backend/prisma/schema.prisma` com `startTime`, `endTime`, `type`, `fee` e `onDelete: Cascade`.
 - [ ] T1.2 — Executar `npx prisma generate` no diretório `backend/` para atualizar o client do Prisma.
 - [ ] T1.3 — Atualizar a documentação do banco de dados em `docs/database/erd.md` refletindo os novos campos e o relacionamento com `Transaction`.
 - [ ] T1.4 — Criar/atualizar a tipagem de `EventEntity` no frontend web (`frontend-web/src/types/event.ts`).
