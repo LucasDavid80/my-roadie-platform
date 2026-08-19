@@ -43,7 +43,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 - [x] T5.1 — Executar a suíte Flutter de forma serial e, se necessário, por arquivo para identificar o teste que não conclui no tempo esperado.
 - [x] T5.2 — Diagnosticar a causa do bloqueio sem alterar código até haver evidência reproduzível (por exemplo, mock pendente, `pumpAndSettle` sem término ou dependência de rede).
 - [x] T5.3 — Implementar a correção mínima necessária, com testes alterados somente se a mudança de lógica de produção exigir.
-- [ ] T5.4 — Executar novamente `flutter test` completo e registrar o resultado para revalidar o checklist de fechamento.
+- [x] T5.4 — Executar novamente `flutter test` completo e registrar o resultado para revalidar o checklist de fechamento.
 
 ## Checklist de fechamento da feature
 
