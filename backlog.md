@@ -105,7 +105,7 @@
 - Intenção: Estender o modelo `Event` no Prisma e backend NestJS para suportar e persistir `startTime`, `endTime`, `type` e `fee`, sincronizar automaticamente receitas em `Transaction` quando houver cachê (`fee > 0`), conectar o botão de deletar em `CommitmentCard` com confirmação ao fluxo de remoção do `AgendaController`, e ajustar layout/dinamismo do formulário `NewAppointmentWidget`.
 - Impacto esperado: alto (completude da agenda, usabilidade e integração financeira)
 - Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
-- Status: em desenvolvimento (specs/015-extensao-modelo-eventos-e-acoes-card/)
+- Status: concluído (specs/015-extensao-modelo-eventos-e-acoes-card/)
 
 ---
 
@@ -120,7 +120,7 @@
 - Intenção: Estender o modelo `Event` no Prisma e backend NestJS para persistir `startTime`, `endTime`, `type` e `fee`, sincronizar automaticamente receitas em `Transaction` (`INCOME`), conectar a ação de exclusão de compromissos com confirmação no `CommitmentCard`, exibir dinamicamente o campo de cachê para `Show`/`Gravação` e centralizar o botão de submissão no `NewAppointmentWidget`.
 - Impacto esperado: alto (completude da agenda, usabilidade e integração financeira)
 - Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
-- Status: em desenvolvimento (specs/015-extensao-modelo-eventos-e-acoes-card/)
+- Status: concluído (specs/015-extensao-modelo-eventos-e-acoes-card/)
 
 ### Ajuste de layout horizontal do card "Novo Compromisso" e campos
 - Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.
