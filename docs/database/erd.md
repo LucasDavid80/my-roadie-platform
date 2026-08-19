@@ -27,7 +27,7 @@ Entities principais:
 
 - Event
   - id: uuid (PK)
-  - title, date, location, description, status
+  - title, date, startTime?, endTime?, type?, fee? (Decimal), location, description?, status
   - bandId -> Band.id
   - createdById -> User.id
   - createdAt, updatedAt
@@ -47,7 +47,7 @@ Entities principais:
   - id: uuid (PK)
   - description, amount (Decimal), type (INCOME|EXPENSE), date
   - bandId -> Band.id
-  - eventId? -> Event.id
+  - eventId? -> Event.id (onDelete: Cascade)
   - userId -> User.id
   - createdAt
 
@@ -78,6 +78,10 @@ erDiagram
     String id PK
     String title
     DateTime date
+    String startTime
+    String endTime
+    String type
+    Decimal fee
     String location
     String description
     String status
@@ -92,10 +96,12 @@ erDiagram
   }
   TRANSACTION {
     String id PK
+    String description
     Decimal amount
     String type
     DateTime date
     String bandId FK
+    String eventId FK
     String userId FK
   }
 ```
