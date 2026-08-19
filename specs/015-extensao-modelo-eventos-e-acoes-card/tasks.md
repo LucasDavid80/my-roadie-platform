@@ -35,7 +35,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 ## Fase 4 — Validação Integrada & Testes Automatizados
 
 - [x] T4.1 — Executar os testes automatizados do backend (`npm test` e `npm run test:e2e` em `backend/`).
-- [ ] T4.2 — Executar os testes automatizados do mobile (`flutter test` em `mobile/`).
+- [x] T4.2 — Executar os testes automatizados do mobile (`flutter test` em `mobile/`).
 - [ ] T4.3 — Validar a integridade dos builds do backend, web e mobile (`npm run build` / `flutter analyze`).
 
 ## Fase 5 — Fechamento & Sincronização de Documentação
