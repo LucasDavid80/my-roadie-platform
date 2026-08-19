@@ -22,6 +22,20 @@ Estender o modelo `Event` no banco de dados (Prisma) e na API backend (NestJS) p
   - Estado atual: relação `event Event? @relation(fields: [eventId], references: [id])` sem regra de exclusão em cascata.
   - Ajuste necessário: adicionar `onDelete: Cascade` para permitir exclusão limpa do evento e suas receitas vinculadas sem violação de FK.
 
+### 2. Backend NestJS (`backend/src/modules/events/`) — Task T0.2
+- **`CreateEventDto` & `UpdateEventDto`**:
+  - `CreateEventDto` valida apenas `title`, `date`, `location`, `description`, `bandId` e `status`.
+  - Adicionar `@IsOptional() @IsString()` para `startTime`, `endTime`, `type`, e `@IsOptional() @IsNumber()` para `fee`.
+  - `UpdateEventDto` herda via `PartialType(CreateEventDto)`, propagando as validações automaticamente.
+- **`EventEntity`**:
+  - Atualmente é uma classe vazia (`export class Event {}`). Necessita de definição de propriedades tipadas completas.
+- **`EventsService`**:
+  - `create`: persistir os 4 novos campos e disparar a criação de `Transaction` (`INCOME`) quando `fee > 0`.
+  - `update`: atualizar campos e sincronizar a transação financeira vinculada (atualizar `amount`/`description`, criar caso `fee` passe a ser `> 0`, ou excluir caso `fee` seja zerado/removido).
+  - `remove`: validar autorização e deletar o evento (com cascade nas transações).
+- **`EventsController`**:
+  - Rotas `@Post()`, `@Get()`, `@Get(':id')`, `@Patch(':id')`, `@Delete(':id')` já ativas com guards de autenticação. Não exige alterações de assinatura.
+
 ## Escopo
 
 1. **Schema & Banco de Dados (`backend/prisma/schema.prisma` e `docs/database/erd.md`)**:

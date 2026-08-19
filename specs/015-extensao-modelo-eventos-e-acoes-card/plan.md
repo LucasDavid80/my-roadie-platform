@@ -53,15 +53,22 @@ Esta especificação estende o ecossistema de eventos de ponta a ponta com sincr
   - Atualizar documentação em `docs/database/erd.md`.
 
 #### B. Backend NestJS (`backend/src/modules/events/`)
-- `dto/create-event.dto.ts`:
-  - Adicionar `@IsOptional() @IsString() startTime?: string;`
-  - Adicionar `@IsOptional() @IsString() endTime?: string;`
-  - Adicionar `@IsOptional() @IsString() type?: string;`
-  - Adicionar `@IsOptional() @IsNumber() fee?: number;`
-- `dto/update-event.dto.ts`:
-  - Herda automaticamente de `CreateEventDto`.
-- `entities/event.entity.ts`:
-  - Atualizar propriedades para refletir os novos campos.
+- **Achados da Inspeção (T0.2)**:
+  - `CreateEventDto` atualmente não possui validações para horários, tipo e cachê.
+  - `UpdateEventDto` utiliza `PartialType(CreateEventDto)` e herdará as novas propriedades automaticamente.
+  - `EventEntity` (`event.entity.ts`) está vazia e deve ser preenchida com as propriedades do domínio.
+  - `EventsService` já resolve o usuário via `resolveDbUser` e lida com o workspace solo em `bandAccessService`; a criação da `Transaction` utilizará o `userId` e o `resolvedBandId` já computados.
+  - `EventsController` está pronto e protegido com `JwtAuthGuard` e `CurrentUserPayload`.
+- **Modificações a aplicar**:
+  - `dto/create-event.dto.ts`:
+    - Adicionar `@IsOptional() @IsString() startTime?: string;`
+    - Adicionar `@IsOptional() @IsString() endTime?: string;`
+    - Adicionar `@IsOptional() @IsString() type?: string;`
+    - Adicionar `@IsOptional() @IsNumber() fee?: number;`
+  - `dto/update-event.dto.ts`:
+    - Herda automaticamente de `CreateEventDto`.
+  - `entities/event.entity.ts`:
+    - Atualizar propriedades para refletir os novos campos.
 - `events.service.ts`:
   - **No `create`**:
     - Persistir `startTime`, `endTime`, `type`, `fee` no Prisma.
