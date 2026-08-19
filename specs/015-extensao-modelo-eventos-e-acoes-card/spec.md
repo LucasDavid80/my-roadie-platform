@@ -36,6 +36,21 @@ Estender o modelo `Event` no banco de dados (Prisma) e na API backend (NestJS) p
 - **`EventsController`**:
   - Rotas `@Post()`, `@Get()`, `@Get(':id')`, `@Patch(':id')`, `@Delete(':id')` já ativas com guards de autenticação. Não exige alterações de assinatura.
 
+### 3. Mobile Flutter (`mobile/`) — Task T0.3
+- **`EventEntity` & `EventModel`**:
+  - `EventEntity` já possui todos os campos tipados (`startTime`, `endTime`, `type`, `fee`).
+  - `EventModel.fromMap()` e `toMap()` já fazem parsing desses campos.
+  - **Gargalo no `toCreatePayload()`**: O método enviava apenas `title`, `date`, `location`, `description` e `bandId`. É mandatório incluir `startTime`, `endTime`, `type` e `fee` para persistência correta no backend.
+- **`CommitmentCard`**:
+  - O ícone de exclusão é atualmente um `Icon` estático sem callback ou efeito.
+  - Deve ser transformado em `IconButton` com modal de confirmação (`showDialog`) acionando `onDelete(event.id)`.
+- **`CommitmentsWidget` & `PrincipalScreen`**:
+  - Devem receber e propagar a função de exclusão para conectar ao `ref.read(agendaProvider.notifier).deleteEvent(id)`.
+- **`NewAppointmentWidget`**:
+  - Possui todos os controladores e seletores, necessitando da lógica dinâmica para o campo Cachê (visível apenas para `Show` e `Gravação`; ocultado para `Ensaio` e `Reunião`, expandindo o campo Local) e da centralização do botão de salvar/criar.
+- **`AgendaController`**:
+  - O método `deleteEvent(id)` já está implementado e integrado ao repositório, necessitando apenas da conexão na UI.
+
 ## Escopo
 
 1. **Schema & Banco de Dados (`backend/prisma/schema.prisma` e `docs/database/erd.md`)**:

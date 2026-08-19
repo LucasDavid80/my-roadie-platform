@@ -101,20 +101,26 @@ Esta especificação estende o ecossistema de eventos de ponta a ponta com sincr
 - Adicionar interface `EventEntity` em `frontend-web/src/types/event.ts` mantendo paridade com o modelo do backend.
 
 #### D. Mobile Flutter (`mobile/`)
-- `lib/domain/models/event_model.dart`:
-  - Ajustar `toCreatePayload()` para incluir `startTime`, `endTime`, `type`, `fee` no payload enviado para o NestJS.
-  - Validar parsing em `fromMap()` para `fee` e horários.
-- `lib/presentation/screens/principal/widgets/commitment_card.dart`:
-  - Trocar o ícone estático de delete por um `IconButton` com confirmação interativa (`showDialog` com alerta de confirmação de exclusão).
-  - Receber callback `onDelete: Future<void> Function(String id)` e exibir feedback (`SnackBar`).
-- `lib/presentation/screens/principal/widgets/commitments_widget.dart` & `principal_screen.dart`:
-  - Conectar o callback `onDelete` ao `ref.read(agendaProvider.notifier).deleteEvent(id)`.
-- `lib/presentation/widgets/new_appointment_widget.dart`:
-  - Ajustar padding e espaçamento horizontal para layout limpo e proporcional.
-  - Exibição dinâmica do campo `Cachê`: renderizado apenas se o tipo selecionado for `Show` ou `Gravação`. Para `Ensaio` e `Reunião`, o input de `Local` expande em largura total e `fee` é definido como 0.
-  - Centralizar botão de ação principal ("Criar Compromisso" / "Salvar Alterações").
-- Testes:
-  - Atualizar e criar testes em `mobile/test/` para `AgendaController.deleteEvent`, `EventModel` e `CommitmentCard`.
+- **Achados da Inspeção (T0.3)**:
+  - `EventEntity` em `domain/entities/` já possui os campos necessários (`startTime`, `endTime`, `type`, `fee`).
+  - `EventModel.toCreatePayload()` era o ponto de perda de dados: não incluía os campos adicionais no mapa JSON.
+  - `CommitmentCard` continha um ícone estático `Icon(Icons.delete_outline)` sem interação.
+  - `AgendaController` já conta com `deleteEvent` devidamente estruturado no Notifier.
+- **Modificações a aplicar**:
+  - `lib/domain/models/event_model.dart`:
+    - Ajustar `toCreatePayload()` para incluir `startTime`, `endTime`, `type`, `fee` no payload enviado para o NestJS.
+    - Validar parsing em `fromMap()` para `fee` e horários.
+  - `lib/presentation/screens/principal/widgets/commitment_card.dart`:
+    - Trocar o ícone estático de delete por um `IconButton` com confirmação interativa (`showDialog` com alerta de confirmação de exclusão).
+    - Receber callback `onDelete: Future<void> Function(String id)` e exibir feedback (`SnackBar`).
+  - `lib/presentation/screens/principal/widgets/commitments_widget.dart` & `principal_screen.dart`:
+    - Conectar o callback `onDelete` ao `ref.read(agendaProvider.notifier).deleteEvent(id)`.
+  - `lib/presentation/widgets/new_appointment_widget.dart`:
+    - Ajustar padding e espaçamento horizontal para layout limpo e proporcional.
+    - Exibição dinâmica do campo `Cachê`: renderizado apenas se o tipo selecionado for `Show` ou `Gravação`. Para `Ensaio` e `Reunião`, o input de `Local` expande em largura total e `fee` é definido como 0.
+    - Centralizar botão de ação principal ("Criar Compromisso" / "Salvar Alterações").
+  - Testes:
+    - Atualizar e criar testes em `mobile/test/` para `AgendaController.deleteEvent`, `EventModel` e `CommitmentCard`.
 
 ---
 
