@@ -69,6 +69,18 @@ class EventModel extends EventEntity {
       'date': date.toIso8601String(),
       'location': location,
     };
+    if (startTime.isNotEmpty) {
+      payload['startTime'] = startTime;
+    }
+    if (endTime.isNotEmpty) {
+      payload['endTime'] = endTime;
+    }
+    if (type.isNotEmpty) {
+      payload['type'] = type;
+    }
+    if (fee > 0) {
+      payload['fee'] = fee;
+    }
     if (notes.isNotEmpty) {
       payload['description'] = notes;
     }
