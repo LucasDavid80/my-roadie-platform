@@ -13,12 +13,43 @@ export class EventsService {
     private readonly bandAccessService: BandAccessService,
   ) {}
 
+  private async resolveDbUser(user: CurrentUserPayload) {
+    const searchConditions: Prisma.UserWhereInput[] = [
+      { id: user.userId },
+      { supabaseId: user.userId },
+    ];
+    if (user.email) {
+      searchConditions.push({ email: user.email });
+    }
+
+    const dbUser = await this.prisma.user.findFirst({
+      where: {
+        OR: searchConditions,
+      },
+    });
+
+    if (dbUser) {
+      return dbUser;
+    }
+
+    return await this.prisma.user.create({
+      data: {
+        supabaseId: user.userId,
+        email: user.email || `${user.userId}@supabase.user`,
+        name: '',
+        role: user.role || Role.MUSICIAN,
+      },
+    });
+  }
+
   async create(createEventDto: CreateEventDto, user: CurrentUserPayload) {
+    const dbUser = await this.resolveDbUser(user);
+    const userId = dbUser.id;
     let resolvedBandId = createEventDto.bandId;
 
     if (resolvedBandId) {
       await this.bandAccessService.assertMembership(
-        user.userId,
+        userId,
         user.role,
         resolvedBandId,
       );
@@ -33,20 +64,13 @@ export class EventsService {
         );
       }
     } else {
-      const userBandIds = await this.bandAccessService.getUserBandIds(
-        user.userId,
-      );
+      const userBandIds = await this.bandAccessService.getUserBandIds(userId);
 
       if (userBandIds.length > 0) {
         resolvedBandId = userBandIds[0];
       } else {
-        const dbUser = await this.prisma.user.findUnique({
-          where: { id: user.userId },
-          select: { name: true },
-        });
-
-        const bandName = dbUser?.name
-          ? `Projeto Solo - ${dbUser.name}`
+        const bandName = dbUser?.name?.trim()
+          ? `Projeto Solo - ${dbUser.name.trim()}`
           : 'Minha Banda';
 
         const newBand = await this.prisma.band.create({
@@ -54,7 +78,7 @@ export class EventsService {
             name: bandName,
             members: {
               create: {
-                userId: user.userId,
+                userId,
               },
             },
           },
@@ -72,7 +96,7 @@ export class EventsService {
         description: createEventDto.description,
         status: createEventDto.status ?? EventStatus.PENDING,
         bandId: resolvedBandId,
-        createdById: user.userId,
+        createdById: userId,
       },
       include: {
         tasks: true,
@@ -81,9 +105,12 @@ export class EventsService {
   }
 
   async findAll(user: CurrentUserPayload, bandId?: string) {
+    const dbUser = await this.resolveDbUser(user);
+    const userId = dbUser.id;
+
     if (bandId) {
       await this.bandAccessService.assertMembership(
-        user.userId,
+        userId,
         user.role,
         bandId,
       );
@@ -101,7 +128,7 @@ export class EventsService {
       });
     }
 
-    const bandIds = await this.bandAccessService.getUserBandIds(user.userId);
+    const bandIds = await this.bandAccessService.getUserBandIds(userId);
     return await this.prisma.event.findMany({
       where: {
         bandId: { in: bandIds },
@@ -112,6 +139,9 @@ export class EventsService {
   }
 
   async findOne(id: string, user: CurrentUserPayload) {
+    const dbUser = await this.resolveDbUser(user);
+    const userId = dbUser.id;
+
     const event = await this.prisma.event.findUnique({
       where: { id },
       include: {
@@ -133,7 +163,7 @@ export class EventsService {
     }
 
     await this.bandAccessService.assertMembership(
-      user.userId,
+      userId,
       user.role,
       event.bandId,
     );
@@ -147,10 +177,12 @@ export class EventsService {
     user: CurrentUserPayload,
   ) {
     await this.findOne(id, user);
+    const dbUser = await this.resolveDbUser(user);
+    const userId = dbUser.id;
 
     if (updateEventDto.bandId) {
       await this.bandAccessService.assertMembership(
-        user.userId,
+        userId,
         user.role,
         updateEventDto.bandId,
       );

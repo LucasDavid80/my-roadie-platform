@@ -10,17 +10,14 @@ export class BandAccessService {
    */
   async getUserBandIds(userId: string): Promise<string[]> {
     const members = await this.prisma.bandMember.findMany({
-      where: { userId },
+      where: {
+        OR: [{ userId }, { user: { supabaseId: userId } }],
+      },
       select: { bandId: true },
     });
     return members.map((m) => m.bandId);
   }
 
-  /**
-   * Valida se o usuário tem acesso à banda especificada.
-   * Se for ADMIN, permite o acesso direto.
-   * Caso contrário, verifica se existe associação em BandMember. Lança ForbiddenException se não for membro.
-   */
   async assertMembership(
     userId: string,
     role: string,
@@ -32,8 +29,8 @@ export class BandAccessService {
 
     const member = await this.prisma.bandMember.findFirst({
       where: {
-        userId,
         bandId,
+        OR: [{ userId }, { user: { supabaseId: userId } }],
       },
     });
 

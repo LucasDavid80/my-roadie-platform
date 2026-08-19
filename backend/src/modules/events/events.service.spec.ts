@@ -69,7 +69,10 @@ describe('EventsService', () => {
             user: {
               findUnique: jest
                 .fn()
-                .mockResolvedValue({ name: 'Lucas Musician' }),
+                .mockResolvedValue({ id: 'user-uuid-1', name: 'Lucas Musician' }),
+              findFirst: jest
+                .fn()
+                .mockResolvedValue({ id: 'user-uuid-1', name: 'Lucas Musician' }),
             },
             event: {
               create: jest.fn().mockResolvedValue(mockEvent),
@@ -214,8 +217,8 @@ describe('EventsService', () => {
       };
 
       jest
-        .spyOn(prisma.user, 'findUnique')
-        .mockResolvedValueOnce({ name: 'Lucas Musician' } as any);
+        .spyOn(prisma.user, 'findFirst')
+        .mockResolvedValueOnce({ id: 'user-uuid-1', name: 'Lucas Musician' } as any);
       jest
         .spyOn(prisma.band, 'create')
         .mockResolvedValueOnce(autoCreatedBand as any);
@@ -231,9 +234,14 @@ describe('EventsService', () => {
       expect(bandAccessService.getUserBandIds).toHaveBeenCalledWith(
         mockUser.userId,
       );
-      expect(prisma.user.findUnique).toHaveBeenCalledWith({
-        where: { id: mockUser.userId },
-        select: { name: true },
+      expect(prisma.user.findFirst).toHaveBeenCalledWith({
+        where: {
+          OR: [
+            { id: mockUser.userId },
+            { supabaseId: mockUser.userId },
+            { email: mockUser.email },
+          ],
+        },
       });
       expect(prisma.band.create).toHaveBeenCalledWith({
         data: {

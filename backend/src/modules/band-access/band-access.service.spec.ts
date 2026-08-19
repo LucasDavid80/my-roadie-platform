@@ -50,7 +50,10 @@ describe('BandAccessService', () => {
       ).resolves.not.toThrow();
 
       expect(prisma.bandMember.findFirst).toHaveBeenCalledWith({
-        where: { userId: 'user-123', bandId: 'band-456' },
+        where: {
+          bandId: 'band-456',
+          OR: [{ userId: 'user-123' }, { user: { supabaseId: 'user-123' } }],
+        },
       });
     });
 
@@ -76,7 +79,9 @@ describe('BandAccessService', () => {
 
       expect(result).toEqual(['band-1', 'band-2']);
       expect(prisma.bandMember.findMany).toHaveBeenCalledWith({
-        where: { userId: 'user-123' },
+        where: {
+          OR: [{ userId: 'user-123' }, { user: { supabaseId: 'user-123' } }],
+        },
         select: { bandId: true },
       });
     });
