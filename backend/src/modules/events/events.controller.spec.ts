@@ -22,6 +22,10 @@ describe('EventsController', () => {
     id: 'event-uuid-123',
     title: 'Show no Festival de Verão',
     date: new Date('2026-10-15T20:00:00.000Z'),
+    startTime: '19:30',
+    endTime: '22:00',
+    type: 'Show',
+    fee: 1500,
     location: 'Concha Acústica',
     description: 'Apresentação principal do festival',
     status: EventStatus.PENDING,
@@ -66,6 +70,10 @@ describe('EventsController', () => {
       const dto: CreateEventDto = {
         title: 'Show no Festival de Verão',
         date: '2026-10-15T20:00:00.000Z',
+        startTime: '19:30',
+        endTime: '22:00',
+        type: 'Show',
+        fee: 1500,
         location: 'Concha Acústica',
         description: 'Apresentação principal do festival',
         bandId: 'band-uuid-1',
@@ -132,8 +140,14 @@ describe('EventsController', () => {
 
   describe('update', () => {
     it('deve atualizar o evento chamando o service com ID, DTO e user', async () => {
-      const dto: UpdateEventDto = { title: 'Show Atualizado' };
-      const updatedEvent = { ...mockEvent, title: 'Show Atualizado' };
+      const dto: UpdateEventDto = {
+        title: 'Show Atualizado',
+        startTime: '20:00',
+        endTime: '23:00',
+        type: 'Show',
+        fee: 2000,
+      };
+      const updatedEvent = { ...mockEvent, ...dto };
 
       jest.spyOn(service, 'update').mockResolvedValueOnce(updatedEvent);
 

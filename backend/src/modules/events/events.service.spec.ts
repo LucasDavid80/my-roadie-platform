@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { EventStatus, Role } from '@prisma/client';
+import { EventStatus, Prisma, Role, TransactionType } from '@prisma/client';
 import { EventsService } from './events.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BandAccessService } from '../band-access/band-access.service';
@@ -40,6 +40,10 @@ describe('EventsService', () => {
     id: 'event-uuid-123',
     title: 'Show no Festival de Verão',
     date: new Date('2026-10-15T20:00:00.000Z'),
+    startTime: '19:30',
+    endTime: '22:00',
+    type: 'Show',
+    fee: new Prisma.Decimal(1500),
     location: 'Concha Acústica',
     description: 'Apresentação principal do festival',
     status: EventStatus.PENDING,
@@ -48,6 +52,18 @@ describe('EventsService', () => {
     createdAt: new Date(),
     updatedAt: new Date(),
     tasks: [],
+  };
+
+  const mockTransaction = {
+    id: 'tx-uuid-1',
+    description: 'Cachê - Show no Festival de Verão',
+    amount: new Prisma.Decimal(1500),
+    type: TransactionType.INCOME,
+    date: new Date('2026-10-15T20:00:00.000Z'),
+    bandId: 'band-uuid-1',
+    userId: 'user-uuid-1',
+    eventId: 'event-uuid-123',
+    createdAt: new Date(),
   };
 
   const mockBandAccessService = {
@@ -80,6 +96,12 @@ describe('EventsService', () => {
               findUnique: jest.fn().mockResolvedValue(mockEvent),
               update: jest.fn().mockResolvedValue(mockEvent),
               delete: jest.fn().mockResolvedValue(mockEvent),
+            },
+            transaction: {
+              create: jest.fn().mockResolvedValue(mockTransaction),
+              findFirst: jest.fn().mockResolvedValue(null),
+              update: jest.fn().mockResolvedValue(mockTransaction),
+              delete: jest.fn().mockResolvedValue(mockTransaction),
             },
           },
         },
@@ -126,6 +148,10 @@ describe('EventsService', () => {
           date: new Date(dto.date),
           location: dto.location,
           description: dto.description,
+          startTime: undefined,
+          endTime: undefined,
+          type: undefined,
+          fee: undefined,
           status: EventStatus.PENDING,
           bandId: dto.bandId,
           createdById: mockUser.userId,
@@ -135,6 +161,62 @@ describe('EventsService', () => {
         },
       });
       expect(result).toEqual(mockEvent);
+    });
+
+    it('deve persistir startTime, endTime, type, fee e criar uma Transaction do tipo INCOME quando fee > 0', async () => {
+      const dto: CreateEventDto = {
+        title: 'Show com Cachê',
+        date: '2026-10-15T20:00:00.000Z',
+        location: 'Concha Acústica',
+        bandId: 'band-uuid-1',
+        startTime: '19:30',
+        endTime: '22:00',
+        type: 'Show',
+        fee: 2000,
+      };
+
+      const eventWithFee = {
+        ...mockEvent,
+        title: 'Show com Cachê',
+        startTime: '19:30',
+        endTime: '22:00',
+        type: 'Show',
+        fee: new Prisma.Decimal(2000),
+      };
+      jest.spyOn(prisma.event, 'create').mockResolvedValueOnce(eventWithFee as any);
+
+      const result = await service.create(dto, mockUser);
+
+      expect(prisma.event.create).toHaveBeenCalledWith({
+        data: {
+          title: dto.title,
+          date: new Date(dto.date),
+          location: dto.location,
+          description: undefined,
+          startTime: '19:30',
+          endTime: '22:00',
+          type: 'Show',
+          fee: new Prisma.Decimal(2000),
+          status: EventStatus.PENDING,
+          bandId: dto.bandId,
+          createdById: mockUser.userId,
+        },
+        include: {
+          tasks: true,
+        },
+      });
+      expect(prisma.transaction.create).toHaveBeenCalledWith({
+        data: {
+          description: 'Cachê - Show com Cachê',
+          amount: new Prisma.Decimal(2000),
+          type: TransactionType.INCOME,
+          date: eventWithFee.date,
+          bandId: 'band-uuid-1',
+          userId: mockUser.userId,
+          eventId: eventWithFee.id,
+        },
+      });
+      expect(result).toEqual(eventWithFee);
     });
 
     it('deve lançar ForbiddenException se o usuário não pertencer à banda do evento', async () => {
@@ -195,6 +277,10 @@ describe('EventsService', () => {
           date: new Date(dto.date),
           location: dto.location,
           description: undefined,
+          startTime: undefined,
+          endTime: undefined,
+          type: undefined,
+          fee: undefined,
           status: EventStatus.PENDING,
           bandId: 'band-uuid-1',
           createdById: mockUser.userId,
@@ -259,6 +345,10 @@ describe('EventsService', () => {
           date: new Date(dto.date),
           location: dto.location,
           description: undefined,
+          startTime: undefined,
+          endTime: undefined,
+          type: undefined,
+          fee: undefined,
           status: EventStatus.PENDING,
           bandId: 'band-auto-created-uuid',
           createdById: mockUser.userId,
@@ -391,6 +481,97 @@ describe('EventsService', () => {
       expect(result.title).toBe('Show Festival Atualizado');
     });
 
+    it('deve sincronizar a transação vinculada atualizando amount quando fee for alterado e fee > 0', async () => {
+      const existingTx = {
+        id: 'tx-uuid-1',
+        description: 'Cachê - Show no Festival de Verão',
+        amount: new Prisma.Decimal(1000),
+        type: TransactionType.INCOME,
+      };
+      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx as any);
+
+      const updateDto: UpdateEventDto = {
+        fee: 2500,
+      };
+
+      await service.update('event-uuid-123', updateDto, mockUser);
+
+      expect(prisma.transaction.update).toHaveBeenCalledWith({
+        where: { id: 'tx-uuid-1' },
+        data: {
+          amount: new Prisma.Decimal(2500),
+          description: `Cachê - ${mockEvent.title}`,
+          date: mockEvent.date,
+          band: { connect: { id: mockEvent.bandId } },
+        },
+      });
+    });
+
+    it('deve criar uma nova transação no update se fee > 0 e não existia transação prévia', async () => {
+      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(null);
+
+      const updateDto: UpdateEventDto = {
+        fee: 1800,
+      };
+
+      await service.update('event-uuid-123', updateDto, mockUser);
+
+      expect(prisma.transaction.create).toHaveBeenCalledWith({
+        data: {
+          description: `Cachê - ${mockEvent.title}`,
+          amount: new Prisma.Decimal(1800),
+          type: TransactionType.INCOME,
+          date: mockEvent.date,
+          bandId: mockEvent.bandId,
+          userId: mockUser.userId,
+          eventId: mockEvent.id,
+        },
+      });
+    });
+
+    it('deve remover a transação vinculada quando fee for zerado ou nulo', async () => {
+      const existingTx = {
+        id: 'tx-uuid-1',
+        description: 'Cachê - Show no Festival de Verão',
+        amount: new Prisma.Decimal(1000),
+        type: TransactionType.INCOME,
+      };
+      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx as any);
+
+      const updateDto: UpdateEventDto = {
+        fee: 0,
+      };
+
+      await service.update('event-uuid-123', updateDto, mockUser);
+
+      expect(prisma.transaction.delete).toHaveBeenCalledWith({
+        where: { id: 'tx-uuid-1' },
+      });
+    });
+
+    it('deve atualizar a descrição da transação vinculada se o título do evento for alterado', async () => {
+      const existingTx = {
+        id: 'tx-uuid-1',
+        description: 'Cachê - Show no Festival de Verão',
+        amount: new Prisma.Decimal(1000),
+        type: TransactionType.INCOME,
+      };
+      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx as any);
+
+      const updateDto: UpdateEventDto = {
+        title: 'Novo Título do Show',
+      };
+
+      await service.update('event-uuid-123', updateDto, mockUser);
+
+      expect(prisma.transaction.update).toHaveBeenCalledWith({
+        where: { id: 'tx-uuid-1' },
+        data: {
+          description: 'Cachê - Show no Festival de Verão',
+        },
+      });
+    });
+
     it('deve validar nova banda caso bandId seja alterado no update', async () => {
       const updateDto: UpdateEventDto = {
         bandId: 'band-uuid-nova',
@@ -440,3 +621,4 @@ describe('EventsService', () => {
     });
   });
 });
+
