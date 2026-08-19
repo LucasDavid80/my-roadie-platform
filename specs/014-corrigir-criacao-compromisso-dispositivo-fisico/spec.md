@@ -43,9 +43,9 @@ Investigar e corrigir a falha em que a criação e sincronização de novos comp
 ## Critério de sucesso
 
 - [x] `POST /events` no backend ativo, autenticado via JWT e persistindo eventos no banco de dados com testes unitários e E2E passando.
-- [ ] Criação de compromissos funcionando tanto para músico individual (sem envio de `bandId`, com criação/resolução de workspace solo automático) quanto com `bandId` explícito.
+- [x] Criação de compromissos funcionando tanto para músico individual (sem envio de `bandId`, com criação/resolução de workspace solo automático) quanto com `bandId` explícito.
 - [x] Mobile envia requisições de criação de eventos com payload compatível com o backend.
 - [x] `NewAppointmentWidget` exibe SnackBar legível com mensagem descritiva caso a requisição falhe, mantendo os dados preenchidos no formulário para reenvio.
-- [ ] Criação de compromisso funciona de ponta a ponta no dispositivo físico conectado ao backend local (via `adb reverse` ou IP configurado).
-- [ ] Todos os testes automatizados do backend e mobile passando sem regressões.
-- [ ] `backlog.md` atualizado com o status concluído ao finalizar a spec.
+- [x] Criação de compromisso funciona de ponta a ponta no dispositivo físico conectado ao backend local (via `adb reverse` ou IP configurado).
+- [x] Todos os testes automatizados do backend e mobile passando sem regressões.
+- [x] `backlog.md` atualizado com o status concluído ao finalizar a spec.

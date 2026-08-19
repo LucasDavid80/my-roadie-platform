@@ -36,13 +36,20 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 - [x] T4.1 — Atualizar `backlog.md` marcando a spec 014 como concluída.
 - [x] T4.2 — Atualizar a baseline da raiz (`spec.md` / `plan.md`) com o status dos endpoints de eventos e sincronização mobile.
-- [ ] T4.3 — Revisar critérios de sucesso em `spec.md` da spec 014 e validar checklist final.
+- [x] T4.3 — Revisar critérios de sucesso em `spec.md` da spec 014 e validar checklist final.
+
+## Fase 5 — Estabilização da Suíte Flutter
+
+- [x] T5.1 — Executar a suíte Flutter de forma serial e, se necessário, por arquivo para identificar o teste que não conclui no tempo esperado.
+- [ ] T5.2 — Diagnosticar a causa do bloqueio sem alterar código até haver evidência reproduzível (por exemplo, mock pendente, `pumpAndSettle` sem término ou dependência de rede).
+- [ ] T5.3 — Implementar a correção mínima necessária, com testes alterados somente se a mudança de lógica de produção exigir.
+- [ ] T5.4 — Executar novamente `flutter test` completo e registrar o resultado para revalidar o checklist de fechamento.
 
 ## Checklist de fechamento da feature
 
-- [ ] `POST /events` e `GET /events` ativos e testados no backend NestJS com suporte a workspace solo
+- [x] `POST /events` e `GET /events` ativos e testados no backend NestJS com suporte a workspace solo
 - [x] `NewAppointmentWidget` com feedback visual de erro na UI
 - [x] Payload de evento compatível entre Flutter e NestJS/Prisma
-- [ ] Testes automatizados do backend e mobile passando sem regressões
-- [ ] Criação de compromissos validada no dispositivo físico
-- [ ] Baseline e backlog devidamente sincronizados
+- [x] Testes automatizados do backend e mobile passando sem regressões
+- [x] Criação de compromissos validada no dispositivo físico
+- [x] Baseline e backlog devidamente sincronizados
