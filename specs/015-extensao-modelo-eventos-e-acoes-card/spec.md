@@ -12,6 +12,16 @@ Estender o modelo `Event` no banco de dados (Prisma) e na API backend (NestJS) p
 - **Consistência de Contratos e Banco de Dados**: Alinhar o schema do Prisma (`prisma/schema.prisma`), os DTOs do backend (`CreateEventDto`, `UpdateEventDto`), a entidade do backend, a documentação do banco (`docs/database/erd.md`), os tipos do frontend web e os models/entities do Flutter.
 - **Refinamento de UX/UI**: Otimizar a distribuição horizontal dos campos e centralizar o botão de ação no modal/card `NewAppointmentWidget`.
 
+## Resultados da Inspeção (Fase 0)
+
+### 1. Schema Prisma & Banco de Dados (`backend/prisma/schema.prisma`) — Task T0.1
+- **Modelo `Event`**:
+  - Estado atual: contém apenas `id`, `title`, `date`, `location`, `description`, `createdById`, `createdAt`, `bandId`, `updatedAt`, `status`, e relações com `Band`, `User`, `Task[]`, `Transaction[]`.
+  - Lacunas identificadas: faltam os campos `startTime` (horário de início), `endTime` (horário de término), `type` (tipo de compromisso, default `"Show"`) e `fee` (`Decimal(10, 2)` para valor de cachê).
+- **Modelo `Transaction`**:
+  - Estado atual: relação `event Event? @relation(fields: [eventId], references: [id])` sem regra de exclusão em cascata.
+  - Ajuste necessário: adicionar `onDelete: Cascade` para permitir exclusão limpa do evento e suas receitas vinculadas sem violação de FK.
+
 ## Escopo
 
 1. **Schema & Banco de Dados (`backend/prisma/schema.prisma` e `docs/database/erd.md`)**:
