@@ -34,19 +34,23 @@ Esta especificação estende o ecossistema de eventos de ponta a ponta com sincr
 ### 2. Detalhamento por Camada
 
 #### A. Banco de Dados & Schema (`backend/prisma/schema.prisma`)
-- Adicionar ao model `Event`:
-  ```prisma
-  startTime    String?
-  endTime      String?
-  type         String?       @default("Show")
-  fee          Decimal?      @db.Decimal(10, 2)
-  ```
-- Ajustar relation em `Transaction`:
-  ```prisma
-  event        Event?          @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  ```
-- Executar `npx prisma generate`.
-- Atualizar documentação em `docs/database/erd.md`.
+- **Achados da Inspeção (T0.1)**:
+  - `Event` atualmente possui apenas metadados básicos (`id`, `title`, `date`, `location`, `description`, `createdById`, `bandId`, `status`, timestamps e relações).
+  - `Transaction` já conta com a chave estrangeira opcional `eventId String?` e a relação `event Event?`, mas sem `onDelete: Cascade`.
+- **Modificações a aplicar**:
+  - Adicionar ao model `Event`:
+    ```prisma
+    startTime    String?
+    endTime      String?
+    type         String?       @default("Show")
+    fee          Decimal?      @db.Decimal(10, 2)
+    ```
+  - Ajustar a relation em `Transaction` para habilitar integridade referencial em cascata:
+    ```prisma
+    event        Event?          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    ```
+  - Executar `npx prisma generate`.
+  - Atualizar documentação em `docs/database/erd.md`.
 
 #### B. Backend NestJS (`backend/src/modules/events/`)
 - `dto/create-event.dto.ts`:
