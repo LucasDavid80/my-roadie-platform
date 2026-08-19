@@ -29,7 +29,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 ### Backend (`backend/src/modules/`)
 - ✅ **auth** — login via Supabase Auth, estratégia JWT com validação dinâmica de algoritmos ES256 (JWKS) e HS256 em `JwtStrategy`, `JwtAuthGuard` com logs estruturados e exceções 401 descritivas (`TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`) (Spec 012).
 - ✅ **users** — CRUD completo (`POST /users`, `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`), com testes unitários e e2e.
-- ✅ **events** — CRUD de eventos com DTOs de criação/atualização e testes.
+- ✅ **events** — CRUD completo de eventos (`POST /events`, `GET /events`, `GET /events/:id`, `PATCH /events/:id`, `DELETE /events/:id`), com DTOs validados via `class-validator` (`CreateEventDto` com `bandId` opcional, `UpdateEventDto`), suporte ao modelo de Workspace Unificado para músicos solo (resolução de banda existente ou auto-provisionamento de banda padrão em `EventsService.create`), autenticação via `JwtAuthGuard` vinculando `createdById` e `bandId` via Prisma, e cobertura de testes unitários e E2E (Spec 014).
 - ✅ **tasks** — CRUD completo de tarefas (`POST /tasks`, `GET /tasks`, `GET /tasks/:id`, `PATCH /tasks/:id`, `DELETE /tasks/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
 - ✅ **repertoire** — CRUD completo de músicas do repertório (`POST /repertoire`, `GET /repertoire`, `GET /repertoire/:id`, `PATCH /repertoire/:id`, `DELETE /repertoire/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
 - ✅ **transactions** — CRUD completo de lançamentos financeiros (`POST /transactions`, `GET /transactions`, `GET /transactions/:id`, `PATCH /transactions/:id`, `DELETE /transactions/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
@@ -49,13 +49,14 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **Carregamento e Salvamento do Perfil Mobile:** Injeção do JWT de sessão do Supabase no `RemoteDataSource._getHeaders()` para evitar erros HTTP 401 Unauthorized, com `UserNotifier`/`PersonScreen` expondo mensagens de erro reais na UI em vez de falhas silenciosas, com testes unitários, de widget e de integração para o fluxo de carregamento e edição do perfil (Spec 009).
 - ✅ **Deduplicação de `fetchProfile` e Tratamento Visual de Erro:** `UserNotifier` com trava de requisição prevenindo execuções síncronas redundantes de `fetchProfile`, com exibição de erros 401 legíveis ao usuário via UI/SnackBar (Spec 012).
 - ✅ **Rolagem da Agenda sobre o calendário:** `CustomCalendar` restringe o `TableCalendar` a `AvailableGestures.horizontalSwipe`, liberando o arraste vertical para o `SingleChildScrollView` da `PrincipalScreen`; a navegação horizontal, as setas do cabeçalho, a seleção de dias e os marcadores de eventos foram preservados e cobertos por teste de widget (Spec 013).
+- ✅ **Criação e Sincronização de Compromissos com Feedback Visual:** `RemoteDataSource.saveEvent` sanitiza o payload de criação omitindo `id` local em conformidade com o `ValidationPipe` do backend; `NewAppointmentWidget` captura exceções de rede, validação ou autenticação exibindo feedback visual claro via `SnackBar` na UI em vez de falhas silenciosas; conectividade em dispositivos físicos suportada via `adb reverse` e `--dart-define=BACKEND_URL` (Spec 014).
 
 ## 5. Regras de negócio confirmadas (das que já têm API)
 
 1. Conta é criada no Supabase Auth e depois o perfil é criado no backend usando o `supabaseId`.
 2. Rotas protegidas exigem JWT válido (com verificação de algoritmo ES256/JWKS e HS256, gerando exceções descritivas como `TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN` e `MISSING_BEARER` no `JwtAuthGuard`).
 3. Um usuário só atualiza/deleta o próprio perfil, a menos que seja `ADMIN`.
-4. Eventos pertencem a uma Band; edição/exclusão é restrita a criador, membro com permissão, ou `ADMIN`.
+4. Eventos pertencem a uma Band; na criação sem `bandId` explícito, o backend resolve o workspace existente do usuário ou auto-provisiona uma banda padrão; edição/exclusão é restrita a criador, membro com permissão, ou `ADMIN`.
 5. `ValidationPipe` com whitelist rígida: payloads com campos extras (`id`, `createdAt`, `updatedAt`) são rejeitados com 400.
 6. Recursos dos módulos `tasks`, `repertoire` e `transactions` exigem associação à `Band` dona via `BandMember` (`403 Forbidden` para não-membros), exceto para `ADMIN` (acesso global). `GET` sem `bandId` filtra automaticamente pelas bandas do usuário (Spec 011).
 7. O carregamento de perfil (`fetchProfile`) é executado estritamente uma única vez por ciclo de autenticação na Web e no Mobile, evitando chamadas duplicadas ao backend.
@@ -68,5 +69,5 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 ## 7. Critério de "pronto" desta baseline
 
-Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após os ajustes de UX da Agenda (Spec 013). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
+Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a correção da criação de compromissos no dispositivo físico (Spec 014). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
 

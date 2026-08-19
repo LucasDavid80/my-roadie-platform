@@ -1,16 +1,53 @@
-# agenda_musical
+# My Roadie — Mobile
 
-A new Flutter project.
+## Executar em um dispositivo físico Android
 
-## Getting Started
+O backend deve estar em execução na porta `3000` antes de iniciar o app:
 
-This project is a starting point for a Flutter application.
+```powershell
+cd ../backend
+npm run start:dev
+```
 
-A few resources to get you started if this is your first Flutter project:
+Conecte o aparelho por USB, habilite a depuração USB e confirme que ele foi
+autorizado:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```powershell
+adb devices
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Opção 1 — USB com `adb reverse`
+
+Encaminhe a porta do aparelho para o backend local:
+
+```powershell
+adb reverse tcp:3000 tcp:3000
+cd ../mobile
+flutter run --dart-define=BACKEND_URL=http://localhost:3000
+```
+
+Em um aparelho físico, `localhost` e `10.0.2.2` não apontam automaticamente
+para a máquina de desenvolvimento. O `adb reverse` permite que o
+`localhost:3000` do aparelho alcance o backend em execução no computador.
+
+### Opção 2 — Rede local com `BACKEND_URL`
+
+Mantenha o computador e o aparelho na mesma rede Wi-Fi, obtenha o IPv4 local
+do computador e execute o app apontando para esse endereço:
+
+```powershell
+cd ../mobile
+flutter run --dart-define=BACKEND_URL=http://<IP_LOCAL>:3000
+```
+
+Substitua `<IP_LOCAL>` pelo endereço da máquina, por exemplo
+`192.168.1.10`. Garanta que a porta `3000` esteja acessível na rede local.
+
+## Validação manual no aparelho
+
+1. Inicie sessão no aplicativo e crie um compromisso informando título, data,
+   local e banda.
+2. Confirme que o compromisso aparece na agenda após o salvamento.
+3. Desative temporariamente a conectividade e tente criar outro compromisso.
+   O formulário deve permanecer preenchido e apresentar uma mensagem de erro
+   legível.

@@ -27,8 +27,8 @@ class ServerException implements Exception {
   String toString() => message;
 }
 
-String _extractErrorMessage(String body) {
-  if (body.isEmpty) return 'Não autorizado';
+String _extractErrorMessage(String body, [String fallback = 'Não autorizado']) {
+  if (body.isEmpty) return fallback;
   try {
     final dynamic decoded = jsonDecode(body);
     if (decoded is Map && decoded['message'] != null) {
@@ -84,14 +84,16 @@ class RemoteDataSource {
         final List<dynamic> data = jsonDecode(response.body);
         return data.map((json) => EventModel.fromMap(json)).toList();
       } else if (response.statusCode == 401) {
-        throw UnauthorizedException();
+        throw UnauthorizedException(_extractErrorMessage(response.body, 'Não autorizado'));
       } else {
-        throw ServerException('Failed to load events: ${response.statusCode}');
+        throw ServerException(
+          _extractErrorMessage(response.body, 'Failed to load events: ${response.statusCode}'),
+        );
       }
     } on http.ClientException {
       throw NetworkException();
     } catch (e) {
-      if (e is UnauthorizedException || e is ServerException) {
+      if (e is UnauthorizedException || e is ServerException || e is NetworkException) {
         rethrow;
       }
       throw NetworkException(e.toString());
@@ -100,10 +102,12 @@ class RemoteDataSource {
 
   Future<EventModel?> saveEvent(EventModel event) async {
     try {
+      final payload = event.toCreatePayload();
+
       final response = await _client.post(
         Uri.parse('${AppConfig.backendUrl}/events'),
         headers: _getHeaders(),
-        body: jsonEncode(event.toMap()),
+        body: jsonEncode(payload),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -114,16 +118,22 @@ class RemoteDataSource {
           }
         }
         return event;
+      } else if (response.statusCode == 401) {
+        throw UnauthorizedException(
+          _extractErrorMessage(response.body, 'Não autorizado'),
+        );
       } else {
-        if (response.statusCode == 401) {
-          throw UnauthorizedException();
-        }
-        throw ServerException('Failed to save event: ${response.statusCode}');
+        throw ServerException(
+          _extractErrorMessage(
+            response.body,
+            'Failed to save event: ${response.statusCode}',
+          ),
+        );
       }
     } on http.ClientException {
       throw NetworkException();
     } catch (e) {
-      if (e is UnauthorizedException || e is ServerException) {
+      if (e is UnauthorizedException || e is ServerException || e is NetworkException) {
         rethrow;
       }
       throw NetworkException(e.toString());

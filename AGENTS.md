@@ -14,6 +14,7 @@
 
 - Não iniciar implementação de uma feature sem `spec.md` + `plan.md` + `tasks.md` dela existirem.
 - **Antes de qualquer task, confirmar a branch atual (`git branch --show-current`) e conferir que ela é `spec/<numero-da-spec-em-questão>`.** Se a branch não bater com a spec pedida no prompt, parar e avisar — não seguir na branch errada.
+- Toda inspeção e verificação de tasks na Fase 0 deve ter seus resultados documentados em `specs/<feature>/spec.md` e, caso seja necessário, refletir os ajustes correspondentes em `plan.md` e `tasks.md`.
 - Ao marcar uma task como concluída em `tasks.md`, isso é uma alegação que será revisada por humano quando envolver infraestrutura externa (Supabase, variáveis de ambiente, CI, assinatura de app) — não assumir que "marcado como feito" = "verificado".
 - Mudança em `prisma/schema.prisma` sempre é seguida de `npx prisma generate` e atualização de `docs/database/erd.md`.
 - Evitar prompts amplos do tipo `/goal` que disparam múltiplos subagentes em paralelo — preferir tarefas escopadas por fase/task para não estourar a cota do plano Pro.

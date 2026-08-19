@@ -95,6 +95,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/013-ajustes-ux-agenda-mobile/)
 
+### Corrigir criação de compromisso no dispositivo físico
+- Intenção: Investigar e corrigir a falha em que um novo compromisso não é criado ao usar o app mobile em um aparelho físico (ativação de endpoints de eventos, sanitização de payload e feedback de erro na UI).
+- Impacto esperado: alto (bug crítico/agenda)
+- Depende de: Mobile conectado à API real (spec 003), Atualização da lista de compromissos após criação (spec 007)
+- Status: concluído (specs/014-corrigir-criacao-compromisso-dispositivo-fisico/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -103,6 +109,12 @@
 
 ## Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
+
+### Corrigir criação de compromisso no dispositivo físico
+- Intenção: Investigar e corrigir a falha em que um novo compromisso não é criado ao usar o app mobile em um aparelho físico (ativação de endpoints de eventos, sanitização de payload e feedback de erro na UI).
+- Impacto esperado: alto (bug crítico/agenda)
+- Depende de: Mobile conectado à API real (spec 003), Atualização da lista de compromissos após criação (spec 007)
+- Status: concluído (specs/014-corrigir-criacao-compromisso-dispositivo-fisico/)
 
 ### Correção da tela de cadastro na Web e sincronização no Supabase Auth (Mobile)
 - Intenção: Corrigir o acesso à tela de cadastro no frontend-web e investigar/garantir a persistência real da conta no Supabase Auth durante o cadastro no app mobile.
@@ -116,10 +128,22 @@
 - Depende de: nenhum
 - Status: concluído (specs/002-isolar-rotas-admin/)
 
+### Extensão do Modelo de Eventos & Ações do Card de Compromisso (Horários, Cachê e Exclusão)
+- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para suportar e persistir `startTime`, `endTime`, `type` e `fee`, além de conectar o botão de deletar em `CommitmentCard` ao fluxo de remoção do `AgendaController`.
+- Impacto esperado: alto (completude da agenda e usabilidade)
+- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
+- Status: ideia
+
 ### Ajuste de layout horizontal do card "Novo Compromisso" e campos
 - Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.
 - Impacto esperado: médio (visual/UI)
 - Depende de: nenhum
+- Status: ideia
+
+### Testes de Integração Ponta a Ponta (E2E) no Mobile
+- Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
+- Impacto esperado: alto (qualidade e confiabilidade de entrega)
+- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
 - Status: ideia
 
 ### Centralizar botão "Criar Compromisso"

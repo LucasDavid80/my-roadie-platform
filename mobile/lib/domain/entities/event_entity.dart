@@ -9,6 +9,7 @@ class EventEntity {
   final String location;
   final double fee;
   final String notes;
+  final String? bandId;
 
   const EventEntity({
     required this.id,
@@ -20,5 +21,6 @@ class EventEntity {
     required this.location,
     required this.fee,
     this.notes = '',
+    this.bandId,
   });
 }

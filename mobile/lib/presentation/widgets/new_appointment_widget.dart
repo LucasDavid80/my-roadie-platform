@@ -27,6 +27,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
   DateTime? _selectedDate;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -390,44 +391,87 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () async {
-                              if (_titleController.text.isEmpty ||
-                                  _selectedDate == null) {
-                                return;
-                              }
+                            onPressed: _isLoading
+                                ? null
+                                : () async {
+                                    if (_titleController.text.trim().isEmpty ||
+                                        _selectedDate == null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Por favor, preencha o título e selecione uma data.',
+                                          ),
+                                          backgroundColor: AppColors.erro,
+                                        ),
+                                      );
+                                      return;
+                                    }
 
-                              final newEvent = EventEntity(
-                                // Se estiver editando, MANTÉM o ID original. Se for novo, gera um novo.
-                                id: isEditing
-                                    ? widget.event!.id
-                                    : DateTime.now().toString(),
-                                title: _titleController.text,
-                                type: _selectedType,
-                                date: _selectedDate!,
-                                startTime:
-                                    _startTime?.format(context) ?? '--:--',
-                                endTime: _endTime?.format(context) ?? '--:--',
-                                location: _locationController.text,
-                                fee:
-                                    double.tryParse(
-                                      _cacheController.text.replaceAll(
-                                        ',',
-                                        '.',
-                                      ),
-                                    ) ??
-                                    0.0,
-                                notes: _notesController.text,
-                              );
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
 
-                              try {
-                                await widget.onConfirm(newEvent);
-                                if (context.mounted) {
-                                  Navigator.of(context).pop();
-                                }
-                              } catch (e) {
-                                // Mantém o formulário aberto em caso de exceção de persistência
-                              }
-                            },
+                                    final newEvent = EventEntity(
+                                      // Se estiver editando, MANTÉM o ID original. Se for novo, gera um novo.
+                                      id: isEditing
+                                          ? widget.event!.id
+                                          : DateTime.now().toString(),
+                                      title: _titleController.text.trim(),
+                                      type: _selectedType,
+                                      date: _selectedDate!,
+                                      startTime:
+                                          _startTime?.format(context) ?? '--:--',
+                                      endTime:
+                                          _endTime?.format(context) ?? '--:--',
+                                      location: _locationController.text.trim(),
+                                      fee:
+                                          double.tryParse(
+                                            _cacheController.text.replaceAll(
+                                              ',',
+                                              '.',
+                                            ),
+                                          ) ??
+                                          0.0,
+                                      notes: _notesController.text.trim(),
+                                      bandId: widget.event?.bandId,
+                                    );
+
+                                    try {
+                                      await widget.onConfirm(newEvent);
+                                      if (context.mounted) {
+                                        Navigator.of(context).pop();
+                                      }
+                                    } catch (error, stackTrace) {
+                                      debugPrint(
+                                        'Erro ao salvar compromisso: $error',
+                                      );
+                                      debugPrintStack(stackTrace: stackTrace);
+                                      if (context.mounted) {
+                                        setState(() {
+                                          _isLoading = false;
+                                        });
+                                        final rawMessage = error
+                                            .toString()
+                                            .replaceFirst('Exception: ', '')
+                                            .trim();
+                                        final message = rawMessage.isNotEmpty
+                                            ? rawMessage
+                                            : 'Erro ao salvar compromisso. Tente novamente.';
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            duration: const Duration(seconds: 15),
+                                            content: Text(
+                                              'Erro ao salvar compromisso:\n$message',
+                                              maxLines: 6,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            backgroundColor: AppColors.erro,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -436,15 +480,27 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                               ),
                               elevation: 0,
                             ),
-                            child: Text(
-                              isEditing
-                                  ? 'Salvar Alterações'
-                                  : 'Criar Compromisso',
-                              style: const TextStyle(
-                                color: AppColors.textLight,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: _isLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor:
+                                          AlwaysStoppedAnimation<Color>(
+                                            AppColors.textLight,
+                                          ),
+                                    ),
+                                  )
+                                : Text(
+                                    isEditing
+                                        ? 'Salvar Alterações'
+                                        : 'Criar Compromisso',
+                                    style: const TextStyle(
+                                      color: AppColors.textLight,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ),
                       ],

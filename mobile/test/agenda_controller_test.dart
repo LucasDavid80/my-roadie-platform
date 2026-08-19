@@ -238,4 +238,59 @@ void main() {
     final shows = container.read(agendaProvider.notifier).monthlyShows;
     expect(shows, 1);
   });
+
+  test('Should delete event from state when repository succeeds (T3.1)', () async {
+    final event1 = EventEntity(
+      id: 'event-1',
+      title: 'Show 1',
+      type: 'Show',
+      date: DateTime.now(),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Pub A',
+      fee: 300.0,
+      notes: '',
+    );
+    final event2 = EventEntity(
+      id: 'event-2',
+      title: 'Show 2',
+      type: 'Show',
+      date: DateTime.now(),
+      startTime: '21:00',
+      endTime: '23:00',
+      location: 'Pub B',
+      fee: 400.0,
+      notes: '',
+    );
+
+    when(() => mockAgendaRepository.saveEvent(event1)).thenAnswer((_) async => event1);
+    when(() => mockAgendaRepository.saveEvent(event2)).thenAnswer((_) async => event2);
+    when(() => mockAgendaRepository.deleteEvent('event-1')).thenAnswer((_) async {});
+
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(event1);
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(event2);
+
+    expect(container.read(agendaProvider).length, 2);
+
+    await container.read(agendaProvider.notifier).deleteEvent('event-1');
+
+    final state = container.read(agendaProvider);
+    expect(state.length, 1);
+    expect(state.first.id, 'event-2');
+  });
+
+  test('Should handle deleteEvent error gracefully when repository fails (T3.1)', () async {
+    when(() => mockAgendaRepository.deleteEvent('non-existent'))
+        .thenThrow(Exception('Erro ao deletar'));
+
+    await container.read(agendaProvider.notifier).deleteEvent('non-existent');
+    expect(container.read(agendaProvider), isEmpty);
+  });
+
+  test('Should handle fetchEvents error gracefully without throwing (T3.1)', () async {
+    when(() => mockAgendaRepository.getEvents()).thenThrow(Exception('Falha no banco'));
+
+    await container.read(agendaProvider.notifier).fetchEvents();
+    expect(container.read(agendaProvider), isEmpty);
+  });
 }

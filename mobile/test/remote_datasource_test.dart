@@ -100,6 +100,110 @@ void main() {
     });
   });
 
+  group('saveEvent', () {
+    final tEventModel = EventModel(
+      id: 'temp-id-123',
+      title: 'Show Rock',
+      type: 'Show',
+      date: DateTime(2026, 7, 16, 20, 0),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Bar do Rock',
+      fee: 500.0,
+      notes: 'Trazer cabos',
+      bandId: 'band-uuid-1',
+    );
+
+    final tSavedResponseJson = {
+      'id': 'persisted-uuid-999',
+      'title': 'Show Rock',
+      'date': '2026-07-16T20:00:00.000',
+      'location': 'Bar do Rock',
+      'description': 'Trazer cabos',
+      'bandId': 'band-uuid-1',
+      'createdById': 'user-uuid-1',
+      'status': 'PENDING',
+    };
+
+    test('should return persisted EventModel and send sanitized payload when status is 201 (positive case)', () async {
+      // arrange
+      String? capturedBody;
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer((invocation) async {
+        capturedBody = invocation.namedArguments[#body] as String?;
+        return http.Response(jsonEncode(tSavedResponseJson), 201);
+      });
+
+      // act
+      final result = await remoteDataSource.saveEvent(tEventModel);
+
+      // assert
+      expect(result, isA<EventModel>());
+      expect(result?.id, 'persisted-uuid-999');
+      expect(result?.title, 'Show Rock');
+      expect(result?.notes, 'Trazer cabos');
+      expect(result?.bandId, 'band-uuid-1');
+
+      // Verifica sanitização do payload (sem 'id', 'fee', 'type', 'startTime', 'endTime')
+      expect(capturedBody, isNotNull);
+      final dynamic decodedPayload = jsonDecode(capturedBody!);
+      expect(decodedPayload['id'], isNull);
+      expect(decodedPayload['fee'], isNull);
+      expect(decodedPayload['type'], isNull);
+      expect(decodedPayload['title'], 'Show Rock');
+      expect(decodedPayload['description'], 'Trazer cabos');
+      expect(decodedPayload['bandId'], 'band-uuid-1');
+    });
+
+    test('should throw UnauthorizedException when status code is 401 (negative case)', () async {
+      // arrange
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer((_) async => http.Response(jsonEncode({'message': 'Sessão inválida'}), 401));
+
+      // act & assert
+      expect(
+        () => remoteDataSource.saveEvent(tEventModel),
+        throwsA(isA<UnauthorizedException>()),
+      );
+    });
+
+    test('should throw ServerException when status code is 400 or 500 (negative case)', () async {
+      // arrange
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer((_) async => http.Response(jsonEncode({'message': 'Erro de validação'}), 400));
+
+      // act & assert
+      expect(
+        () => remoteDataSource.saveEvent(tEventModel),
+        throwsA(isA<ServerException>()),
+      );
+    });
+
+    test('should throw NetworkException when ClientException is thrown (negative case)', () async {
+      // arrange
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenThrow(http.ClientException('No Internet'));
+
+      // act & assert
+      expect(
+        () => remoteDataSource.saveEvent(tEventModel),
+        throwsA(isA<NetworkException>()),
+      );
+    });
+  });
+
   group('getUserProfile', () {
     final tUserJson = {
       'id': 'user-123',
