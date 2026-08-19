@@ -20,7 +20,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 - [x] T2.1 — Atualizar `CreateEventDto` e `UpdateEventDto` com validações `class-validator` para `startTime`, `endTime`, `type` e `fee`.
 - [x] T2.2 — Atualizar `backend/src/modules/events/entities/event.entity.ts` com as novas propriedades.
-- [ ] T2.3 — Atualizar `EventsService` para persistir os campos de `Event` e sincronizar automaticamente uma `Transaction` do tipo `INCOME` quando `fee > 0` na criação e atualização.
+- [x] T2.3 — Atualizar `EventsService` para persistir os campos de `Event` e sincronizar automaticamente uma `Transaction` do tipo `INCOME` quando `fee > 0` na criação e atualização.
 - [ ] T2.4 — Atualizar os testes unitários do backend (`events.service.spec.ts` e `events.controller.spec.ts`) cobrindo os novos campos, a sincronização de `Transaction` e a exclusão com autorização.
 - [ ] T2.5 — Atualizar os testes E2E do backend (`backend/test/events.e2e-spec.ts`) validando o ciclo completo de criação com transação, consulta, atualização e exclusão.
 

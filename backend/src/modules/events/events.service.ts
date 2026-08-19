@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { EventStatus, Prisma, Role } from '@prisma/client';
+import { EventStatus, Prisma, Role, TransactionType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BandAccessService } from '../band-access/band-access.service';
 import { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
@@ -88,12 +88,19 @@ export class EventsService {
       }
     }
 
-    return await this.prisma.event.create({
+    const createdEvent = await this.prisma.event.create({
       data: {
         title: createEventDto.title,
         date: new Date(createEventDto.date),
         location: createEventDto.location,
         description: createEventDto.description,
+        startTime: createEventDto.startTime,
+        endTime: createEventDto.endTime,
+        type: createEventDto.type,
+        fee:
+          createEventDto.fee !== undefined
+            ? new Prisma.Decimal(createEventDto.fee)
+            : undefined,
         status: createEventDto.status ?? EventStatus.PENDING,
         bandId: resolvedBandId,
         createdById: userId,
@@ -102,6 +109,22 @@ export class EventsService {
         tasks: true,
       },
     });
+
+    if (createEventDto.fee !== undefined && createEventDto.fee > 0) {
+      await this.prisma.transaction.create({
+        data: {
+          description: `Cachê - ${createdEvent.title}`,
+          amount: new Prisma.Decimal(createEventDto.fee),
+          type: TransactionType.INCOME,
+          date: createdEvent.date,
+          bandId: resolvedBandId,
+          userId,
+          eventId: createdEvent.id,
+        },
+      });
+    }
+
+    return createdEvent;
   }
 
   async findAll(user: CurrentUserPayload, bandId?: string) {
@@ -211,6 +234,21 @@ export class EventsService {
     if (updateEventDto.description !== undefined) {
       data.description = updateEventDto.description;
     }
+    if (updateEventDto.startTime !== undefined) {
+      data.startTime = updateEventDto.startTime;
+    }
+    if (updateEventDto.endTime !== undefined) {
+      data.endTime = updateEventDto.endTime;
+    }
+    if (updateEventDto.type !== undefined) {
+      data.type = updateEventDto.type;
+    }
+    if (updateEventDto.fee !== undefined) {
+      data.fee =
+        updateEventDto.fee !== null
+          ? new Prisma.Decimal(updateEventDto.fee)
+          : null;
+    }
     if (updateEventDto.status !== undefined) {
       data.status = updateEventDto.status;
     }
@@ -218,13 +256,71 @@ export class EventsService {
       data.band = { connect: { id: updateEventDto.bandId } };
     }
 
-    return await this.prisma.event.update({
+    const updatedEvent = await this.prisma.event.update({
       where: { id },
       data,
       include: {
         tasks: true,
       },
     });
+
+    const existingTransaction = await this.prisma.transaction.findFirst({
+      where: {
+        eventId: id,
+        type: TransactionType.INCOME,
+      },
+    });
+
+    if (updateEventDto.fee !== undefined) {
+      if (updateEventDto.fee !== null && updateEventDto.fee > 0) {
+        if (existingTransaction) {
+          await this.prisma.transaction.update({
+            where: { id: existingTransaction.id },
+            data: {
+              amount: new Prisma.Decimal(updateEventDto.fee),
+              description: `Cachê - ${updatedEvent.title}`,
+              date: updatedEvent.date,
+              band: { connect: { id: updatedEvent.bandId } },
+            },
+          });
+        } else {
+          await this.prisma.transaction.create({
+            data: {
+              description: `Cachê - ${updatedEvent.title}`,
+              amount: new Prisma.Decimal(updateEventDto.fee),
+              type: TransactionType.INCOME,
+              date: updatedEvent.date,
+              bandId: updatedEvent.bandId,
+              userId,
+              eventId: updatedEvent.id,
+            },
+          });
+        }
+      } else if (existingTransaction) {
+        await this.prisma.transaction.delete({
+          where: { id: existingTransaction.id },
+        });
+      }
+    } else if (existingTransaction) {
+      const transactionData: Prisma.TransactionUpdateInput = {};
+      if (updateEventDto.title !== undefined) {
+        transactionData.description = `Cachê - ${updatedEvent.title}`;
+      }
+      if (updateEventDto.date !== undefined) {
+        transactionData.date = updatedEvent.date;
+      }
+      if (updateEventDto.bandId !== undefined) {
+        transactionData.band = { connect: { id: updatedEvent.bandId } };
+      }
+      if (Object.keys(transactionData).length > 0) {
+        await this.prisma.transaction.update({
+          where: { id: existingTransaction.id },
+          data: transactionData,
+        });
+      }
+    }
+
+    return updatedEvent;
   }
 
   async remove(id: string, user: CurrentUserPayload) {
