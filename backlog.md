@@ -128,6 +128,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/002-isolar-rotas-admin/)
 
+### Extensão do Modelo de Eventos & Ações do Card de Compromisso (Horários, Cachê e Exclusão)
+- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para suportar e persistir `startTime`, `endTime`, `type` e `fee`, além de conectar o botão de deletar em `CommitmentCard` ao fluxo de remoção do `AgendaController`.
+- Impacto esperado: alto (completude da agenda e usabilidade)
+- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
+- Status: ideia
+
 ### Ajuste de layout horizontal do card "Novo Compromisso" e campos
 - Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.
 - Impacto esperado: médio (visual/UI)
