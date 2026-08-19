@@ -8,11 +8,13 @@ class CommitmentsWidget extends StatelessWidget {
   // Pode mudar para StatelessWidget!
   final List<EventEntity> commitments;
   final Future<void> Function(EventEntity) onConfirm;
+  final Future<void> Function(String id) onDelete;
 
   const CommitmentsWidget({
     super.key,
     required this.commitments,
     required this.onConfirm,
+    required this.onDelete,
   });
 
   @override
@@ -72,7 +74,11 @@ class CommitmentsWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (showHeader) _buildDateHeader(commitment.date),
-                  CommitmentCard(event: commitment, onConfirm: onConfirm),
+                  CommitmentCard(
+                    event: commitment,
+                    onConfirm: onConfirm,
+                    onDelete: onDelete,
+                  ),
                 ],
               ),
             );
