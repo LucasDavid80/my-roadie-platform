@@ -5,7 +5,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 ## Fase 0 — Diagnóstico & Validação Prévia
 
 - [x] T0.1 — Inspecionar o modelo `Event` e `Transaction` em `backend/prisma/schema.prisma` e mapear colunas/relações a ajustar (`startTime`, `endTime`, `type`, `fee`, `onDelete: Cascade`).
-- [ ] T0.2 — Inspecionar `CreateEventDto`, `UpdateEventDto`, `EventsService` e `EventsController` no backend NestJS para criação/atualização de transações vinculadas.
+- [x] T0.2 — Inspecionar `CreateEventDto`, `UpdateEventDto`, `EventsService` e `EventsController` no backend NestJS para criação/atualização de transações vinculadas.
 - [ ] T0.3 — Inspecionar `EventEntity`, `EventModel`, `CommitmentCard`, `CommitmentsWidget` e `NewAppointmentWidget` no app mobile.
 - [ ] T0.4 — Documentar os resultados da inspeção da Fase 0 em `specs/015-extensao-modelo-eventos-e-acoes-card/spec.md`.
 
