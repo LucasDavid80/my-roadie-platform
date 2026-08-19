@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 class CommitmentCard extends StatelessWidget {
   final EventEntity event;
   final Future<void> Function(EventEntity) onConfirm;
+  final Future<void> Function(String id)? onDelete;
 
   const CommitmentCard({
     super.key,
     required this.event,
     required this.onConfirm,
+    this.onDelete,
   });
 
   @override
@@ -90,8 +92,58 @@ class CommitmentCard extends StatelessWidget {
           icon: const Icon(Icons.edit_outlined, color: Colors.blueGrey),
           onPressed: () => _openEditModal(context),
         ),
-        const Icon(Icons.delete_outline, color: Colors.blueGrey),
+        IconButton(
+          icon: const Icon(Icons.delete_outline, color: Colors.blueGrey),
+          onPressed: () => _confirmDelete(context),
+        ),
       ],
+    );
+  }
+
+  void _confirmDelete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Excluir Compromisso'),
+        content: const Text(
+          'Tem certeza de que deseja excluir este compromisso? Esta ação não pode ser desfeita.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+              if (onDelete != null) {
+                try {
+                  await onDelete!(event.id);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Compromisso excluído com sucesso!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Erro ao excluir compromisso: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
+              }
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
     );
   }
 
