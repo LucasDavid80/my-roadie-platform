@@ -34,7 +34,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 ## Fase 4 — Fechamento
 
-- [ ] T4.1 — Atualizar `backlog.md` marcando a spec 014 como concluída.
+- [x] T4.1 — Atualizar `backlog.md` marcando a spec 014 como concluída.
 - [ ] T4.2 — Atualizar a baseline da raiz (`spec.md` / `plan.md`) com o status dos endpoints de eventos e sincronização mobile.
 - [ ] T4.3 — Revisar critérios de sucesso em `spec.md` da spec 014 e validar checklist final.
 
