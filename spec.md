@@ -19,17 +19,17 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - **User** — email (único), nome, role, `supabaseId` (único), telefone, instagram, cidade/UF, cachê mínimo, link do YouTube, bio, instrumentos, estilos, disponibilidade.
 - **Band** — nome; tem membros, eventos, repertório e transações.
 - **BandMember** — vincula User↔Band, com papel dentro da banda (ex.: owner/member), único por `[userId, bandId]`.
-- **Event** — título, data, local, descrição, status (`PENDING`, `CONFIRMED`, `FINISHED`, `CANCELLED`), pertence a uma Band, tem um criador (User).
+- **Event** — título, data, horários (`startTime`, `endTime`), tipo (`type`, default `"Show"`), cachê (`fee`), local, descrição, status (`PENDING`, `CONFIRMED`, `FINISHED`, `CANCELLED`), pertence a uma Band, tem um criador (User) e relação em cascata com `Transaction`.
 - **Task** — descrição, `isDone`, pertence a um Event (cascade delete).
 - **RepertoireSong** — título, artista, tom, posição, notas; pertence a uma Band.
-- **Transaction** — descrição, valor (decimal), tipo (`INCOME`/`EXPENSE`), data; vinculada a Band, opcionalmente a Event, e a um User.
+- **Transaction** — descrição, valor (decimal), tipo (`INCOME`/`EXPENSE`), data; vinculada a Band, opcionalmente a Event (com `onDelete: Cascade`), e a um User.
 
 ## 4. O que está de fato implementado hoje (verificado no código)
 
 ### Backend (`backend/src/modules/`)
 - ✅ **auth** — login via Supabase Auth, estratégia JWT com validação dinâmica de algoritmos ES256 (JWKS) e HS256 em `JwtStrategy`, `JwtAuthGuard` com logs estruturados e exceções 401 descritivas (`TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`) (Spec 012).
 - ✅ **users** — CRUD completo (`POST /users`, `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`), com testes unitários e e2e.
-- ✅ **events** — CRUD completo de eventos (`POST /events`, `GET /events`, `GET /events/:id`, `PATCH /events/:id`, `DELETE /events/:id`), com DTOs validados via `class-validator` (`CreateEventDto` com `bandId` opcional, `UpdateEventDto`), suporte ao modelo de Workspace Unificado para músicos solo (resolução de banda existente ou auto-provisionamento de banda padrão em `EventsService.create`), autenticação via `JwtAuthGuard` vinculando `createdById` e `bandId` via Prisma, e cobertura de testes unitários e E2E (Spec 014).
+- ✅ **events** — CRUD completo de eventos (`POST /events`, `GET /events`, `GET /events/:id`, `PATCH /events/:id`, `DELETE /events/:id`), com DTOs validados via `class-validator` (`CreateEventDto` com `bandId` opcional, horários `startTime`/`endTime`, tipo `type` e cachê `fee`, `UpdateEventDto`), persistência completa dos novos campos, sincronização automática de `Transaction` do tipo `INCOME` quando `fee > 0`, suporte ao modelo de Workspace Unificado para músicos solo (resolução de banda existente ou auto-provisionamento de banda padrão em `EventsService.create`), autenticação via `JwtAuthGuard` vinculando `createdById` e `bandId` via Prisma, exclusão segura com integridade referencial em cascata (`onDelete: Cascade` em `Transaction`), e cobertura de testes unitários e E2E (Spec 014, Spec 015).
 - ✅ **tasks** — CRUD completo de tarefas (`POST /tasks`, `GET /tasks`, `GET /tasks/:id`, `PATCH /tasks/:id`, `DELETE /tasks/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
 - ✅ **repertoire** — CRUD completo de músicas do repertório (`POST /repertoire`, `GET /repertoire`, `GET /repertoire/:id`, `PATCH /repertoire/:id`, `DELETE /repertoire/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
 - ✅ **transactions** — CRUD completo de lançamentos financeiros (`POST /transactions`, `GET /transactions`, `GET /transactions/:id`, `PATCH /transactions/:id`, `DELETE /transactions/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
@@ -41,6 +41,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios), eliminando os placeholders.
 - ✅ **Autenticação e Cadastro via Supabase Auth:** Módulo `src/lib/supabase.ts` centraliza a instância do Supabase. `AuthContext` efetua autenticação real via `supabase.auth.signInWithPassword`, e `LoginForm` exibe mensagens de erro amigáveis (Spec 008). Rota `/register` acessível e integrada ao `supabase.auth.signUp` e à API do backend NestJS (`POST /users`) com mensagens de erro (Spec 010).
 - ✅ **Deduplicação de `fetchProfile` e Mensagens 401:** `AuthContext` deduplica o carregamento de perfil via `useRef` garantindo disparo único de `fetchProfile`, com `LoginForm` exibindo feedbacks descritivos de erro da API (Spec 012).
+- ✅ **Tipagem de Eventos:** Interface `EventEntity` em `src/types/event.ts` refletindo `startTime`, `endTime`, `type`, `fee` e metadados de compromissos para consistência dos contratos do monorepo (Spec 015).
 
 ### Mobile (`mobile/lib/`)
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
@@ -50,6 +51,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **Deduplicação de `fetchProfile` e Tratamento Visual de Erro:** `UserNotifier` com trava de requisição prevenindo execuções síncronas redundantes de `fetchProfile`, com exibição de erros 401 legíveis ao usuário via UI/SnackBar (Spec 012).
 - ✅ **Rolagem da Agenda sobre o calendário:** `CustomCalendar` restringe o `TableCalendar` a `AvailableGestures.horizontalSwipe`, liberando o arraste vertical para o `SingleChildScrollView` da `PrincipalScreen`; a navegação horizontal, as setas do cabeçalho, a seleção de dias e os marcadores de eventos foram preservados e cobertos por teste de widget (Spec 013).
 - ✅ **Criação e Sincronização de Compromissos com Feedback Visual:** `RemoteDataSource.saveEvent` sanitiza o payload de criação omitindo `id` local em conformidade com o `ValidationPipe` do backend; `NewAppointmentWidget` captura exceções de rede, validação ou autenticação exibindo feedback visual claro via `SnackBar` na UI em vez de falhas silenciosas; conectividade em dispositivos físicos suportada via `adb reverse` e `--dart-define=BACKEND_URL` (Spec 014).
+- ✅ **Extensão de Eventos, Exclusão com Confirmação e Refinamento de Layout:** `EventModel.toCreatePayload()` e `fromMap()` persistem e desserializam `startTime`, `endTime`, `type` e `fee`; `CommitmentCard` implementa exclusão de compromissos com diálogo interativo de confirmação (`showDialog`) acionando `AgendaController.deleteEvent(id)` e feedback visual via `SnackBar`; `NewAppointmentWidget` com renderização dinâmica do campo Cachê (visível apenas para `Show` e `Gravação`), expansão do campo Local e botão de ação centralizado (Spec 015).
 
 ## 5. Regras de negócio confirmadas (das que já têm API)
 
@@ -60,6 +62,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 5. `ValidationPipe` com whitelist rígida: payloads com campos extras (`id`, `createdAt`, `updatedAt`) são rejeitados com 400.
 6. Recursos dos módulos `tasks`, `repertoire` e `transactions` exigem associação à `Band` dona via `BandMember` (`403 Forbidden` para não-membros), exceto para `ADMIN` (acesso global). `GET` sem `bandId` filtra automaticamente pelas bandas do usuário (Spec 011).
 7. O carregamento de perfil (`fetchProfile`) é executado estritamente uma única vez por ciclo de autenticação na Web e no Mobile, evitando chamadas duplicadas ao backend.
+8. A criação ou atualização de eventos com cachê (`fee > 0`) sincroniza automaticamente uma receita (`INCOME`) no módulo de transações vinculada ao evento (`eventId`). A remoção de um evento exclui em cascata suas transações vinculadas (Spec 015).
 
 ## 6. Fora do escopo desta baseline (não construído ainda)
 
@@ -69,5 +72,5 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 ## 7. Critério de "pronto" desta baseline
 
-Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a correção da criação de compromissos no dispositivo físico (Spec 014). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
+Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a extensão do modelo de eventos, sincronização financeira e ações do card de compromisso (Spec 015). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
 

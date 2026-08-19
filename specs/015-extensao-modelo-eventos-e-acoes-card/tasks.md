@@ -41,7 +41,7 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 ## Fase 5 — Fechamento & Sincronização de Documentação
 
 - [x] T5.1 — Atualizar `backlog.md` marcando a spec 015 como concluída.
-- [ ] T5.2 — Atualizar a baseline da raiz (`spec.md` / `plan.md`) com a extensão do modelo de eventos e a sincronização financeira.
+- [x] T5.2 — Atualizar a baseline da raiz (`spec.md` / `plan.md`) com a extensão do modelo de eventos e a sincronização financeira.
 - [ ] T5.3 — Validar o checklist de fechamento em `tasks.md`.
 
 ## Checklist de fechamento da feature
