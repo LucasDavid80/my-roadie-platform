@@ -140,6 +140,12 @@
 - Depende de: nenhum
 - Status: ideia
 
+### Testes de Integração Ponta a Ponta (E2E) no Mobile
+- Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
+- Impacto esperado: alto (qualidade e confiabilidade de entrega)
+- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
+- Status: ideia
+
 ### Centralizar botão "Criar Compromisso"
 - Intenção: Centralizar o botão de submissão do formulário de novo compromisso, atualmente alinhado à esquerda.
 - Impacto esperado: baixo (alinhamento visual)
