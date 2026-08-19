@@ -42,15 +42,15 @@ Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 - [x] T5.1 — Atualizar `backlog.md` marcando a spec 015 como concluída.
 - [x] T5.2 — Atualizar a baseline da raiz (`spec.md` / `plan.md`) com a extensão do modelo de eventos e a sincronização financeira.
-- [ ] T5.3 — Validar o checklist de fechamento em `tasks.md`.
+- [x] T5.3 — Validar o checklist de fechamento em `tasks.md`.
 
 ## Checklist de fechamento da feature
 
-- [ ] Modelo `Event` no Prisma atualizado com `startTime`, `endTime`, `type`, `fee` e `npx prisma generate` executado
-- [ ] `docs/database/erd.md` devidamente atualizado
-- [ ] Endpoints do backend NestJS sincronizando `Transaction` (`INCOME`) automaticamente ao informar cachê (`fee > 0`)
-- [ ] App mobile enviando horários, cachê e tipo ao backend e persistindo corretamente
-- [ ] Exclusão de compromisso funcionando no `CommitmentCard` com confirmação e feedback visual
-- [ ] Layout e alinhamento de `NewAppointmentWidget` refinados
-- [ ] Testes automatizados do backend e mobile passando sem regressões
-- [ ] `backlog.md`, `spec.md` e `plan.md` atualizados
+- [x] Modelo `Event` no Prisma atualizado com `startTime`, `endTime`, `type`, `fee` e `npx prisma generate` executado
+- [x] `docs/database/erd.md` devidamente atualizado
+- [x] Endpoints do backend NestJS sincronizando `Transaction` (`INCOME`) automaticamente ao informar cachê (`fee > 0`)
+- [x] App mobile enviando horários, cachê e tipo ao backend e persistindo corretamente
+- [x] Exclusão de compromisso funcionando no `CommitmentCard` com confirmação e feedback visual
+- [x] Layout e alinhamento de `NewAppointmentWidget` refinados
+- [x] Testes automatizados do backend e mobile passando sem regressões
+- [x] `backlog.md`, `spec.md` e `plan.md` atualizados
