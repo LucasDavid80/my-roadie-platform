@@ -236,21 +236,12 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                         ].map((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.music_note,
-                                                  size: 18,
-                                                  color: Colors.pinkAccent,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  value,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                              ],
+                                            child: Text(
+                                              value,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           );
                                         }).toList(),
