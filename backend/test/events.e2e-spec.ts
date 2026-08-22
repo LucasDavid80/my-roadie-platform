@@ -53,9 +53,15 @@ describe('EventsController (e2e)', () => {
         ),
     },
     user: {
-      findUnique: jest.fn().mockResolvedValue({ id: 'user-uuid-1', name: 'Admin User' }),
-      findFirst: jest.fn().mockResolvedValue({ id: 'user-uuid-1', name: 'Admin User' }),
-      create: jest.fn().mockResolvedValue({ id: 'user-uuid-1', name: 'Admin User' }),
+      findUnique: jest
+        .fn()
+        .mockResolvedValue({ id: 'user-uuid-1', name: 'Admin User' }),
+      findFirst: jest
+        .fn()
+        .mockResolvedValue({ id: 'user-uuid-1', name: 'Admin User' }),
+      create: jest
+        .fn()
+        .mockResolvedValue({ id: 'user-uuid-1', name: 'Admin User' }),
     },
     bandMember: {
       findFirst: jest

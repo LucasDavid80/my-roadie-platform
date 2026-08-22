@@ -132,11 +132,7 @@ export class EventsService {
     const userId = dbUser.id;
 
     if (bandId) {
-      await this.bandAccessService.assertMembership(
-        userId,
-        user.role,
-        bandId,
-      );
+      await this.bandAccessService.assertMembership(userId, user.role, bandId);
       return await this.prisma.event.findMany({
         where: { bandId },
         include: { tasks: true },

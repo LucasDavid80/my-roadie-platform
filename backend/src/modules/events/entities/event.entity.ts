@@ -16,4 +16,3 @@ export class Event {
   updatedAt!: Date;
   status!: EventStatus;
 }
-

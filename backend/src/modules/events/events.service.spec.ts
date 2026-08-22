@@ -83,12 +83,14 @@ describe('EventsService', () => {
               create: jest.fn().mockResolvedValue(mockBand),
             },
             user: {
-              findUnique: jest
-                .fn()
-                .mockResolvedValue({ id: 'user-uuid-1', name: 'Lucas Musician' }),
-              findFirst: jest
-                .fn()
-                .mockResolvedValue({ id: 'user-uuid-1', name: 'Lucas Musician' }),
+              findUnique: jest.fn().mockResolvedValue({
+                id: 'user-uuid-1',
+                name: 'Lucas Musician',
+              }),
+              findFirst: jest.fn().mockResolvedValue({
+                id: 'user-uuid-1',
+                name: 'Lucas Musician',
+              }),
             },
             event: {
               create: jest.fn().mockResolvedValue(mockEvent),
@@ -183,7 +185,9 @@ describe('EventsService', () => {
         type: 'Show',
         fee: new Prisma.Decimal(2000),
       };
-      jest.spyOn(prisma.event, 'create').mockResolvedValueOnce(eventWithFee as any);
+      jest
+        .spyOn(prisma.event, 'create')
+        .mockResolvedValueOnce(eventWithFee as any);
 
       const result = await service.create(dto, mockUser);
 
@@ -293,18 +297,17 @@ describe('EventsService', () => {
     });
 
     it('deve auto-provisionar nova banda solo padrão e criar evento quando bandId não for informado e o usuário não tiver banda', async () => {
-      jest
-        .spyOn(bandAccessService, 'getUserBandIds')
-        .mockResolvedValueOnce([]);
+      jest.spyOn(bandAccessService, 'getUserBandIds').mockResolvedValueOnce([]);
 
       const autoCreatedBand = {
         id: 'band-auto-created-uuid',
         name: 'Projeto Solo - Lucas Musician',
       };
 
-      jest
-        .spyOn(prisma.user, 'findFirst')
-        .mockResolvedValueOnce({ id: 'user-uuid-1', name: 'Lucas Musician' } as any);
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValueOnce({
+        id: 'user-uuid-1',
+        name: 'Lucas Musician',
+      } as any);
       jest
         .spyOn(prisma.band, 'create')
         .mockResolvedValueOnce(autoCreatedBand as any);
@@ -488,7 +491,9 @@ describe('EventsService', () => {
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
       };
-      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx as any);
+      jest
+        .spyOn(prisma.transaction, 'findFirst')
+        .mockResolvedValueOnce(existingTx as any);
 
       const updateDto: UpdateEventDto = {
         fee: 2500,
@@ -536,7 +541,9 @@ describe('EventsService', () => {
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
       };
-      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx as any);
+      jest
+        .spyOn(prisma.transaction, 'findFirst')
+        .mockResolvedValueOnce(existingTx as any);
 
       const updateDto: UpdateEventDto = {
         fee: 0,
@@ -556,7 +563,9 @@ describe('EventsService', () => {
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
       };
-      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx as any);
+      jest
+        .spyOn(prisma.transaction, 'findFirst')
+        .mockResolvedValueOnce(existingTx as any);
 
       const updateDto: UpdateEventDto = {
         title: 'Novo Título do Show',
@@ -621,4 +630,3 @@ describe('EventsService', () => {
     });
   });
 });
-
