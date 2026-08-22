@@ -144,11 +144,11 @@ void main() {
     expect(find.byType(NewAppointmentWidget), findsNothing);
   });
 
-  testWidgets('Should load existing event data when editing', (WidgetTester tester) async {
+  testWidgets('Should load existing event data when editing (type Show with fee)', (WidgetTester tester) async {
     final existingEvent = EventEntity(
       id: '123',
       title: 'Show Antigo',
-      type: 'Ensaio',
+      type: 'Show',
       date: DateTime(2026, 5, 25),
       startTime: '14:00',
       endTime: '16:00',
@@ -167,7 +167,75 @@ void main() {
     expect(find.text('Estúdio X'), findsOneWidget);
     expect(find.text('200,00'), findsOneWidget);
     expect(find.text('Levar cabos'), findsOneWidget);
+    expect(find.text('Show'), findsOneWidget);
+  });
+
+  testWidgets('Should hide fee input when event type is Ensaio or Reuniao (T3.4 dynamic fee)', (WidgetTester tester) async {
+    final existingEvent = EventEntity(
+      id: '124',
+      title: 'Ensaio Geral',
+      type: 'Ensaio',
+      date: DateTime(2026, 5, 25),
+      startTime: '14:00',
+      endTime: '16:00',
+      location: 'Estúdio X',
+      fee: 0.0,
+      notes: 'Levar partituras',
+    );
+
+    await tester.pumpWidget(createTestWidget(
+      onConfirm: (e) async {},
+      event: existingEvent,
+    ));
+
+    expect(find.text('Ensaio Geral'), findsOneWidget);
+    expect(find.text('Estúdio X'), findsOneWidget);
     expect(find.text('Ensaio'), findsOneWidget);
+    // Campo Cachê não deve ser renderizado para Ensaio
+    expect(find.text('Cachê'), findsNothing);
+  });
+
+  testWidgets('Should reset fee to 0.0 when changing type from Show to Ensaio (T3.4 dynamic fee switch)', (WidgetTester tester) async {
+    EventEntity? submittedEvent;
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          onConfirm: (e) async {
+            submittedEvent = e;
+          },
+        ),
+      ),
+    ));
+
+    // Preenche título e data
+    await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Ensaio de Domingo');
+    await tester.tap(find.text('Selecionar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    // Digita um cachê enquanto está como 'Show'
+    await tester.enterText(find.widgetWithText(TextField, '0,00'), '500,00');
+
+    // Altera o tipo para 'Ensaio'
+    await tester.tap(find.text('Show'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ensaio').last);
+    await tester.pumpAndSettle();
+
+    // Campo Cachê deve sumir da árvore de widgets
+    expect(find.text('Cachê'), findsNothing);
+
+    // Submete o formulário
+    final submitButton = find.text('Criar Compromisso');
+    await tester.ensureVisible(submitButton);
+    await tester.tap(submitButton);
+    await tester.pumpAndSettle();
+
+    expect(submittedEvent, isNotNull);
+    expect(submittedEvent!.type, 'Ensaio');
+    expect(submittedEvent!.fee, 0.0);
   });
 
   testWidgets('Should create new event with full data, call onConfirm and close modal (T3.1 positive)', (WidgetTester tester) async {

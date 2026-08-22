@@ -125,6 +125,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
   Widget build(BuildContext context) {
     // Muda o título dependendo se está editando ou criando
     final isEditing = widget.event != null;
+    final showsFee = _selectedType == 'Show' || _selectedType == 'Gravação';
     return Center(
       child: SingleChildScrollView(
         child: Container(
@@ -185,7 +186,10 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
 
               // --- FORMULÁRIO ---
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -232,27 +236,22 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                         ].map((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.music_note,
-                                                  size: 18,
-                                                  color: Colors.pinkAccent,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  value,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                              ],
+                                            child: Text(
+                                              value,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           );
                                         }).toList(),
                                     onChanged: (newValue) {
                                       setState(() {
                                         _selectedType = newValue!;
+                                        if (_selectedType != 'Show' &&
+                                            _selectedType != 'Gravação') {
+                                          _cacheController.clear();
+                                        }
                                       });
                                     },
                                   ),
@@ -261,7 +260,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 12),
 
                         // Seletor de Data (Agora clicável)
                         Expanded(
@@ -321,7 +320,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                             () => _pickTime(true),
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: _buildClickableTimeField(
                             'Término',
@@ -334,29 +333,35 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                     const SizedBox(height: 16),
 
                     // LOCAL E CACHÊ
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: _buildSimpleInput(
-                            controller: _locationController,
-                            label: 'Local',
-                            hint: 'Endereço...',
+                    if (showsFee)
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: _buildSimpleInput(
+                              controller: _locationController,
+                              label: 'Local',
+                              hint: 'Endereço...',
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          flex: 1,
-                          child: _buildSimpleInput(
-                            controller: _cacheController,
-                            label: 'Cachê',
-                            hint: '0,00',
-                            isMoney: true,
-                            keyboardType: TextInputType.number,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _buildSimpleInput(
+                              controller: _cacheController,
+                              label: 'Cachê',
+                              hint: '0,00',
+                              isMoney: true,
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      )
+                    else
+                      _buildSimpleInput(
+                        controller: _locationController,
+                        label: 'Local',
+                        hint: 'Endereço...',
+                      ),
                     const SizedBox(height: 16),
 
                     // OBSERVAÇÕES
@@ -370,33 +375,34 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                     const SizedBox(height: 24),
 
                     // BOTÕES
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () => context.pop(),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              side: BorderSide(color: Colors.grey.shade300),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: const Text(
-                              'Cancelar',
-                              style: TextStyle(color: Colors.black87),
+                        OutlinedButton(
+                          onPressed: () => context.pop(),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            side: BorderSide(color: Colors.grey.shade300),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
+                          child: const Text(
+                            'Cancelar',
+                            style: TextStyle(color: Colors.black87),
+                          ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
+                        const SizedBox(height: 12),
+                        Center(
                           child: ElevatedButton(
                             onPressed: _isLoading
                                 ? null
                                 : () async {
                                     if (_titleController.text.trim().isEmpty ||
                                         _selectedDate == null) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         const SnackBar(
                                           content: Text(
                                             'Por favor, preencha o título e selecione uma data.',
@@ -420,18 +426,18 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                       type: _selectedType,
                                       date: _selectedDate!,
                                       startTime:
-                                          _startTime?.format(context) ?? '--:--',
+                                          _startTime?.format(context) ??
+                                          '--:--',
                                       endTime:
                                           _endTime?.format(context) ?? '--:--',
                                       location: _locationController.text.trim(),
-                                      fee:
-                                          double.tryParse(
-                                            _cacheController.text.replaceAll(
-                                              ',',
-                                              '.',
-                                            ),
-                                          ) ??
-                                          0.0,
+                                      fee: showsFee
+                                          ? double.tryParse(
+                                                  _cacheController.text
+                                                      .replaceAll(',', '.'),
+                                                ) ??
+                                                0.0
+                                          : 0.0,
                                       notes: _notesController.text.trim(),
                                       bandId: widget.event?.bandId,
                                     );
@@ -457,10 +463,14 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                         final message = rawMessage.isNotEmpty
                                             ? rawMessage
                                             : 'Erro ao salvar compromisso. Tente novamente.';
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
                                           SnackBar(
                                             behavior: SnackBarBehavior.floating,
-                                            duration: const Duration(seconds: 15),
+                                            duration: const Duration(
+                                              seconds: 15,
+                                            ),
                                             content: Text(
                                               'Erro ao salvar compromisso:\n$message',
                                               maxLines: 6,
@@ -486,10 +496,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(
-                                            AppColors.textLight,
-                                          ),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.textLight,
+                                      ),
                                     ),
                                   )
                                 : Text(

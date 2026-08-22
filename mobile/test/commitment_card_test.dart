@@ -57,4 +57,93 @@ void main() {
     expect(find.byType(NewAppointmentWidget), findsOneWidget);
     expect(find.text('Editar Compromisso'), findsOneWidget);
   });
+
+  testWidgets('Should show confirmation dialog when delete button is tapped', (WidgetTester tester) async {
+    await tester.pumpWidget(createTestWidget(
+      event: testEvent,
+      onConfirm: (e) async {},
+    ));
+
+    final deleteButton = find.byIcon(Icons.delete_outline);
+    await tester.tap(deleteButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Excluir Compromisso'), findsOneWidget);
+    expect(find.text('Tem certeza de que deseja excluir este compromisso? Esta ação não pode ser desfeita.'), findsOneWidget);
+    expect(find.text('Cancelar'), findsOneWidget);
+    expect(find.text('Excluir'), findsOneWidget);
+  });
+
+  testWidgets('Should dismiss confirmation dialog and not call onDelete when Cancelar is tapped', (WidgetTester tester) async {
+    bool deleteCalled = false;
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: CommitmentCard(
+          event: testEvent,
+          onConfirm: (e) async {},
+          onDelete: (id) async {
+            deleteCalled = true;
+          },
+        ),
+      ),
+    ));
+
+    final deleteButton = find.byIcon(Icons.delete_outline);
+    await tester.tap(deleteButton);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Cancelar'));
+    await tester.pumpAndSettle();
+
+    expect(deleteCalled, isFalse);
+    expect(find.text('Excluir Compromisso'), findsNothing);
+  });
+
+  testWidgets('Should call onDelete and show success SnackBar when Excluir is confirmed', (WidgetTester tester) async {
+    String? deletedId;
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: CommitmentCard(
+          event: testEvent,
+          onConfirm: (e) async {},
+          onDelete: (id) async {
+            deletedId = id;
+          },
+        ),
+      ),
+    ));
+
+    final deleteButton = find.byIcon(Icons.delete_outline);
+    await tester.tap(deleteButton);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Excluir'));
+    await tester.pumpAndSettle();
+
+    expect(deletedId, '1');
+    expect(find.text('Compromisso excluído com sucesso!'), findsOneWidget);
+  });
+
+  testWidgets('Should show error SnackBar when onDelete throws exception', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: CommitmentCard(
+          event: testEvent,
+          onConfirm: (e) async {},
+          onDelete: (id) async {
+            throw Exception('Falha ao excluir');
+          },
+        ),
+      ),
+    ));
+
+    final deleteButton = find.byIcon(Icons.delete_outline);
+    await tester.tap(deleteButton);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Excluir'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Erro ao excluir compromisso'), findsOneWidget);
+  });
 }

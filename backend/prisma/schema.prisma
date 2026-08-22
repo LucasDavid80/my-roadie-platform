@@ -57,6 +57,10 @@ model Event {
   id           String        @id @default(uuid())
   title        String
   date         DateTime
+  startTime    String?
+  endTime      String?
+  type         String?       @default("Show")
+  fee          Decimal?      @db.Decimal(10, 2)
   location     String
   description  String?
   createdById  String
@@ -103,7 +107,7 @@ model Transaction {
   eventId     String?
   userId      String
   band        Band            @relation(fields: [bandId], references: [id])
-  event       Event?          @relation(fields: [eventId], references: [id])
+  event       Event?          @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user        User            @relation(fields: [userId], references: [id])
 }
 

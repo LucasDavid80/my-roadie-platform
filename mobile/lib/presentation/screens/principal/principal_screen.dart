@@ -29,6 +29,10 @@ class PrincipalScreen extends ConsumerWidget {
       await ref.read(agendaProvider.notifier).addOrUpdateEvent(newEvent);
     }
 
+    Future<void> handleOnDelete(String id) async {
+      await ref.read(agendaProvider.notifier).deleteEvent(id);
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: const MyRoadieAppBar(selectedScreen: 'calendar'),
@@ -87,6 +91,7 @@ class PrincipalScreen extends ConsumerWidget {
                 commitments: events, // <-- Passando a lista observada
                 onConfirm:
                     handleOnConfirm, // <-- Passando a função do controller
+                onDelete: handleOnDelete,
               ),
 
               const SizedBox(height: 80),

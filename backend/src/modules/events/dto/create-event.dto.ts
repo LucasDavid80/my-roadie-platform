@@ -2,6 +2,7 @@ import {
   IsDateString,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
@@ -24,6 +25,22 @@ export class CreateEventDto {
   @IsString({ message: 'A descrição deve ser um texto' })
   @IsOptional()
   description?: string;
+
+  @IsString({ message: 'O horário de início deve ser um texto' })
+  @IsOptional()
+  startTime?: string;
+
+  @IsString({ message: 'O horário de término deve ser um texto' })
+  @IsOptional()
+  endTime?: string;
+
+  @IsString({ message: 'O tipo deve ser um texto' })
+  @IsOptional()
+  type?: string;
+
+  @IsNumber({}, { message: 'O cachê deve ser um número' })
+  @IsOptional()
+  fee?: number;
 
   @IsUUID('4', { message: 'O bandId deve ser um UUID válido' })
   @IsOptional()

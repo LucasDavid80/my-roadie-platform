@@ -147,12 +147,14 @@ void main() {
       expect(result?.notes, 'Trazer cabos');
       expect(result?.bandId, 'band-uuid-1');
 
-      // Verifica sanitização do payload (sem 'id', 'fee', 'type', 'startTime', 'endTime')
+      // Verifica sanitização do payload (sem 'id', mas com fee, type, startTime, endTime)
       expect(capturedBody, isNotNull);
       final dynamic decodedPayload = jsonDecode(capturedBody!);
       expect(decodedPayload['id'], isNull);
-      expect(decodedPayload['fee'], isNull);
-      expect(decodedPayload['type'], isNull);
+      expect(decodedPayload['fee'], 500.0);
+      expect(decodedPayload['type'], 'Show');
+      expect(decodedPayload['startTime'], '20:00');
+      expect(decodedPayload['endTime'], '22:00');
       expect(decodedPayload['title'], 'Show Rock');
       expect(decodedPayload['description'], 'Trazer cabos');
       expect(decodedPayload['bandId'], 'band-uuid-1');
@@ -201,6 +203,49 @@ void main() {
         () => remoteDataSource.saveEvent(tEventModel),
         throwsA(isA<NetworkException>()),
       );
+    });
+
+    test('should send PATCH request and return updated EventModel when event has valid UUID id', () async {
+      // arrange
+      final tExistingEvent = EventModel(
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        title: 'Show Rock Atualizado',
+        type: 'Show',
+        date: DateTime(2026, 7, 16, 20, 0),
+        startTime: '21:00',
+        endTime: '23:30',
+        location: 'Novo Local',
+        fee: 800.0,
+        notes: 'Setlist atualizado',
+        bandId: 'band-uuid-1',
+      );
+
+      final tUpdatedResponseJson = {
+        'id': '123e4567-e89b-12d3-a456-426614174000',
+        'title': 'Show Rock Atualizado',
+        'date': '2026-07-16T20:00:00.000',
+        'location': 'Novo Local',
+        'fee': 800.0,
+        'description': 'Setlist atualizado',
+        'bandId': 'band-uuid-1',
+        'createdById': 'user-uuid-1',
+        'status': 'PENDING',
+      };
+
+      when(() => mockHttpClient.patch(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer((_) async => http.Response(jsonEncode(tUpdatedResponseJson), 200));
+
+      // act
+      final result = await remoteDataSource.saveEvent(tExistingEvent);
+
+      // assert
+      expect(result, isA<EventModel>());
+      expect(result?.id, '123e4567-e89b-12d3-a456-426614174000');
+      expect(result?.title, 'Show Rock Atualizado');
+      expect(result?.fee, 800.0);
     });
   });
 

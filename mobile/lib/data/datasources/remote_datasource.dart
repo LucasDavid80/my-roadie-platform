@@ -100,15 +100,26 @@ class RemoteDataSource {
     }
   }
 
+  static final _uuidRegex = RegExp(
+    r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+  );
+
   Future<EventModel?> saveEvent(EventModel event) async {
     try {
       final payload = event.toCreatePayload();
+      final isUpdating = event.id.isNotEmpty && _uuidRegex.hasMatch(event.id);
 
-      final response = await _client.post(
-        Uri.parse('${AppConfig.backendUrl}/events'),
-        headers: _getHeaders(),
-        body: jsonEncode(payload),
-      );
+      final response = isUpdating
+          ? await _client.patch(
+              Uri.parse('${AppConfig.backendUrl}/events/${event.id}'),
+              headers: _getHeaders(),
+              body: jsonEncode(payload),
+            )
+          : await _client.post(
+              Uri.parse('${AppConfig.backendUrl}/events'),
+              headers: _getHeaders(),
+              body: jsonEncode(payload),
+            );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (response.body.isNotEmpty) {

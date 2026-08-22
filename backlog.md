@@ -101,6 +101,12 @@
 - Depende de: Mobile conectado à API real (spec 003), Atualização da lista de compromissos após criação (spec 007)
 - Status: concluído (specs/014-corrigir-criacao-compromisso-dispositivo-fisico/)
 
+### Extensão do Modelo de Eventos & Ações do Card de Compromisso (Horários, Cachê e Exclusão)
+- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para suportar e persistir `startTime`, `endTime`, `type` e `fee`, sincronizar automaticamente receitas em `Transaction` quando houver cachê (`fee > 0`), conectar o botão de deletar em `CommitmentCard` com confirmação ao fluxo de remoção do `AgendaController`, e ajustar layout/dinamismo do formulário `NewAppointmentWidget`.
+- Impacto esperado: alto (completude da agenda, usabilidade e integração financeira)
+- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
+- Status: concluído (specs/015-extensao-modelo-eventos-e-acoes-card/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -110,46 +116,28 @@
 ## Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
 
-### Corrigir criação de compromisso no dispositivo físico
-- Intenção: Investigar e corrigir a falha em que um novo compromisso não é criado ao usar o app mobile em um aparelho físico (ativação de endpoints de eventos, sanitização de payload e feedback de erro na UI).
-- Impacto esperado: alto (bug crítico/agenda)
-- Depende de: Mobile conectado à API real (spec 003), Atualização da lista de compromissos após criação (spec 007)
-- Status: concluído (specs/014-corrigir-criacao-compromisso-dispositivo-fisico/)
-
-### Correção da tela de cadastro na Web e sincronização no Supabase Auth (Mobile)
-- Intenção: Corrigir o acesso à tela de cadastro no frontend-web e investigar/garantir a persistência real da conta no Supabase Auth durante o cadastro no app mobile.
-- Impacto esperado: alto (bug crítico/cadastro)
-- Depende de: nenhum
-- Status: concluído (specs/010-correcao-login-e-cadastro/)
-
-### Isolar rotas de admin em Route Group próprio
-- Intenção: Separar `(admin)` de `(dashboard)` na Web com guard de papel dedicado, conforme `constitution.md` §9.
-- Impacto esperado: médio (segurança/arquitetura)
-- Depende de: nenhum
-- Status: concluído (specs/002-isolar-rotas-admin/)
-
 ### Extensão do Modelo de Eventos & Ações do Card de Compromisso (Horários, Cachê e Exclusão)
-- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para suportar e persistir `startTime`, `endTime`, `type` e `fee`, além de conectar o botão de deletar em `CommitmentCard` ao fluxo de remoção do `AgendaController`.
-- Impacto esperado: alto (completude da agenda e usabilidade)
+- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para persistir `startTime`, `endTime`, `type` e `fee`, sincronizar automaticamente receitas em `Transaction` (`INCOME`), conectar a ação de exclusão de compromissos com confirmação no `CommitmentCard`, exibir dinamicamente o campo de cachê para `Show`/`Gravação` e centralizar o botão de submissão no `NewAppointmentWidget`.
+- Impacto esperado: alto (completude da agenda, usabilidade e integração financeira)
 - Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
-- Status: ideia
+- Status: concluído (specs/015-extensao-modelo-eventos-e-acoes-card/)
 
 ### Ajuste de layout horizontal do card "Novo Compromisso" e campos
 - Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.
 - Impacto esperado: médio (visual/UI)
 - Depende de: nenhum
-- Status: ideia
-
-### Testes de Integração Ponta a Ponta (E2E) no Mobile
-- Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
-- Impacto esperado: alto (qualidade e confiabilidade de entrega)
-- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
-- Status: ideia
+- Status: absorvido (integrado em specs/015-extensao-modelo-eventos-e-acoes-card/)
 
 ### Centralizar botão "Criar Compromisso"
 - Intenção: Centralizar o botão de submissão do formulário de novo compromisso, atualmente alinhado à esquerda.
 - Impacto esperado: baixo (alinhamento visual)
 - Depende de: nenhum
+- Status: absorvido (integrado em specs/015-extensao-modelo-eventos-e-acoes-card/)
+
+### Testes de Integração Ponta a Ponta (E2E) no Mobile
+- Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
+- Impacto esperado: alto (qualidade e confiabilidade de entrega)
+- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
 - Status: ideia
 
 ---
@@ -180,10 +168,10 @@
 - Depende de: API de Repertoire (spec 005)
 - Status: ideia
 
-### Inventário de Equipamentos & Checklist de Carga (Roadie Check)
-- Intenção: Oferecer um painel de inventário de equipamentos por banda para fazer check-in/check-out em transportes de shows (evitando perdas).
-- Impacto esperado: alto
-- Depende de: API de Tasks (spec 004)
+### Checklist Operacional de Eventos & Inventário de Carga (Roadie Check)
+- Intenção: Conectar a API de Tasks (spec 004) à interface mobile, permitindo gerenciar checklists operacionais vinculados a cada evento (passagem de som, afazeres técnicos, check-in/check-out de carga da van) com barra de progresso no card de compromisso e contagem real de tarefas concluídas no painel inicial (`InfosWidget`).
+- Impacto esperado: alto (operação de estrada e valor para roadies)
+- Depende de: API de Tasks (spec 004), Extensão do Modelo de Eventos (spec 015)
 - Status: ideia
 
 ### Persistência Local e Sincronização Offline (Offline-First)
