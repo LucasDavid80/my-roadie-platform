@@ -68,6 +68,7 @@ class EventModel extends EventEntity {
       'title': title,
       'date': date.toIso8601String(),
       'location': location,
+      'fee': fee,
     };
     if (startTime.isNotEmpty) {
       payload['startTime'] = startTime;
@@ -77,9 +78,6 @@ class EventModel extends EventEntity {
     }
     if (type.isNotEmpty) {
       payload['type'] = type;
-    }
-    if (fee > 0) {
-      payload['fee'] = fee;
     }
     if (notes.isNotEmpty) {
       payload['description'] = notes;
