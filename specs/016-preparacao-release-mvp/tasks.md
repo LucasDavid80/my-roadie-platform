@@ -20,7 +20,7 @@
 ## Fase 3 — Backend em Produção
 
 - [x] T3.1 — Alterar `backend/src/main.ts` para `app.enableCors({ origin: process.env.FRONTEND_URL })`.
-- [ ] T3.2 — Criar conta e projeto na plataforma de hospedagem escolhida (Railway Hobby ou Render Starter).
+- [x] T3.2 — Criar conta e projeto na plataforma de hospedagem escolhida (Railway Hobby ou Render Starter).
 - [ ] T3.3 — Configurar variáveis de ambiente de produção: `DATABASE_URL` (pooler), chaves do Supabase, `FRONTEND_URL`.
 - [ ] T3.4 — Rodar `npx prisma migrate deploy` contra o banco de produção.
 - [ ] T3.5 — Publicar o backend e validar que responde publicamente (`GET` de um endpoint simples).
