@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:agenda_musical/core/router.dart';
+import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -18,7 +19,7 @@ void main() async {
         publishableKey: AppConfig.supabaseAnonKey,
       );
     } catch (e) {
-      debugPrint('Erro ao inicializar Supabase: $e');
+      AppLogger.error('Erro ao inicializar Supabase', e);
     }
   }
 

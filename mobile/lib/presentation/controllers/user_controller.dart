@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_user_repository.dart';
@@ -72,8 +72,7 @@ class UserNotifier extends Notifier<UserEntity> {
       state = userProfile;
       _lastFetchedUserId = targetId;
     } catch (e, stack) {
-      debugPrint('fetchProfile ERRO: $e');
-      debugPrintStack(stackTrace: stack);
+      AppLogger.error('fetchProfile ERRO', e, stack);
     } finally {
       _isFetching = false;
     }
@@ -89,8 +88,7 @@ class UserNotifier extends Notifier<UserEntity> {
       state = updated;
       return SaveProfileResult.success();
     } catch (e, stack) {
-      debugPrint('saveProfile ERRO: $e');
-      debugPrintStack(stackTrace: stack);
+      AppLogger.error('saveProfile ERRO', e, stack);
       String message = 'Erro ao salvar perfil';
       if (e is UnauthorizedException) {
         message = e.message;

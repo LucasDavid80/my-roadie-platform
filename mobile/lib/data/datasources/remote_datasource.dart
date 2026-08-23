@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import '../../core/utils/app_logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/config/app_config.dart';
@@ -59,9 +59,9 @@ class RemoteDataSource {
       } catch (_) {}
     }
 
-    debugPrint('DEBUG AUTH TOKEN PRESENTE: ${token != null && token.isNotEmpty}');
+    AppLogger.info('DEBUG AUTH TOKEN PRESENTE: ${token != null && token.isNotEmpty}');
     if (token != null && token.length > 20) {
-      debugPrint('DEBUG AUTH TOKEN (início): ${token.substring(0, 20)}...');
+      AppLogger.info('DEBUG AUTH TOKEN (início): ${token.substring(0, 20)}...');
     }
 
     final headers = <String, String>{'Content-Type': 'application/json'};
@@ -181,16 +181,16 @@ class RemoteDataSource {
       final headers = _getHeaders();
       final url = '${AppConfig.backendUrl}/users/$id';
 
-      debugPrint('DEBUG REQUEST URL: $url');
-      debugPrint('DEBUG REQUEST HEADERS: $headers');
+      AppLogger.info('DEBUG REQUEST URL: $url');
+      AppLogger.info('DEBUG REQUEST HEADERS: $headers');
 
       final response = await _client.get(
         Uri.parse(url),
         headers: headers,
       );
 
-      debugPrint('DEBUG RESPONSE STATUS: ${response.statusCode}');
-      debugPrint('DEBUG RESPONSE BODY: ${response.body}');
+      AppLogger.info('DEBUG RESPONSE STATUS: ${response.statusCode}');
+      AppLogger.info('DEBUG RESPONSE BODY: ${response.body}');
 
       if (response.statusCode == 200) {
         return UserModel.fromJson(jsonDecode(response.body));

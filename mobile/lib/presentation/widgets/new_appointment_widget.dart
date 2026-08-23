@@ -1,4 +1,5 @@
 import 'package:agenda_musical/core/constants/app_colors.dart';
+import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -448,10 +449,11 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                         Navigator.of(context).pop();
                                       }
                                     } catch (error, stackTrace) {
-                                      debugPrint(
-                                        'Erro ao salvar compromisso: $error',
+                                      AppLogger.error(
+                                        'Erro ao salvar compromisso',
+                                        error,
+                                        stackTrace,
                                       );
-                                      debugPrintStack(stackTrace: stackTrace);
                                       if (context.mounted) {
                                         setState(() {
                                           _isLoading = false;
