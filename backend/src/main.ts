@@ -16,7 +16,7 @@ async function bootstrap() {
   // Esta linha substitui a necessidade do enableShutdownHooks no service
   app.enableShutdownHooks();
 
-  app.enableCors();
+  app.enableCors({ origin: process.env.FRONTEND_URL });
   await app.listen(process.env.PORT || 3000, '0.0.0.0');
 }
 void bootstrap();
