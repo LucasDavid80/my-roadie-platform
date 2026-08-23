@@ -8,7 +8,7 @@
 
 ## Fase 1 — Implementação do AppLogger & Sanitização de Logs (Mobile)
 
-- [ ] T1.1 — Criar o utilitário `mobile/lib/core/utils/app_logger.dart` com proteção via `kDebugMode`.
+- [x] T1.1 — Criar o utilitário `mobile/lib/core/utils/app_logger.dart` com proteção via `kDebugMode`.
 - [ ] T1.2 — Refatorar `mobile/lib/data/datasources/remote_datasource.dart`, `mobile/lib/main.dart`, `mobile/lib/presentation/controllers/user_controller.dart` e `mobile/lib/presentation/widgets/new_appointment_widget.dart` para utilizar `AppLogger`.
 - [ ] T1.3 — Remover especificamente o log parcial do token JWT em `remote_datasource.dart` (não substituir por versão mascarada — remover a informação do token do log por completo).
 - [ ] T1.4 — Criar testes unitários para o `AppLogger` em `mobile/test/core/utils/app_logger_test.dart`.
