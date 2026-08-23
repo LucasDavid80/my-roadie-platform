@@ -60,9 +60,6 @@ class RemoteDataSource {
     }
 
     AppLogger.info('DEBUG AUTH TOKEN PRESENTE: ${token != null && token.isNotEmpty}');
-    if (token != null && token.length > 20) {
-      AppLogger.info('DEBUG AUTH TOKEN (início): ${token.substring(0, 20)}...');
-    }
 
     final headers = <String, String>{'Content-Type': 'application/json'};
     if (token != null && token.isNotEmpty) {
