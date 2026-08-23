@@ -15,7 +15,7 @@
 
 ## Fase 2 — Identidade do Aplicativo (Mobile)
 
-- [ ] T2.1 — Atualizar `android:label` em `mobile/android/app/src/main/AndroidManifest.xml` para `"My Roadie"`.
+- [x] T2.1 — Atualizar `android:label` em `mobile/android/app/src/main/AndroidManifest.xml` para `"My Roadie"`.
 
 ## Fase 3 — Backend em Produção
 
