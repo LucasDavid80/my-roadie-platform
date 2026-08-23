@@ -107,6 +107,12 @@
 - Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
 - Status: concluído (specs/015-extensao-modelo-eventos-e-acoes-card/)
 
+### Preparação para Release do MVP & Padronização de Logs (AppLogger)
+- Intenção: Criar utilitário centralizado `AppLogger` com proteção `kDebugMode` para eliminar `debugPrint`s que expõem tokens e dados sensíveis em compilações de release, e ajustar a identidade da aplicação para "My Roadie" (`android:label`).
+- Impacto esperado: alto (segurança, privacidade e prontidão para release)
+- Depende de: Extensão do Modelo de Eventos & Ações do Card de Compromisso (spec 015)
+- Status: em spec (specs/016-preparacao-release-mvp/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -139,6 +145,12 @@
 - Impacto esperado: alto (qualidade e confiabilidade de entrega)
 - Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
 - Status: ideia
+
+### Pipeline CI/CD Unificado & Modernizado (E2E, Deploy Contínuo e Otimização de Custos)
+- Intenção: Unificar as melhores práticas do histórico do CI/CD, combinando a estabilidade e eficiência de custos da versão atual (filtros de paths/mensagens de commit, JDK 17 e Android SDK) com a completude funcional da versão histórica (estágio de testes E2E com Playwright para Web/API, automação de Continuous Deployment na Vercel e Render, e notificações de status de build/deploy).
+- Impacto esperado: alto (automação de entrega contínua, confiabilidade e governança)
+- Depende de: nenhum
+- Status: priorizado
 
 ---
 
