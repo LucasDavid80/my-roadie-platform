@@ -152,6 +152,12 @@
 - Depende de: nenhum
 - Status: priorizado
 
+### Auditoria e Otimização de Performance do Pipeline CI/CD (Speed & Caching)
+- Intenção: Medir, diagnosticar e otimizar os tempos de execução do GitHub Actions através de caching avançado multi-camadas (Gradle/Android cache, Next.js build cache, Flutter pub cache e node_modules), paralelização inteligente e detecção automática de paths alterados via `paths-filter` nativo, reduzindo o tempo de feedback nos PRs e o consumo da cota gratuita.
+- Impacto esperado: alto (redução de tempo de espera nos PRs e economia de minutos de CI)
+- Depende de: Pipeline CI/CD Unificado & Modernizado
+- Status: priorizado
+
 ---
 
 ### Fase 2: Conformidade Legal, Privacidade & Governança (LGPD)
