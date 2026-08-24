@@ -41,6 +41,10 @@ Preparar e colocar no ar a primeira versão de testes fechados (MVP) do My Roadi
 ### 3. Estratégia de Banco de Dados Supabase (T0.3)
 - Decisão confirmada: o MVP de testes fechados utilizará o **mesmo projeto Supabase de desenvolvimento**, mantendo as credenciais existentes e simplificando a infraestrutura inicial.
 
+### 4. Avaliação do FlutLab.io e Migração para GitHub Actions (T6.2 / Decisão Arquitetural)
+- **Diagnóstico do FlutLab.io**: Durante a execução da Fase 6, verificou-se que o FlutLab.io disponibiliza compilação apenas para *Web, Android APK, App Bundle (Android AAB)* e testes, não possuindo infraestrutura macOS para geração nativa de arquivos `.ipa` instaláveis no iOS.
+- **Decisão e Pivô**: Desistência do uso do FlutLab.io e adoção dos **runners `macos-latest` do GitHub Actions** (disponíveis gratuitamente). O pipeline do repositório compila o app com `flutter build ios --release --no-codesign`, empacota o bundle em formato `.ipa` e disponibiliza o binário para download direto via artefatos do GitHub Actions, mantendo o processo 100% gratuito e sem necessidade de Mac físico local.
+
 ## Escopo
 
 ### 1. Mobile — Logging e Identidade
@@ -67,7 +71,7 @@ Preparar e colocar no ar a primeira versão de testes fechados (MVP) do My Roadi
 
 ### 4. Mobile — Build de Release
 - Gerar o APK de release: `flutter build apk --release --dart-define=BACKEND_URL=<url-producao>`.
-- Gerar o `.ipa` via FlutLab.io (sem necessidade de Mac local), assinado com certificado de um Apple ID gratuito, para distribuição via sideload.
+- Gerar o `.ipa` via GitHub Actions (`macos-latest`, sem necessidade de Mac local), preparado para assinatura com Apple ID gratuito via sideload (Sideloadly/AltStore). (Nota: FlutLab.io foi descontinuado do fluxo por falta de suporte a IPA).
 
 ## Fora de Escopo
 
@@ -88,5 +92,5 @@ Preparar e colocar no ar a primeira versão de testes fechados (MVP) do My Roadi
 - [ ] Frontend-web publicado e acessível publicamente.
 - [ ] Rota `/testers` criada, não-listada, com instruções e links de instalação Android e iOS.
 - [ ] APK de release gerado e apontando para o backend de produção.
-- [ ] `.ipa` gerado via FlutLab.io e testado via sideload em ao menos um dispositivo iOS.
+- [ ] `.ipa` gerado via pipeline do GitHub Actions (`macos-latest`) e testado via sideload em ao menos um dispositivo iOS.
 - [ ] Suíte de testes do mobile e backend passando com 100% de sucesso e zero issues no linter/analyzer.
