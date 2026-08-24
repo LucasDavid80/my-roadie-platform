@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Smartphone, Apple, ShieldAlert, Sparkles, Download } from 'lucide-react';
+import { Smartphone, Apple, ShieldAlert, Sparkles, Download, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Download MVP | My Roadie — Programa de Testes',
@@ -124,18 +124,92 @@ export default function TestersPage() {
           </div>
 
           {/* Card iOS */}
-          <div className="bg-white p-8 rounded-2xl border border-zinc-200 shadow-sm flex flex-col justify-between">
+          <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200 shadow-sm flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-900">
-                <Apple className="w-6 h-6" />
+              <div className="flex items-center justify-between">
+                <div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-900">
+                  <Apple className="w-6 h-6" />
+                </div>
+                <span className="px-2.5 py-1 bg-zinc-100 text-zinc-800 text-xs font-semibold rounded-full border border-zinc-200">
+                  Sideload Gratuito
+                </span>
               </div>
-              <h2 className="text-2xl font-bold text-black">iOS (.IPA)</h2>
-              <p className="text-zinc-600 text-sm leading-relaxed">
-                Instalação via Sideload para iPhones.
-              </p>
+              <div>
+                <h2 className="text-2xl font-bold text-black">iOS (.IPA)</h2>
+                <p className="text-zinc-600 text-sm mt-1">
+                  Compatível com iPhone (iOS 15.0 ou superior) via computador.
+                </p>
+              </div>
+
+              {/* Botão de Download */}
+              <div className="pt-2">
+                <a
+                  href="/downloads/my-roadie-release.ipa"
+                  download="my-roadie-release.ipa"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-zinc-900 hover:bg-black active:bg-zinc-800 text-white font-bold rounded-xl transition-all shadow-md shadow-zinc-900/20 hover:scale-[1.01]"
+                >
+                  <Download className="w-5 h-5" />
+                  <span>Baixar IPA do My Roadie</span>
+                </a>
+                <p className="text-[11px] text-zinc-400 text-center mt-1.5">
+                  Arquivo .ipa para instalação via Sideloadly / AltStore
+                </p>
+              </div>
+
+              {/* Instruções de Sideload */}
+              <div className="pt-2 space-y-3">
+                <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
+                  Passo a passo do Sideload:
+                </h3>
+                <ol className="space-y-2.5 text-xs text-zinc-600">
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-700 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      1
+                    </span>
+                    <span>Baixe o arquivo <strong>.ipa</strong> acima no seu computador (PC Windows ou Mac).</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-700 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      2
+                    </span>
+                    <span>
+                      Conecte o iPhone via cabo ao computador e abra o programa de sideload gratuito (recomendado: <strong>Sideloadly</strong> ou <strong>AltStore</strong>).
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-700 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      3
+                    </span>
+                    <span>
+                      Arraste o arquivo <strong>.ipa</strong> para a ferramenta, informe seu Apple ID gratuito e clique em <strong>Start</strong> para transferir o app.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-700 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      4
+                    </span>
+                    <span>
+                      No iPhone, acesse <strong>Ajustes &gt; Geral &gt; Gerenciamento de VPN e Dispositivo</strong>, toque no seu e-mail do Apple ID e selecione <strong>&quot;Confiar&quot;</strong>.
+                    </span>
+                  </li>
+                </ol>
+
+                {/* Alerta de Expiração de 7 dias */}
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-900 leading-relaxed space-y-1">
+                  <div className="flex items-center gap-1.5 font-bold text-amber-800">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Aviso de Validade (7 dias):</span>
+                  </div>
+                  <p>
+                    Apps instalados com Apple ID gratuito expiram a cada <strong>7 dias</strong>. Quando expirar, basta refazer a etapa do Sideload no computador ou acessar este link para baixar a versão mais recente.
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="mt-8 pt-6 border-t border-zinc-100">
-              <span className="text-xs text-zinc-400">Seção iOS</span>
+
+            <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-400">
+              <span>Formato: IPA</span>
+              <span>Validade: 7 dias (Sideload)</span>
             </div>
           </div>
         </div>

@@ -35,7 +35,7 @@
 
 - [x] T5.1 — Criar a rota `frontend-web/src/app/testers/page.tsx`, sem link na navegação principal.
 - [x] T5.2 — Adicionar seção Android com botão de download do `.apk` e instrução de "fontes desconhecidas".
-- [ ] T5.3 — Adicionar seção iOS com link do `.ipa` e passo a passo do sideload (Sideloadly/AltStore), incluindo o aviso de expiração em 7 dias.
+- [x] T5.3 — Adicionar seção iOS com link do `.ipa` e passo a passo do sideload (Sideloadly/AltStore), incluindo o aviso de expiração em 7 dias.
 - [ ] T5.4 — Decidir e configurar onde os arquivos `.apk`/`.ipa` ficam hospedados (assets estáticos do frontend-web ou storage separado).
 
 ## Fase 6 — Builds de Release (Mobile)
