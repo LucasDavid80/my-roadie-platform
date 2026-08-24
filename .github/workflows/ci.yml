@@ -183,6 +183,21 @@ jobs:
       - run: flutter pub get
       - run: flutter build apk --release
 
+  mobile-ios-build:
+    needs: mobile-test
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign --dart-define=BACKEND_URL=https://my-roadie-backend.onrender.com
+
   # ==========================================
   # DEPLOY JOBS (Continuous Deployment)
   # ==========================================
