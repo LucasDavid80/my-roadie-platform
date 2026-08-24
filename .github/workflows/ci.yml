@@ -182,3 +182,34 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build apk --release
+
+  # ==========================================
+  # DEPLOY JOBS (Continuous Deployment)
+  # ==========================================
+  deploy-production:
+    name: Deploy to Production
+    needs: [frontend-build, backend-build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Backend Deploy (Render)
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$RENDER_DEPLOY_HOOK" ]; then
+            echo "Disparando deploy do Backend no Render..."
+            curl -fsS -X POST "$RENDER_DEPLOY_HOOK"
+          else
+            echo "Aviso: RENDER_DEPLOY_HOOK não configurado nos secrets do GitHub. Ignorando."
+          fi
+
+      - name: Trigger Frontend Deploy (Vercel)
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK" ]; then
+            echo "Disparando deploy do Frontend na Vercel..."
+            curl -fsS -X POST "$VERCEL_DEPLOY_HOOK"
+          else
+            echo "Aviso: VERCEL_DEPLOY_HOOK não configurado nos secrets do GitHub. Ignorando."
+          fi
