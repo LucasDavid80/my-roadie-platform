@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Smartphone, Apple, ShieldAlert, Sparkles } from 'lucide-react';
+import { Smartphone, Apple, ShieldAlert, Sparkles, Download } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Download MVP | My Roadie — Programa de Testes',
@@ -51,18 +51,75 @@ export default function TestersPage() {
         {/* Cards de Plataforma */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card Android */}
-          <div className="bg-white p-8 rounded-2xl border border-zinc-200 shadow-sm flex flex-col justify-between">
+          <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200 shadow-sm flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
-                <Smartphone className="w-6 h-6" />
+              <div className="flex items-center justify-between">
+                <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+                  <Smartphone className="w-6 h-6" />
+                </div>
+                <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
+                  Instalação Direta
+                </span>
               </div>
-              <h2 className="text-2xl font-bold text-black">Android (.APK)</h2>
-              <p className="text-zinc-600 text-sm leading-relaxed">
-                Instalação direta para smartphones Android.
-              </p>
+              <div>
+                <h2 className="text-2xl font-bold text-black">Android (.APK)</h2>
+                <p className="text-zinc-600 text-sm mt-1">
+                  Compatível com qualquer smartphone Android (versão 8.0 ou superior).
+                </p>
+              </div>
+
+              {/* Botão de Download */}
+              <div className="pt-2">
+                <a
+                  href="/downloads/my-roadie-release.apk"
+                  download="my-roadie-release.apk"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.01]"
+                >
+                  <Download className="w-5 h-5" />
+                  <span>Baixar APK do My Roadie</span>
+                </a>
+                <p className="text-[11px] text-zinc-400 text-center mt-1.5">
+                  Arquivo .apk de release oficial para testes
+                </p>
+              </div>
+
+              {/* Instruções de Instalação e Fontes Desconhecidas */}
+              <div className="pt-2 space-y-3">
+                <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
+                  Passo a passo de instalação:
+                </h3>
+                <ol className="space-y-2.5 text-xs text-zinc-600">
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-700 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      1
+                    </span>
+                    <span>Toque no botão acima para iniciar o download do arquivo <strong>.apk</strong>.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-700 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      2
+                    </span>
+                    <span>
+                      Abra o arquivo baixado. Se o sistema exibir um aviso de segurança, clique em <strong>Configurações</strong> e ative a opção <strong>&quot;Permitir desta fonte&quot;</strong> (ou <em>Fontes desconhecidas</em>).
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-zinc-100 text-zinc-700 font-bold flex items-center justify-center shrink-0 text-[11px]">
+                      3
+                    </span>
+                    <span>Confirme a instalação e abra o aplicativo <strong>My Roadie</strong> para começar a testar.</span>
+                  </li>
+                </ol>
+
+                <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-lg text-[11px] text-zinc-500 leading-relaxed">
+                  💡 <strong>Nota:</strong> O alerta de &quot;fonte desconhecida&quot; é um procedimento padrão do Android para aplicativos instalados fora da Google Play Store durante fases de teste fechado.
+                </div>
+              </div>
             </div>
-            <div className="mt-8 pt-6 border-t border-zinc-100">
-              <span className="text-xs text-zinc-400">Seção Android</span>
+
+            <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-400">
+              <span>Formato: APK</span>
+              <span>Versão: MVP 1.0.0</span>
             </div>
           </div>
 
