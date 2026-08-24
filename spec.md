@@ -34,14 +34,16 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **repertoire** — CRUD completo de músicas do repertório (`POST /repertoire`, `GET /repertoire`, `GET /repertoire/:id`, `PATCH /repertoire/:id`, `DELETE /repertoire/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
 - ✅ **transactions** — CRUD completo de lançamentos financeiros (`POST /transactions`, `GET /transactions`, `GET /transactions/:id`, `PATCH /transactions/:id`, `DELETE /transactions/:id`), com DTOs validados via `class-validator`, autorização por banda via `BandAccessService`, e cobertura de testes unitários e E2E.
 - ✅ **band-access** — Módulo reutilizável `BandAccessModule` / `BandAccessService` com `getUserBandIds` e `assertMembership`, garantindo autorização restrita por associação em `BandMember` nos módulos `tasks`, `repertoire` e `transactions` (Spec 011).
+- ✅ **cors-producao** — Configuração de CORS restrito por ambiente via `process.env.FRONTEND_URL` em `backend/src/main.ts`, eliminando wildcard em produção (Spec 016).
 
 ### Frontend Web (`frontend-web/src/`)
-- Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`.
+- Rotas presentes: `(auth)/login`, `(auth)/register`, `(dashboard)/dashboard`, `(dashboard)/profile`, `(admin)/admin`, `/testers`.
 - Serviços de API e contexto de autenticação (`AuthContext`) existem na estrutura.
 - A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios), eliminando os placeholders.
 - ✅ **Autenticação e Cadastro via Supabase Auth:** Módulo `src/lib/supabase.ts` centraliza a instância do Supabase. `AuthContext` efetua autenticação real via `supabase.auth.signInWithPassword`, e `LoginForm` exibe mensagens de erro amigáveis (Spec 008). Rota `/register` acessível e integrada ao `supabase.auth.signUp` e à API do backend NestJS (`POST /users`) com mensagens de erro (Spec 010).
 - ✅ **Deduplicação de `fetchProfile` e Mensagens 401:** `AuthContext` deduplica o carregamento de perfil via `useRef` garantindo disparo único de `fetchProfile`, com `LoginForm` exibindo feedbacks descritivos de erro da API (Spec 012).
 - ✅ **Tipagem de Eventos:** Interface `EventEntity` em `src/types/event.ts` refletindo `startTime`, `endTime`, `type`, `fee` e metadados de compromissos para consistência dos contratos do monorepo (Spec 015).
+- ✅ **Página de Distribuição para Testers:** Rota não-listada `/testers` criada com layout temático, instruções de instalação para Android (download de `.apk` e ativação de fontes desconhecidas) e iOS (download de `.ipa` e passo a passo de sideload via AltStore/Sideloadly com aviso de renovação de 7 dias) (Spec 016).
 
 ### Mobile (`mobile/lib/`)
 - Telas presentes e com bastante conteúdo: login/signup (`presentation/screens/auth`), agenda/calendário (`presentation/screens/principal`), perfil (`presentation/screens/person`).
@@ -52,6 +54,7 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 - ✅ **Rolagem da Agenda sobre o calendário:** `CustomCalendar` restringe o `TableCalendar` a `AvailableGestures.horizontalSwipe`, liberando o arraste vertical para o `SingleChildScrollView` da `PrincipalScreen`; a navegação horizontal, as setas do cabeçalho, a seleção de dias e os marcadores de eventos foram preservados e cobertos por teste de widget (Spec 013).
 - ✅ **Criação e Sincronização de Compromissos com Feedback Visual:** `RemoteDataSource.saveEvent` sanitiza o payload de criação omitindo `id` local em conformidade com o `ValidationPipe` do backend; `NewAppointmentWidget` captura exceções de rede, validação ou autenticação exibindo feedback visual claro via `SnackBar` na UI em vez de falhas silenciosas; conectividade em dispositivos físicos suportada via `adb reverse` e `--dart-define=BACKEND_URL` (Spec 014).
 - ✅ **Extensão de Eventos, Exclusão com Confirmação e Refinamento de Layout:** `EventModel.toCreatePayload()` e `fromMap()` persistem e desserializam `startTime`, `endTime`, `type` e `fee`; `CommitmentCard` implementa exclusão de compromissos com diálogo interativo de confirmação (`showDialog`) acionando `AgendaController.deleteEvent(id)` e feedback visual via `SnackBar`; `NewAppointmentWidget` com renderização dinâmica do campo Cachê (visível apenas para `Show` e `Gravação`), expansão do campo Local e botão de ação centralizado (Spec 015).
+- ✅ **Padronização de Logging & Identidade Oficial do App:** Utilitário `AppLogger` (`mobile/lib/core/utils/app_logger.dart`) centralizado com métodos `info`, `warning` e `error` operando sob proteção de tempo de compilação com `kDebugMode`, sanitização total de dados sensíveis e eliminação de tokens JWT em logs do `logcat`, suíte de testes unitários dedicada (`app_logger_test.dart`), e identidade visual do app configurada para `"My Roadie"` em `AndroidManifest.xml` (Spec 016).
 
 ## 5. Regras de negócio confirmadas (das que já têm API)
 
@@ -72,5 +75,5 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 ## 7. Critério de "pronto" desta baseline
 
-Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a extensão do modelo de eventos, sincronização financeira e ações do card de compromisso (Spec 015). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
+Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a preparação e publicação do MVP para testes fechados (Spec 016). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
 

@@ -50,17 +50,17 @@
 
 - [x] T7.1 — Executar suíte de testes do mobile (`flutter test`) e análise estática (`flutter analyze`).
 - [x] T7.2 — Executar suíte de testes do backend (`npm test` e `npm run test:e2e`), validando que a mudança de CORS não quebrou nada.
-- [ ] T7.3 — Atualizar `backlog.md`, `spec.md` e `plan.md` raiz com a entrega da spec 016.
+- [x] T7.3 — Atualizar `backlog.md`, `spec.md` e `plan.md` raiz com a entrega da spec 016.
 
 ## Checklist de fechamento da feature
 
-- [ ] `AppLogger` criado e operacional com proteção `kDebugMode`
-- [ ] Todos os `debugPrint` residuais e logs sensíveis refatorados, incluindo o token JWT
-- [ ] Testes unitários do `AppLogger` passando
-- [ ] Nome do app no `AndroidManifest.xml` definido como "My Roadie"
-- [ ] Backend com CORS restrito, publicado, sem cold start, com migrations aplicadas
-- [ ] Frontend-web publicado e funcional contra o backend de produção
-- [ ] Rota `/testers` no ar com instruções Android e iOS
-- [ ] APK de release gerado apontando para produção
-- [ ] `.ipa` gerado via pipeline do GitHub Actions (`macos-latest`) e validado via sideload em dispositivo real
-- [ ] Suítes de testes automatizados do mobile e backend passando 100%
+- [x] `AppLogger` criado e operacional com proteção `kDebugMode`
+- [x] Todos os `debugPrint` residuais e logs sensíveis refatorados, incluindo o token JWT
+- [x] Testes unitários do `AppLogger` passando
+- [x] Nome do app no `AndroidManifest.xml` definido como "My Roadie"
+- [x] Backend com CORS restrito, publicado, sem cold start, com migrations aplicadas
+- [x] Frontend-web publicado e funcional contra o backend de produção
+- [x] Rota `/testers` no ar com instruções Android e iOS
+- [x] APK de release gerado apontando para produção
+- [x] `.ipa` gerado via pipeline do GitHub Actions (`macos-latest`) e validado via sideload em dispositivo real
+- [x] Suítes de testes automatizados do mobile e backend passando 100%

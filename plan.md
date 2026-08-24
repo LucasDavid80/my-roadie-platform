@@ -18,6 +18,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Persistência: Prisma Client sobre Postgres (Supabase). `DATABASE_URL` via env.
 - Fluxo de schema: editar `prisma/schema.prisma` → migration → `npx prisma generate` → atualizar `docs/database/erd.md`.
 - Autenticação e Autorização: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts` com suporte dinâmico a ES256 via JWKS do Supabase e HS256 em dev local), guards (`JwtAuthGuard` com logs detalhados e exceções descritivas como `TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`, `OwnershipGuard`) e `BandAccessService` (`getUserBandIds`, `assertMembership`) para verificação de pertencimento via `BandMember` nos módulos de `tasks`, `repertoire` e `transactions` (Spec 011, Spec 012). Módulo `events` autenticado e ativo com `EventsController` e `EventsService` integrados ao Prisma, suporte a Workspace Unificado para músicos solo, novos campos (`startTime`, `endTime`, `type`, `fee`), sincronização automática com `Transaction` (`INCOME` para `fee > 0`) e integridade referencial `onDelete: Cascade` (Spec 014, Spec 015).
+- Configuração de Produção & CORS: `backend/src/main.ts` restringe CORS à origem definida em `process.env.FRONTEND_URL`, eliminando permissões abertas de wildcard para segurança em produção (Spec 016).
 
 **Lacunas de módulos e autorização por banda zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e com autorização por banda fechada via `BandAccessService` (spec 011); módulo `Event` ativo com endpoints REST completos, suporte a workspace solo, extensão de campos, sincronização financeira e testes unitários/E2E (spec 014, spec 015).
 
@@ -27,6 +28,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - `src/services/` concentra chamadas HTTP; sempre remover `id`/`createdAt`/`updatedAt` antes de `POST`/`PATCH`.
 - Tipos de `src/types/` devem espelhar os DTOs do backend (como `src/types/event.ts` para `EventEntity` - Spec 015).
 - Instância centralizada do Supabase em `src/lib/supabase.ts`. Autenticação integrada ao Supabase Auth via `signInWithPassword` no `AuthContext` (Spec 008) e cadastro integrado ao Supabase Auth + API NestJS (`POST /users`) no `RegisterForm` (Spec 010). `AuthContext` com trava `useRef` garantindo disparo único de `fetchProfile` e tratamento amigável de erros de autenticação na UI (Spec 012).
+- Página de Distribuição: Rota `/testers` (`src/app/testers/page.tsx`) não-listada na navegação, provendo centralização de links de build (`.apk` e `.ipa`) e guia de instalação para testadores fechados (Spec 016).
 
 **Decisão fechada:** A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios).
 
@@ -42,9 +44,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - ✅ **Rolagem da Agenda sobre o calendário:** `CustomCalendar` configura o `TableCalendar` com `AvailableGestures.horizontalSwipe`, para que o gesto vertical seja tratado pelo `SingleChildScrollView` da `PrincipalScreen`. O teste de widget em `principal_screen_test.dart` confirma que um arraste iniciado sobre o calendário desloca a tela, sem alterar a seleção de dia, os marcadores de eventos ou a navegação mensal (Spec 013).
 - ✅ **Criação de Compromissos e Feedback Visual na UI (`NewAppointmentWidget`):** `RemoteDataSource.saveEvent` sanitiza o payload de criação (removendo `id` local autogerado antes do `POST`), `AgendaController.addOrUpdateEvent` propaga exceções e `NewAppointmentWidget` exibe `SnackBar` com mensagens informativas de erro (rede, validação 400, auth 401 ou servidor 500) mantendo o formulário preenchido para reenvio. Compatibilidade com dispositivos físicos validada via `adb reverse tcp:3000 tcp:3000` ou `--dart-define=BACKEND_URL` (Spec 014).
 - ✅ **Extensão do Modelo de Eventos, Exclusão de Compromisso e Layout (`CommitmentCard` / `NewAppointmentWidget`):** `EventModel` serializa e desserializa `startTime`, `endTime`, `type` e `fee`. `CommitmentCard` substitui o ícone estático por um `IconButton` funcional com diálogo de confirmação chamando `AgendaController.deleteEvent(id)` e feedback visual via `SnackBar`. `NewAppointmentWidget` com renderização dinâmica do campo Cachê (exibido apenas para `Show` e `Gravação`), expansão do input `Local` para `Ensaio`/`Reunião`, layout ajustado e botão de submissão centralizado (Spec 015).
-
-
-
+- ✅ **Logging Centralizado via `AppLogger` & Identidade do App:** Utilitário `AppLogger` (`mobile/lib/core/utils/app_logger.dart`) implementado com `kDebugMode`, eliminando em builds de release qualquer vazamento de tokens de autenticação ou dados sensíveis em `logcat`. Logs diretos de `debugPrint` refatorados em todo o app (`remote_datasource.dart`, `user_controller.dart`, `main.dart`, `new_appointment_widget.dart`), remoção completa de rastros do JWT, testes unitários em `app_logger_test.dart`, e nome de exibição do app alterado para "My Roadie" (`android:label`) (Spec 016).
 
 ## 5. Testes
 
@@ -64,6 +64,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 ## 6. CI/CD
 
 - Definido em `.github/workflows/ci.yml`, roda com Node 22.
+- Job `mobile-ios-build` configurado com runner `macos-latest` para compilação do iOS sem códigos de assinatura locais (`--no-codesign`), empacotamento em `.ipa` e upload automatizado de artefatos para distribuição (Spec 016).
 - Simulação local recomendada via `act --secret-file .secrets` antes de abrir PR.
 - Fluxo esperado: lint → unit tests → build → integração/e2e.
 
