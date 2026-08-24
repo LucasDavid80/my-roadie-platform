@@ -49,7 +49,7 @@
 ## Fase 7 — Validação Automatizada & Fechamento
 
 - [x] T7.1 — Executar suíte de testes do mobile (`flutter test`) e análise estática (`flutter analyze`).
-- [ ] T7.2 — Executar suíte de testes do backend (`npm test` e `npm run test:e2e`), validando que a mudança de CORS não quebrou nada.
+- [x] T7.2 — Executar suíte de testes do backend (`npm test` e `npm run test:e2e`), validando que a mudança de CORS não quebrou nada.
 - [ ] T7.3 — Atualizar `backlog.md`, `spec.md` e `plan.md` raiz com a entrega da spec 016.
 
 ## Checklist de fechamento da feature
