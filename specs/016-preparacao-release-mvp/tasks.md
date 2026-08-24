@@ -44,7 +44,7 @@
 - [x] T6.2 — Avaliar viabilidade do FlutLab.io e decidir migração para GitHub Actions (`macos-latest`) por ausência de compilação de IPA nativo no FlutLab.
 - [x] T6.3 — Configurar job `mobile-ios-build` com runner `macos-latest` no pipeline de CI/CD (`.github/workflows/ci.yml`) para compilar o iOS em release com `--dart-define=BACKEND_URL=<url-producao>`.
 - [x] T6.4 — Configurar empacotamento do `Runner.app` em `my-roadie-release.ipa` e upload do artefato no GitHub Actions.
-- [ ] T6.5 — Testar o sideload do `.ipa` em ao menos um dispositivo iOS real via Sideloadly ou AltStore.
+- [x] T6.5 — Testar o sideload do `.ipa` em ao menos um dispositivo iOS real via Sideloadly ou AltStore.
 
 ## Fase 7 — Validação Automatizada & Fechamento
 
