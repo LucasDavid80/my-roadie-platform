@@ -42,7 +42,7 @@
 
 - [x] T6.1 — Gerar o APK de release com `flutter build apk --release --dart-define=BACKEND_URL=<url-producao>`.
 - [x] T6.2 — Zipar a pasta `mobile/` e subir no FlutLab.io.
-- [ ] T6.3 — Configurar o `BACKEND_URL` de produção no build do FlutLab.
+- [x] T6.3 — Configurar o `BACKEND_URL` de produção no build do FlutLab.
 - [ ] T6.4 — Gerar certificado a partir de um Apple ID gratuito e configurar no FlutLab para obter um `.ipa` assinado.
 - [ ] T6.5 — Testar o sideload do `.ipa` em ao menos um dispositivo iOS real via Sideloadly ou AltStore.
 
