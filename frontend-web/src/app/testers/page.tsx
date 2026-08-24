@@ -13,6 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default function TestersPage() {
+  const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL || '/downloads/my-roadie-release.apk';
+  const ipaDownloadUrl = process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL || '/downloads/my-roadie-release.ipa';
+
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50">
       {/* Header simplificado sem links de navegação pública */}
@@ -71,7 +74,7 @@ export default function TestersPage() {
               {/* Botão de Download */}
               <div className="pt-2">
                 <a
-                  href="/downloads/my-roadie-release.apk"
+                  href={apkDownloadUrl}
                   download="my-roadie-release.apk"
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.01]"
                 >
@@ -144,7 +147,7 @@ export default function TestersPage() {
               {/* Botão de Download */}
               <div className="pt-2">
                 <a
-                  href="/downloads/my-roadie-release.ipa"
+                  href={ipaDownloadUrl}
                   download="my-roadie-release.ipa"
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-zinc-900 hover:bg-black active:bg-zinc-800 text-white font-bold rounded-xl transition-all shadow-md shadow-zinc-900/20 hover:scale-[1.01]"
                 >
