@@ -29,7 +29,7 @@
 
 - [x] T4.1 — Criar conta e projeto na plataforma de hospedagem escolhida (ex.: Vercel).
 - [x] T4.2 — Configurar variável de ambiente com a URL pública do backend.
-- [ ] T4.3 — Publicar o frontend-web e validar login/cadastro contra o backend de produção.
+- [x] T4.3 — Publicar o frontend-web e validar login/cadastro contra o backend de produção.
 
 ## Fase 5 — Página de Distribuição para Testers (Frontend-web)
 
