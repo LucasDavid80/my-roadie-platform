@@ -147,13 +147,13 @@
 - Status: ideia
 
 ### Pipeline CI/CD Unificado & Modernizado (E2E, Deploy Contínuo e Otimização de Custos)
-- Intenção: Unificar as melhores práticas do histórico do CI/CD, combinando a estabilidade e eficiência de custos da versão atual (filtros de paths/mensagens de commit, JDK 17 e Android SDK) com a completude funcional da versão histórica (estágio de testes E2E com Playwright para Web/API, automação de Continuous Deployment na Vercel e Render, e notificações de status de build/deploy).
+- Intenção: Unificar as melhores práticas do histórico do CI/CD, combinando a estabilidade e eficiência de custos da versão atual (filtros de paths/mensagens de commit, JDK 17, Android SDK e runner macOS para iOS) com a completude funcional da versão histórica (estágio de testes E2E com Playwright para Web/API, automação de Continuous Deployment na Vercel e Render, suporte a `workflow_dispatch` para disparo manual sob demanda de builds/releases de mobile/web, e notificações de status).
 - Impacto esperado: alto (automação de entrega contínua, confiabilidade e governança)
 - Depende de: nenhum
 - Status: priorizado
 
 ### Auditoria e Otimização de Performance do Pipeline CI/CD (Speed & Caching)
-- Intenção: Medir, diagnosticar e otimizar os tempos de execução do GitHub Actions através de caching avançado multi-camadas (Gradle/Android cache, Next.js build cache, Flutter pub cache e node_modules), paralelização inteligente e detecção automática de paths alterados via `paths-filter` nativo, reduzindo o tempo de feedback nos PRs e o consumo da cota gratuita.
+- Intenção: Medir, diagnosticar e otimizar os tempos de execução do GitHub Actions através de caching avançado multi-camadas (Gradle/Android cache, Next.js build cache, Flutter pub cache e node_modules), paralelização inteligente e detecção automática estrita de arquivos alterados via `paths-filter` nativo (garantindo que jobs de `mobile` e runners macOS só sejam acionados quando houver modificação real na pasta `mobile/`), reduzindo o tempo de feedback nos PRs e o consumo da cota gratuita.
 - Impacto esperado: alto (redução de tempo de espera nos PRs e economia de minutos de CI)
 - Depende de: Pipeline CI/CD Unificado & Modernizado
 - Status: priorizado
