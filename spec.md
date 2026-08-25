@@ -75,5 +75,5 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 
 ## 7. Critério de "pronto" desta baseline
 
-Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a preparação e publicação do MVP para testes fechados (Spec 016). Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
+Esta spec serve como referência congelada. Ela é considerada válida enquanto bater com o código — atualizada após a preparação e publicação do MVP para testes fechados (Spec 016). A entrega desta feature incluiu: `AppLogger` centralizado para remover logs sensíveis em release, `android:label="My Roadie"`, CORS restrito via `process.env.FRONTEND_URL`, página `/testers` para distribuição de builds, e preparação de APK/IPA para teste fechado. Se qualquer item da seção 4 mudar nas próximas specs, este arquivo deve ser atualizado na spec correspondente.
 

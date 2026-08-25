@@ -72,7 +72,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 | Variável | Onde |
 |---|---|
-| `DATABASE_URL`, `JWT_SECRET`, `SUPABASE_URL`, `SUPABASE_KEY` | backend |
+| `DATABASE_URL`, `JWT_SECRET`, `SUPABASE_URL`, `SUPABASE_KEY`, `FRONTEND_URL` | backend |
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | frontend-web |
 | `SUPABASE_SERVICE_ROLE` | backend apenas, nunca no cliente |
 

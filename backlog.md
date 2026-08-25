@@ -111,7 +111,7 @@
 - Intenção: Criar utilitário centralizado `AppLogger` com proteção `kDebugMode` para eliminar `debugPrint`s que expõem tokens e dados sensíveis em compilações de release, ajustar a identidade da aplicação para "My Roadie" (`android:label`), restringir CORS no backend, publicar frontend-web com rota `/testers` para distribuição de builds, e automatizar geração de APK e IPA (via runner macOS do GitHub Actions) para testes fechados com usuários reais.
 - Impacto esperado: alto (segurança, privacidade e prontidão para release)
 - Depende de: Extensão do Modelo de Eventos & Ações do Card de Compromisso (spec 015)
-- Status: concluído (specs/016-preparacao-release-mvp/)
+- Status: concluído (specs/016-preparacao-release-mvp/) — release do MVP para testes fechados entregue
 
 ---
 
