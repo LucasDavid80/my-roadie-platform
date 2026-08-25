@@ -10,6 +10,7 @@ node_modules/
 .vscode/
 .idea/
 
-# OS files
+# OS and Archives
 .DS_Store
 Thumbs.db
+*.zip
