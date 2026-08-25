@@ -20,9 +20,10 @@ flowchart TD
     FrontendTest --> FrontendE2E[frontend-e2e: Playwright Chromium]
     FrontendE2E --> FrontendBuild[frontend-build: Next.js]
 
-    MobileLint --> MobileTest[mobile-test: Flutter Test]
+    MobileLint --> MobileTest[mobile-test: Flutter Test - Fluxos Leves]
     MobileTest --> MobileAndroidBuild[mobile-android-build: APK + Upload]
     MobileTest --> MobileIosBuild[mobile-ios-build: macOS + IPA + Upload]
+    MobileTest -.->|run_mobile_e2e == true| MobileEmulatorE2E[mobile-e2e-emulator: Preparado para Spec 018]
 
     BackendBuild --> DeployCheck{Merge na main?}
     FrontendBuild --> DeployCheck
@@ -52,6 +53,11 @@ workflow_dispatch:
       required: false
       default: 'https://my-roadie-backend.onrender.com'
       type: string
+    run_mobile_e2e:
+      description: 'Executar testes E2E com Emulador Mobile (Consome mais minutos de CI)'
+      required: false
+      default: false
+      type: boolean
 ```
 
 ### Job de Detecção de Mudanças (`changes`)
@@ -81,11 +87,6 @@ changes:
             - '.github/workflows/ci.yml'
 ```
 
-Condição simplificada nos jobs:
-```yaml
-if: needs.changes.outputs.backend == 'true' || github.event.inputs.scope == 'all' || github.event.inputs.scope == 'backend'
-```
-
 ## 3. Integração de Testes E2E
 
 ### Backend E2E (`backend-e2e`)
@@ -97,6 +98,10 @@ if: needs.changes.outputs.backend == 'true' || github.event.inputs.scope == 'all
 - Executado após o sucesso de `frontend-test`.
 - Instala o browser Chromium com dependências de SO: `npx playwright install --with-deps chromium`.
 - Executa `npx playwright test`.
+
+### Mobile E2E & Integração
+- **Dia a dia (PRs/Pushes)**: Execução no job `mobile-test` através do `flutter test` (cobrindo testes unitários e testes de integração de widget/fluxo sem emulador, como `profile_flow_integration_test.dart`), mantendo o tempo de execução abaixo de 30 segundos.
+- **Sob Demanda (Gancho Spec 018)**: Configuração do step/job `mobile-e2e-emulator` condicionado a `inputs.run_mobile_e2e == true`, pronto para receber os scripts da Spec 018 sem impactar a cota padrão.
 
 ## 4. Compilação Mobile & Publicação Padronizada de Artefatos
 

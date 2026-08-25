@@ -8,15 +8,16 @@
 
 ## Fase 1 — Detecção Inteligente de Paths & Gatilho Manual (`workflow_dispatch`)
 
-- [ ] T1.1 — Configurar gatilho `workflow_dispatch` com inputs configuráveis (`scope` e `backend_url`) no cabeçalho do workflow `.github/workflows/ci.yml`.
+- [ ] T1.1 — Configurar gatilho `workflow_dispatch` com inputs configuráveis (`scope`, `backend_url` e `run_mobile_e2e`) no cabeçalho do workflow `.github/workflows/ci.yml`.
 - [ ] T1.2 — Implementar o job `changes` utilizando `dorny/paths-filter@v3` para mapear com precisão alterações em `backend`, `frontend` e `mobile`.
 - [ ] T1.3 — Atualizar as condições `if` e dependências `needs` de todos os jobs de linting (`frontend-lint`, `backend-lint`, `mobile-lint`) para responder aos outputs de `changes` ou bypass de `workflow_dispatch`.
 
-## Fase 2 — Integração de Testes E2E (Backend & Frontend Playwright)
+## Fase 2 — Integração de Testes E2E (Backend, Frontend Playwright & Gancho Mobile)
 
 - [ ] T2.1 — Adicionar o job `backend-e2e` executando `npm run test:e2e` condicionado ao sucesso de `backend-test`.
 - [ ] T2.2 — Adicionar o job `frontend-e2e` instalando Chromium (`npx playwright install --with-deps chromium`) e rodando `npx playwright test` condicionado ao sucesso de `frontend-test`.
-- [ ] T2.3 — Atualizar dependências de `backend-build` e `frontend-build` para exigir a aprovação dos respectivos jobs de E2E.
+- [ ] T2.3 — Configurar a estrutura do job/step `mobile-e2e-emulator` condicionado a `github.event.inputs.run_mobile_e2e == 'true'`, deixando o gancho pronto para a Spec 018.
+- [ ] T2.4 — Atualizar dependências de `backend-build` e `frontend-build` para exigir a aprovação dos respectivos jobs de E2E.
 
 ## Fase 3 — Padronização de Builds Mobile & Publicação de Artefatos
 
@@ -37,10 +38,11 @@
 
 ## Checklist de fechamento da feature
 
-- [ ] `workflow_dispatch` operacional para disparo manual com seleção de escopo e URL
+- [ ] `workflow_dispatch` operacional com inputs `scope`, `backend_url` e `run_mobile_e2e`
 - [ ] Detecção de mudanças ativa via `dorny/paths-filter@v3` poupando minutos de runner
 - [ ] PRs sem alteração em `mobile/` não disparam runners macOS nem Android SDK
 - [ ] Testes E2E do backend e Playwright do frontend integrados ao pipeline
+- [ ] Gancho preparatório para E2E Mobile da Spec 018 configurado e desligado por padrão
 - [ ] Builds de APK (Android) e IPA (iOS) gerados e publicados como artefatos no GitHub Actions
 - [ ] Deploys automáticos (Render e Vercel) condicionados ao sucesso dos builds na `main`
 - [ ] Sintaxe do arquivo de workflow validada
