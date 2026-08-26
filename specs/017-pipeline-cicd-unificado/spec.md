@@ -24,23 +24,58 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 
 ## Resultados da Inspeção (Fase 0)
 
-### 1. Workflow Atual (`.github/workflows/ci.yml`) — Task T0.1
-- **Gatilhos**: Apenas `push` e `pull_request` nas branches `main` e `master`. Não possui `workflow_dispatch`.
-- **Filtros de execução**: Utiliza expressões `contains(github.event.head_commit.message, '[web]')` e `github.event_name == 'pull_request'`, fazendo com que todo PR execute a suíte inteira, incluindo macOS.
-- **Testes Backend**: Executa apenas `npm test` (unitários). Não executa `npm run test:e2e`.
-- **Testes Frontend**: Executa apenas `vitest` (`npm test -- --run`). Possui Playwright configurado em `frontend-web/playwright.config.ts` com testes em `frontend-web/tests/`, mas não está plugado no CI.
-- **Build Mobile**:
-  - Android: Executa `flutter build apk --release` sem `--dart-define=BACKEND_URL` e sem `upload-artifact`.
-  - iOS: Executa `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=https://my-roadie-backend.onrender.com`, empacota em `.ipa` e publica via `actions/upload-artifact@v4`.
+### 1. Mapeamento de Scripts de Teste, Build e Variáveis de Ambiente — Task T0.1
+
+#### Backend (`backend/package.json`)
+- **Scripts de Teste**:
+  - `npm test`: `jest` (testes unitários com mock de `jwks-rsa` mapeado em `test/__mocks__/jwks-rsa.js`).
+  - `npm run test:e2e`: `jest --config ./test/jest-e2e.json` (7 suítes E2E integradas com Supertest e mock de autenticação).
+  - `npm run test:cov`: `jest --coverage` (cobertura com Jest).
+- **Scripts de Lint & Formatação**:
+  - `npm run lint`: `eslint "{src,apps,libs,test}/**/*.ts" --fix`.
+  - `npm run format`: `prettier --write "src/**/*.ts" "test/**/*.ts"`.
+- **Scripts de Build & Start**:
+  - `postinstall`: `prisma generate` (gera o Prisma Client).
+  - `npm run build`: `nest build` (compila para `dist/`).
+  - `npm run start:prod`: `node dist/src/main` (execução em produção para o monorepo).
+- **Variáveis de Ambiente Necessárias**:
+  - `DATABASE_URL`: String de conexão PostgreSQL (Supabase).
+  - `JWT_SECRET`: Chave secreta para validação/assinatura de tokens JWT.
+
+#### Frontend Web (`frontend-web/package.json`)
+- **Scripts de Teste**:
+  - `npm test`: `vitest` (testes unitários e componentes com `@testing-library/react` e `@vitest/coverage-v8`).
+  - `npx playwright test`: Testes E2E ponta a ponta configurados em `playwright.config.ts` com browser Chromium.
+- **Scripts de Lint**:
+  - `npm run lint`: `eslint`.
+- **Scripts de Build & Start**:
+  - `npm run build`: `next build` (compilação e otimização Next.js App Router).
+  - `npm run dev`: `next dev` (servidor de desenvolvimento na porta 3000).
+- **Variáveis de Ambiente Necessárias**:
+  - `NEXT_PUBLIC_SUPABASE_URL`: URL da instância Supabase.
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Chave anônima pública do Supabase.
+
+#### Mobile (`mobile/pubspec.yaml`)
+- **Comandos de Teste**:
+  - `flutter test`: Execução rápida de testes unitários e testes de integração de fluxo sem emulador (`profile_flow_integration_test.dart`).
+  - `flutter test integration_test/`: Testes E2E com emulador / dispositivo real (preparado para Spec 018).
+- **Comandos de Lint & Análise**:
+  - `flutter analyze`: Análise estática com regras de `flutter_lints: ^6.0.0`.
+- **Comandos de Build**:
+  - Android: `flutter build apk --release --dart-define=BACKEND_URL=...`.
+  - iOS: `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=...`.
+- **Definições em Tempo de Compilação (`--dart-define`)**:
+  - `BACKEND_URL`: URL base do backend de produção (`https://my-roadie-backend.onrender.com`).
 
 ### 2. Configuração do Playwright Web (`frontend-web/playwright.config.ts`) — Task T0.2
 - Configurado com `webServer` (`npm run dev`), porta `3000`, e browser `chromium`.
 - Para rodar no CI Linux sem interface gráfica, necessita do step `npx playwright install --with-deps chromium`.
 
-### 3. Variáveis e Secrets de Ambiente — Task T0.3
-- Backend: `DATABASE_URL`, `JWT_SECRET`.
-- Frontend: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-- CD: `RENDER_DEPLOY_HOOK`, `VERCEL_DEPLOY_HOOK`.
+### 3. Workflow Atual e Variáveis de Ambiente (`.github/workflows/ci.yml`) — Task T0.3
+- **Gatilhos atuais**: Apenas `push` e `pull_request` nas branches `main` e `master`. Não possui `workflow_dispatch`.
+- **Filtros de execução atuais**: Utiliza expressões `contains(github.event.head_commit.message, '[web]')` e `github.event_name == 'pull_request'`, executando todos os jobs em qualquer PR.
+- **Secrets de Ambiente**:
+  - CD: `RENDER_DEPLOY_HOOK`, `VERCEL_DEPLOY_HOOK`.
 
 ## Escopo
 
