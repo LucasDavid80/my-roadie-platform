@@ -68,8 +68,18 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
   - `BACKEND_URL`: URL base do backend de produção (`https://my-roadie-backend.onrender.com`).
 
 ### 2. Configuração do Playwright Web (`frontend-web/playwright.config.ts`) — Task T0.2
-- Configurado com `webServer` (`npm run dev`), porta `3000`, e browser `chromium`.
-- Para rodar no CI Linux sem interface gráfica, necessita do step `npx playwright install --with-deps chromium`.
+- **Configuração do Playwright (`frontend-web/playwright.config.ts`)**:
+  - `testDir: './tests'`: Focado exclusivamente nas suítes E2E da pasta `tests/`.
+  - `baseURL: 'http://localhost:3000'`.
+  - `webServer`: Inicializa automaticamente a aplicação com `npm run dev`, aguardando `http://localhost:3000` ficar responsivo (`reuseExistingServer: !process.env.CI`).
+  - `projects`: Configurado para `chromium` (`devices['Desktop Chrome']`).
+- **Suítes de Testes Inspecionadas (`frontend-web/tests/`)**:
+  - `auth.spec.ts`: Testa o fluxo ponta a ponta de registro de novo músico, interceptação e aceite de alertas (`dialog.accept()`), redirecionamento para login, login com sucesso e renderização dos cards na dashboard.
+  - `security.spec.ts`: Testa autenticação de administrador com visualização do escudo admin, bloqueio de rota protegida `/admin/users` com redirecionamento de músicos comuns, e persistência de sessão após `page.reload()`.
+- **Requisitos Operacionais para CI Linux (`ubuntu-latest`)**:
+  - Necessita da instalação prévia do Chromium com dependências do sistema operacional: `npx playwright install --with-deps chromium`.
+  - Necessita de variáveis públicas para inicialização do Next.js: `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+  - Execução através do comando `npx playwright test` com output de trace em falhas (`trace: 'on-first-retry'`).
 
 ### 3. Workflow Atual e Variáveis de Ambiente (`.github/workflows/ci.yml`) — Task T0.3
 - **Gatilhos atuais**: Apenas `push` e `pull_request` nas branches `main` e `master`. Não possui `workflow_dispatch`.
