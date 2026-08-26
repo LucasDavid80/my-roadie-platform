@@ -23,6 +23,7 @@
 
 ### 4. Backend — Configuração de Produção
 - `backend/src/main.ts`: trocar `app.enableCors()` por `app.enableCors({ origin: process.env.FRONTEND_URL })`, lendo a origem permitida de uma variável de ambiente em vez de hardcode, para facilitar trocar o domínio sem novo deploy de código.
+- `backend/package.json`: script `"start:prod": "node dist/src/main"` atualizado para refletir a saída real da compilação do NestJS no monorepo (onde a pasta compilada gera `dist/src/main.js` em vez de `dist/main.js`).
 - Variáveis de ambiente de produção a configurar na plataforma de hospedagem:
   - `DATABASE_URL` — connection string do **pooler** (pgbouncer) do Supabase, não a direta.
   - Chaves do Supabase (as mesmas já usadas em desenvolvimento, mas do projeto de produção se for um projeto separado).
@@ -46,7 +47,10 @@
 - **Android**: `flutter build apk --release --dart-define=BACKEND_URL=<url-producao-do-backend>`.
 - **iOS**: build automatizado via GitHub Actions com runner `macos-latest` (sem necessidade de Mac local físico). O pipeline executa `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=<url-producao-do-backend>`, empacota o `Runner.app` em `my-roadie-release.ipa` e publica como artefato de build. *(Decisão: FlutLab.io foi descontinuado após validação técnica por não suportar exportação de `.ipa`).* O arquivo `.ipa` gerado é baixado e assinado via Sideloadly / AltStore usando um Apple ID gratuito.
 
-### 8. Testes
+### 8. Continuous Deployment (CD) & Automação de Deploy
+- Introdução inicial do job `deploy-production` em `.github/workflows/ci.yml` acionando webhooks de deploy (Render para backend e Vercel para frontend) quando ocorrem pushes na branch `main`.
+
+### 9. Testes
 - Teste unitário em `mobile/test/core/utils/app_logger_test.dart` verificando execução segura e compatibilidade.
 - Execução de `flutter test` e `flutter analyze`.
 - Execução de `npm test` e `npm run test:e2e` no backend, contra a configuração de CORS restrito, para garantir que nada quebrou com a mudança de `enableCors()`.

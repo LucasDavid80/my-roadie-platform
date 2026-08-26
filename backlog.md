@@ -146,6 +146,12 @@
 - Depende de: nenhum
 - Status: absorvido (integrado em specs/015-extensao-modelo-eventos-e-acoes-card/)
 
+### Preparação para Release do MVP & Padronização de Logs (AppLogger)
+- Intenção: Criar utilitário centralizado `AppLogger` com proteção `kDebugMode` para eliminar `debugPrint`s que expõem tokens e dados sensíveis em compilações de release, ajustar a identidade da aplicação para "My Roadie" (`android:label`), restringir CORS no backend, publicar frontend-web com rota `/testers` para distribuição de builds, e automatizar geração de APK e IPA (via runner macOS do GitHub Actions) para testes fechados com usuários reais.
+- Impacto esperado: alto (segurança, privacidade e prontidão para release)
+- Depende de: Extensão do Modelo de Eventos & Ações do Card de Compromisso (spec 015)
+- Status: concluído (specs/016-preparacao-release-mvp/)
+
 ### Testes de Integração Ponta a Ponta (E2E) no Mobile
 - Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
 - Impacto esperado: alto (qualidade e confiabilidade de entrega)

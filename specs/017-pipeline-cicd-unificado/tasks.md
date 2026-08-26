@@ -36,17 +36,17 @@
 - [x] T5.1 — Validar a sintaxe e a estrutura do arquivo `.github/workflows/ci.yml`.
 - [x] T5.2 — Executar localmente as suítes de testes (`npm test` no backend, `npm test` no frontend, `flutter test` no mobile).
 - [x] T5.3 — Atualizar `backlog.md`, `spec.md` e `plan.md` raiz com o status de fechamento da Fase 1 do backlog.
-- [ ] T5.4 — Sincronizar inconsistências residuais da auditoria da Spec 016 em `backlog.md` (Fase 1), `specs/016-preparacao-release-mvp/plan.md` e `plan.md` raiz.
+- [x] T5.4 — Sincronizar inconsistências residuais da auditoria da Spec 016 em `backlog.md` (Fase 1), `specs/016-preparacao-release-mvp/plan.md` e `plan.md` raiz.
 
 ## Checklist de fechamento da feature
 
-- [ ] `workflow_dispatch` operacional com inputs `scope`, `backend_url` e `run_mobile_e2e`
-- [ ] Detecção de mudanças ativa via `dorny/paths-filter@v3` poupando minutos de runner
-- [ ] PRs sem alteração em `mobile/` não disparam runners macOS nem Android SDK
-- [ ] Testes E2E do backend e Playwright do frontend integrados ao pipeline
-- [ ] Gancho preparatório para E2E Mobile da Spec 018 configurado e desligado por padrão
-- [ ] Builds de APK (Android) e IPA (iOS) gerados e publicados como artefatos no GitHub Actions
-- [ ] Deploys automáticos (Render e Vercel) condicionados ao sucesso dos builds na `main`
-- [ ] Inconsistências residuais da auditoria da Spec 016 saneadas e sincronizadas
-- [ ] Sintaxe do arquivo de workflow validada
-- [ ] Fase 1 do Backlog concluída e documentada nas baselines
+- [x] `workflow_dispatch` operacional com inputs `scope`, `backend_url` e `run_mobile_e2e`
+- [x] Detecção de mudanças ativa via `dorny/paths-filter@v3` poupando minutos de runner
+- [x] PRs sem alteração em `mobile/` não disparam runners macOS nem Android SDK
+- [x] Testes E2E do backend e Playwright do frontend integrados ao pipeline
+- [x] Gancho preparatório para E2E Mobile da Spec 018 configurado e desligado por padrão
+- [x] Builds de APK (Android) e IPA (iOS) gerados e publicados como artefatos no GitHub Actions
+- [x] Deploys automáticos (Render e Vercel) condicionados ao sucesso dos builds na `main`
+- [x] Inconsistências residuais da auditoria da Spec 016 saneadas e sincronizadas
+- [x] Sintaxe do arquivo de workflow validada
+- [x] Fase 1 do Backlog concluída e documentada nas baselines
