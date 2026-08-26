@@ -309,6 +309,12 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || 'https://my-roadie-backend.onrender.com' }}
+      - name: Publicar Artefato Android (.apk)
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-roadie-android-release-apk
+          path: mobile/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 7
 
   mobile-ios-build:
     needs: mobile-test
