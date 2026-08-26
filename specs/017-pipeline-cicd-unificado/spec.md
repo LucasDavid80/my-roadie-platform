@@ -151,14 +151,14 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 
 ## Critérios de Sucesso
 
-- [ ] Gatilho `workflow_dispatch` adicionado com inputs `scope`, `backend_url` e `run_mobile_e2e` (default: `false`).
-- [ ] Job `changes` implementado com `dorny/paths-filter@v3`, filtrando com precisão execuções de `backend`, `frontend` e `mobile`.
-- [ ] Runners `macos-latest` e builds Android ignorados em PRs que não alteram a pasta `mobile/`.
-- [ ] Testes E2E do backend (`npm run test:e2e`) integrados e passando no CI.
-- [ ] Testes E2E Playwright do frontend integrados e passando no CI em modo headless.
-- [ ] Build Android compilando com URL de produção e publicando o artefato `my-roadie-release.apk`.
-- [ ] Build iOS compilando com URL de produção e publicando o artefato `my-roadie-release.ipa`.
-- [ ] Hooks de deploy do Render e Vercel preservados para merges na `main`.
-- [ ] Inconsistências de documentação identificadas na auditoria da Spec 016 saneadas e sincronizadas.
-- [ ] Sintaxe do `.github/workflows/ci.yml` 100% válida e formatada.
-- [ ] Baseline (`spec.md`, `plan.md`) e `backlog.md` atualizados refletindo a conclusão da Fase 1.
+- [x] Gatilho `workflow_dispatch` adicionado com inputs `scope`, `backend_url` e `run_mobile_e2e` (default: `false`).
+- [x] Job `changes` implementado com `dorny/paths-filter@v3`, filtrando com precisão execuções de `backend`, `frontend` e `mobile`.
+- [x] Runners `macos-latest` e builds Android ignorados em PRs que não alteram a pasta `mobile/`.
+- [x] Testes E2E do backend (`npm run test:e2e`) integrados e passando no CI.
+- [x] Testes E2E Playwright do frontend integrados e passando no CI em modo headless.
+- [x] Build Android compilando com URL de produção e publicando o artefato `my-roadie-release.apk`.
+- [x] Build iOS compilando com URL de produção e publicando o artefato `my-roadie-release.ipa`.
+- [x] Hooks de deploy do Render e Vercel preservados para merges na `main`.
+- [x] Inconsistências de documentação identificadas na auditoria da Spec 016 saneadas e sincronizadas.
+- [x] Sintaxe do `.github/workflows/ci.yml` 100% válida e formatada.
+- [x] Baseline (`spec.md`, `plan.md`) e `backlog.md` atualizados refletindo a conclusão da Fase 1.

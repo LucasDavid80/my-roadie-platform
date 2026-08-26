@@ -94,8 +94,9 @@ changes:
 - Roda `npx prisma generate` e `npm run test:e2e`.
 - Utiliza mock em memória de JWKS (`test/__mocks__/jwks-rsa.js`) e banco de dados configurado para testes.
 
-### Frontend Web E2E (`frontend-e2e`)
-- Executado após o sucesso de `frontend-test`.
+### Frontend Web E2E & Testes Unitários (`frontend-test` e `frontend-e2e`)
+- Executado após o sucesso de `frontend-lint`.
+- Configuração do Vitest com `pool: 'threads'` em `frontend-web/vitest.config.ts` garantindo estabilidade e isolamento na execução dos testes unitários e de componentes.
 - Instala o browser Chromium com dependências de SO: `npx playwright install --with-deps chromium`.
 - Executa `npx playwright test`.
 
