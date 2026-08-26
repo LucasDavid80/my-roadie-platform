@@ -117,7 +117,7 @@
 - Intenção: Unificar e modernizar o CI/CD com filtros inteligentes de paths (`dorny/paths-filter`), disparo manual sob demanda (`workflow_dispatch`), execução de testes E2E (backend e Playwright web), publicação unificada de artefatos de release (APK e IPA) e Continuous Deployment.
 - Impacto esperado: alto (automação de entrega contínua, confiabilidade e redução de custos)
 - Depende de: nenhum
-- Status: em spec (specs/017-pipeline-cicd-unificado/)
+- Status: concluído (specs/017-pipeline-cicd-unificado/)
 
 ---
 
@@ -156,13 +156,13 @@
 - Intenção: Unificar e modernizar o CI/CD com filtros inteligentes de paths (`dorny/paths-filter`), disparo manual sob demanda (`workflow_dispatch`), execução de testes E2E (backend e Playwright web), publicação unificada de artefatos de release (APK e IPA) e Continuous Deployment.
 - Impacto esperado: alto (automação de entrega contínua, confiabilidade e redução de custos)
 - Depende de: nenhum
-- Status: em spec (specs/017-pipeline-cicd-unificado/)
+- Status: concluído (specs/017-pipeline-cicd-unificado/)
 
 ### Auditoria e Otimização de Performance do Pipeline CI/CD (Speed & Caching)
 - Intenção: Medir, diagnosticar e otimizar os tempos de execução do GitHub Actions através de caching avançado multi-camadas (Gradle/Android cache, Next.js build cache, Flutter pub cache e node_modules), paralelização inteligente e detecção automática estrita de arquivos alterados via `paths-filter` nativo (garantindo que jobs de `mobile` e runners macOS só sejam acionados quando houver modificação real na pasta `mobile/`), reduzindo o tempo de feedback nos PRs e o consumo da cota gratuita.
 - Impacto esperado: alto (redução de tempo de espera nos PRs e economia de minutos de CI)
 - Depende de: Pipeline CI/CD Unificado & Modernizado
-- Status: priorizado
+- Status: absorvido (integrado em specs/017-pipeline-cicd-unificado/)
 
 ---
 

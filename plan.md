@@ -63,10 +63,22 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 6. CI/CD
 
-- Definido em `.github/workflows/ci.yml`, roda com Node 22.
-- Job `mobile-ios-build` configurado com runner `macos-latest` para compilação do iOS sem códigos de assinatura locais (`--no-codesign`), empacotamento em `.ipa` e upload automatizado de artefatos para distribuição (Spec 016).
+- Definido centralmente em `.github/workflows/ci.yml`, estruturado com grafo de 15 jobs interdependentes (DAG) executando sobre Node 22 (`ubuntu-latest`) e macOS (`macos-latest`).
+- **Detecção Inteligente de Caminhos (`dorny/paths-filter@v3`):** Job inicial `changes` mapeia alterações por pasta (`backend/**`, `frontend-web/**`, `mobile/**`), evitando execuções desnecessárias de builds móveis e runners macOS em PRs que alteram apenas documentação ou outras partes do monorepo.
+- **Disparo Manual Sob Demanda (`workflow_dispatch`):** Suporta parâmetros configuráveis na UI do GitHub Actions:
+  - `scope`: `auto` (default), `all`, `backend`, `frontend`, `mobile`.
+  - `backend_url`: URL injetada nos builds mobile (default: `https://my-roadie-backend.onrender.com`).
+  - `run_mobile_e2e`: flag booleana (default: `false`) para ativação sob demanda de testes em emuladores mobile.
+- **Testes Automatizados (Lints, Unitários & E2E):**
+  - Backend: `backend-lint` → `backend-test` (Jest unitários) → `backend-e2e` (Jest E2E com mock de JWKS em `test/__mocks__/jwks-rsa.js` e Prisma Client gerado).
+  - Frontend Web: `frontend-lint` → `frontend-test` (Vitest com `pool: threads`) → `frontend-e2e` (Playwright com browser headless Chromium).
+  - Mobile: `mobile-lint` (`flutter analyze`) → `mobile-test` (`flutter test` cobrindo testes unitários e de integração de fluxo sem emulador) → `mobile-e2e-emulator` (gancho condicionado a `run_mobile_e2e == true`, preparado para a Spec 018).
+- **Compilação e Publicação de Artefatos de Release:**
+  - `mobile-android-build`: Compila `app-release.apk` com Java 17 Zulu, Android SDK, Gradle cache e `--dart-define=BACKEND_URL`, publicando artefato `my-roadie-android-release-apk` via `actions/upload-artifact@v4` (retenção de 7 dias).
+  - `mobile-ios-build`: Compila iOS no runner `macos-latest` com `--no-codesign` e `--dart-define=BACKEND_URL`, empacota em `my-roadie-release.ipa` e publica artefato `my-roadie-ios-release-ipa` via `actions/upload-artifact@v4` (retenção de 7 dias).
+- **Caching Multi-Camadas:** Caching de npm para backend e frontend (`actions/setup-node@v4`), caching de SDK/pub para Flutter (`subosito/flutter-action@v2`) e caching de Gradle para Android (`actions/setup-java@v4`).
+- **Continuous Deployment (`deploy-production`):** Disparado automaticamente em pushes/merges na branch `main` ou via `workflow_dispatch`, condicionado ao sucesso dos jobs de build (`frontend-build` e `backend-build`), realizando chamadas `POST` seguras aos webhooks do Render (`RENDER_DEPLOY_HOOK`) e Vercel (`VERCEL_DEPLOY_HOOK`).
 - Simulação local recomendada via `act --secret-file .secrets` antes de abrir PR.
-- Fluxo esperado: lint → unit tests → build → integração/e2e.
 
 ## 7. Ambientes e variáveis
 
