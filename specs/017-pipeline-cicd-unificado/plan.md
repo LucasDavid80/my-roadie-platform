@@ -128,3 +128,9 @@ changes:
 - **Node/npm**: `actions/setup-node@v4` com `cache: 'npm'` apontando para os respectivos `package-lock.json`.
 - **Flutter**: `subosito/flutter-action@v2` com `cache: true`.
 - **Java/Gradle**: `actions/setup-java@v4` com `cache: 'gradle'` para agilizar compilações Android subsequentes.
+
+## 7. Sincronização e Resolução de Inconsistências da Spec 016
+
+- **`backlog.md`**: Adicionar a entrada da Spec 016 na seção temática *Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)* como `concluído (specs/016-preparacao-release-mvp/)`, mantendo paridade com a entrada da Baseline.
+- **`specs/016-preparacao-release-mvp/plan.md`**: Adicionar nota técnica formalizando o ajuste do script `start:prod` (`node dist/src/main`) devido à saída do compilador NestJS no monorepo e a introdução inicial do job `deploy-production`.
+- **`plan.md` (raiz)**: Atualizar a Seção 6 (CI/CD) para documentar formalmente a arquitetura do job `deploy-production` disparando webhooks do Render e Vercel.

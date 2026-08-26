@@ -11,6 +11,7 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 5. **Padronização de Artefatos de Release**: Publicação automatizada tanto do `.apk` (Android) quanto do `.ipa` (iOS) via `actions/upload-artifact@v4`, ambos apontando para o backend de produção via `--dart-define=BACKEND_URL`, com retenção de 7 dias.
 6. **Automação de Continuous Deployment (CD)**: Preservar e consolidar os hooks de deploy do Render (backend) e Vercel (frontend) condicionados ao sucesso dos testes e compilações na branch `main`.
 7. **Otimização de Performance e Caching**: Caching multi-camadas (npm para Node 22, Flutter pub cache e Gradle cache para Android SDK).
+8. **Saneamento e Sincronização de Documentação Residual da Spec 016**: Corrigir as inconsistências apontadas na auditoria da Spec 016 (inclusão da Spec 016 na listagem temática da Fase 1 do `backlog.md`, documentação técnica do ajuste `"start:prod": "node dist/src/main"` de `backend/package.json`, e documentação da arquitetura de Continuous Deployment no `plan.md` raiz e `specs/016-preparacao-release-mvp/plan.md`).
 
 ## Por quê
 
@@ -69,6 +70,11 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 4. **Estágio de Deploy Contínuo (CD)**:
    - `deploy-production` condicionado ao sucesso de `backend-build` e `frontend-build`, disparando os webhooks de deploy da Vercel e Render apenas em pushes/merges na branch `main`.
 
+5. **Sincronização de Documentação & Baseline Residual**:
+   - Atualizar `backlog.md` incluindo o item da Spec 016 na seção temática *Fase 1: Estabilização, Segurança & Bugs Críticos*.
+   - Atualizar `specs/016-preparacao-release-mvp/plan.md` documentando a justificativa técnica do script `start:prod` e o estágio `deploy-production`.
+   - Atualizar a Seção 6 do `plan.md` raiz detalhando a existência e funcionamento do job `deploy-production`.
+
 ## Fora de Escopo
 
 - Implementação dos cenários detalhados de testes E2E do app mobile (escopo da Spec 018 — esta spec provê a infraestrutura de CI e o gatilho manual sob demanda).
@@ -84,5 +90,6 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 - [ ] Build Android compilando com URL de produção e publicando o artefato `my-roadie-release.apk`.
 - [ ] Build iOS compilando com URL de produção e publicando o artefato `my-roadie-release.ipa`.
 - [ ] Hooks de deploy do Render e Vercel preservados para merges na `main`.
+- [ ] Inconsistências de documentação identificadas na auditoria da Spec 016 saneadas e sincronizadas.
 - [ ] Sintaxe do `.github/workflows/ci.yml` 100% válida e formatada.
 - [ ] Baseline (`spec.md`, `plan.md`) e `backlog.md` atualizados refletindo a conclusão da Fase 1.

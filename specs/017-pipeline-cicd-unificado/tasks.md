@@ -35,6 +35,7 @@
 - [ ] T5.1 — Validar a sintaxe e a estrutura do arquivo `.github/workflows/ci.yml`.
 - [ ] T5.2 — Executar localmente as suítes de testes (`npm test` no backend, `npm test` no frontend, `flutter test` no mobile).
 - [ ] T5.3 — Atualizar `backlog.md`, `spec.md` e `plan.md` raiz com o status de fechamento da Fase 1 do backlog.
+- [ ] T5.4 — Sincronizar inconsistências residuais da auditoria da Spec 016 em `backlog.md` (Fase 1), `specs/016-preparacao-release-mvp/plan.md` e `plan.md` raiz.
 
 ## Checklist de fechamento da feature
 
@@ -45,5 +46,6 @@
 - [ ] Gancho preparatório para E2E Mobile da Spec 018 configurado e desligado por padrão
 - [ ] Builds de APK (Android) e IPA (iOS) gerados e publicados como artefatos no GitHub Actions
 - [ ] Deploys automáticos (Render e Vercel) condicionados ao sucesso dos builds na `main`
+- [ ] Inconsistências residuais da auditoria da Spec 016 saneadas e sincronizadas
 - [ ] Sintaxe do arquivo de workflow validada
 - [ ] Fase 1 do Backlog concluída e documentada nas baselines
