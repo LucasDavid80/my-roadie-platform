@@ -67,7 +67,12 @@ jobs:
   # LINTS JOBS
   # ==========================================
   frontend-lint:
-    if: "contains(github.event.head_commit.message, '[web]') || github.event_name == 'pull_request' || (!contains(github.event.head_commit.message, '[backend]') && !contains(github.event.head_commit.message, '[mobile]'))"
+    name: Frontend Lint
+    needs: changes
+    if: |
+      inputs.scope == 'all' ||
+      inputs.scope == 'frontend' ||
+      ((inputs.scope == 'auto' || !inputs.scope) && needs.changes.outputs.frontend == 'true')
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -83,7 +88,12 @@ jobs:
       - run: npm run lint
   
   backend-lint:
-    if: "contains(github.event.head_commit.message, '[backend]') || github.event_name == 'pull_request' || (!contains(github.event.head_commit.message, '[web]') && !contains(github.event.head_commit.message, '[mobile]'))"
+    name: Backend Lint
+    needs: changes
+    if: |
+      inputs.scope == 'all' ||
+      inputs.scope == 'backend' ||
+      ((inputs.scope == 'auto' || !inputs.scope) && needs.changes.outputs.backend == 'true')
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -103,7 +113,12 @@ jobs:
       - run: npm run lint
 
   mobile-lint:
-    if: "contains(github.event.head_commit.message, '[mobile]') || github.event_name == 'pull_request'"
+    name: Mobile Lint
+    needs: changes
+    if: |
+      inputs.scope == 'all' ||
+      inputs.scope == 'mobile' ||
+      ((inputs.scope == 'auto' || !inputs.scope) && needs.changes.outputs.mobile == 'true')
     runs-on: ubuntu-latest
     defaults:
       run:
