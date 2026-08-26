@@ -4,7 +4,7 @@
 
 - [x] T0.1 — Mapear estrutura de scripts de teste, build e variáveis de ambiente em `backend/package.json`, `frontend-web/package.json` e `mobile/pubspec.yaml`.
 - [x] T0.2 — Inspecionar `frontend-web/playwright.config.ts` e suítes em `frontend-web/tests/` para garantir execução sem falhas em modo headless no Linux.
-- [ ] T0.3 — Inspecionar `.github/workflows/ci.yml` mapeando todas as dependências entre jobs (`needs`), secrets e condições atuais.
+- [x] T0.3 — Inspecionar `.github/workflows/ci.yml` mapeando todas as dependências entre jobs (`needs`), secrets e condições atuais.
 
 ## Fase 1 — Detecção Inteligente de Paths & Gatilho Manual (`workflow_dispatch`)
 

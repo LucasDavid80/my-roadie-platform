@@ -81,11 +81,24 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
   - Necessita de variáveis públicas para inicialização do Next.js: `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
   - Execução através do comando `npx playwright test` com output de trace em falhas (`trace: 'on-first-retry'`).
 
-### 3. Workflow Atual e Variáveis de Ambiente (`.github/workflows/ci.yml`) — Task T0.3
-- **Gatilhos atuais**: Apenas `push` e `pull_request` nas branches `main` e `master`. Não possui `workflow_dispatch`.
-- **Filtros de execução atuais**: Utiliza expressões `contains(github.event.head_commit.message, '[web]')` e `github.event_name == 'pull_request'`, executando todos os jobs em qualquer PR.
-- **Secrets de Ambiente**:
-  - CD: `RENDER_DEPLOY_HOOK`, `VERCEL_DEPLOY_HOOK`.
+### 3. Workflow Atual, Dependências e Secrets (`.github/workflows/ci.yml`) — Task T0.3
+- **Gatilhos Atuais**:
+  - `push` e `pull_request` apenas para branches `main` e `master`, com `paths-ignore` restrito a `**.md` e `.gitignore`.
+  - Ausência do gatilho sob demanda `workflow_dispatch`.
+- **Topologia de Jobs e Dependências (`needs`)**:
+  - `frontend-lint` (sem needs) -> `frontend-test` (`needs: frontend-lint`) -> `frontend-build` (`needs: frontend-test`).
+  - `backend-lint` (sem needs) -> `backend-test` (`needs: backend-lint`) -> `backend-build` (`needs: backend-test`).
+  - `mobile-lint` (sem needs) -> `mobile-test` (`needs: mobile-lint`) -> `mobile-build` (Android) / `mobile-ios-build` (iOS macOS) (`needs: mobile-test`).
+  - `deploy-production` (`needs: [frontend-build, backend-build]`, `if: github.ref == 'refs/heads/main' && github.event_name == 'push'`).
+- **Mapeamento de Secrets por Job**:
+  - `backend-lint`, `backend-test`, `backend-build`: `DATABASE_URL` e `JWT_SECRET`.
+  - `frontend-build`: `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+  - `deploy-production`: `RENDER_DEPLOY_HOOK` e `VERCEL_DEPLOY_HOOK`.
+- **Pontos Críticos e Gargalos Identificados**:
+  1. *Consumo Excessivo de Minutos*: A condição `github.event_name == 'pull_request'` nos lints força a execução do pipeline inteiro em qualquer PR, disparando desnecessariamente compilações Android e o runner `macos-latest` (que consome 10x da cota).
+  2. *Gaps de Testes*: Não há execução das 7 suítes E2E do backend (`npm run test:e2e`) nem dos testes Playwright do frontend (`npx playwright test`).
+  3. *Assimetria Mobile*: O job Android (`mobile-build`) não injeta `--dart-define=BACKEND_URL` nem disponibiliza o arquivo compilado via `actions/upload-artifact@v4`, enquanto o job iOS já gera `.ipa` e publica artefato.
+  4. *Otimização de Cache*: O step Android não utiliza `cache: 'gradle'` no `setup-java`.
 
 ## Escopo
 
