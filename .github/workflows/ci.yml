@@ -11,6 +11,29 @@ on:
     paths-ignore:
       - '**.md'
       - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 'Escopo de execução dos jobs'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - all
+          - backend
+          - frontend
+          - mobile
+      backend_url:
+        description: 'URL do backend para injeção nos builds mobile'
+        required: false
+        default: 'https://my-roadie-backend.onrender.com'
+        type: string
+      run_mobile_e2e:
+        description: 'Executar testes E2E com Emulador Mobile (Consome mais minutos de CI)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   # ==========================================

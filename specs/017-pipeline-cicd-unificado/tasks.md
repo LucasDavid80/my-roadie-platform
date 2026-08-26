@@ -8,7 +8,7 @@
 
 ## Fase 1 — Detecção Inteligente de Paths & Gatilho Manual (`workflow_dispatch`)
 
-- [ ] T1.1 — Configurar gatilho `workflow_dispatch` com inputs configuráveis (`scope`, `backend_url` e `run_mobile_e2e`) no cabeçalho do workflow `.github/workflows/ci.yml`.
+- [x] T1.1 — Configurar gatilho `workflow_dispatch` com inputs configuráveis (`scope`, `backend_url` e `run_mobile_e2e`) no cabeçalho do workflow `.github/workflows/ci.yml`.
 - [ ] T1.2 — Implementar o job `changes` utilizando `dorny/paths-filter@v3` para mapear com precisão alterações em `backend`, `frontend` e `mobile`.
 - [ ] T1.3 — Atualizar as condições `if` e dependências `needs` de todos os jobs de linting (`frontend-lint`, `backend-lint`, `mobile-lint`) para responder aos outputs de `changes` ou bypass de `workflow_dispatch`.
 
