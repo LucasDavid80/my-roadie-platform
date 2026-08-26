@@ -349,10 +349,17 @@ jobs:
   deploy-production:
     name: Deploy to Production
     needs: [frontend-build, backend-build]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: |
+      always() &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
+      (needs.frontend-build.result == 'success' || needs.backend-build.result == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Backend Deploy (Render)
+        if: needs.backend-build.result == 'success'
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
@@ -364,6 +371,7 @@ jobs:
           fi
 
       - name: Trigger Frontend Deploy (Vercel)
+        if: needs.frontend-build.result == 'success'
         env:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
