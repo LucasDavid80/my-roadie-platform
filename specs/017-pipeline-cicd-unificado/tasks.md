@@ -17,7 +17,7 @@
 - [x] T2.1 — Adicionar o job `backend-e2e` executando `npm run test:e2e` condicionado ao sucesso de `backend-test`.
 - [x] T2.2 — Adicionar o job `frontend-e2e` instalando Chromium (`npx playwright install --with-deps chromium`) e rodando `npx playwright test` condicionado ao sucesso de `frontend-test`.
 - [x] T2.3 — Configurar a estrutura do job/step `mobile-e2e-emulator` condicionado a `github.event.inputs.run_mobile_e2e == 'true'`, deixando o gancho pronto para a Spec 018.
-- [ ] T2.4 — Atualizar dependências de `backend-build` e `frontend-build` para exigir a aprovação dos respectivos jobs de E2E.
+- [x] T2.4 — Atualizar dependências de `backend-build` e `frontend-build` para exigir a aprovação dos respectivos jobs de E2E.
 
 ## Fase 3 — Padronização de Builds Mobile & Publicação de Artefatos
 

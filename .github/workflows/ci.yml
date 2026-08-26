@@ -250,7 +250,7 @@ jobs:
   # BUILD JOBS
   # ==========================================
   frontend-build:
-    needs: frontend-test
+    needs: frontend-e2e
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -269,7 +269,7 @@ jobs:
       - run: npm run build
 
   backend-build:
-    needs: backend-test
+    needs: backend-e2e
     runs-on: ubuntu-latest
     defaults:
       run:
