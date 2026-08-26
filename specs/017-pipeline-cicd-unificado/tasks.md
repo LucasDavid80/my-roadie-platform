@@ -28,7 +28,7 @@
 ## Fase 4 — Deploy Contínuo (CD) & Otimização de Performance
 
 - [x] T4.1 — Refatorar o job `deploy-production` para disparar webhooks do Render e Vercel apenas após o sucesso dos jobs de build aplicáveis quando na branch `main`.
-- [ ] T4.2 — Validar caching multi-camadas (npm, Flutter pub e Gradle) em todos os jobs do pipeline.
+- [x] T4.2 — Validar caching multi-camadas (npm, Flutter pub e Gradle) em todos os jobs do pipeline.
 
 ## Fase 5 — Validação, Sintaxe do Workflow & Documentação
 
