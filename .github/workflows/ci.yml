@@ -288,7 +288,8 @@ jobs:
       - run: npx prisma generate
       - run: npm run build
 
-  mobile-build:
+  mobile-android-build:
+    name: Mobile Android Build
     needs: mobile-test
     runs-on: ubuntu-latest
     defaults:
@@ -300,13 +301,14 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
+          cache: 'gradle'
       - uses: android-actions/setup-android@v3
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
       - run: flutter pub get
-      - run: flutter build apk --release
+      - run: flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || 'https://my-roadie-backend.onrender.com' }}
 
   mobile-ios-build:
     needs: mobile-test
