@@ -317,6 +317,7 @@ jobs:
           retention-days: 7
 
   mobile-ios-build:
+    name: Mobile iOS Build
     needs: mobile-test
     runs-on: macos-latest
     defaults:
@@ -329,7 +330,7 @@ jobs:
           channel: 'stable'
           cache: true
       - run: flutter pub get
-      - run: flutter build ios --release --no-codesign --dart-define=BACKEND_URL=https://my-roadie-backend.onrender.com
+      - run: flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || 'https://my-roadie-backend.onrender.com' }}
       - name: Empacotar IPA para Sideload
         run: |
           mkdir -p Payload

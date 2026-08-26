@@ -23,7 +23,7 @@
 
 - [x] T3.1 — Atualizar `mobile-android-build` para injetar `--dart-define=BACKEND_URL` de produção e habilitar `cache: 'gradle'` no `setup-java`.
 - [x] T3.2 — Adicionar step `actions/upload-artifact@v4` no `mobile-android-build` para publicar `app-release.apk` como `my-roadie-android-release-apk` (retenção de 7 dias).
-- [ ] T3.3 — Padronizar `mobile-ios-build` garantindo o uso consistente do input de `backend_url` e upload do artefato `my-roadie-ios-release-ipa`.
+- [x] T3.3 — Padronizar `mobile-ios-build` garantindo o uso consistente do input de `backend_url` e upload do artefato `my-roadie-ios-release-ipa`.
 
 ## Fase 4 — Deploy Contínuo (CD) & Otimização de Performance
 
