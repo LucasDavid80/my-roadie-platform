@@ -29,6 +29,7 @@
 
 - [x] T4.1 — Refatorar o job `deploy-production` para disparar webhooks do Render e Vercel apenas após o sucesso dos jobs de build aplicáveis quando na branch `main`.
 - [x] T4.2 — Validar caching multi-camadas (npm, Flutter pub e Gradle) em todos os jobs do pipeline.
+- [x] T4.3 — Documentar os resultados da auditoria de caching multi-camadas (npm, Flutter pub e Gradle) em spec.md.
 
 ## Fase 5 — Validação, Sintaxe do Workflow & Documentação
 

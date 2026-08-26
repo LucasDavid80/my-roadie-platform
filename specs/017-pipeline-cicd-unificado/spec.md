@@ -100,6 +100,17 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
   3. *Assimetria Mobile*: O job Android (`mobile-build`) não injeta `--dart-define=BACKEND_URL` nem disponibiliza o arquivo compilado via `actions/upload-artifact@v4`, enquanto o job iOS já gera `.ipa` e publica artefato.
   4. *Otimização de Cache*: O step Android não utiliza `cache: 'gradle'` no `setup-java`.
 
+### 4. Auditoria de Caching Multi-Camadas e Otimizações de CI — Task T4.3
+- **Node.js / npm (`frontend-web` e `backend`)**:
+  - Todos os 8 jobs do ecossistema Node (`frontend-lint`, `backend-lint`, `frontend-test`, `frontend-e2e`, `backend-test`, `backend-e2e`, `frontend-build`, `backend-build`) utilizam `actions/setup-node@v4` com parâmetro `cache: 'npm'` e apontamento explícito para `./frontend-web/package-lock.json` e `./backend/package-lock.json`.
+  - Garante reuso dos pacotes do npm cache entre execuções, evitando downloads redundantes de dependências nos runners `ubuntu-latest`.
+- **Flutter / Dart (`mobile`)**:
+  - Todos os 5 jobs Mobile (`mobile-lint`, `mobile-test`, `mobile-e2e-emulator`, `mobile-android-build`, `mobile-ios-build`) utilizam a action oficial `subosito/flutter-action@v2` com `cache: true` no canal `stable`.
+  - Mantém em cache o SDK do Flutter e os artefatos do pub cache entre execuções nos runners Linux (`ubuntu-latest`) e macOS (`macos-latest`).
+- **Java / Gradle (`mobile/android`)**:
+  - O job de compilação Android (`mobile-android-build`) utiliza `actions/setup-java@v4` com `distribution: 'zulu'`, `java-version: '17'` e `cache: 'gradle'`.
+  - Mantém em cache os wrappers e dependências do Gradle, reduzindo significativamente o tempo de compilação do arquivo `app-release.apk`.
+
 ## Escopo
 
 1. **Gatilhos & Detecção de Mudanças**:
