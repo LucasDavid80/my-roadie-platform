@@ -37,6 +37,7 @@
 - [x] T5.2 — Executar localmente as suítes de testes (`npm test` no backend, `npm test` no frontend, `flutter test` no mobile).
 - [x] T5.3 — Atualizar `backlog.md`, `spec.md` e `plan.md` raiz com o status de fechamento da Fase 1 do backlog.
 - [x] T5.4 — Sincronizar inconsistências residuais da auditoria da Spec 016 em `backlog.md` (Fase 1), `specs/016-preparacao-release-mvp/plan.md` e `plan.md` raiz.
+- [x] T5.5 — Priorizar Spec 018 em `backlog.md` com dependency explícita em Spec 017 e documentar saneamento pós-auditoria em `plan.md` Spec 017.
 
 ## Checklist de fechamento da feature
 

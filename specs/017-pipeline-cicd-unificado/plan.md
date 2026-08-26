@@ -135,3 +135,10 @@ changes:
 - **`backlog.md`**: Adicionar a entrada da Spec 016 na seção temática *Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)* como `concluído (specs/016-preparacao-release-mvp/)`, mantendo paridade com a entrada da Baseline.
 - **`specs/016-preparacao-release-mvp/plan.md`**: Adicionar nota técnica formalizando o ajuste do script `start:prod` (`node dist/src/main`) devido à saída do compilador NestJS no monorepo e a introdução inicial do job `deploy-production`.
 - **`plan.md` (raiz)**: Atualizar a Seção 6 (CI/CD) para documentar formalmente a arquitetura do job `deploy-production` disparando webhooks do Render e Vercel.
+
+## 8. Saneamento Documentai Pós-Auditoria
+
+Após auditoria inicial de fechamento, foi descoberta a necessidade de sincronizar inconsistências adicionais:
+- Atualizar `spec.md` marcando explicitamente todos os critérios de sucesso como `[x]` após validação completa do pipeline.
+- Refinar documentação de Vitest em `plan.md` §3 para capturar configuração de `pool: 'threads'` como mitigação de instabilidade em testes paralelos.
+- Priorizar Spec 018 em `backlog.md` com dependency explícita em Spec 017 (gancho de E2E Mobile já estruturado no CI/CD).

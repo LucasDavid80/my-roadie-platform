@@ -47,8 +47,9 @@
 - **Android**: `flutter build apk --release --dart-define=BACKEND_URL=<url-producao-do-backend>`.
 - **iOS**: build automatizado via GitHub Actions com runner `macos-latest` (sem necessidade de Mac local físico). O pipeline executa `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=<url-producao-do-backend>`, empacota o `Runner.app` em `my-roadie-release.ipa` e publica como artefato de build. *(Decisão: FlutLab.io foi descontinuado após validação técnica por não suportar exportação de `.ipa`).* O arquivo `.ipa` gerado é baixado e assinado via Sideloadly / AltStore usando um Apple ID gratuito.
 
-### 8. Continuous Deployment (CD) & Automação de Deploy
+### 8. Continuous Deployment (CD) & Automação de Deploy (Introdução Inicial — Spec 017 Expandida)
 - Introdução inicial do job `deploy-production` em `.github/workflows/ci.yml` acionando webhooks de deploy (Render para backend e Vercel para frontend) quando ocorrem pushes na branch `main`.
+- **Nota técnica:** A infraestrutura completa de CD (condições de trigger, validações de status dos builds, tratamento de secrets) é formalizada e expandida na Spec 017 com detalhes de condicionalidade `always()`, validações de sucesso/failure e suporte a `workflow_dispatch`. Esta spec (016) apenas documenta a introdução inicial do conceito e validação de CORS em produção; Spec 017 unifica e otimiza todo o pipeline.
 
 ### 9. Testes
 - Teste unitário em `mobile/test/core/utils/app_logger_test.dart` verificando execução segura e compatibilidade.
