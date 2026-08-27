@@ -2,7 +2,17 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode, useSyncExternalStore } from 'react';
+
+const emptySubscribe = () => () => {};
+
+function useIsMounted() {
+    return useSyncExternalStore(
+        emptySubscribe,
+        () => true,
+        () => false
+    );
+}
 
 interface ProtectedRouteProps {
     children: ReactNode;
@@ -12,23 +22,29 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, allowedRoles }: Readonly<ProtectedRouteProps>) {
     const { user, isAuthenticated } = useAuth();
     const router = useRouter();
+    const isMounted = useIsMounted();
+
+    const userRole = user?.role;
+    const hasRoleAccess = !allowedRoles || (userRole ? allowedRoles.includes(userRole) : false);
 
     useEffect(() => {
+        if (!isMounted) return;
+
         if (!isAuthenticated) {
-            router.push('/login');
+            router.replace('/login');
             return;
         }
 
-        if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-            router.push('/dashboard');
+        if (!hasRoleAccess) {
+            router.replace('/dashboard');
         }
-    }, [isAuthenticated, user, allowedRoles, router]);
+    }, [isMounted, isAuthenticated, hasRoleAccess, router]);
 
-    if (!isAuthenticated) {
+    if (!isMounted || !isAuthenticated) {
         return <div className="min-h-screen flex items-center justify-center">Redirecionando...</div>;
     }
 
-    if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+    if (!hasRoleAccess) {
         return <div className="min-h-screen flex items-center justify-center">Acesso negado.</div>;
     }
 

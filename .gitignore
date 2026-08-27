@@ -14,3 +14,7 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.zip
+
+# Local CI / Act
+.act-event.json
+.actrc

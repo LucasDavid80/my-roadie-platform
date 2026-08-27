@@ -113,6 +113,12 @@
 - Depende de: Extensão do Modelo de Eventos & Ações do Card de Compromisso (spec 015)
 - Status: concluído (specs/016-preparacao-release-mvp/) — release do MVP para testes fechados entregue
 
+### Pipeline CI/CD Unificado & Modernizado (E2E, Deploy Contínuo, Filtro de Paths & Otimização de Custos)
+- Intenção: Unificar e modernizar o CI/CD com filtros inteligentes de paths (`dorny/paths-filter`), disparo manual sob demanda (`workflow_dispatch`), execução de testes E2E (backend e Playwright web), publicação unificada de artefatos de release (APK e IPA) e Continuous Deployment.
+- Impacto esperado: alto (automação de entrega contínua, confiabilidade e redução de custos)
+- Depende de: nenhum
+- Status: concluído (specs/017-pipeline-cicd-unificado/)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -140,23 +146,29 @@
 - Depende de: nenhum
 - Status: absorvido (integrado em specs/015-extensao-modelo-eventos-e-acoes-card/)
 
+### Preparação para Release do MVP & Padronização de Logs (AppLogger)
+- Intenção: Criar utilitário centralizado `AppLogger` com proteção `kDebugMode` para eliminar `debugPrint`s que expõem tokens e dados sensíveis em compilações de release, ajustar a identidade da aplicação para "My Roadie" (`android:label`), restringir CORS no backend, publicar frontend-web com rota `/testers` para distribuição de builds, e automatizar geração de APK e IPA (via runner macOS do GitHub Actions) para testes fechados com usuários reais.
+- Impacto esperado: alto (segurança, privacidade e prontidão para release)
+- Depende de: Extensão do Modelo de Eventos & Ações do Card de Compromisso (spec 015)
+- Status: concluído (specs/016-preparacao-release-mvp/)
+
 ### Testes de Integração Ponta a Ponta (E2E) no Mobile
 - Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
 - Impacto esperado: alto (qualidade e confiabilidade de entrega)
-- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
-- Status: ideia
+- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
+- Status: priorizado (próxima spec / spec 018 — gancho estruturado no CI/CD)
 
-### Pipeline CI/CD Unificado & Modernizado (E2E, Deploy Contínuo e Otimização de Custos)
-- Intenção: Unificar as melhores práticas do histórico do CI/CD, combinando a estabilidade e eficiência de custos da versão atual (filtros de paths/mensagens de commit, JDK 17, Android SDK e runner macOS para iOS) com a completude funcional da versão histórica (estágio de testes E2E com Playwright para Web/API, automação de Continuous Deployment na Vercel e Render, suporte a `workflow_dispatch` para disparo manual sob demanda de builds/releases de mobile/web, e notificações de status).
-- Impacto esperado: alto (automação de entrega contínua, confiabilidade e governança)
+### Pipeline CI/CD Unificado & Modernizado (E2E, Deploy Contínuo, Filtro de Paths & Otimização de Custos)
+- Intenção: Unificar e modernizar o CI/CD com filtros inteligentes de paths (`dorny/paths-filter`), disparo manual sob demanda (`workflow_dispatch`), execução de testes E2E (backend e Playwright web), publicação unificada de artefatos de release (APK e IPA) e Continuous Deployment.
+- Impacto esperado: alto (automação de entrega contínua, confiabilidade e redução de custos)
 - Depende de: nenhum
-- Status: priorizado
+- Status: concluído (specs/017-pipeline-cicd-unificado/)
 
 ### Auditoria e Otimização de Performance do Pipeline CI/CD (Speed & Caching)
 - Intenção: Medir, diagnosticar e otimizar os tempos de execução do GitHub Actions através de caching avançado multi-camadas (Gradle/Android cache, Next.js build cache, Flutter pub cache e node_modules), paralelização inteligente e detecção automática estrita de arquivos alterados via `paths-filter` nativo (garantindo que jobs de `mobile` e runners macOS só sejam acionados quando houver modificação real na pasta `mobile/`), reduzindo o tempo de feedback nos PRs e o consumo da cota gratuita.
 - Impacto esperado: alto (redução de tempo de espera nos PRs e economia de minutos de CI)
 - Depende de: Pipeline CI/CD Unificado & Modernizado
-- Status: priorizado
+- Status: absorvido (integrado em specs/017-pipeline-cicd-unificado/)
 
 ---
 

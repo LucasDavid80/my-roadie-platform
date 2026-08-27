@@ -11,13 +11,69 @@ on:
     paths-ignore:
       - '**.md'
       - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 'Escopo de execução dos jobs'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - all
+          - backend
+          - frontend
+          - mobile
+      backend_url:
+        description: 'URL do backend para injeção nos builds mobile (opcional, fallback para secrets.BACKEND_URL)'
+        required: false
+        default: ''
+        type: string
+      run_mobile_e2e:
+        description: 'Executar testes E2E com Emulador Mobile (Consome mais minutos de CI)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
+  # ==========================================
+  # PATHS FILTER JOB
+  # ==========================================
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      mobile: ${{ steps.filter.outputs.mobile }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ github.base_ref || 'main' }}
+          filters: |
+            backend:
+              - 'backend/**'
+              - 'prisma/**'
+              - '.github/workflows/ci.yml'
+            frontend:
+              - 'frontend-web/**'
+              - '.github/workflows/ci.yml'
+            mobile:
+              - 'mobile/**'
+              - '.github/workflows/ci.yml'
+
   # ==========================================
   # LINTS JOBS
   # ==========================================
   frontend-lint:
-    if: "contains(github.event.head_commit.message, '[web]') || github.event_name == 'pull_request' || (!contains(github.event.head_commit.message, '[backend]') && !contains(github.event.head_commit.message, '[mobile]'))"
+    name: Frontend Lint
+    needs: changes
+    if: |
+      inputs.scope == 'all' ||
+      inputs.scope == 'frontend' ||
+      ((inputs.scope == 'auto' || !inputs.scope) && needs.changes.outputs.frontend == 'true')
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -33,7 +89,12 @@ jobs:
       - run: npm run lint
   
   backend-lint:
-    if: "contains(github.event.head_commit.message, '[backend]') || github.event_name == 'pull_request' || (!contains(github.event.head_commit.message, '[web]') && !contains(github.event.head_commit.message, '[mobile]'))"
+    name: Backend Lint
+    needs: changes
+    if: |
+      inputs.scope == 'all' ||
+      inputs.scope == 'backend' ||
+      ((inputs.scope == 'auto' || !inputs.scope) && needs.changes.outputs.backend == 'true')
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -53,7 +114,12 @@ jobs:
       - run: npm run lint
 
   mobile-lint:
-    if: "contains(github.event.head_commit.message, '[mobile]') || github.event_name == 'pull_request'"
+    name: Mobile Lint
+    needs: changes
+    if: |
+      inputs.scope == 'all' ||
+      inputs.scope == 'mobile' ||
+      ((inputs.scope == 'auto' || !inputs.scope) && needs.changes.outputs.mobile == 'true')
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -86,6 +152,26 @@ jobs:
       - run: npm ci
       - run: npm test -- --run
 
+  frontend-e2e:
+    needs: frontend-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend-web
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './frontend-web/package-lock.json'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+
   backend-test:
     needs: backend-lint
     runs-on: ubuntu-latest
@@ -106,6 +192,26 @@ jobs:
       - run: npx prisma generate
       - run: npm test
 
+  backend-e2e:
+    needs: backend-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './backend/package-lock.json'
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run test:e2e
+
   mobile-test:
     needs: mobile-lint
     runs-on: ubuntu-latest
@@ -121,11 +227,31 @@ jobs:
       - run: flutter pub get
       - run: flutter test
 
+  mobile-e2e-emulator:
+    name: Mobile E2E Emulator (Spec 018)
+    needs: mobile-test
+    if: github.event.inputs.run_mobile_e2e == 'true' || inputs.run_mobile_e2e == true
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - name: Placeholder para suíte de testes E2E Mobile (Spec 018)
+        run: |
+          echo "Hook de E2E Mobile sob demanda ativado."
+          echo "Os cenários detalhados com emulador serão implementados na Spec 018."
+
   # ==========================================
   # BUILD JOBS
   # ==========================================
   frontend-build:
-    needs: frontend-test
+    needs: frontend-e2e
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -144,7 +270,7 @@ jobs:
       - run: npm run build
 
   backend-build:
-    needs: backend-test
+    needs: backend-e2e
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -163,7 +289,8 @@ jobs:
       - run: npx prisma generate
       - run: npm run build
 
-  mobile-build:
+  mobile-android-build:
+    name: Mobile Android Build
     needs: mobile-test
     runs-on: ubuntu-latest
     defaults:
@@ -175,15 +302,23 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
+          cache: 'gradle'
       - uses: android-actions/setup-android@v3
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
       - run: flutter pub get
-      - run: flutter build apk --release
+      - run: flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}
+      - name: Publicar Artefato Android (.apk)
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-roadie-android-release-apk
+          path: mobile/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 7
 
   mobile-ios-build:
+    name: Mobile iOS Build
     needs: mobile-test
     runs-on: macos-latest
     defaults:
@@ -196,7 +331,7 @@ jobs:
           channel: 'stable'
           cache: true
       - run: flutter pub get
-      - run: flutter build ios --release --no-codesign --dart-define=BACKEND_URL=https://my-roadie-backend.onrender.com
+      - run: flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}
       - name: Empacotar IPA para Sideload
         run: |
           mkdir -p Payload
@@ -215,10 +350,17 @@ jobs:
   deploy-production:
     name: Deploy to Production
     needs: [frontend-build, backend-build]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: |
+      always() &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
+      (needs.frontend-build.result == 'success' || needs.backend-build.result == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Backend Deploy (Render)
+        if: needs.backend-build.result == 'success'
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
@@ -230,6 +372,7 @@ jobs:
           fi
 
       - name: Trigger Frontend Deploy (Vercel)
+        if: needs.frontend-build.result == 'success'
         env:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |

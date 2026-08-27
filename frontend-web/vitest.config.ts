@@ -8,6 +8,7 @@ export default defineConfig({
         environment: 'jsdom',
         globals: true,
         setupFiles: './src/test/setup.ts',
+        pool: 'threads',
         fileParallelism: false,
         exclude: ['**/node_modules/**', '**/tests/**', '**/dist/**'],
         coverage: {
