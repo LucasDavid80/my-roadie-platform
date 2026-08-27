@@ -123,6 +123,11 @@ test.describe('E2E Security & Login', () => {
 
         // Intercepta listagem / criação na API backend (/users)
         await page.route('**/users', async (route) => {
+            const url = new URL(route.request().url());
+            if (url.pathname !== '/users') {
+                await route.continue();
+                return;
+            }
             if (route.request().method() === 'GET') {
                 await route.fulfill({
                     status: 200,

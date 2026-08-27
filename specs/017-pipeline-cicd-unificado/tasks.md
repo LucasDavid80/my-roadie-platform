@@ -43,7 +43,7 @@
 
 - [x] T6.1 — Implementar interceptação de rotas (`page.route`) de autenticação Supabase e API backend em `frontend-web/tests/security.spec.ts` (Admin login, bloqueio de rota protegida e persistência de sessão).
 - [x] T6.2 — Implementar interceptação de rotas (`page.route`) de cadastro Supabase e criação de usuário em `frontend-web/tests/auth.spec.ts` (Fluxo de cadastro de novo músico e login).
-- [ ] T6.3 — Validar a execução local da suíte E2E do frontend com Playwright (`npx playwright test`).
+- [x] T6.3 — Validar a execução local da suíte E2E do frontend com Playwright (`npx playwright test`).
 - [ ] T6.4 — Atualizar documentação e critérios de sucesso no `spec.md`, `plan.md` e `tasks.md`.
 
 ## Checklist de fechamento da feature

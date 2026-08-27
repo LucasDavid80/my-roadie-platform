@@ -164,6 +164,11 @@ test.describe('Fluxo de Autenticação MyRoadie', () => {
 
         // Intercepta criação e listagem na API backend (/users)
         await page.route('**/users', async (route) => {
+            const url = new URL(route.request().url());
+            if (url.pathname !== '/users') {
+                await route.continue();
+                return;
+            }
             if (route.request().method() === 'POST') {
                 const postData = route.request().postDataJSON() || {};
                 currentUser = {
