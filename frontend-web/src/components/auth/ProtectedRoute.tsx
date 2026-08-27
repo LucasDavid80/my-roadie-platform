@@ -2,7 +2,17 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode, useState } from 'react';
+import { useEffect, ReactNode, useSyncExternalStore } from 'react';
+
+const emptySubscribe = () => () => {};
+
+function useIsMounted() {
+    return useSyncExternalStore(
+        emptySubscribe,
+        () => true,
+        () => false
+    );
+}
 
 interface ProtectedRouteProps {
     children: ReactNode;
@@ -12,13 +22,10 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, allowedRoles }: Readonly<ProtectedRouteProps>) {
     const { user, isAuthenticated } = useAuth();
     const router = useRouter();
-    const [isMounted, setIsMounted] = useState(false);
+    const isMounted = useIsMounted();
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
-
-    const rolesKey = allowedRoles?.join(',');
+    const userRole = user?.role;
+    const hasRoleAccess = !allowedRoles || (userRole ? allowedRoles.includes(userRole) : false);
 
     useEffect(() => {
         if (!isMounted) return;
@@ -28,16 +35,16 @@ export function ProtectedRoute({ children, allowedRoles }: Readonly<ProtectedRou
             return;
         }
 
-        if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+        if (!hasRoleAccess) {
             router.replace('/dashboard');
         }
-    }, [isMounted, isAuthenticated, user?.role, rolesKey, router]);
+    }, [isMounted, isAuthenticated, hasRoleAccess, router]);
 
     if (!isMounted || !isAuthenticated) {
         return <div className="min-h-screen flex items-center justify-center">Redirecionando...</div>;
     }
 
-    if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+    if (!hasRoleAccess) {
         return <div className="min-h-screen flex items-center justify-center">Acesso negado.</div>;
     }
 
