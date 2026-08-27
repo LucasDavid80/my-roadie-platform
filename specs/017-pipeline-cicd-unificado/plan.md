@@ -109,12 +109,12 @@ changes:
 ### Android (`mobile-android-build`)
 - Runner: `ubuntu-latest`.
 - Java 17 (`zulu`) + Android SDK + Flutter stable.
-- Build: `flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || 'https://my-roadie-backend.onrender.com' }}`.
+- Build: `flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`.
 - Upload: `actions/upload-artifact@v4` publicando `mobile/build/app/outputs/flutter-apk/app-release.apk` como `my-roadie-android-release-apk` com `retention-days: 7`.
 
 ### iOS (`mobile-ios-build`)
 - Runner: `macos-latest`.
-- Build: `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || 'https://my-roadie-backend.onrender.com' }}`.
+- Build: `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`.
 - Empacotamento em `Payload/Runner.app` -> `my-roadie-release.ipa`.
 - Upload: `actions/upload-artifact@v4` publicando `mobile/my-roadie-release.ipa` como `my-roadie-ios-release-ipa` com `retention-days: 7`.
 
