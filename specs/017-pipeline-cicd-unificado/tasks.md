@@ -44,7 +44,7 @@
 - [x] T6.1 — Implementar interceptação de rotas (`page.route`) de autenticação Supabase e API backend em `frontend-web/tests/security.spec.ts` (Admin login, bloqueio de rota protegida e persistência de sessão).
 - [x] T6.2 — Implementar interceptação de rotas (`page.route`) de cadastro Supabase e criação de usuário em `frontend-web/tests/auth.spec.ts` (Fluxo de cadastro de novo músico e login).
 - [x] T6.3 — Validar a execução local da suíte E2E do frontend com Playwright (`npx playwright test`).
-- [ ] T6.4 — Atualizar documentação e critérios de sucesso no `spec.md`, `plan.md` e `tasks.md`.
+- [x] T6.4 — Atualizar documentação e critérios de sucesso no `spec.md`, `plan.md` e `tasks.md`.
 
 ## Checklist de fechamento da feature
 
@@ -52,8 +52,8 @@
 - [x] Detecção de mudanças ativa via `dorny/paths-filter@v3` poupando minutos de runner
 - [x] PRs sem alteração em `mobile/` não disparam runners macOS nem Android SDK
 - [x] Testes E2E do backend e Playwright do frontend integrados ao pipeline
-- [ ] Isolamento hermético e mocks de rede implementados nas suítes E2E Playwright
-- [ ] Suíte E2E Web validada e aprovada com sucesso no CI e localmente
+- [x] Isolamento hermético e mocks de rede implementados nas suítes E2E Playwright
+- [x] Suíte E2E Web validada e aprovada com sucesso no CI e localmente
 - [x] Gancho preparatório para E2E Mobile da Spec 018 configurado e desligado por padrão
 - [x] Builds de APK (Android) e IPA (iOS) gerados e publicados como artefatos no GitHub Actions
 - [x] Deploys automáticos (Render e Vercel) condicionados ao sucesso dos builds na `main`

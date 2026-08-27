@@ -163,8 +163,8 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 - [x] Runners `macos-latest` e builds Android ignorados em PRs que não alteram a pasta `mobile/`.
 - [x] Testes E2E do backend (`npm run test:e2e`) integrados e passando no CI.
 - [x] Testes E2E Playwright do frontend integrados no CI em modo headless.
-- [ ] Interceptação de rede (`page.route`) implementada em `frontend-web/tests/security.spec.ts` e `frontend-web/tests/auth.spec.ts`.
-- [ ] Suíte E2E do frontend (`npx playwright test`) executada e aprovada no runner do CI e localmente.
+- [x] Interceptação de rede (`page.route`) implementada em `frontend-web/tests/security.spec.ts` e `frontend-web/tests/auth.spec.ts`.
+- [x] Suíte E2E do frontend (`npx playwright test`) executada e aprovada no runner do CI e localmente.
 - [x] Build Android compilando com URL de produção e publicando o artefato `my-roadie-release.apk`.
 - [x] Build iOS compilando com URL de produção e publicando o artefato `my-roadie-release.ipa`.
 - [x] Hooks de deploy do Render e Vercel preservados para merges na `main`.

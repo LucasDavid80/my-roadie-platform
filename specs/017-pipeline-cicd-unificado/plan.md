@@ -149,8 +149,12 @@ Para viabilizar a execução dos testes E2E Playwright de forma hermética e det
 - **Estratégia de Interceptação com `page.route`**:
   - `**/auth/v1/token*`: Intercepta requisições de autenticação por senha do Supabase, inspecionando o payload e retornando tokens válidos com claims de `role: 'ADMIN'` (para `admin@roadie.com`) ou `role: 'MUSICIAN'` (para demais contas).
   - `**/auth/v1/signup*`: Intercepta o registro de novos usuários no Supabase Auth, retornando estrutura de usuário válida para permitir a continuidade do fluxo na interface.
-  - `**/auth/login`, `**/users/me`, `**/users`: Intercepta chamadas de sincronização e criação de usuário da API do backend NestJS, respondendo com payloads JSON consistentes.
+  - `**/auth/login`, `**/users/me`, `**/users`: Intercepta chamadas de sincronização e criação de usuário da API do backend NestJS, validando `url.pathname === '/users'` para não interferir em rotas do frontend como `/admin/users`.
+- **Estabilização de Hidratação e Roteamento**:
+  - Implementação de `isMounted` no `ProtectedRoute.tsx` para evitar *hydration mismatch* entre renderização inicial no servidor e leitura do `localStorage` no cliente.
+  - Estabilização de `ADMIN_ROLES` e dependências no `useEffect` de guarda de rotas, garantindo transições determinísticas de `router.replace('/dashboard')` para perfis sem permissão.
+  - Configuração do Playwright com execução sequencial (`workers: 1`) e timeout de expect de 15s para suportar cold-start do servidor de desenvolvimento Next.js.
 - **Benefícios**:
   - Testes E2E tornam-se 100% autônomos e independentes de disponibilidade de rede externa ou contas previamente cadastradas.
-  - Execução ultra-rápida e resiliente a oscilações no CI.
+  - Execução rápida, previsível e resiliente a oscilações no CI.
 
