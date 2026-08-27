@@ -136,9 +136,21 @@ changes:
 - **`specs/016-preparacao-release-mvp/plan.md`**: Adicionar nota técnica formalizando o ajuste do script `start:prod` (`node dist/src/main`) devido à saída do compilador NestJS no monorepo e a introdução inicial do job `deploy-production`.
 - **`plan.md` (raiz)**: Atualizar a Seção 6 (CI/CD) para documentar formalmente a arquitetura do job `deploy-production` disparando webhooks do Render e Vercel.
 
-## 8. Saneamento Documentai Pós-Auditoria
+## 8. Saneamento Documental Pós-Auditoria
 
 Após auditoria inicial de fechamento, foi descoberta a necessidade de sincronizar inconsistências adicionais:
 - Atualizar `spec.md` marcando explicitamente todos os critérios de sucesso como `[x]` após validação completa do pipeline.
 - Refinar documentação de Vitest em `plan.md` §3 para capturar configuração de `pool: 'threads'` como mitigação de instabilidade em testes paralelos.
 - Priorizar Spec 018 em `backlog.md` com dependency explícita em Spec 017 (gancho de E2E Mobile já estruturado no CI/CD).
+
+## 9. Isolamento Hermético e Mocking de Rede nos Testes E2E Web (Fase 6)
+
+Para viabilizar a execução dos testes E2E Playwright de forma hermética e determinística em ambientes isolados (como runners `ubuntu-latest` do GitHub Actions):
+- **Estratégia de Interceptação com `page.route`**:
+  - `**/auth/v1/token*`: Intercepta requisições de autenticação por senha do Supabase, inspecionando o payload e retornando tokens válidos com claims de `role: 'ADMIN'` (para `admin@roadie.com`) ou `role: 'MUSICIAN'` (para demais contas).
+  - `**/auth/v1/signup*`: Intercepta o registro de novos usuários no Supabase Auth, retornando estrutura de usuário válida para permitir a continuidade do fluxo na interface.
+  - `**/auth/login`, `**/users/me`, `**/users`: Intercepta chamadas de sincronização e criação de usuário da API do backend NestJS, respondendo com payloads JSON consistentes.
+- **Benefícios**:
+  - Testes E2E tornam-se 100% autônomos e independentes de disponibilidade de rede externa ou contas previamente cadastradas.
+  - Execução ultra-rápida e resiliente a oscilações no CI.
+

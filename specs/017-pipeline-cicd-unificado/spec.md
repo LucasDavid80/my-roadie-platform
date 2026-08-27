@@ -107,9 +107,13 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 - **Flutter / Dart (`mobile`)**:
   - Todos os 5 jobs Mobile (`mobile-lint`, `mobile-test`, `mobile-e2e-emulator`, `mobile-android-build`, `mobile-ios-build`) utilizam a action oficial `subosito/flutter-action@v2` com `cache: true` no canal `stable`.
   - Mantém em cache o SDK do Flutter e os artefatos do pub cache entre execuções nos runners Linux (`ubuntu-latest`) e macOS (`macos-latest`).
-- **Java / Gradle (`mobile/android`)**:
-  - O job de compilação Android (`mobile-android-build`) utiliza `actions/setup-java@v4` com `distribution: 'zulu'`, `java-version: '17'` e `cache: 'gradle'`.
-  - Mantém em cache os wrappers e dependências do Gradle, reduzindo significativamente o tempo de compilação do arquivo `app-release.apk`.
+### 5. Diagnóstico de Falha no `frontend-e2e` e Isolamento Hermético (Fase 6)
+- **Causa Raiz Identificada no CI**:
+  - No runner do GitHub Actions (`ubuntu-latest`), o frontend Next.js inicializa via `npm run dev` na porta 3000.
+  - As suítes de teste Playwright (`auth.spec.ts` e `security.spec.ts`) submetiam credenciais simuladas (`admin@roadie.com`, `musico@roadie.com`, `test-...@myroadie.br`) que disparavam chamadas reais ao Supabase Auth e endpoints do backend.
+  - Pela ausência desses usuários em instâncias externas e pela natureza isolada do ambiente de CI, as autenticações falhavam na UI, impedindo a transição de rota para `/dashboard` e gerando timeout de asserção.
+- **Solução Arquitetural**:
+  - Implementar interceptação de rede no browser via `page.route` do Playwright para responder deterministicamente às rotas de autenticação do Supabase (`**/auth/v1/token*`, `**/auth/v1/signup*`) e da API Backend (`**/auth/login`, `**/users/me`, `**/users`), assegurando suítes herméticas e independentes de serviços externos.
 
 ## Escopo
 
@@ -144,6 +148,9 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
    - Atualizar `specs/016-preparacao-release-mvp/plan.md` documentando a justificativa técnica do script `start:prod` e o estágio `deploy-production`.
    - Atualizar a Seção 6 do `plan.md` raiz detalhando a existência e funcionamento do job `deploy-production`.
 
+6. **Isolamento Hermético e Mocking de Rede nos Testes E2E Web (Playwright)**:
+   - Configurar interceptação de rotas (`page.route`) em `frontend-web/tests/security.spec.ts` e `frontend-web/tests/auth.spec.ts` para mockar respostas do Supabase Auth e da API Backend, garantindo execução autônoma e determinística no CI.
+
 ## Fora de Escopo
 
 - Implementação dos cenários detalhados de testes E2E do app mobile (escopo da Spec 018 — esta spec provê a infraestrutura de CI e o gatilho manual sob demanda).
@@ -155,10 +162,13 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 - [x] Job `changes` implementado com `dorny/paths-filter@v3`, filtrando com precisão execuções de `backend`, `frontend` e `mobile`.
 - [x] Runners `macos-latest` e builds Android ignorados em PRs que não alteram a pasta `mobile/`.
 - [x] Testes E2E do backend (`npm run test:e2e`) integrados e passando no CI.
-- [x] Testes E2E Playwright do frontend integrados e passando no CI em modo headless.
+- [x] Testes E2E Playwright do frontend integrados no CI em modo headless.
+- [ ] Interceptação de rede (`page.route`) implementada em `frontend-web/tests/security.spec.ts` e `frontend-web/tests/auth.spec.ts`.
+- [ ] Suíte E2E do frontend (`npx playwright test`) executada e aprovada no runner do CI e localmente.
 - [x] Build Android compilando com URL de produção e publicando o artefato `my-roadie-release.apk`.
 - [x] Build iOS compilando com URL de produção e publicando o artefato `my-roadie-release.ipa`.
 - [x] Hooks de deploy do Render e Vercel preservados para merges na `main`.
 - [x] Inconsistências de documentação identificadas na auditoria da Spec 016 saneadas e sincronizadas.
 - [x] Sintaxe do `.github/workflows/ci.yml` 100% válida e formatada.
 - [x] Baseline (`spec.md`, `plan.md`) e `backlog.md` atualizados refletindo a conclusão da Fase 1.
+

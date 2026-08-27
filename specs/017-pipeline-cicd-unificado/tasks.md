@@ -39,15 +39,25 @@
 - [x] T5.4 — Sincronizar inconsistências residuais da auditoria da Spec 016 em `backlog.md` (Fase 1), `specs/016-preparacao-release-mvp/plan.md` e `plan.md` raiz.
 - [x] T5.5 — Priorizar Spec 018 em `backlog.md` com dependency explícita em Spec 017 e documentar saneamento pós-auditoria em `plan.md` Spec 017.
 
+## Fase 6 — Isolamento Hermético e Mocking de Rede nos Testes E2E Web (Playwright)
+
+- [ ] T6.1 — Implementar interceptação de rotas (`page.route`) de autenticação Supabase e API backend em `frontend-web/tests/security.spec.ts` (Admin login, bloqueio de rota protegida e persistência de sessão).
+- [ ] T6.2 — Implementar interceptação de rotas (`page.route`) de cadastro Supabase e criação de usuário em `frontend-web/tests/auth.spec.ts` (Fluxo de cadastro de novo músico e login).
+- [ ] T6.3 — Validar a execução local da suíte E2E do frontend com Playwright (`npx playwright test`).
+- [ ] T6.4 — Atualizar documentação e critérios de sucesso no `spec.md`, `plan.md` e `tasks.md`.
+
 ## Checklist de fechamento da feature
 
 - [x] `workflow_dispatch` operacional com inputs `scope`, `backend_url` e `run_mobile_e2e`
 - [x] Detecção de mudanças ativa via `dorny/paths-filter@v3` poupando minutos de runner
 - [x] PRs sem alteração em `mobile/` não disparam runners macOS nem Android SDK
 - [x] Testes E2E do backend e Playwright do frontend integrados ao pipeline
+- [ ] Isolamento hermético e mocks de rede implementados nas suítes E2E Playwright
+- [ ] Suíte E2E Web validada e aprovada com sucesso no CI e localmente
 - [x] Gancho preparatório para E2E Mobile da Spec 018 configurado e desligado por padrão
 - [x] Builds de APK (Android) e IPA (iOS) gerados e publicados como artefatos no GitHub Actions
 - [x] Deploys automáticos (Render e Vercel) condicionados ao sucesso dos builds na `main`
 - [x] Inconsistências residuais da auditoria da Spec 016 saneadas e sincronizadas
 - [x] Sintaxe do arquivo de workflow validada
 - [x] Fase 1 do Backlog concluída e documentada nas baselines
+
