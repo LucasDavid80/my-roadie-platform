@@ -30,22 +30,46 @@ A spec contempla:
 
 ## Resultados da Inspeção (Fase 0)
 
-### 1. Diagnóstico do Código Atual do Frontend
-- Arquivo analisado: [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx).
-- As URLs são lidas nas linhas 16 e 17:
+### 1. Relatório da Task T0.1 — Diagnóstico da Rota de Testadores (`frontend-web`)
+- **Arquivo analisado:** [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx).
+- **Leitura de Variáveis de Ambiente:**
   ```typescript
   const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL || '/downloads/my-roadie-release.apk';
   const ipaDownloadUrl = process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL || '/downloads/my-roadie-release.ipa';
   ```
-- Se as variáveis `NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL` não existirem no `.env.local` ou na Vercel, o fallback aponta para o diretório `/downloads/` do Next.js.
-- No diretório [`frontend-web/public/downloads/`](file:///C:/dev/my-roadie-platform/frontend-web/public/downloads/), existem apenas `.gitkeep` e `README.md`, gerando o erro 404 quando o usuário clica no botão de download.
+- **Comportamento com variáveis configuradas:** Se `NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL` apontam para links externos válidos (ex.: GitHub Releases), o download direto funciona normalmente via CDN pública.
+- **Comportamento com variáveis ausentes (Causa Raiz do Erro 404):**
+  - O fallback utiliza caminhos relativos locais (`/downloads/my-roadie-release.apk` e `/downloads/my-roadie-release.ipa`).
+  - No diretório [`frontend-web/public/downloads/`](file:///C:/dev/my-roadie-platform/frontend-web/public/downloads/), existem apenas `.gitkeep` e `README.md` (binários não são versionados no Git).
+  - O servidor Next.js/Vercel retorna HTTP 404 (Not Found) a qualquer clique de download.
+  - A interface do usuário não valida se a URL é válida nem se o arquivo está disponível, gerando cliques cegos que levam à tela 404.
+- **Versão Hardcoded:** O rodapé do card Android exibe `MVP 1.0.0` fixo no JSX (linha 125) sem consultar uma variável de ambiente (ex.: `NEXT_PUBLIC_APP_VERSION`).
 
-### 2. Diagnóstico da Geração de Artefatos e Workflow CI/CD (Spec 017)
-- Arquivo analisado: [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml).
-- **Bug 1 (`paths-filter`)**: Linha 54 possui `base: ${{ github.base_ref || 'main' }}`. Em eventos de `push` para `main`, `github.base_ref` é vazio e o fallback `'main'` faz com que `paths-filter` rode `git diff main...HEAD`, resultando em diff vazio e pulando todos os builds e deploys.
-- **Bug 2 (Fallback `BACKEND_URL`)**: Linhas 312 e 334 passam `--dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`. Caso o secret do GitHub não esteja configurado, o app compila com string vazia e aponta para `http://10.0.2.2:3000` (Android) / `http://localhost:3000` (iOS).
-- **Inconsistência de Nomenclatura**: No job Android, o arquivo gerado é `mobile/build/app/outputs/flutter-apk/app-release.apk`, enquanto no iOS o arquivo é empacotado como `my-roadie-release.ipa`.
-- **Limitação de Acesso**: Os artefatos são enviados via `actions/upload-artifact@v4` (expiram em 7 dias e exigem login no GitHub), necessitando de uma publicação pública e permanente em GitHub Releases.
+### 2. Relatório da Task T0.2 — Diagnóstico dos Jobs de Build Mobile (`.github/workflows/ci.yml`)
+- **Arquivo analisado:** [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) (linhas 292 a 346).
+- **Job `mobile-android-build`:**
+  - Compila com: `flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`
+  - Caminho gerado: `mobile/build/app/outputs/flutter-apk/app-release.apk`.
+  - Assimetria de Nomenclatura: O arquivo sai com nome genérico `app-release.apk`, enquanto o frontend e a documentação referenciam `my-roadie-release.apk`.
+- **Job `mobile-ios-build`:**
+  - Compila com: `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`
+  - Empacotamento manual: Cria pasta `Payload/`, copia `Runner.app` e compacta gerando `mobile/my-roadie-release.ipa`.
+- **Injeção de `BACKEND_URL`:**
+  - A interpolação `${{ inputs.backend_url || secrets.BACKEND_URL }}` não possui fallback estático. Caso a secret não esteja configurada no GitHub, o app é compilado com URL vazia e reverte para `http://10.0.2.2:3000` (Android) / `http://localhost:3000` (iOS).
+- **Limitações de Distribuição dos Artefatos:**
+  - O step `actions/upload-artifact@v4` possui retenção temporária de apenas 7 dias e exige autenticação prévia com permissão no repositório GitHub, impossibilitando a distribuição direta a testadores externos.
+
+### 3. Relatório da Task T0.3 — Auditoria do Pipeline CI/CD da Spec 017
+- **Bug no `dorny/paths-filter@v3` (linha 54):**
+  - Configuração atual: `base: ${{ github.base_ref || 'main' }}`.
+  - Em eventos de `push` para a branch `main`, `github.base_ref` é vazio e o fallback `'main'` faz o action executar `git diff main...HEAD`. Estando na própria `main`, o diff é vazio e todas as flags (`backend`, `frontend`, `mobile`) avaliam para `false`, cancelando lints, testes e deploys de produção.
+  - Correção: Ajustar `base` para `${{ github.base_ref }}` para que em pushes o filtro use `github.event.before`.
+- **Ausência de Trigger para Tags de Release:**
+  - O workflow `ci.yml` escuta apenas `push` em branches (`main`, `master`), `pull_request` e `workflow_dispatch`, não possuindo trigger para tags `v*`.
+- **Estratégia de Saneamento Integrada:**
+  - Corrigir `paths-filter` e fallback de `BACKEND_URL` para `https://my-roadie-backend.onrender.com`.
+  - Renomear APK para `my-roadie-release.apk`.
+  - Implementar o job `publish-github-release` para publicar releases públicas e permanentes com os binários anexados.
 
 ---
 
