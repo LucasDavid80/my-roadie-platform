@@ -8,7 +8,7 @@
 ## Fase 1: Padronização de Releases, Correções do CI/CD (Spec 017) e URLs
 - [x] T1.1 — Corrigir `base` do `dorny/paths-filter@v3` no [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) para evitar diff vazio em pushes para `main`.
 - [x] T1.2 — Validar e padronizar injeção segura de `BACKEND_URL` via segredos (`secrets.BACKEND_URL` / `inputs.backend_url`) nos jobs `mobile-android-build` e `mobile-ios-build` do CI/CD.
-- [ ] T1.3 — Padronizar o nome do artefato Android para `my-roadie-release.apk` (garantindo simetria com `my-roadie-release.ipa`).
+- [x] T1.3 — Padronizar o nome do artefato Android para `my-roadie-release.apk` (garantindo simetria com `my-roadie-release.ipa`).
 - [ ] T1.4 — Definir e documentar o padrão canônico das URLs públicas de download para GitHub Releases e Supabase Storage.
 - [ ] T1.5 — Atualizar o arquivo [`frontend-web/public/downloads/README.md`](file:///C:/dev/my-roadie-platform/frontend-web/public/downloads/README.md) com o guia de variáveis `NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL`.
 - [ ] T1.6 — Adicionar suporte a `NEXT_PUBLIC_APP_VERSION` para exibição dinâmica de versão na UI.

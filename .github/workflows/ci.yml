@@ -310,11 +310,13 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}
+      - name: Padronizar Nome do APK de Release
+        run: cp build/app/outputs/flutter-apk/app-release.apk my-roadie-release.apk
       - name: Publicar Artefato Android (.apk)
         uses: actions/upload-artifact@v4
         with:
           name: my-roadie-android-release-apk
-          path: mobile/build/app/outputs/flutter-apk/app-release.apk
+          path: mobile/my-roadie-release.apk
           retention-days: 7
 
   mobile-ios-build:
