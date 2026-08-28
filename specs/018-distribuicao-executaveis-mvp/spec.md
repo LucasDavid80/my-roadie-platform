@@ -75,23 +75,34 @@ A spec contempla:
 
 ## Decisões de Arquitetura & Estratégia de Distribuição
 
+*(Consulte [`docs/distribution/download-urls.md`](file:///C:/dev/my-roadie-platform/docs/distribution/download-urls.md) para a documentação canônica completa)*
+
 1. **Provedor Primário: GitHub Releases**
    - Criação de releases versionadas (ex.: `v1.0.0-mvp`, `v1.0.1-beta`) diretamente no repositório.
    - O GitHub fornece URLs públicas diretas e estáveis com CDN global:
-     `https://github.com/<owner>/<repo>/releases/download/<tag>/my-roadie-release.apk`
-     `https://github.com/<owner>/<repo>/releases/download/<tag>/my-roadie-release.ipa`
-   - Permite link dinâmico para a versão mais recente via tag fixa ou URL `latest`.
+     - Por tag: `https://github.com/<owner>/<repo>/releases/download/<tag>/my-roadie-release.apk`
+     - Por tag: `https://github.com/<owner>/<repo>/releases/download/<tag>/my-roadie-release.ipa`
+   - Link dinâmico para a versão mais recente via tag fixa ou URL `latest`:
+     - `https://github.com/<owner>/<repo>/releases/latest/download/my-roadie-release.apk`
+     - `https://github.com/<owner>/<repo>/releases/latest/download/my-roadie-release.ipa`
 
-2. **Saneamento do CI/CD**
+2. **Provedor Secundário / Alternativo: Supabase Storage**
+   - Bucket público (`releases`):
+     - Por tag: `https://<project-ref>.supabase.co/storage/v1/object/public/releases/<tag>/my-roadie-release.apk`
+     - Por tag: `https://<project-ref>.supabase.co/storage/v1/object/public/releases/<tag>/my-roadie-release.ipa`
+     - Alias `latest`: `https://<project-ref>.supabase.co/storage/v1/object/public/releases/latest/my-roadie-release.apk`
+     - Alias `latest`: `https://<project-ref>.supabase.co/storage/v1/object/public/releases/latest/my-roadie-release.ipa`
+
+3. **Saneamento do CI/CD**
    - Ajustar `base` no `dorny/paths-filter` para `${{ github.base_ref }}` (permitindo que o push use `github.event.before`).
    - Garantir injeção segura de `BACKEND_URL` via `secrets.BACKEND_URL` e `inputs.backend_url`.
    - Renomear o APK para `my-roadie-release.apk` antes da publicação da release.
 
-3. **Melhorias de Resiliência na UI (`/testers`)**
+4. **Melhorias de Resiliência na UI (`/testers`)**
    - Se a variável de ambiente não estiver definida e o arquivo local não existir, o botão exibirá estado informativo (ex.: "Release em preparação / Em breve" ou link direto para a página de releases do repositório), evitando que o usuário caia em página 404 em branco.
    - Adicionar aviso de versão ativa dinâmica (`NEXT_PUBLIC_APP_VERSION`) e orientações para os testers.
 
-4. **Publicação Automatizada via Tag no GitHub Actions**
+5. **Publicação Automatizada via Tag no GitHub Actions**
    - Adicionar job condicional `publish-release` em `.github/workflows/ci.yml` acionado quando uma tag `v*` é criada (`on: push: tags: ['v*']`) ou via parâmetro no `workflow_dispatch`.
    - O job coleta os binários gerados em `mobile-android-build` e `mobile-ios-build` e cria automaticamente a Release no GitHub com os arquivos anexados (`softprops/action-gh-release@v2`).
 
