@@ -6,7 +6,7 @@
 - [x] T0.3 — Auditar a Spec 017 (`ci.yml`, paths-filter, injeção de BACKEND_URL e artefatos) e documentar os resultados na seção "Resultados da Inspeção (Fase 0)" de [`specs/018-distribuicao-executaveis-mvp/spec.md`](file:///C:/dev/my-roadie-platform/specs/018-distribuicao-executaveis-mvp/spec.md).
 
 ## Fase 1: Padronização de Releases, Correções do CI/CD (Spec 017) e URLs
-- [ ] T1.1 — Corrigir `base` do `dorny/paths-filter@v3` no [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) para evitar diff vazio em pushes para `main`.
+- [x] T1.1 — Corrigir `base` do `dorny/paths-filter@v3` no [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) para evitar diff vazio em pushes para `main`.
 - [ ] T1.2 — Adicionar fallback seguro de produção (`https://my-roadie-backend.onrender.com`) na injeção de `--dart-define=BACKEND_URL` em `mobile-android-build` e `mobile-ios-build` no CI/CD.
 - [ ] T1.3 — Padronizar o nome do artefato Android para `my-roadie-release.apk` (garantindo simetria com `my-roadie-release.ipa`).
 - [ ] T1.4 — Definir e documentar o padrão canônico das URLs públicas de download para GitHub Releases e Supabase Storage.
