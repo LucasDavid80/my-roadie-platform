@@ -1,7 +1,7 @@
 # Tasks — 018: Hospedagem e Distribuição de Executáveis de Release do MVP
 
 ## Fase 0: Mapeamento e Diagnóstico da Base
-- [ ] T0.1 — Inspecionar o código de [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx) e validar comportamento com variáveis de ambiente ausentes e presentes.
+- [x] T0.1 — Inspecionar o código de [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx) e validar comportamento com variáveis de ambiente ausentes e presentes.
 - [ ] T0.2 — Inspecionar os jobs de build mobile em [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) e validar nomes e caminhos dos arquivos gerados (`app-release.apk` e `my-roadie-release.ipa`).
 - [ ] T0.3 — Auditar a Spec 017 (`ci.yml`, paths-filter, injeção de BACKEND_URL e artefatos) e documentar os resultados na seção "Resultados da Inspeção (Fase 0)" de [`specs/018-distribuicao-executaveis-mvp/spec.md`](file:///C:/dev/my-roadie-platform/specs/018-distribuicao-executaveis-mvp/spec.md).
 
