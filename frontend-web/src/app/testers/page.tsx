@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 export default function TestersPage() {
   const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL || '/downloads/my-roadie-release.apk';
   const ipaDownloadUrl = process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL || '/downloads/my-roadie-release.ipa';
+  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || 'MVP 1.0.0';
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50">
@@ -27,7 +28,7 @@ export default function TestersPage() {
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 bg-amber-50 text-primary text-xs font-semibold rounded-full border border-amber-200/60 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            Beta Fechado (MVP)
+            Beta Fechado ({appVersion})
           </span>
         </div>
       </header>
@@ -122,7 +123,7 @@ export default function TestersPage() {
 
             <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-400">
               <span>Formato: APK</span>
-              <span>Versão: MVP 1.0.0</span>
+              <span>Versão: {appVersion}</span>
             </div>
           </div>
 
@@ -211,7 +212,7 @@ export default function TestersPage() {
             </div>
 
             <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-400">
-              <span>Formato: IPA</span>
+              <span>Formato: IPA ({appVersion})</span>
               <span>Validade: 7 dias (Sideload)</span>
             </div>
           </div>
