@@ -3,12 +3,15 @@
 ## Fase 0: Mapeamento e Diagnóstico da Base
 - [ ] T0.1 — Inspecionar o código de [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx) e validar comportamento com variáveis de ambiente ausentes e presentes.
 - [ ] T0.2 — Inspecionar os jobs de build mobile em [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) e validar nomes e caminhos dos arquivos gerados (`app-release.apk` e `my-roadie-release.ipa`).
-- [ ] T0.3 — Documentar os resultados da inspeção na seção "Resultados da Inspeção (Fase 0)" de [`specs/018-distribuicao-executaveis-mvp/spec.md`](file:///C:/dev/my-roadie-platform/specs/018-distribuicao-executaveis-mvp/spec.md).
+- [ ] T0.3 — Auditar a Spec 017 (`ci.yml`, paths-filter, injeção de BACKEND_URL e artefatos) e documentar os resultados na seção "Resultados da Inspeção (Fase 0)" de [`specs/018-distribuicao-executaveis-mvp/spec.md`](file:///C:/dev/my-roadie-platform/specs/018-distribuicao-executaveis-mvp/spec.md).
 
-## Fase 1: Padronização de Releases e Configuração de URLs
-- [ ] T1.1 — Definir e documentar o padrão canônico das URLs públicas de download para GitHub Releases e Supabase Storage.
-- [ ] T1.2 — Atualizar o arquivo [`frontend-web/public/downloads/README.md`](file:///C:/dev/my-roadie-platform/frontend-web/public/downloads/README.md) com o guia de variáveis `NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL`.
-- [ ] T1.3 — Adicionar suporte a `NEXT_PUBLIC_APP_VERSION` para exibição dinâmica de versão na UI.
+## Fase 1: Padronização de Releases, Correções do CI/CD (Spec 017) e URLs
+- [ ] T1.1 — Corrigir `base` do `dorny/paths-filter@v3` no [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) para evitar diff vazio em pushes para `main`.
+- [ ] T1.2 — Adicionar fallback seguro de produção (`https://my-roadie-backend.onrender.com`) na injeção de `--dart-define=BACKEND_URL` em `mobile-android-build` e `mobile-ios-build` no CI/CD.
+- [ ] T1.3 — Padronizar o nome do artefato Android para `my-roadie-release.apk` (garantindo simetria com `my-roadie-release.ipa`).
+- [ ] T1.4 — Definir e documentar o padrão canônico das URLs públicas de download para GitHub Releases e Supabase Storage.
+- [ ] T1.5 — Atualizar o arquivo [`frontend-web/public/downloads/README.md`](file:///C:/dev/my-roadie-platform/frontend-web/public/downloads/README.md) com o guia de variáveis `NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL`.
+- [ ] T1.6 — Adicionar suporte a `NEXT_PUBLIC_APP_VERSION` para exibição dinâmica de versão na UI.
 
 ## Fase 2: Resiliência da UI da Página `/testers` (Frontend Web)
 - [ ] T2.1 — Refatorar [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx) para verificar se as URLs de download são válidas (iniciam com `http://`, `https://` ou apontam para asset estático existente).
@@ -28,4 +31,19 @@
 ## Fase 5: Documentação Operacional e Sincronização
 - [ ] T5.1 — Criar o runbook operacional `docs/operations/release-runbook.md` com instruções detalhadas para geração de tags, compilação de release e configuração de variáveis na Vercel.
 - [ ] T5.2 — Atualizar `backlog.md` registrando a Spec 018 como ativa/em desenvolvimento e ajustando o roadmap.
-- [ ] T5.3 — Atualizar `plan.md` raiz com o resumo da infraestrutura de distribuição de releases.
+- [ ] T5.3 — Atualizar `plan.md` raiz com o resumo da infraestrutura de distribuição de releases e correções do pipeline.
+
+## Checklist de fechamento da feature
+
+- [ ] Diagnóstico e auditoria da Spec 017 documentados no `spec.md` da Spec 018
+- [ ] `dorny/paths-filter` corrigido para não ignorar mudanças em pushes para `main`
+- [ ] Fallback da URL de produção configurado nos builds mobile do CI/CD
+- [ ] Nomenclatura dos artefatos mobile simétrica (`my-roadie-release.apk` e `my-roadie-release.ipa`)
+- [ ] Página `/testers` resiliente contra variáveis ausentes, eliminando quedas em tela 404
+- [ ] Suporte a `NEXT_PUBLIC_APK_DOWNLOAD_URL`, `NEXT_PUBLIC_IPA_DOWNLOAD_URL` e `NEXT_PUBLIC_APP_VERSION`
+- [ ] Job de publicação de GitHub Release automatizado no CI/CD via tags `v*`
+- [ ] Testes unitários do frontend web (Vitest) passando com 100% de sucesso
+- [ ] Testes E2E de navegação e botões da página `/testers` (Playwright) passando com 100% de sucesso
+- [ ] Runbook operacional criado em `docs/operations/release-runbook.md`
+- [ ] Documentos de governança (`backlog.md` e `plan.md`) atualizados e sincronizados
+- [ ] Sintaxe do `.github/workflows/ci.yml` validada
