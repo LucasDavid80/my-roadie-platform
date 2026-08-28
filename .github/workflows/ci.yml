@@ -309,7 +309,7 @@ jobs:
           channel: 'stable'
           cache: true
       - run: flutter pub get
-      - run: flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL || 'https://my-roadie-backend.onrender.com' }}
+      - run: flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}
       - name: Publicar Artefato Android (.apk)
         uses: actions/upload-artifact@v4
         with:
@@ -331,7 +331,7 @@ jobs:
           channel: 'stable'
           cache: true
       - run: flutter pub get
-      - run: flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL || 'https://my-roadie-backend.onrender.com' }}
+      - run: flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}
       - name: Empacotar IPA para Sideload
         run: |
           mkdir -p Payload

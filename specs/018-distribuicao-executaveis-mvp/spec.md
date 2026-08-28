@@ -8,8 +8,8 @@ A spec contempla:
 1. **Infraestrutura de Armazenamento de Releases**: Definir e estruturar o armazenamento público externo permanente para os binários compilados (`.apk` e `.ipa`) via **GitHub Releases** (com suporte alternativo/secundário via **Supabase Storage**).
 2. **Saneamento e Correções no Pipeline CI/CD (Spec 017)**:
    - Corrigir a configuração de `base` do `dorny/paths-filter@v3` em [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml) para que eventos de `push` na branch `main` não gerem diffs vazios e não pulem os deploys de produção.
-   - Adicionar fallback explícito e seguro para a URL do backend de produção (`https://my-roadie-backend.onrender.com`) nos steps de compilação mobile (`mobile-android-build` e `mobile-ios-build`), evitando que o app compile apontando para `localhost` / `10.0.2.2` caso o secret `BACKEND_URL` não esteja definido no repositório.
-   - Padronizar a nomenclatura simétrica do arquivo Android para `my-roadie-release.apk` (alinhando com `my-roadie-release.ipa`).
+   - Garantir a injeção estrita da URL do backend através do secret `BACKEND_URL` do repositório (e `inputs.backend_url` no disparo manual) nos steps de compilação mobile (`mobile-android-build` e `mobile-ios-build`), preservando a segurança e isolamento de infraestrutura sem expor URLs hardcoded no workflow.
+    - Padronizar a nomenclatura simétrica do arquivo Android para `my-roadie-release.apk` (alinhando com `my-roadie-release.ipa`).
 3. **Resiliência e Tratamento na UI (`/testers`)**: Melhorar a página de testadores ([`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx)) para lidar elegantemente com ausência de URLs configuradas, exibindo badges de status, avisos informativos claros e prevenindo links quebrados (404) quando as variáveis de ambiente não estiverem definidas.
 4. **Automação de Publicação no CI/CD**: Integrar step de publicação automatizada de release no workflow do GitHub Actions ao criar tags de versão (ex.: `v*.*.*`), anexando os binários `my-roadie-release.apk` e `my-roadie-release.ipa` diretamente na release.
 5. **Padronização de URLs e Variáveis de Ambiente**: Mapear, documentar e configurar as variáveis `NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL` no ambiente local e no provedor de deploy (Vercel).
@@ -23,7 +23,7 @@ A spec contempla:
 - **Binários Não Devem Poluir o Repositório Git**: Arquivos `.apk` e `.ipa` pesam dezenas de megabytes e não devem ser versionados diretamente no Git para não inchar o clone do monorepo nem violar cotas da Vercel.
 - **Artefatos do GitHub Actions São Temporários e Privados**: Os artefatos gerados pelo job `mobile-android-build` e `mobile-ios-build` expiram em 7 dias e exigem login prévio no GitHub com permissão no repositório, inviabilizando o download direto por testadores externos.
 - **Falha no Paths-Filter em Pushes para `main` (Auditoria Spec 017)**: A expressão `base: ${{ github.base_ref || 'main' }}` faz com que, no evento `push` para `main`, o paths-filter compare `main` contra `main` (diff vazio), pulando jobs de build e impedindo o deploy de produção no Render e Vercel.
-- **Risco de Configuração em Builds Mobile (Auditoria Spec 017)**: A interpolação `${{ inputs.backend_url || secrets.BACKEND_URL }}` sem valor padrão em `ci.yml` faz com que o app mobile seja compilado com URL vazia caso a secret não esteja configurada no GitHub, caindo no fallback `http://10.0.2.2:3000` (Android) / `http://localhost:3000` (iOS).
+- **Governança de Segredos em Builds Mobile (Auditoria Spec 017)**: A injeção da URL do backend é parametrizada via `secrets.BACKEND_URL` (e `inputs.backend_url`), exigindo que a secret esteja configurada no repositório GitHub (e no `.secrets` para `act` local) para compilar releases de produção sem expor URLs sensíveis no código do workflow.
 - **Transparência e Resiliência na Interface**: A interface do usuário não deve apresentar links quebrados. Se uma versão de release ainda não tiver URL configurada no ambiente, a UI deve orientar o usuário em vez de disparar uma navegação que resulta em 404.
 
 ---
@@ -55,7 +55,7 @@ A spec contempla:
   - Compila com: `flutter build ios --release --no-codesign --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`
   - Empacotamento manual: Cria pasta `Payload/`, copia `Runner.app` e compacta gerando `mobile/my-roadie-release.ipa`.
 - **Injeção de `BACKEND_URL`:**
-  - A interpolação `${{ inputs.backend_url || secrets.BACKEND_URL }}` não possui fallback estático. Caso a secret não esteja configurada no GitHub, o app é compilado com URL vazia e reverte para `http://10.0.2.2:3000` (Android) / `http://localhost:3000` (iOS).
+  - A injeção via `${{ inputs.backend_url || secrets.BACKEND_URL }}` utiliza estritamente segredos e inputs, mantendo o pipeline seguro e exigindo a configuração de `BACKEND_URL` no GitHub Secrets e `.secrets` local.
 - **Limitações de Distribuição dos Artefatos:**
   - O step `actions/upload-artifact@v4` possui retenção temporária de apenas 7 dias e exige autenticação prévia com permissão no repositório GitHub, impossibilitando a distribuição direta a testadores externos.
 
@@ -67,7 +67,7 @@ A spec contempla:
 - **Ausência de Trigger para Tags de Release:**
   - O workflow `ci.yml` escuta apenas `push` em branches (`main`, `master`), `pull_request` e `workflow_dispatch`, não possuindo trigger para tags `v*`.
 - **Estratégia de Saneamento Integrada:**
-  - Corrigir `paths-filter` e fallback de `BACKEND_URL` para `https://my-roadie-backend.onrender.com`.
+  - Corrigir `paths-filter` e padronizar injeção de `BACKEND_URL` via segredos (`secrets.BACKEND_URL` / `inputs.backend_url`).
   - Renomear APK para `my-roadie-release.apk`.
   - Implementar o job `publish-github-release` para publicar releases públicas e permanentes com os binários anexados.
 
@@ -84,7 +84,7 @@ A spec contempla:
 
 2. **Saneamento do CI/CD**
    - Ajustar `base` no `dorny/paths-filter` para `${{ github.base_ref }}` (permitindo que o push use `github.event.before`).
-   - Adicionar fallback seguro `'https://my-roadie-backend.onrender.com'` no `--dart-define=BACKEND_URL`.
+   - Garantir injeção segura de `BACKEND_URL` via `secrets.BACKEND_URL` e `inputs.backend_url`.
    - Renomear o APK para `my-roadie-release.apk` antes da publicação da release.
 
 3. **Melhorias de Resiliência na UI (`/testers`)**
@@ -100,7 +100,7 @@ A spec contempla:
 ## Escopo Detalhado
 
 - **CI/CD (`ci.yml`)**:
-  - Corrigir `paths-filter` e fallback de `BACKEND_URL`.
+  - Corrigir `paths-filter` e padronizar injeção de `BACKEND_URL` via segredos.
   - Adicionar suporte a triggers de tags de release (`v*`).
   - Padronizar renomeação do APK para `my-roadie-release.apk`.
   - Adicionar job de publicação de release que anexa `my-roadie-release.apk` e `my-roadie-release.ipa` aos assets do GitHub Release.
@@ -124,7 +124,7 @@ A spec contempla:
 ## Critérios de Sucesso
 
 - [ ] Diagnóstico detalhado e auditoria da Spec 017 documentados na Fase 0.
-- [ ] Pipeline CI/CD saneado: `paths-filter` operacional em pushes na `main`, fallback de URL de produção ativo e nomenclatura simétrica dos artefatos mobile.
+- [ ] Pipeline CI/CD saneado: `paths-filter` operacional em pushes na `main`, injeção de `BACKEND_URL` via segredos validada e nomenclatura simétrica dos artefatos mobile.
 - [ ] Página `/testers` atualizada para tratar de forma resiliente links de download ausentes, eliminando quedas em tela 404.
 - [ ] Workflow de CI/CD atualizado para suportar criação e anexo automático de `.apk` e `.ipa` em GitHub Releases ao gerar tags `v*`.
 - [ ] Documentação de operação de release criada em `docs/operations/release-runbook.md`.

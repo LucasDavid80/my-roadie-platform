@@ -7,8 +7,8 @@ flowchart TD
     subgraph CI_CD["GitHub Actions CI/CD (ci.yml)"]
         A[Push Tag v*.*.* ou workflow_dispatch] -->|Paths Filter Corrigido| B[mobile-android-build]
         A -->|Paths Filter Corrigido| C[mobile-ios-build]
-        B -->|Compila com Fallback Prod URL| D["my-roadie-release.apk"]
-        C -->|Compila com Fallback Prod URL| E["my-roadie-release.ipa"]
+        B -->|Compila com Secrets BACKEND_URL| D["my-roadie-release.apk"]
+        C -->|Compila com Secrets BACKEND_URL| E["my-roadie-release.ipa"]
         D --> F[publish-release Job]
         E --> F
         F -->|Upload Automático de Assets| G["GitHub Release (ex: v1.0.0-mvp)"]
@@ -34,12 +34,12 @@ flowchart TD
 
 ### Fase 0: Diagnóstico, Mapeamento e Auditoria da Spec 017
 - Mapear o comportamento atual de [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx) com e sem as variáveis de ambiente `NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL`.
-- Registrar na seção "Resultados da Inspeção" do `spec.md` as falhas identificadas no workflow `ci.yml` da Spec 017 (`paths-filter` com diff vazio em push para `main`, fallback de `BACKEND_URL` ausente e assimetria de nomenclatura).
+- Registrar na seção "Resultados da Inspeção" do `spec.md` as falhas identificadas no workflow `ci.yml` da Spec 017 (`paths-filter` com diff vazio em push para `main`, injeção estrita de `BACKEND_URL` e assimetria de nomenclatura).
 
 ### Fase 1: Padronização de Releases, Correções no CI/CD e URLs
 - **Correção no `ci.yml`**:
   - Ajustar `dorny/paths-filter@v3` para usar `base: ${{ github.base_ref }}` (evitando que `base: main` force comparação vazia no push para a `main`).
-  - Injetar fallback de produção no `BACKEND_URL`: `--dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL || 'https://my-roadie-backend.onrender.com' }}` nos jobs `mobile-android-build` e `mobile-ios-build`.
+  - Padronizar a injeção segura de `BACKEND_URL` via segredos: `--dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}` nos jobs `mobile-android-build` e `mobile-ios-build`.
   - Renomear o artefato compilado Android de `app-release.apk` para `my-roadie-release.apk`.
 - **Padronização de URLs**:
   - Formato por tag: `https://github.com/<owner>/<repo>/releases/download/<tag>/my-roadie-release.apk`
