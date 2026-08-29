@@ -3,6 +3,8 @@ name: My Roadie Ecosystem CI/CD
 on:
   push:
     branches: [ main, master ]
+    tags:
+      - 'v*'
     paths-ignore:
       - '**.md'
       - '.gitignore'

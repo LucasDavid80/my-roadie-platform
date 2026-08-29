@@ -19,7 +19,7 @@
 - [x] T2.3 — Adicionar link alternativo seguro para a página de Releases do repositório no GitHub para testadores técnicos.
 
 ## Fase 3: Automação de Publicação de Release no CI/CD
-- [ ] T3.1 — Adicionar trigger de tags de release (`v*`) em [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml).
+- [x] T3.1 — Adicionar trigger de tags de release (`v*`) em [`.github/workflows/ci.yml`](file:///C:/dev/my-roadie-platform/.github/workflows/ci.yml).
 - [ ] T3.2 — Criar o job `publish-github-release` no GitHub Actions condicionado a tags de release, coletando os artefatos de `mobile-android-build` e `mobile-ios-build` e publicando via `softprops/action-gh-release@v2`.
 - [ ] T3.3 — Adicionar parâmetro `publish_release` no disparo manual `workflow_dispatch` do CI/CD.
 
