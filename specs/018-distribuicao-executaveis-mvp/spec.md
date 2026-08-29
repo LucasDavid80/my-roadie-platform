@@ -144,10 +144,10 @@ A spec contempla:
 
 ## Critérios de Sucesso
 
-- [ ] Diagnóstico detalhado e auditoria da Spec 017 documentados na Fase 0.
-- [ ] Pipeline CI/CD saneado: `paths-filter` operacional em pushes na `main`, injeção de `BACKEND_URL` via segredos validada e nomenclatura simétrica dos artefatos mobile.
-- [ ] Página `/testers` atualizada para tratar de forma resiliente links de download ausentes, eliminando quedas em tela 404.
-- [ ] Workflow de CI/CD atualizado para suportar criação e anexo automático de `.apk` e `.ipa` em GitHub Releases ao gerar tags `v*`.
-- [ ] Documentação de operação de release criada em `docs/operations/release-runbook.md`.
-- [ ] Testes unitários do frontend web atualizados e passando com 100% de sucesso.
-- [ ] Testes E2E do Playwright cobrindo a renderização e o comportamento dos botões da rota `/testers`.
+- [x] Diagnóstico detalhado e auditoria da Spec 017 documentados na Fase 0.
+- [x] Pipeline CI/CD saneado: `paths-filter` operacional em pushes na `main`, injeção de `BACKEND_URL` via segredos validada e nomenclatura simétrica dos artefatos mobile.
+- [x] Página `/testers` atualizada para tratar de forma resiliente links de download ausentes, eliminando quedas em tela 404.
+- [x] Workflow de CI/CD atualizado para suportar criação e anexo automático de `.apk` e `.ipa` em GitHub Releases ao gerar tags `v*`.
+- [x] Documentação de operação de release criada em `docs/operations/release-runbook.md`.
+- [x] Testes unitários do frontend web atualizados e passando com 100% de sucesso.
+- [x] Testes E2E do Playwright cobrindo a renderização e o comportamento dos botões da rota `/testers`.
