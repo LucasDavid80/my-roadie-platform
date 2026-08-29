@@ -24,7 +24,7 @@
 - [x] T3.3 — Adicionar parâmetro `publish_release` no disparo manual `workflow_dispatch` do CI/CD.
 
 ## Fase 4: Testes Unitários e E2E (Vitest e Playwright)
-- [ ] T4.1 — Criar/atualizar suíte de testes unitários em `frontend-web/src/app/testers/page.test.tsx` cobrindo cenários com e sem URLs de download configuradas.
+- [x] T4.1 — Criar/atualizar suíte de testes unitários em `frontend-web/src/app/testers/page.test.tsx` cobrindo cenários com e sem URLs de download configuradas.
 - [ ] T4.2 — Criar teste E2E com Playwright em `frontend-web/tests/testers.spec.ts` validando a rota `/testers`, visibilidade das instruções de Android/iOS e atributos dos botões de download.
 - [ ] T4.3 — Executar `npm test` e `npx playwright test` no `frontend-web/` e garantir 100% de sucesso.
 
