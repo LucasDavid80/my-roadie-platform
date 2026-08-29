@@ -123,7 +123,7 @@
 - Intenção: Resolver a falha 404 de download na rota `/testers`, estabelecendo infraestrutura de armazenamento e distribuição externa para APK e IPA via GitHub Releases, resiliência de UI no frontend e automação de publicação no CI/CD.
 - Impacto esperado: alto (distribuição e experiência de onboarding para testers)
 - Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Preparação para Release do MVP (spec 016)
-- Status: concluído (specs/018-distribuicao-executaveis-mvp/)
+- Status: concluído (specs/018-distribuicao-executaveis-mvp/; baseline raiz sincronizada em spec.md e plan.md)
 
 ---
 
