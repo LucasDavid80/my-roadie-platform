@@ -3,7 +3,7 @@ import path from 'path';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Smartphone, Apple, ShieldAlert, Sparkles, Download, Clock, AlertCircle } from 'lucide-react';
+import { Smartphone, Apple, ShieldAlert, Sparkles, Download, Clock, AlertCircle, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Download MVP | My Roadie — Programa de Testes',
@@ -49,6 +49,7 @@ export default function TestersPage() {
   const rawApkUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL || '/downloads/my-roadie-release.apk';
   const rawIpaUrl = process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL || '/downloads/my-roadie-release.ipa';
   const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || 'MVP 1.0.0';
+  const githubReleasesUrl = process.env.NEXT_PUBLIC_GITHUB_RELEASES_URL || 'https://github.com/LucasDavid80/my-roadie-platform/releases';
 
   const isApkAvailable = isValidDownloadUrl(rawApkUrl);
   const isIpaAvailable = isValidDownloadUrl(rawIpaUrl);
@@ -313,6 +314,30 @@ export default function TestersPage() {
               <span>Validade: 7 dias (Sideload)</span>
             </div>
           </div>
+        </div>
+
+        {/* Link Alternativo para Testadores Técnicos (GitHub Releases) */}
+        <div className="mt-12 p-6 bg-white border border-zinc-200 rounded-2xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-zinc-900">Área de Releases no GitHub</span>
+              <span className="px-2 py-0.5 bg-zinc-100 text-zinc-600 text-[10px] font-semibold rounded-full border border-zinc-200">
+                Avançado / Técnico
+              </span>
+            </div>
+            <p className="text-xs text-zinc-500 max-w-xl">
+              Testadores técnicos e desenvolvedores podem consultar o histórico completo de builds compilados, notas de versão e baixar assets diretamente pelo repositório oficial.
+            </p>
+          </div>
+          <a
+            href={githubReleasesUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 active:bg-zinc-300 text-zinc-800 font-semibold text-xs rounded-xl transition-all border border-zinc-200 shrink-0"
+          >
+            <ExternalLink className="w-4 h-4" />
+            <span>Ver Releases no GitHub</span>
+          </a>
         </div>
       </main>
 
