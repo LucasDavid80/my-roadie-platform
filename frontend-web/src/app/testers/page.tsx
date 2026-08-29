@@ -3,7 +3,7 @@ import path from 'path';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Smartphone, Apple, ShieldAlert, Sparkles, Download, Clock } from 'lucide-react';
+import { Smartphone, Apple, ShieldAlert, Sparkles, Download, Clock, AlertCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Download MVP | My Roadie — Programa de Testes',
@@ -100,9 +100,16 @@ export default function TestersPage() {
                 <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
                   <Smartphone className="w-6 h-6" />
                 </div>
-                <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
-                  Instalação Direta
-                </span>
+                {isApkAvailable ? (
+                  <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
+                    Instalação Direta
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-200 flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    Em breve / Aguardando build
+                  </span>
+                )}
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-black">Android (.APK)</h2>
@@ -111,19 +118,41 @@ export default function TestersPage() {
                 </p>
               </div>
 
-              {/* Botão de Download */}
+              {/* Botão de Download ou Estado Indisponível */}
               <div className="pt-2">
-                <a
-                  href={apkDownloadUrl}
-                  download="my-roadie-release.apk"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.01]"
-                >
-                  <Download className="w-5 h-5" />
-                  <span>Baixar APK do My Roadie</span>
-                </a>
-                <p className="text-[11px] text-zinc-400 text-center mt-1.5">
-                  Arquivo .apk de release oficial para testes
-                </p>
+                {isApkAvailable ? (
+                  <>
+                    <a
+                      href={apkDownloadUrl}
+                      download="my-roadie-release.apk"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.01]"
+                    >
+                      <Download className="w-5 h-5" />
+                      <span>Baixar APK do My Roadie</span>
+                    </a>
+                    <p className="text-[11px] text-zinc-400 text-center mt-1.5">
+                      Arquivo .apk de release oficial para testes
+                    </p>
+                  </>
+                ) : (
+                  <div className="space-y-2">
+                    <button
+                      type="button"
+                      disabled
+                      aria-disabled="true"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-zinc-100 text-zinc-400 font-bold rounded-xl border border-zinc-200 cursor-not-allowed"
+                    >
+                      <Clock className="w-5 h-5 text-zinc-400" />
+                      <span>Release em preparação</span>
+                    </button>
+                    <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-left text-xs text-amber-800 flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      <p>
+                        O download do APK ainda não foi configurado neste ambiente. A versão oficial estará disponível assim que a build for publicada.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Instruções de Instalação e Fontes Desconhecidas */}
@@ -173,9 +202,16 @@ export default function TestersPage() {
                 <div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-900">
                   <Apple className="w-6 h-6" />
                 </div>
-                <span className="px-2.5 py-1 bg-zinc-100 text-zinc-800 text-xs font-semibold rounded-full border border-zinc-200">
-                  Sideload Gratuito
-                </span>
+                {isIpaAvailable ? (
+                  <span className="px-2.5 py-1 bg-zinc-100 text-zinc-800 text-xs font-semibold rounded-full border border-zinc-200">
+                    Sideload Gratuito
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-200 flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    Em breve / Aguardando build
+                  </span>
+                )}
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-black">iOS (.IPA)</h2>
@@ -184,19 +220,41 @@ export default function TestersPage() {
                 </p>
               </div>
 
-              {/* Botão de Download */}
+              {/* Botão de Download ou Estado Indisponível */}
               <div className="pt-2">
-                <a
-                  href={ipaDownloadUrl}
-                  download="my-roadie-release.ipa"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-zinc-900 hover:bg-black active:bg-zinc-800 text-white font-bold rounded-xl transition-all shadow-md shadow-zinc-900/20 hover:scale-[1.01]"
-                >
-                  <Download className="w-5 h-5" />
-                  <span>Baixar IPA do My Roadie</span>
-                </a>
-                <p className="text-[11px] text-zinc-400 text-center mt-1.5">
-                  Arquivo .ipa para instalação via Sideloadly / AltStore
-                </p>
+                {isIpaAvailable ? (
+                  <>
+                    <a
+                      href={ipaDownloadUrl}
+                      download="my-roadie-release.ipa"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-zinc-900 hover:bg-black active:bg-zinc-800 text-white font-bold rounded-xl transition-all shadow-md shadow-zinc-900/20 hover:scale-[1.01]"
+                    >
+                      <Download className="w-5 h-5" />
+                      <span>Baixar IPA do My Roadie</span>
+                    </a>
+                    <p className="text-[11px] text-zinc-400 text-center mt-1.5">
+                      Arquivo .ipa para instalação via Sideloadly / AltStore
+                    </p>
+                  </>
+                ) : (
+                  <div className="space-y-2">
+                    <button
+                      type="button"
+                      disabled
+                      aria-disabled="true"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-zinc-100 text-zinc-400 font-bold rounded-xl border border-zinc-200 cursor-not-allowed"
+                    >
+                      <Clock className="w-5 h-5 text-zinc-400" />
+                      <span>Release em preparação</span>
+                    </button>
+                    <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-left text-xs text-amber-800 flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      <p>
+                        O download do IPA ainda não foi configurado neste ambiente. A versão oficial estará disponível assim que a build for publicada.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Instruções de Sideload */}
