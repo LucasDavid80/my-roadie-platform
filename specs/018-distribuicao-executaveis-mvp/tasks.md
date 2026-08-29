@@ -36,7 +36,7 @@
 ## Fase 6: Correção do E2E do Playwright para `/testers`
 - [x] T6.1 — Diagnosticar a falha do `webServer` do Playwright em `frontend-web/tests/testers.spec.ts`, confirmando por que o servidor Next.js não responde em `http://localhost:3000` durante a execução do teste.
 - [x] T6.2 — Ajustar a configuração de `webServer` em [`frontend-web/playwright.config.ts`](file:///C:/dev/my-roadie-platform/frontend-web/playwright.config.ts) e/ou a estratégia de inicialização para que a app suba de forma estável antes de iniciar os testes E2E.
-- [ ] T6.3 — Validar o path de execução e o estado de boot do frontend (`npm run dev` / `next dev`) para garantir disponibilidade da rota `/testers` no ambiente de teste.
+- [x] T6.3 — Validar o path de execução e o estado de boot do frontend (`npm run dev` / `next dev`) para garantir disponibilidade da rota `/testers` no ambiente de teste.
 - [ ] T6.4 — Reexecutar `npx playwright test tests/testers.spec.ts --reporter=line` e confirmar 100% de sucesso antes de fechar a feature.
 
 ## Checklist de fechamento da feature
