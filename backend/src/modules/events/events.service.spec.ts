@@ -1,6 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { EventStatus, Prisma, Role, TransactionType } from '@prisma/client';
+import {
+  Band,
+  EventStatus,
+  Prisma,
+  Role,
+  Transaction,
+  TransactionType,
+  User,
+} from '@prisma/client';
 import { EventsService } from './events.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BandAccessService } from '../band-access/band-access.service';
@@ -54,7 +62,7 @@ describe('EventsService', () => {
     tasks: [],
   };
 
-  const mockTransaction = {
+  const mockTransaction: Transaction = {
     id: 'tx-uuid-1',
     description: 'Cachê - Show no Festival de Verão',
     amount: new Prisma.Decimal(1500),
@@ -64,6 +72,7 @@ describe('EventsService', () => {
     userId: 'user-uuid-1',
     eventId: 'event-uuid-123',
     createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const mockBandAccessService = {
@@ -177,17 +186,16 @@ describe('EventsService', () => {
         fee: 2000,
       };
 
-      const eventWithFee = {
-        ...mockEvent,
-        title: 'Show com Cachê',
-        startTime: '19:30',
-        endTime: '22:00',
-        type: 'Show',
-        fee: new Prisma.Decimal(2000),
-      };
-      jest
-        .spyOn(prisma.event, 'create')
-        .mockResolvedValueOnce(eventWithFee as any);
+      const eventWithFee: Prisma.EventGetPayload<{ include: { tasks: true } }> =
+        {
+          ...mockEvent,
+          title: 'Show com Cachê',
+          startTime: '19:30',
+          endTime: '22:00',
+          type: 'Show',
+          fee: new Prisma.Decimal(2000),
+        };
+      jest.spyOn(prisma.event, 'create').mockResolvedValueOnce(eventWithFee);
 
       const result = await service.create(dto, mockUser);
 
@@ -299,18 +307,35 @@ describe('EventsService', () => {
     it('deve auto-provisionar nova banda solo padrão e criar evento quando bandId não for informado e o usuário não tiver banda', async () => {
       jest.spyOn(bandAccessService, 'getUserBandIds').mockResolvedValueOnce([]);
 
-      const autoCreatedBand = {
+      const autoCreatedBand: Band = {
         id: 'band-auto-created-uuid',
         name: 'Projeto Solo - Lucas Musician',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
-      jest.spyOn(prisma.user, 'findFirst').mockResolvedValueOnce({
+      const mockFoundUser: User = {
         id: 'user-uuid-1',
         name: 'Lucas Musician',
-      } as any);
-      jest
-        .spyOn(prisma.band, 'create')
-        .mockResolvedValueOnce(autoCreatedBand as any);
+        email: 'musician@example.com',
+        supabaseId: 'user-uuid-1',
+        role: Role.MUSICIAN,
+        experience: null,
+        phone: null,
+        instagram: null,
+        city: null,
+        minCache: null,
+        youtubeUrl: null,
+        bio: null,
+        instruments: [],
+        styles: [],
+        availability: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValueOnce(mockFoundUser);
+      jest.spyOn(prisma.band, 'create').mockResolvedValueOnce(autoCreatedBand);
 
       const dto: CreateEventDto = {
         title: 'Primeiro Show Solo',
@@ -485,15 +510,21 @@ describe('EventsService', () => {
     });
 
     it('deve sincronizar a transação vinculada atualizando amount quando fee for alterado e fee > 0', async () => {
-      const existingTx = {
+      const existingTx: Transaction = {
         id: 'tx-uuid-1',
         description: 'Cachê - Show no Festival de Verão',
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
+        date: new Date('2026-10-15T20:00:00.000Z'),
+        userId: mockUser.userId,
+        bandId: mockEvent.bandId,
+        eventId: mockEvent.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       jest
         .spyOn(prisma.transaction, 'findFirst')
-        .mockResolvedValueOnce(existingTx as any);
+        .mockResolvedValueOnce(existingTx);
 
       const updateDto: UpdateEventDto = {
         fee: 2500,
@@ -535,15 +566,21 @@ describe('EventsService', () => {
     });
 
     it('deve remover a transação vinculada quando fee for zerado ou nulo', async () => {
-      const existingTx = {
+      const existingTx: Transaction = {
         id: 'tx-uuid-1',
         description: 'Cachê - Show no Festival de Verão',
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
+        date: new Date('2026-10-15T20:00:00.000Z'),
+        userId: mockUser.userId,
+        bandId: mockEvent.bandId,
+        eventId: mockEvent.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       jest
         .spyOn(prisma.transaction, 'findFirst')
-        .mockResolvedValueOnce(existingTx as any);
+        .mockResolvedValueOnce(existingTx);
 
       const updateDto: UpdateEventDto = {
         fee: 0,
@@ -557,15 +594,21 @@ describe('EventsService', () => {
     });
 
     it('deve atualizar a descrição da transação vinculada se o título do evento for alterado', async () => {
-      const existingTx = {
+      const existingTx: Transaction = {
         id: 'tx-uuid-1',
         description: 'Cachê - Show no Festival de Verão',
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
+        date: new Date('2026-10-15T20:00:00.000Z'),
+        userId: mockUser.userId,
+        bandId: mockEvent.bandId,
+        eventId: mockEvent.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       jest
         .spyOn(prisma.transaction, 'findFirst')
-        .mockResolvedValueOnce(existingTx as any);
+        .mockResolvedValueOnce(existingTx);
 
       const updateDto: UpdateEventDto = {
         title: 'Novo Título do Show',

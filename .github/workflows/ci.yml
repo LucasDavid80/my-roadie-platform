@@ -3,6 +3,8 @@ name: My Roadie Ecosystem CI/CD
 on:
   push:
     branches: [ main, master ]
+    tags:
+      - 'v*'
     paths-ignore:
       - '**.md'
       - '.gitignore'
@@ -34,6 +36,11 @@ on:
         required: false
         default: false
         type: boolean
+      publish_release:
+        description: 'Publicar GitHub Release com binários mobile (.apk e .ipa)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   # ==========================================
@@ -51,7 +58,7 @@ jobs:
       - uses: dorny/paths-filter@v3
         id: filter
         with:
-          base: ${{ github.base_ref || 'main' }}
+          base: ${{ github.base_ref }}
           filters: |
             backend:
               - 'backend/**'
@@ -119,6 +126,8 @@ jobs:
     if: |
       inputs.scope == 'all' ||
       inputs.scope == 'mobile' ||
+      github.ref_type == 'tag' ||
+      inputs.publish_release == true ||
       ((inputs.scope == 'auto' || !inputs.scope) && needs.changes.outputs.mobile == 'true')
     runs-on: ubuntu-latest
     defaults:
@@ -310,11 +319,13 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build apk --release --dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}
+      - name: Padronizar Nome do APK de Release
+        run: cp build/app/outputs/flutter-apk/app-release.apk my-roadie-release.apk
       - name: Publicar Artefato Android (.apk)
         uses: actions/upload-artifact@v4
         with:
           name: my-roadie-android-release-apk
-          path: mobile/build/app/outputs/flutter-apk/app-release.apk
+          path: mobile/my-roadie-release.apk
           retention-days: 7
 
   mobile-ios-build:
@@ -382,3 +393,40 @@ jobs:
           else
             echo "Aviso: VERCEL_DEPLOY_HOOK não configurado nos secrets do GitHub. Ignorando."
           fi
+
+  # ==========================================
+  # RELEASE DISTRIBUTION JOB
+  # ==========================================
+  publish-github-release:
+    name: Publish GitHub Release
+    needs: [mobile-android-build, mobile-ios-build]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
+      (github.ref_type == 'tag' || inputs.publish_release == true)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Baixar Artefato APK
+        uses: actions/download-artifact@v4
+        with:
+          name: my-roadie-android-release-apk
+          path: release-assets/
+      - name: Baixar Artefato IPA
+        uses: actions/download-artifact@v4
+        with:
+          name: my-roadie-ios-release-ipa
+          path: release-assets/
+      - name: Publicar Release no GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-assets/my-roadie-release.apk
+            release-assets/my-roadie-release.ipa
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+

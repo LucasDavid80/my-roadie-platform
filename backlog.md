@@ -119,6 +119,12 @@
 - Depende de: nenhum
 - Status: concluído (specs/017-pipeline-cicd-unificado/)
 
+### Hospedagem e Distribuição de Executáveis de Release do MVP
+- Intenção: Resolver a falha 404 de download na rota `/testers`, estabelecendo infraestrutura de armazenamento e distribuição externa para APK e IPA via GitHub Releases, resiliência de UI no frontend e automação de publicação no CI/CD.
+- Impacto esperado: alto (distribuição e experiência de onboarding para testers)
+- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Preparação para Release do MVP (spec 016)
+- Status: concluído (specs/018-distribuicao-executaveis-mvp/; baseline raiz sincronizada em spec.md e plan.md)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -152,11 +158,17 @@
 - Depende de: Extensão do Modelo de Eventos & Ações do Card de Compromisso (spec 015)
 - Status: concluído (specs/016-preparacao-release-mvp/)
 
+### Hospedagem e Distribuição de Executáveis de Release do MVP
+- Intenção: Resolver a falha 404 de download na rota `/testers`, estabelecendo infraestrutura de armazenamento e distribuição externa para APK e IPA via GitHub Releases, resiliência de UI no frontend e automação de publicação no CI/CD.
+- Impacto esperado: alto (distribuição e experiência de onboarding para testers)
+- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Preparação para Release do MVP (spec 016)
+- Status: concluído (specs/018-distribuicao-executaveis-mvp/)
+
 ### Testes de Integração Ponta a Ponta (E2E) no Mobile
 - Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
 - Impacto esperado: alto (qualidade e confiabilidade de entrega)
-- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012)
-- Status: priorizado (próxima spec / spec 018 — gancho estruturado no CI/CD)
+- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012), Hospedagem e Distribuição de Executáveis de Release do MVP (spec 018)
+- Status: priorizado (próxima spec / spec 019 — gancho estruturado no CI/CD)
 
 ### Pipeline CI/CD Unificado & Modernizado (E2E, Deploy Contínuo, Filtro de Paths & Otimização de Custos)
 - Intenção: Unificar e modernizar o CI/CD com filtros inteligentes de paths (`dorny/paths-filter`), disparo manual sob demanda (`workflow_dispatch`), execução de testes E2E (backend e Playwright web), publicação unificada de artefatos de release (APK e IPA) e Continuous Deployment.

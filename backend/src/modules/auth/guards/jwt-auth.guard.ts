@@ -19,7 +19,7 @@ interface JwtAuthError {
 export class JwtAuthGuard extends AuthGuard('jwt') {
   private readonly logger = new Logger(JwtAuthGuard.name);
 
-  handleRequest<TUser = any>(
+  handleRequest<TUser = unknown>(
     err: JwtAuthError | null,
     user: TUser | false,
     info: JwtAuthInfo | null,
