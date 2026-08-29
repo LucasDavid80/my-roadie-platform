@@ -31,19 +31,19 @@
 ## Fase 5: Documentação Operacional e Sincronização
 - [x] T5.1 — Criar o runbook operacional `docs/operations/release-runbook.md` com instruções detalhadas para geração de tags, compilação de release e configuração de variáveis na Vercel.
 - [x] T5.2 — Atualizar `backlog.md` registrando a Spec 018 como ativa/em desenvolvimento e ajustando o roadmap.
-- [ ] T5.3 — Atualizar `plan.md` raiz com o resumo da infraestrutura de distribuição de releases e correções do pipeline.
+- [x] T5.3 — Atualizar `plan.md` raiz com o resumo da infraestrutura de distribuição de releases e correções do pipeline.
 
 ## Checklist de fechamento da feature
 
-- [ ] Diagnóstico e auditoria da Spec 017 documentados no `spec.md` da Spec 018
-- [ ] `dorny/paths-filter` corrigido para não ignorar mudanças em pushes para `main`
-- [ ] Injeção de `BACKEND_URL` via segredos padronizada nos builds mobile do CI/CD
-- [ ] Nomenclatura dos artefatos mobile simétrica (`my-roadie-release.apk` e `my-roadie-release.ipa`)
-- [ ] Página `/testers` resiliente contra variáveis ausentes, eliminando quedas em tela 404
-- [ ] Suporte a `NEXT_PUBLIC_APK_DOWNLOAD_URL`, `NEXT_PUBLIC_IPA_DOWNLOAD_URL` e `NEXT_PUBLIC_APP_VERSION`
-- [ ] Job de publicação de GitHub Release automatizado no CI/CD via tags `v*`
+- [x] Diagnóstico e auditoria da Spec 017 documentados no `spec.md` da Spec 018
+- [x] `dorny/paths-filter` corrigido para não ignorar mudanças em pushes para `main`
+- [x] Injeção de `BACKEND_URL` via segredos padronizada nos builds mobile do CI/CD
+- [x] Nomenclatura dos artefatos mobile simétrica (`my-roadie-release.apk` e `my-roadie-release.ipa`)
+- [x] Página `/testers` resiliente contra variáveis ausentes, eliminando quedas em tela 404
+- [x] Suporte a `NEXT_PUBLIC_APK_DOWNLOAD_URL`, `NEXT_PUBLIC_IPA_DOWNLOAD_URL` e `NEXT_PUBLIC_APP_VERSION`
+- [x] Job de publicação de GitHub Release automatizado no CI/CD via tags `v*`
 - [x] Testes unitários do frontend web (Vitest) passando com 100% de sucesso
 - [x] Testes E2E de navegação e botões da página `/testers` (Playwright) passando com 100% de sucesso
 - [x] Runbook operacional criado em `docs/operations/release-runbook.md`
-- [ ] Documentos de governança (`backlog.md` e `plan.md`) atualizados e sincronizados
-- [ ] Sintaxe do `.github/workflows/ci.yml` validada
+- [x] Documentos de governança (`backlog.md` e `plan.md`) atualizados e sincronizados
+- [x] Sintaxe do `.github/workflows/ci.yml` validada

@@ -28,7 +28,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - `src/services/` concentra chamadas HTTP; sempre remover `id`/`createdAt`/`updatedAt` antes de `POST`/`PATCH`.
 - Tipos de `src/types/` devem espelhar os DTOs do backend (como `src/types/event.ts` para `EventEntity` - Spec 015).
 - Instância centralizada do Supabase em `src/lib/supabase.ts`. Autenticação integrada ao Supabase Auth via `signInWithPassword` no `AuthContext` (Spec 008) e cadastro integrado ao Supabase Auth + API NestJS (`POST /users`) no `RegisterForm` (Spec 010). `AuthContext` com trava `useRef` garantindo disparo único de `fetchProfile` e tratamento amigável de erros de autenticação na UI (Spec 012).
-- Página de Distribuição: Rota `/testers` (`src/app/testers/page.tsx`) não-listada na navegação, provendo centralização de links de build (`.apk` e `.ipa`) e guia de instalação para testadores fechados (Spec 016).
+- Página de Distribuição & Resiliência: Rota `/testers` (`src/app/testers/page.tsx`) com interface resiliente contra links ausentes/404, validação dinâmica de URLs externas (`NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL`), badge informativo de status ("Em breve / Aguardando build"), link alternativo para GitHub Releases e exibição da versão ativa via `NEXT_PUBLIC_APP_VERSION` (Spec 016, Spec 018).
 
 **Decisão fechada:** A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios).
 
@@ -49,7 +49,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 ## 5. Testes
 
 - Backend: Jest, `NestJS TestingModule`; testes unitários colocados junto do código (`*.spec.ts`), e2e em `backend/test/`.
-- Frontend Web: Vitest.
+- Frontend Web: Vitest e Playwright (E2E cobrindo rotas principais e `/testers`).
 - Mobile: `flutter_test`, testes já cobrindo vários widgets/controllers em `mobile/test/`.
 - Banco de teste isolado (`DATABASE_URL_TEST`) para integração/e2e; migrations aplicadas antes de rodar.
 
@@ -63,30 +63,39 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 6. CI/CD
 
-- Definido centralmente em `.github/workflows/ci.yml`, estruturado com grafo de 15 jobs interdependentes (DAG) executando sobre Node 22 (`ubuntu-latest`) e macOS (`macos-latest`).
-- **Detecção Inteligente de Caminhos (`dorny/paths-filter@v3`):** Job inicial `changes` mapeia alterações por pasta (`backend/**`, `frontend-web/**`, `mobile/**`), evitando execuções desnecessárias de builds móveis e runners macOS em PRs que alteram apenas documentação ou outras partes do monorepo.
+- Definido centralmente em `.github/workflows/ci.yml`, estruturado com grafo de 16 jobs interdependentes (DAG) executando sobre Node 22 (`ubuntu-latest`) e macOS (`macos-latest`).
+- **Gatilhos de Execução:** Pushes em branches (`main`, `master`), Tags de release (`v*`), Pull Requests e disparo manual (`workflow_dispatch`).
+- **Detecção Inteligente de Caminhos (`dorny/paths-filter@v3`):** Job inicial `changes` mapeia alterações por pasta (`backend/**`, `frontend-web/**`, `mobile/**`). Configurado com `base: ${{ github.base_ref }}` para que em pull requests compare com a branch alvo e em pushes compare com `github.event.before`, evitando diffs vazios e garantindo execuções de pipeline em merges para a `main` (Spec 018).
 - **Disparo Manual Sob Demanda (`workflow_dispatch`):** Suporta parâmetros configuráveis na UI do GitHub Actions:
   - `scope`: `auto` (default), `all`, `backend`, `frontend`, `mobile`.
-  - `backend_url`: URL injetada nos builds mobile (default: `https://my-roadie-backend.onrender.com`).
+  - `backend_url`: URL injetada nos builds mobile (prioriza input, fallback para `secrets.BACKEND_URL`).
   - `run_mobile_e2e`: flag booleana (default: `false`) para ativação sob demanda de testes em emuladores mobile.
+  - `publish_release`: flag booleana (default: `false`) para forçar publicação de GitHub Release.
 - **Testes Automatizados (Lints, Unitários & E2E):**
   - Backend: `backend-lint` → `backend-test` (Jest unitários) → `backend-e2e` (Jest E2E com mock de JWKS em `test/__mocks__/jwks-rsa.js` e Prisma Client gerado).
-  - Frontend Web: `frontend-lint` → `frontend-test` (Vitest com `pool: threads`) → `frontend-e2e` (Playwright com browser headless Chromium).
-  - Mobile: `mobile-lint` (`flutter analyze`) → `mobile-test` (`flutter test` cobrindo testes unitários e de integração de fluxo sem emulador) → `mobile-e2e-emulator` (gancho condicionado a `run_mobile_e2e == true`, preparado para a Spec 018).
-- **Compilação e Publicação de Artefatos de Release:**
-  - `mobile-android-build`: Compila `app-release.apk` com Java 17 Zulu, Android SDK, Gradle cache e `--dart-define=BACKEND_URL`, publicando artefato `my-roadie-android-release-apk` via `actions/upload-artifact@v4` (retenção de 7 dias).
-  - `mobile-ios-build`: Compila iOS no runner `macos-latest` com `--no-codesign` e `--dart-define=BACKEND_URL`, empacota em `my-roadie-release.ipa` e publica artefato `my-roadie-ios-release-ipa` via `actions/upload-artifact@v4` (retenção de 7 dias).
+  - Frontend Web: `frontend-lint` → `frontend-test` (Vitest com `pool: threads`) → `frontend-e2e` (Playwright com browser headless Chromium validando rotas públicas, privadas e `/testers`).
+  - Mobile: `mobile-lint` (`flutter analyze`) → `mobile-test` (`flutter test` cobrindo testes unitários e de integração de fluxo sem emulador) → `mobile-e2e-emulator` (gancho condicionado a `run_mobile_e2e == true`, preparado para a Spec 019).
+- **Compilação e Padronização de Nomenclatura dos Binários Mobile:**
+  - `mobile-android-build`: Compila `app-release.apk` com Java 17 Zulu, Android SDK, Gradle cache e `--dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`, renomeia o binário para `my-roadie-release.apk` (simetria com o iOS) e publica artefato `my-roadie-android-release-apk` via `actions/upload-artifact@v4`.
+  - `mobile-ios-build`: Compila iOS no runner `macos-latest` com `--no-codesign` e `--dart-define=BACKEND_URL=${{ inputs.backend_url || secrets.BACKEND_URL }}`, empacota em `my-roadie-release.ipa` e publica artefato `my-roadie-ios-release-ipa` via `actions/upload-artifact@v4`.
+- **Publicação Automatizada de Releases (`publish-github-release`):**
+  - Acionado automaticamente na criação de tags `v*` ou via `publish_release == 'true'`, depende da compilação bem-sucedida de Android e iOS, baixa os artefatos gerados e cria a GitHub Release pública permanente anexando `my-roadie-release.apk` e `my-roadie-release.ipa` via `softprops/action-gh-release@v2` (Spec 018).
 - **Caching Multi-Camadas:** Caching de npm para backend e frontend (`actions/setup-node@v4`), caching de SDK/pub para Flutter (`subosito/flutter-action@v2`) e caching de Gradle para Android (`actions/setup-java@v4`).
 - **Continuous Deployment (`deploy-production`):** Disparado automaticamente em pushes/merges na branch `main` ou via `workflow_dispatch`, condicionado ao sucesso dos jobs de build (`frontend-build` e `backend-build`), realizando chamadas `POST` seguras aos webhooks do Render (`RENDER_DEPLOY_HOOK`) e Vercel (`VERCEL_DEPLOY_HOOK`).
 - Simulação local recomendada via `act --secret-file .secrets` antes de abrir PR.
+- Procedimentos de release documentados em `docs/operations/release-runbook.md` e URLs em `docs/distribution/download-urls.md`.
 
 ## 7. Ambientes e variáveis
 
-| Variável | Onde |
-|---|---|
-| `DATABASE_URL`, `JWT_SECRET`, `SUPABASE_URL`, `SUPABASE_KEY`, `FRONTEND_URL` | backend |
-| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | frontend-web |
-| `SUPABASE_SERVICE_ROLE` | backend apenas, nunca no cliente |
+| Variável / Secret | Onde | Descrição |
+|---|---|---|
+| `DATABASE_URL`, `JWT_SECRET`, `SUPABASE_URL`, `SUPABASE_KEY`, `FRONTEND_URL` | backend (.env / Render) | Configurações do servidor e banco de dados |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | frontend-web (.env.local / Vercel) | Credenciais públicas do Supabase Auth |
+| `NEXT_PUBLIC_APK_DOWNLOAD_URL`, `NEXT_PUBLIC_IPA_DOWNLOAD_URL` | frontend-web (.env.local / Vercel) | URLs públicas de download dos binários de release |
+| `NEXT_PUBLIC_APP_VERSION` | frontend-web (.env.local / Vercel) | Versão semântica exibida na rota `/testers` |
+| `SUPABASE_SERVICE_ROLE` | backend apenas | Chave privilegiada (nunca no cliente) |
+| `BACKEND_URL` | GitHub Secrets / .secrets | URL da API injetada nos binários mobile de release |
+| `RENDER_DEPLOY_HOOK`, `VERCEL_DEPLOY_HOOK` | GitHub Secrets / .secrets | Webhooks para deploy contínuo de produção |
 
 ## 8. Débito técnico a considerar antes/junto das próximas features
 
