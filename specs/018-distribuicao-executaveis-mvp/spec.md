@@ -71,6 +71,16 @@ A spec contempla:
   - Renomear APK para `my-roadie-release.apk`.
   - Implementar o job `publish-github-release` para publicar releases públicas e permanentes com os binários anexados.
 
+### 4. Relatório da Task T6.1 — Diagnóstico do `webServer` do Playwright e Testes E2E (`frontend-web`)
+- **Arquivos analisados:** [`frontend-web/playwright.config.ts`](file:///C:/dev/my-roadie-platform/frontend-web/playwright.config.ts) e [`frontend-web/tests/testers.spec.ts`](file:///C:/dev/my-roadie-platform/frontend-web/tests/testers.spec.ts).
+- **Comportamento do `webServer`:**
+  - O Playwright dispara `npm run dev` (`next dev`) e aguarda a disponibilidade do servidor em `http://localhost:3000`.
+  - **Cold Boot no Windows (Next.js 16 + React 19):** O tempo de inicialização a frio e a compilação sob demanda da rota `/testers` levam aproximadamente 60 segundos antes de o listener HTTP na porta 3000 estar pronto para aceitar conexões.
+  - **Adequação do Timeout:** O `timeout: 120 * 1000` (120s) configurado em `playwright.config.ts` é suficiente para suportar o cold boot sem falhas de timeout.
+  - **Visibilidade de Logs:** A configuração `stdout: 'ignore'` suprime o output do compilador Next.js no terminal do Playwright durante o boot; caso ocorra falha silenciosa, a saída de erro é capturada via `stderr: 'pipe'`.
+- **Execução da Suíte E2E:**
+  - Após o handshake na porta 3000, todos os 5 testes da suíte E2E da rota `/testers` executaram no Chromium com 100% de sucesso (tempo total de execução dos testes: ~9s; tempo total do ciclo com boot: ~1.1 min).
+
 ---
 
 ## Decisões de Arquitetura & Estratégia de Distribuição
