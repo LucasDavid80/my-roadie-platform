@@ -26,7 +26,7 @@
 ## Fase 4: Testes Unitários e E2E (Vitest e Playwright)
 - [x] T4.1 — Criar/atualizar suíte de testes unitários em `frontend-web/src/app/testers/page.test.tsx` cobrindo cenários com e sem URLs de download configuradas.
 - [x] T4.2 — Criar teste E2E com Playwright em `frontend-web/tests/testers.spec.ts` validando a rota `/testers`, visibilidade das instruções de Android/iOS e atributos dos botões de download.
-- [ ] T4.3 — Executar `npm test` e `npx playwright test` no `frontend-web/` e garantir 100% de sucesso.
+- [x] T4.3 — Executar `npm test` e `npx playwright test` no `frontend-web/` e garantir 100% de sucesso.
 
 ## Fase 5: Documentação Operacional e Sincronização
 - [ ] T5.1 — Criar o runbook operacional `docs/operations/release-runbook.md` com instruções detalhadas para geração de tags, compilação de release e configuração de variáveis na Vercel.
@@ -42,8 +42,8 @@
 - [ ] Página `/testers` resiliente contra variáveis ausentes, eliminando quedas em tela 404
 - [ ] Suporte a `NEXT_PUBLIC_APK_DOWNLOAD_URL`, `NEXT_PUBLIC_IPA_DOWNLOAD_URL` e `NEXT_PUBLIC_APP_VERSION`
 - [ ] Job de publicação de GitHub Release automatizado no CI/CD via tags `v*`
-- [ ] Testes unitários do frontend web (Vitest) passando com 100% de sucesso
-- [ ] Testes E2E de navegação e botões da página `/testers` (Playwright) passando com 100% de sucesso
+- [x] Testes unitários do frontend web (Vitest) passando com 100% de sucesso
+- [x] Testes E2E de navegação e botões da página `/testers` (Playwright) passando com 100% de sucesso
 - [ ] Runbook operacional criado em `docs/operations/release-runbook.md`
 - [ ] Documentos de governança (`backlog.md` e `plan.md`) atualizados e sincronizados
 - [ ] Sintaxe do `.github/workflows/ci.yml` validada
