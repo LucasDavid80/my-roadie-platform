@@ -29,7 +29,7 @@
 - [x] T4.3 — Executar `npm test` e `npx playwright test` no `frontend-web/` e garantir 100% de sucesso.
 
 ## Fase 5: Documentação Operacional e Sincronização
-- [ ] T5.1 — Criar o runbook operacional `docs/operations/release-runbook.md` com instruções detalhadas para geração de tags, compilação de release e configuração de variáveis na Vercel.
+- [x] T5.1 — Criar o runbook operacional `docs/operations/release-runbook.md` com instruções detalhadas para geração de tags, compilação de release e configuração de variáveis na Vercel.
 - [ ] T5.2 — Atualizar `backlog.md` registrando a Spec 018 como ativa/em desenvolvimento e ajustando o roadmap.
 - [ ] T5.3 — Atualizar `plan.md` raiz com o resumo da infraestrutura de distribuição de releases e correções do pipeline.
 
@@ -44,6 +44,6 @@
 - [ ] Job de publicação de GitHub Release automatizado no CI/CD via tags `v*`
 - [x] Testes unitários do frontend web (Vitest) passando com 100% de sucesso
 - [x] Testes E2E de navegação e botões da página `/testers` (Playwright) passando com 100% de sucesso
-- [ ] Runbook operacional criado em `docs/operations/release-runbook.md`
+- [x] Runbook operacional criado em `docs/operations/release-runbook.md`
 - [ ] Documentos de governança (`backlog.md` e `plan.md`) atualizados e sincronizados
 - [ ] Sintaxe do `.github/workflows/ci.yml` validada
