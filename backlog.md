@@ -123,7 +123,7 @@
 - Intenção: Resolver a falha 404 de download na rota `/testers`, estabelecendo infraestrutura de armazenamento e distribuição externa para APK e IPA via GitHub Releases, resiliência de UI no frontend e automação de publicação no CI/CD.
 - Impacto esperado: alto (distribuição e experiência de onboarding para testers)
 - Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Preparação para Release do MVP (spec 016)
-- Status: em desenvolvimento (specs/018-distribuicao-executaveis-mvp/)
+- Status: concluído (specs/018-distribuicao-executaveis-mvp/)
 
 ---
 
@@ -162,7 +162,7 @@
 - Intenção: Resolver a falha 404 de download na rota `/testers`, estabelecendo infraestrutura de armazenamento e distribuição externa para APK e IPA via GitHub Releases, resiliência de UI no frontend e automação de publicação no CI/CD.
 - Impacto esperado: alto (distribuição e experiência de onboarding para testers)
 - Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Preparação para Release do MVP (spec 016)
-- Status: em desenvolvimento (specs/018-distribuicao-executaveis-mvp/)
+- Status: concluído (specs/018-distribuicao-executaveis-mvp/)
 
 ### Testes de Integração Ponta a Ponta (E2E) no Mobile
 - Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
