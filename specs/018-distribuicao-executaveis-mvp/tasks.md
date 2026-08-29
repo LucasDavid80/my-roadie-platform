@@ -30,7 +30,7 @@
 
 ## Fase 5: Documentação Operacional e Sincronização
 - [x] T5.1 — Criar o runbook operacional `docs/operations/release-runbook.md` com instruções detalhadas para geração de tags, compilação de release e configuração de variáveis na Vercel.
-- [ ] T5.2 — Atualizar `backlog.md` registrando a Spec 018 como ativa/em desenvolvimento e ajustando o roadmap.
+- [x] T5.2 — Atualizar `backlog.md` registrando a Spec 018 como ativa/em desenvolvimento e ajustando o roadmap.
 - [ ] T5.3 — Atualizar `plan.md` raiz com o resumo da infraestrutura de distribuição de releases e correções do pipeline.
 
 ## Checklist de fechamento da feature
