@@ -14,7 +14,7 @@
 - [x] T1.6 — Adicionar suporte a `NEXT_PUBLIC_APP_VERSION` para exibição dinâmica de versão na UI.
 
 ## Fase 2: Resiliência da UI da Página `/testers` (Frontend Web)
-- [ ] T2.1 — Refatorar [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx) para verificar se as URLs de download são válidas (iniciam com `http://`, `https://` ou apontam para asset estático existente).
+- [x] T2.1 — Refatorar [`frontend-web/src/app/testers/page.tsx`](file:///C:/dev/my-roadie-platform/frontend-web/src/app/testers/page.tsx) para verificar se as URLs de download são válidas (iniciam com `http://`, `https://` ou apontam para asset estático existente).
 - [ ] T2.2 — Adicionar tratamento visual amigável quando a URL de download não estiver configurada no ambiente (exibir alerta informativo e badge "Em breve / Aguardando build" em vez de permitir o clique que gera erro 404).
 - [ ] T2.3 — Adicionar link alternativo seguro para a página de Releases do repositório no GitHub para testadores técnicos.
 

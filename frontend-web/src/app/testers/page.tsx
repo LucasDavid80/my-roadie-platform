@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,10 +14,47 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Valida se uma URL de download é válida para disponibilização aos testadores.
+ * Considera válidas URLs remotas (HTTP/HTTPS) ou caminhos estáticos locais existentes no filesystem.
+ */
+export function isValidDownloadUrl(url?: string | null): boolean {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+
+  // URLs remotas HTTP ou HTTPS (ex: GitHub Releases, Supabase Storage)
+  if (/^https?:\/\/.+/i.test(trimmed)) {
+    return true;
+  }
+
+  // Caminhos relativos para assets estáticos em public/
+  if (trimmed.startsWith('/')) {
+    try {
+      if (typeof window === 'undefined') {
+        const relativePath = trimmed.replace(/^\//, '');
+        const directPath = path.join(process.cwd(), 'public', relativePath);
+        const nestedPath = path.join(process.cwd(), 'frontend-web', 'public', relativePath);
+        return fs.existsSync(directPath) || fs.existsSync(nestedPath);
+      }
+    } catch {
+      return false;
+    }
+  }
+
+  return false;
+}
+
 export default function TestersPage() {
-  const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL || '/downloads/my-roadie-release.apk';
-  const ipaDownloadUrl = process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL || '/downloads/my-roadie-release.ipa';
+  const rawApkUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL || '/downloads/my-roadie-release.apk';
+  const rawIpaUrl = process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL || '/downloads/my-roadie-release.ipa';
   const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || 'MVP 1.0.0';
+
+  const isApkAvailable = isValidDownloadUrl(rawApkUrl);
+  const isIpaAvailable = isValidDownloadUrl(rawIpaUrl);
+
+  const apkDownloadUrl = isApkAvailable ? rawApkUrl : undefined;
+  const ipaDownloadUrl = isIpaAvailable ? rawIpaUrl : undefined;
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50">
