@@ -36,6 +36,11 @@ on:
         required: false
         default: false
         type: boolean
+      publish_release:
+        description: 'Publicar GitHub Release com binários mobile (.apk e .ipa)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   # ==========================================
