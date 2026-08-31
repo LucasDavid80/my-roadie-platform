@@ -102,13 +102,13 @@ Estender o modelo `Event` no banco de dados (Prisma) e na API backend (NestJS) p
 
 ## Critérios de Sucesso
 
-- [ ] Modelo `Event` estendido no Prisma com `startTime`, `endTime`, `type`, `fee` e migration/generate executados.
-- [ ] `docs/database/erd.md` atualizado com o diagrama e especificações dos novos campos de `Event` e relacionamento com `Transaction`.
-- [ ] Backend aceita, valida e persiste os novos campos em `POST /events` e `PATCH /events/:id`.
-- [ ] Backend cria e sincroniza automaticamente uma `Transaction` do tipo `INCOME` quando `fee > 0`.
-- [ ] Backend exclui compromissos via `DELETE /events/:id` com validação de permissão via `JwtAuthGuard` e `BandAccessService`.
-- [ ] App mobile envia os novos campos ao criar/editar compromissos e os exibe corretamente no `CommitmentCard` após recarregar.
-- [ ] `CommitmentCard` permite excluir um compromisso com confirmação do usuário e remove o item reativamente da agenda.
-- [ ] Formulário `NewAppointmentWidget` com layout ajustado e botão centralizado.
-- [ ] Todos os testes unitários e de integração (backend e mobile) passando sem regressões.
-- [ ] `backlog.md` e baseline sincronizados ao final da spec.
+- [x] Modelo `Event` estendido no Prisma com `startTime`, `endTime`, `type`, `fee` e migration/generate executados.
+- [x] `docs/database/erd.md` atualizado com o diagrama e especificações dos novos campos de `Event` e relacionamento com `Transaction`.
+- [x] Backend aceita, valida e persiste os novos campos em `POST /events` e `PATCH /events/:id`.
+- [x] Backend cria e sincroniza automaticamente uma `Transaction` do tipo `INCOME` quando `fee > 0`.
+- [x] Backend exclui compromissos via `DELETE /events/:id` com validação de permissão via `JwtAuthGuard` e `BandAccessService`.
+- [x] App mobile envia os novos campos ao criar/editar compromissos e os exibe corretamente no `CommitmentCard` após recarregar.
+- [x] `CommitmentCard` permite excluir um compromisso com confirmação do usuário e remove o item reativamente da agenda.
+- [x] Formulário `NewAppointmentWidget` com layout ajustado e botão centralizado.
+- [x] Todos os testes unitários e de integração (backend e mobile) passando sem regressões.
+- [x] `backlog.md` e baseline sincronizados ao final da spec.

@@ -22,6 +22,7 @@
 - Nunca pule fases do `tasks.md`. Implemente uma fase por vez e aguarde confirmação antes de avançar para a próxima.
 - Tasks que envolvem autorização/controle de acesso (guards, checagem de ownership/membership) entram na mesma categoria de revisão manual obrigatória que as que tocam infraestrutura externa — não fecham sozinhas com "testes passando" como único critério.
 - **Explicação prévia obrigatória antes de qualquer alteração:** Antes de modificar qualquer código ou configuração — independente de onde seja (frontend, backend, banco de dados, pipeline, documentação, entre outros) —, explicar antecipadamente e com clareza o que será alterado e por quê. O agente **nunca** deve executar ferramentas de alteração/edição para só depois explicar o que fez.
+- **Fechamento atômico de spec (Checklist + Critérios de Sucesso):** Ao fechar qualquer spec, o checklist de fechamento em `tasks.md` e os checkboxes de "Critérios de Sucesso" em `spec.md` devem ser marcados `[x]` juntos, no mesmo passo — nunca um sem o outro. Isso evita a recorrência de inconsistências entre o encerramento das tarefas e a validação documental da spec.
 
 ## Regras para código de testes
 

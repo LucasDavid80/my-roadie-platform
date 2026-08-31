@@ -23,7 +23,7 @@ flowchart TD
     MobileLint --> MobileTest[mobile-test: Flutter Test - Fluxos Leves]
     MobileTest --> MobileAndroidBuild[mobile-android-build: APK + Upload]
     MobileTest --> MobileIosBuild[mobile-ios-build: macOS + IPA + Upload]
-    MobileTest -.->|run_mobile_e2e == true| MobileEmulatorE2E[mobile-e2e-emulator: Preparado para Spec 018]
+    MobileTest -.->|run_mobile_e2e == true| MobileEmulatorE2E[mobile-e2e-emulator: Preparado para Spec 019]
 
     BackendBuild --> DeployCheck{Merge na main?}
     FrontendBuild --> DeployCheck
@@ -102,7 +102,7 @@ changes:
 
 ### Mobile E2E & Integração
 - **Dia a dia (PRs/Pushes)**: Execução no job `mobile-test` através do `flutter test` (cobrindo testes unitários e testes de integração de widget/fluxo sem emulador, como `profile_flow_integration_test.dart`), mantendo o tempo de execução abaixo de 30 segundos.
-- **Sob Demanda (Gancho Spec 018)**: Configuração do step/job `mobile-e2e-emulator` condicionado a `inputs.run_mobile_e2e == true`, pronto para receber os scripts da Spec 018 sem impactar a cota padrão.
+- **Sob Demanda (Gancho Spec 019)**: Configuração do step/job `mobile-e2e-emulator` condicionado a `inputs.run_mobile_e2e == true`, pronto para receber os scripts da Spec 019 sem impactar a cota padrão.
 
 ## 4. Compilação Mobile & Publicação Padronizada de Artefatos
 
@@ -125,7 +125,6 @@ changes:
 - Executa requisições `POST` seguras aos webhooks do Render (`RENDER_DEPLOY_HOOK`) e Vercel (`VERCEL_DEPLOY_HOOK`).
 
 ## 6. Estratégia de Caching e Otimização
-
 - **Node/npm**: `actions/setup-node@v4` com `cache: 'npm'` apontando para os respectivos `package-lock.json`.
 - **Flutter**: `subosito/flutter-action@v2` com `cache: true`.
 - **Java/Gradle**: `actions/setup-java@v4` com `cache: 'gradle'` para agilizar compilações Android subsequentes.
@@ -141,7 +140,7 @@ changes:
 Após auditoria inicial de fechamento, foi descoberta a necessidade de sincronizar inconsistências adicionais:
 - Atualizar `spec.md` marcando explicitamente todos os critérios de sucesso como `[x]` após validação completa do pipeline.
 - Refinar documentação de Vitest em `plan.md` §3 para capturar configuração de `pool: 'threads'` como mitigação de instabilidade em testes paralelos.
-- Priorizar Spec 018 em `backlog.md` com dependency explícita em Spec 017 (gancho de E2E Mobile já estruturado no CI/CD).
+- Priorizar Spec 019 em `backlog.md` com dependency explícita em Spec 017 (gancho de E2E Mobile já estruturado no CI/CD).
 
 ## 9. Isolamento Hermético e Mocking de Rede nos Testes E2E Web (Fase 6)
 

@@ -7,7 +7,7 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 1. **Detecção Inteligente de Caminhos (`dorny/paths-filter`)**: Execução estrita e seletiva de jobs conforme as pastas alteradas (`backend/**`, `frontend-web/**`, `mobile/**`), evitando o consumo desnecessário de minutos de CI (especialmente em runners `macos-latest` e builds Android).
 2. **Disparo Manual Sob Demanda (`workflow_dispatch`)**: Permitir que desenvolvedores acionem builds de release avulsos (APK Android e IPA iOS), executem testes ou acionem o pipeline sob demanda pelo painel do GitHub Actions com parâmetros configuráveis.
 3. **Completude de Testes Automatizados (E2E Web & Backend)**: Integrar a execução dos testes E2E do Backend (`npm run test:e2e`) e dos testes E2E de Frontend Web (Playwright com browser headless Chromium) antes dos estágios de build e deploy.
-4. **Fundação e Gancho Preparatório para E2E Mobile (Spec 018)**: Configurar parâmetro `run_mobile_e2e` no `workflow_dispatch` (com `default: false`), preparando o pipeline para a Spec 018 sem consumir minutos da cota em PRs regulares. No dia a dia, manter a execução rápida da suíte de integração com `flutter test` (< 30s no `ubuntu-latest`).
+4. **Fundação e Gancho Preparatório para E2E Mobile (Spec 019)**: Configurar parâmetro `run_mobile_e2e` no `workflow_dispatch` (com `default: false`), preparando o pipeline para a Spec 019 sem consumir minutos da cota em PRs regulares. No dia a dia, manter a execução rápida da suíte de integração com `flutter test` (< 30s no `ubuntu-latest`).
 5. **Padronização de Artefatos de Release**: Publicação automatizada tanto do `.apk` (Android) quanto do `.ipa` (iOS) via `actions/upload-artifact@v4`, ambos apontando para o backend de produção via `--dart-define=BACKEND_URL`, com retenção de 7 dias.
 6. **Automação de Continuous Deployment (CD)**: Preservar e consolidar os hooks de deploy do Render (backend) e Vercel (frontend) condicionados ao sucesso dos testes e compilações na branch `main`.
 7. **Otimização de Performance e Caching**: Caching multi-camadas (npm para Node 22, Flutter pub cache e Gradle cache para Android SDK).
@@ -16,7 +16,7 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 ## Por quê
 
 - **Otimização de Custos e Minutos Gratuitos do GitHub Actions (Crítico)**: Atualmente, qualquer alteração na branch ou em Pull Requests (mesmo um ajuste de documentação ou correção simples no frontend) aciona todos os jobs, incluindo o runner `macos-latest` (que consome 10x minutos da cota do GitHub Actions) e o build do Android. Filtrar jobs por pastas modificadas preserva os minutos de CI e acelera o tempo de feedback nos PRs.
-- **Preparação Estruturada para a Spec 018 (E2E Mobile)**: Emuladores Android/iOS em CI levam de 8 a 15 minutos e geram alto consumo de cota. Deixar o gancho condicional no `workflow_dispatch` (desligado por padrão nos PRs) permite que a Spec 018 adicione os cenários de teste mobile sem precisar reabrir a arquitetura do CI/CD.
+- **Preparação Estruturada para a Spec 019 (E2E Mobile)**: Emuladores Android/iOS em CI levam de 8 a 15 minutos e geram alto consumo de cota. Deixar o gancho condicional no `workflow_dispatch` (desligado por padrão nos PRs) permite que a Spec 019 adicione os cenários de teste mobile sem precisar reabrir a arquitetura do CI/CD.
 - **Flexibilidade Operacional com `workflow_dispatch`**: Para gerar uma nova versão para os testers fechados (distribuída via `/testers`), atualmente é necessário abrir um PR ou comitar na `main`. O gatilho manual permite gerar e baixar APKs e IPAs sob demanda a qualquer momento.
 - **Segurança de Regressão com Testes E2E no CI**: O backend possui 7 suítes completas de testes E2E (`backend/test/*.e2e-spec.ts`) e o frontend possui suítes Playwright (`frontend-web/tests/`). O pipeline anterior rodava apenas testes unitários (`npm test`), deixando passar eventuais quebras de integração entre módulos ou contratos de rotas.
 - **Paridade e Rastreabilidade de Artefatos**: O pipeline gerava o arquivo `.ipa` e publicava nos artefatos do GitHub Actions, mas o `.apk` era compilado sem ser disponibilizado para download nem receber a variável `--dart-define=BACKEND_URL`. Ambos devem ser gerados e disponibilizados de forma simétrica.
@@ -58,7 +58,7 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 #### Mobile (`mobile/pubspec.yaml`)
 - **Comandos de Teste**:
   - `flutter test`: Execução rápida de testes unitários e testes de integração de fluxo sem emulador (`profile_flow_integration_test.dart`).
-  - `flutter test integration_test/`: Testes E2E com emulador / dispositivo real (preparado para Spec 018).
+  - `flutter test integration_test/`: Testes E2E com emulador / dispositivo real (preparado para Spec 019).
 - **Comandos de Lint & Análise**:
   - `flutter analyze`: Análise estática com regras de `flutter_lints: ^6.0.0`.
 - **Comandos de Build**:
@@ -132,7 +132,7 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
    - **Backend**: `backend-lint` -> `backend-test` (unitários) -> `backend-e2e` (`npm run test:e2e`).
    - **Frontend**: `frontend-lint` -> `frontend-test` (vitest) -> `frontend-e2e` (Playwright com Chromium).
    - **Mobile**: `mobile-lint` (`flutter analyze`) -> `mobile-test` (`flutter test` com suíte de integração leve).
-   - **Mobile E2E (Emulador)**: Estrutura modular preparada e conectada ao gatilho `run_mobile_e2e` (pronta para plugar os cenários na Spec 018).
+   - **Mobile E2E (Emulador)**: Estrutura modular preparada e conectada ao gatilho `run_mobile_e2e` (pronta para plugar os cenários na Spec 019).
 
 3. **Estágio de Compilação & Publicação de Artefatos**:
    - **Backend**: `backend-build` (`nest build`).
@@ -153,7 +153,7 @@ Unificar, modernizar e otimizar a infraestrutura de Integração e Entrega Cont�
 
 ## Fora de Escopo
 
-- Implementação dos cenários detalhados de testes E2E do app mobile (escopo da Spec 018 — esta spec provê a infraestrutura de CI e o gatilho manual sob demanda).
+- Implementação dos cenários detalhados de testes E2E do app mobile (escopo da Spec 019 — esta spec provê a infraestrutura de CI e o gatilho manual sob demanda).
 - Deploy automatizado em lojas oficiais (Google Play Store e Apple App Store) via Fastlane — escopo de fase de lançamento comercial.
 
 ## Critérios de Sucesso
