@@ -67,5 +67,52 @@ void main() {
         );
       },
     );
+
+    testWidgets(
+      'deve exibir feedback de erro ao tentar login com credenciais inválidas (T2.2)',
+      (WidgetTester tester) async {
+        E2EBindingHelper.setupTestViewport(tester);
+
+        final context = createHermeticTestContext();
+        final app = context.buildApp(initialLocation: '/login');
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 600));
+        await tester.pumpAndSettle();
+
+        // 1. Localiza o botão "Toque para entrar" e toca para abrir o formulário
+        final startButtonFinder =
+            find.byKey(const ValueKey('login_start_button'));
+        expect(startButtonFinder, findsOneWidget);
+        await tester.tap(startButtonFinder);
+        await tester.pumpAndSettle();
+
+        // 2. Preenche os campos de e-mail e senha com credenciais inválidas
+        final emailFinder = find.byKey(const ValueKey('login_email_field'));
+        final passwordFinder =
+            find.byKey(const ValueKey('login_password_field'));
+        expect(emailFinder, findsOneWidget);
+        expect(passwordFinder, findsOneWidget);
+
+        await tester.enterText(emailFinder, 'invalido@teste.com');
+        await tester.enterText(passwordFinder, 'senha_errada');
+        await tester.pumpAndSettle();
+
+        // 3. Clica no botão "ENTRAR"
+        final submitFinder = find.byKey(const ValueKey('login_submit_button'));
+        expect(submitFinder, findsOneWidget);
+        await tester.tap(submitFinder);
+        await tester.pumpAndSettle();
+
+        // 4. Valida que permanece na tela de login e exibe feedback de erro
+        expect(find.byType(PrincipalScreen), findsNothing);
+        expect(find.byKey(const ValueKey('login_error_box')), findsOneWidget);
+        expect(
+          find.text('E-mail ou senha incorretos. Verifique suas credenciais.'),
+          findsWidgets,
+        );
+      },
+    );
   });
 }
+

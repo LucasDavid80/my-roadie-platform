@@ -38,7 +38,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 - [x] T2.1 — Implementar o teste E2E de login com sucesso em `mobile/integration_test/auth_flow_test.dart`:
   - Abertura na rota `/login`, toque no banner, preenchimento de e-mail/senha válidos, submissão e validação de navegação para a `PrincipalScreen`.
   - Critério: Teste executa e valida a transição de tela com sucesso.
-- [ ] T2.2 — Implementar o teste E2E de credenciais inválidas em `mobile/integration_test/auth_flow_test.dart`:
+- [x] T2.2 — Implementar o teste E2E de credenciais inválidas em `mobile/integration_test/auth_flow_test.dart`:
   - Submissão com dados incorretos e verificação de feedback visual de erro na UI.
   - Critério: Teste valida a permanência na tela de login e a presença do feedback de erro.
 - [ ] T2.3 — Executar a suíte de autenticação localmente (`flutter test integration_test/auth_flow_test.dart`).
