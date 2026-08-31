@@ -65,7 +65,14 @@ Além disso, esta spec conecta a execução dos testes ao job `mobile-e2e-emulat
 | **Agenda** | `CommitmentCard` (Dialog) | Botão Confirmar Exclusão | `TextButton` | `dialog_confirm_delete_button` |
 
 ### 3. Diagnóstico da Estrutura de Execução no CI/CD (`.github/workflows/ci.yml`) — Task T0.3
-- **Status:** *A ser documentado na Fase 0*
+- **Status:** Concluído com sucesso.
+- **Configuração do Gatilho `run_mobile_e2e`:** Presente em `on.workflow_dispatch.inputs.run_mobile_e2e` com `type: boolean` e `default: false`, evitando execução acidental ou consumo excessivo de minutos de CI em PRs rotineiros.
+- **Diagnóstico do Job `mobile-e2e-emulator` (linhas 239-258):**
+  - **Runner:** `macos-latest`, compatível com execução de emuladores e simuladores.
+  - **Precondição (`needs`):** Executa após `mobile-test` passar com sucesso.
+  - **Condição (`if`):** `github.event.inputs.run_mobile_e2e == 'true' || inputs.run_mobile_e2e == true`.
+  - **Ambiente:** `subosito/flutter-action@v2` configurado no canal `stable` com cache ativado.
+  - **Integração Planejada para a Fase 5 (T5.1):** Substituição do step placeholder pelo comando de execução da suíte agregadora `flutter test integration_test/app_test.dart`.
 
 ---
 

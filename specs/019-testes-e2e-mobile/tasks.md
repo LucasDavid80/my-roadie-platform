@@ -10,7 +10,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
   - Critério: Mapeamento de dependências e configuração registrado no `spec.md`.
 - [x] T0.2 — Mapear os widgets, formulários e botões nos 3 fluxos (`LoginPage`, `LoginForm`, `PersonScreen`, `NewAppointmentWidget`, `CommitmentCard`), identificando a necessidade de inclusão de chaves semânticas (`ValueKey`).
   - Critério: Tabela de mapeamento de finders e chaves semânticas documentada no `spec.md`.
-- [ ] T0.3 — Inspecionar a estrutura do job `mobile-e2e-emulator` em `.github/workflows/ci.yml` para planejar a integração da execução dos testes.
+- [x] T0.3 — Inspecionar a estrutura do job `mobile-e2e-emulator` em `.github/workflows/ci.yml` para planejar a integração da execução dos testes.
   - Critério: Diagnóstico registrado no `spec.md`.
 - [ ] T0.4 — Registrar os achados das tarefas T0.1, T0.2 e T0.3 na Seção "Resultados da Inspeção (Fase 0)" em `specs/019-testes-e2e-mobile/spec.md`.
   - Critério: Seção de inspeção em `spec.md` completamente preenchida.
