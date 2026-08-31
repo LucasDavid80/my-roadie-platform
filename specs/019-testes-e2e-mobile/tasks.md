@@ -21,7 +21,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 - [x] T1.1 — Criar a estrutura de diretórios `mobile/integration_test/` e `mobile/integration_test/test_helpers/`.
   - Critério: Estrutura de pastas criada conforme o `plan.md`.
-- [ ] T1.2 — Implementar os helpers compartilhados:
+- [x] T1.2 — Implementar os helpers compartilhados:
   - `mobile/integration_test/test_helpers/e2e_binding.dart`: inicialização do binding e utilitários assíncronos (`pumpAndSettleWithTimeout`).
   - `mobile/integration_test/test_helpers/test_seed_data.dart`: sementes de dados determinísticos para usuários e eventos.
   - `mobile/integration_test/test_helpers/test_app_wrapper.dart`: wrapper raiz da aplicação com `ProviderScope` e `GoRouter`.
