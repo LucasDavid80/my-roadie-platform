@@ -25,7 +25,14 @@ Além disso, esta spec conecta a execução dos testes ao job `mobile-e2e-emulat
 *(Esta seção será preenchida com os dados técnicos coletados durante a execução da Fase 0 das tasks)*
 
 ### 1. Diagnóstico do Pacote `integration_test` e Dependências (`mobile/pubspec.yaml`) — Task T0.1
-- **Status:** *A ser documentado na Fase 0*
+- **Status:** Concluído com sucesso.
+- **Configuração do SDK & Toolchain:** Flutter 3.44.6 (channel stable), Dart 3.12.2 (`environment.sdk: ^3.8.1`).
+- **Pacotes de Teste Identificados em `dev_dependencies`:**
+  - `integration_test: sdk: flutter`: presente e integrado nativamente ao Flutter SDK.
+  - `flutter_test: sdk: flutter`: presente para suporte a finders, matchers e widgets testing.
+  - `mocktail: ^1.0.5`: disponível para criação de mocks e fakes nos testes herméticos.
+  - `flutter_lints: ^6.0.0`: ativo e validado via `flutter analyze` com 0 erros e 0 warnings.
+- **Dependências de Produção Verificadas:** `flutter_riverpod: ^3.3.1`, `go_router: ^17.0.0`, `supabase_flutter: ^2.16.0`, `http: ^1.6.0`, `table_calendar: ^3.0.9`, `intl: ^0.20.2`, `modal_bottom_sheet: ^3.0.0` — todas compatíveis e prontas para interação na suíte E2E.
 
 ### 2. Mapeamento de Finders, Chaves (`Key`s) e Semântica de UI nos 3 Fluxos — Task T0.2
 - **Status:** *A ser documentado na Fase 0*

@@ -6,7 +6,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 ## Fase 0 — Diagnóstico, Setup de Ambiente e Mapeamento de Finders
 
-- [ ] T0.1 — Auditar `mobile/pubspec.yaml` para verificar a configuração do pacote `integration_test`, dependências de teste (`flutter_test`, `mocktail`) e compatibilidade com o SDK Flutter.
+- [x] T0.1 — Auditar `mobile/pubspec.yaml` para verificar a configuração do pacote `integration_test`, dependências de teste (`flutter_test`, `mocktail`) e compatibilidade com o SDK Flutter.
   - Critério: Mapeamento de dependências e configuração registrado no `spec.md`.
 - [ ] T0.2 — Mapear os widgets, formulários e botões nos 3 fluxos (`LoginPage`, `LoginForm`, `PersonScreen`, `NewAppointmentWidget`, `CommitmentCard`), identificando a necessidade de inclusão de chaves semânticas (`ValueKey`).
   - Critério: Tabela de mapeamento de finders e chaves semânticas documentada no `spec.md`.
