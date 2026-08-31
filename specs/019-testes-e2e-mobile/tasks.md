@@ -50,7 +50,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 ## Fase 3 — Suíte E2E do Fluxo de Perfil (`profile_flow_test.dart`)
 
-- [ ] T3.1 — Implementar o teste E2E de navegação e inspeção de perfil em `mobile/integration_test/profile_flow_test.dart`:
+- [x] T3.1 — Implementar o teste E2E de navegação e inspeção de perfil em `mobile/integration_test/profile_flow_test.dart`:
   - Navegação da tela inicial para a tela de perfil via AppBar e validação dos campos preenchidos (Nome, Telefone, Cidade).
   - Critério: Teste valida o carregamento correto dos dados do perfil.
 - [ ] T3.2 — Implementar o teste E2E de edição e salvamento de perfil:
