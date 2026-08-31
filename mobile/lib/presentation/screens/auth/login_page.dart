@@ -149,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       child: Container(
+                        key: const ValueKey('login_start_button'),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
                           vertical: 12,

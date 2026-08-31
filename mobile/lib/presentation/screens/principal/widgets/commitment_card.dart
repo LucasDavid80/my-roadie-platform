@@ -18,6 +18,7 @@ class CommitmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: ValueKey('commitment_card_${event.id}'),
       padding: const EdgeInsets.all(12.0),
       margin: const EdgeInsets.only(bottom: 12.0),
       decoration: BoxDecoration(
@@ -89,10 +90,12 @@ class CommitmentCard extends StatelessWidget {
         _TypeTag(label: event.type),
         const Spacer(),
         IconButton(
+          key: const ValueKey('commitment_card_edit_button'),
           icon: const Icon(Icons.edit_outlined, color: Colors.blueGrey),
           onPressed: () => _openEditModal(context),
         ),
         IconButton(
+          key: const ValueKey('commitment_card_delete_button'),
           icon: const Icon(Icons.delete_outline, color: Colors.blueGrey),
           onPressed: () => _confirmDelete(context),
         ),
@@ -114,6 +117,7 @@ class CommitmentCard extends StatelessWidget {
             child: const Text('Cancelar'),
           ),
           TextButton(
+            key: const ValueKey('dialog_confirm_delete_button'),
             onPressed: () async {
               Navigator.of(dialogContext).pop();
               if (onDelete != null) {

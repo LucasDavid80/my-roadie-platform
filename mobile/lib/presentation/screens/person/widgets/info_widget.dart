@@ -129,6 +129,7 @@ class _InfoWidgetState extends ConsumerState<InfoWidget> {
           const SizedBox(height: 24.0),
 
           CustomTextField(
+            key: const ValueKey('profile_name_field'),
             label: AppStrings.labelArtistName,
             hint: AppStrings.hintArtistName,
             controller: _nameController,
@@ -146,6 +147,7 @@ class _InfoWidgetState extends ConsumerState<InfoWidget> {
           ),
 
           CustomTextField(
+            key: const ValueKey('profile_phone_field'),
             label: AppStrings.labelPhone,
             hint: AppStrings.hintPhone,
             controller: _phoneController,
@@ -164,6 +166,7 @@ class _InfoWidgetState extends ConsumerState<InfoWidget> {
           ),
 
           CustomTextField(
+            key: const ValueKey('profile_city_field'),
             label: AppStrings.labelCity,
             hint: AppStrings.hintCity,
             controller: _cityController,
@@ -171,6 +174,7 @@ class _InfoWidgetState extends ConsumerState<InfoWidget> {
           ),
 
           CustomTextField(
+            key: const ValueKey('profile_state_field'),
             label: AppStrings.labelState,
             hint: AppStrings.hintState,
             controller: _stateController,
@@ -179,6 +183,7 @@ class _InfoWidgetState extends ConsumerState<InfoWidget> {
           ),
 
           CustomTextField(
+            key: const ValueKey('profile_min_cache_field'),
             label: AppStrings.labelMinimumFee,
             hint: AppStrings.hintMinimumFee,
             controller: _minCacheController,

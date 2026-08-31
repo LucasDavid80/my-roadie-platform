@@ -198,6 +198,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                     _buildLabel('Título'),
                     const SizedBox(height: 6),
                     TextField(
+                      key: const ValueKey('appointment_title_field'),
                       controller: _titleController, // Conectado ao controller
                       decoration: _inputDecoration('Ex: Pagode na Adega'),
                     ),
@@ -222,6 +223,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                 decoration: _boxDecoration(),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
+                                    key: const ValueKey(
+                                      'appointment_type_dropdown',
+                                    ),
                                     value: _selectedType,
                                     isExpanded: true,
                                     icon: const Icon(
@@ -340,6 +344,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                           Expanded(
                             flex: 2,
                             child: _buildSimpleInput(
+                              key: const ValueKey(
+                                'appointment_location_field',
+                              ),
                               controller: _locationController,
                               label: 'Local',
                               hint: 'Endereço...',
@@ -348,6 +355,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: _buildSimpleInput(
+                              key: const ValueKey('appointment_fee_field'),
                               controller: _cacheController,
                               label: 'Cachê',
                               hint: '0,00',
@@ -359,6 +367,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                       )
                     else
                       _buildSimpleInput(
+                        key: const ValueKey('appointment_location_field'),
                         controller: _locationController,
                         label: 'Local',
                         hint: 'Endereço...',
@@ -396,6 +405,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                         const SizedBox(height: 12),
                         Center(
                           child: ElevatedButton(
+                            key: const ValueKey('appointment_confirm_button'),
                             onPressed: _isLoading
                                 ? null
                                 : () async {
@@ -589,6 +599,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
   }
 
   Widget _buildSimpleInput({
+    Key? key,
     required TextEditingController controller,
     required String label,
     required String hint,
@@ -609,6 +620,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
         ),
         const SizedBox(height: 6),
         TextField(
+          key: key,
           controller: controller,
           keyboardType: keyboardType,
           decoration: _inputDecoration(hint),

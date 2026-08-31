@@ -26,7 +26,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
   - `mobile/integration_test/test_helpers/test_seed_data.dart`: sementes de dados determinísticos para usuários e eventos.
   - `mobile/integration_test/test_helpers/test_app_wrapper.dart`: wrapper raiz da aplicação com `ProviderScope` e `GoRouter`.
   - Critério: Helpers compilando e reutilizáveis nas suítes de teste.
-- [ ] T1.3 — Adicionar `ValueKey`s semânticas nos elementos principais de interação da UI (formulário de login, tela de perfil, botões da agenda e diálogo de exclusão) sem alterar layout ou funcionalidade.
+- [x] T1.3 — Adicionar `ValueKey`s semânticas nos elementos principais de interação da UI (formulário de login, tela de perfil, botões da agenda e diálogo de exclusão) sem alterar layout ou funcionalidade.
   - Critério: Chaves semânticas presentes e acessíveis via `find.byKey(...)`.
 - [ ] T1.4 — Executar `flutter analyze` na pasta `mobile/` e corrigir eventuais avisos de lint.
   - Critério: Análise estática com 0 erros e 0 warnings.

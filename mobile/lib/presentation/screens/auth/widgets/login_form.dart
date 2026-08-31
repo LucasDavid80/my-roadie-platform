@@ -27,6 +27,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         children: [
           // E-MAIL
           TextFormField(
+            key: const ValueKey('login_email_field'),
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             autofillHints: const [AutofillHints.email],
@@ -56,6 +57,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
           // SENHA
           TextFormField(
+            key: const ValueKey('login_password_field'),
             controller: _passController,
             obscureText: _obscurePassword,
             decoration: InputDecoration(
@@ -89,7 +91,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           if (authState.error != null && authState.error!.isNotEmpty) ...[
             const SizedBox(height: 16),
             Container(
-              key: const Key('login_error_box'),
+              key: const ValueKey('login_error_box'),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.erro.withValues(alpha: 0.1),
@@ -121,6 +123,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             width: double.infinity,
             height: 50,
             child: ElevatedButton(
+              key: const ValueKey('login_submit_button'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(
