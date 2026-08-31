@@ -43,7 +43,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
   - Critério: Teste valida a permanência na tela de login e a presença do feedback de erro.
 - [x] T2.3 — Executar a suíte de autenticação localmente (`flutter test integration_test/auth_flow_test.dart`).
   - Critério: Suíte de autenticação aprovada com 100% de sucesso.
-- [ ] T2.4 — Executar `flutter analyze` na pasta `mobile/`.
+- [x] T2.4 — Executar `flutter analyze` na pasta `mobile/`.
   - Critério: 0 erros e 0 warnings.
 
 ---
