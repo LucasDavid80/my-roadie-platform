@@ -56,7 +56,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 - [x] T3.2 — Implementar o teste E2E de edição e salvamento de perfil:
   - Alteração de campo textual (Cidade/Telefone), clique no botão "Salvar Perfil", validação do SnackBar de sucesso e permanência do valor atualizado na UI.
   - Critério: Teste valida o fluxo completo de atualização com sucesso.
-- [ ] T3.3 — Executar a suíte de perfil localmente (`flutter test integration_test/profile_flow_test.dart`).
+- [x] T3.3 — Executar a suíte de perfil localmente (`flutter test integration_test/profile_flow_test.dart`).
   - Critério: Suíte de perfil aprovada com 100% de sucesso.
 - [ ] T3.4 — Executar `flutter analyze` na pasta `mobile/`.
   - Critério: 0 erros e 0 warnings.
