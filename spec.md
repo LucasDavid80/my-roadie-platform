@@ -74,8 +74,6 @@ Plataforma para músicos e roadies organizarem agendas, eventos, tarefas, repert
 ## 6. Fora do escopo desta baseline (não construído ainda)
 
 - Módulo de **logística** — citado como exemplo em `docs/architecture/backend.md` (`ex: events, users, logistics`), mas não existe nenhum código para isso. É uma menção aspiracional, não uma feature.
-- Exposição via API de **Transaction** (resolvido na spec 006; API de Tasks na spec 004, API de Repertoire na spec 005).
-- Integração do mobile com a API real (resolvido na spec 003).
 
 ## 7. Critério de "pronto" desta baseline
 

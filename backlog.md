@@ -134,53 +134,11 @@
 ## Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
 
-### Extensão do Modelo de Eventos & Ações do Card de Compromisso (Horários, Cachê e Exclusão)
-- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para persistir `startTime`, `endTime`, `type` e `fee`, sincronizar automaticamente receitas em `Transaction` (`INCOME`), conectar a ação de exclusão de compromissos com confirmação no `CommitmentCard`, exibir dinamicamente o campo de cachê para `Show`/`Gravação` e centralizar o botão de submissão no `NewAppointmentWidget`.
-- Impacto esperado: alto (completude da agenda, usabilidade e integração financeira)
-- Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
-- Status: concluído (specs/015-extensao-modelo-eventos-e-acoes-card/)
-
-### Ajuste de layout horizontal do card "Novo Compromisso" e campos
-- Intenção: Ajustar o card de Novo Compromisso para que não fique achatado lateralmente e redimensionar os campos horizontalmente.
-- Impacto esperado: médio (visual/UI)
-- Depende de: nenhum
-- Status: absorvido (integrado em specs/015-extensao-modelo-eventos-e-acoes-card/)
-
-### Centralizar botão "Criar Compromisso"
-- Intenção: Centralizar o botão de submissão do formulário de novo compromisso, atualmente alinhado à esquerda.
-- Impacto esperado: baixo (alinhamento visual)
-- Depende de: nenhum
-- Status: absorvido (integrado em specs/015-extensao-modelo-eventos-e-acoes-card/)
-
-### Preparação para Release do MVP & Padronização de Logs (AppLogger)
-- Intenção: Criar utilitário centralizado `AppLogger` com proteção `kDebugMode` para eliminar `debugPrint`s que expõem tokens e dados sensíveis em compilações de release, ajustar a identidade da aplicação para "My Roadie" (`android:label`), restringir CORS no backend, publicar frontend-web com rota `/testers` para distribuição de builds, e automatizar geração de APK e IPA (via runner macOS do GitHub Actions) para testes fechados com usuários reais.
-- Impacto esperado: alto (segurança, privacidade e prontidão para release)
-- Depende de: Extensão do Modelo de Eventos & Ações do Card de Compromisso (spec 015)
-- Status: concluído (specs/016-preparacao-release-mvp/)
-
-### Hospedagem e Distribuição de Executáveis de Release do MVP
-- Intenção: Resolver a falha 404 de download na rota `/testers`, estabelecendo infraestrutura de armazenamento e distribuição externa para APK e IPA via GitHub Releases, resiliência de UI no frontend e automação de publicação no CI/CD.
-- Impacto esperado: alto (distribuição e experiência de onboarding para testers)
-- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Preparação para Release do MVP (spec 016)
-- Status: concluído (specs/018-distribuicao-executaveis-mvp/)
-
 ### Testes de Integração Ponta a Ponta (E2E) no Mobile
 - Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
 - Impacto esperado: alto (qualidade e confiabilidade de entrega)
 - Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012), Hospedagem e Distribuição de Executáveis de Release do MVP (spec 018)
 - Status: priorizado (próxima spec / spec 019 — gancho estruturado no CI/CD)
-
-### Pipeline CI/CD Unificado & Modernizado (E2E, Deploy Contínuo, Filtro de Paths & Otimização de Custos)
-- Intenção: Unificar e modernizar o CI/CD com filtros inteligentes de paths (`dorny/paths-filter`), disparo manual sob demanda (`workflow_dispatch`), execução de testes E2E (backend e Playwright web), publicação unificada de artefatos de release (APK e IPA) e Continuous Deployment.
-- Impacto esperado: alto (automação de entrega contínua, confiabilidade e redução de custos)
-- Depende de: nenhum
-- Status: concluído (specs/017-pipeline-cicd-unificado/)
-
-### Auditoria e Otimização de Performance do Pipeline CI/CD (Speed & Caching)
-- Intenção: Medir, diagnosticar e otimizar os tempos de execução do GitHub Actions através de caching avançado multi-camadas (Gradle/Android cache, Next.js build cache, Flutter pub cache e node_modules), paralelização inteligente e detecção automática estrita de arquivos alterados via `paths-filter` nativo (garantindo que jobs de `mobile` e runners macOS só sejam acionados quando houver modificação real na pasta `mobile/`), reduzindo o tempo de feedback nos PRs e o consumo da cota gratuita.
-- Impacto esperado: alto (redução de tempo de espera nos PRs e economia de minutos de CI)
-- Depende de: Pipeline CI/CD Unificado & Modernizado
-- Status: absorvido (integrado em specs/017-pipeline-cicd-unificado/)
 
 ---
 

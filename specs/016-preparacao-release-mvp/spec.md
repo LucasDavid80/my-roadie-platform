@@ -82,15 +82,15 @@ Preparar e colocar no ar a primeira versão de testes fechados (MVP) do My Roadi
 
 ## Critérios de Sucesso
 
-- [ ] Utilitário `AppLogger` implementado em `mobile/lib/core/utils/app_logger.dart`.
-- [ ] Todas as chamadas de `debugPrint` e logs sensíveis no mobile refatoradas para usar `AppLogger`, incluindo a remoção do log parcial do token JWT.
-- [ ] Testes unitários para `AppLogger` criados e aprovados.
-- [ ] `AndroidManifest.xml` configurado com `android:label="My Roadie"`.
-- [ ] Backend com CORS restrito ao domínio do frontend-web (sem wildcard).
-- [ ] Migrations aplicadas no banco de produção via `prisma migrate deploy`.
-- [ ] Backend publicado e acessível publicamente, sem cold start (plano sempre ativo).
-- [ ] Frontend-web publicado e acessível publicamente.
-- [ ] Rota `/testers` criada, não-listada, com instruções e links de instalação Android e iOS.
-- [ ] APK de release gerado e apontando para o backend de produção.
-- [ ] `.ipa` gerado via pipeline do GitHub Actions (`macos-latest`) e testado via sideload em ao menos um dispositivo iOS.
-- [ ] Suíte de testes do mobile e backend passando com 100% de sucesso e zero issues no linter/analyzer.
+- [x] Utilitário `AppLogger` implementado em `mobile/lib/core/utils/app_logger.dart`.
+- [x] Todas as chamadas de `debugPrint` e logs sensíveis no mobile refatoradas para usar `AppLogger`, incluindo a remoção do log parcial do token JWT.
+- [x] Testes unitários para `AppLogger` criados e aprovados.
+- [x] `AndroidManifest.xml` configurado com `android:label="My Roadie"`.
+- [x] Backend com CORS restrito ao domínio do frontend-web (sem wildcard).
+- [x] Migrations aplicadas no banco de produção via `prisma migrate deploy`.
+- [x] Backend publicado e acessível publicamente, sem cold start (plano sempre ativo).
+- [x] Frontend-web publicado e acessível publicamente.
+- [x] Rota `/testers` criada, não-listada, com instruções e links de instalação Android e iOS.
+- [x] APK de release gerado e apontando para o backend de produção.
+- [x] `.ipa` gerado via pipeline do GitHub Actions (`macos-latest`) e testado via sideload em ao menos um dispositivo iOS.
+- [x] Suíte de testes do mobile e backend passando com 100% de sucesso e zero issues no linter/analyzer.

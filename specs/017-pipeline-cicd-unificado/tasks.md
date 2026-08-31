@@ -16,7 +16,7 @@
 
 - [x] T2.1 — Adicionar o job `backend-e2e` executando `npm run test:e2e` condicionado ao sucesso de `backend-test`.
 - [x] T2.2 — Adicionar o job `frontend-e2e` instalando Chromium (`npx playwright install --with-deps chromium`) e rodando `npx playwright test` condicionado ao sucesso de `frontend-test`.
-- [x] T2.3 — Configurar a estrutura do job/step `mobile-e2e-emulator` condicionado a `github.event.inputs.run_mobile_e2e == 'true'`, deixando o gancho pronto para a Spec 018.
+- [x] T2.3 — Configurar a estrutura do job/step `mobile-e2e-emulator` condicionado a `github.event.inputs.run_mobile_e2e == 'true'`, deixando o gancho pronto para a Spec 019.
 - [x] T2.4 — Atualizar dependências de `backend-build` e `frontend-build` para exigir a aprovação dos respectivos jobs de E2E.
 
 ## Fase 3 — Padronização de Builds Mobile & Publicação de Artefatos
@@ -37,7 +37,7 @@
 - [x] T5.2 — Executar localmente as suítes de testes (`npm test` no backend, `npm test` no frontend, `flutter test` no mobile).
 - [x] T5.3 — Atualizar `backlog.md`, `spec.md` e `plan.md` raiz com o status de fechamento da Fase 1 do backlog.
 - [x] T5.4 — Sincronizar inconsistências residuais da auditoria da Spec 016 em `backlog.md` (Fase 1), `specs/016-preparacao-release-mvp/plan.md` e `plan.md` raiz.
-- [x] T5.5 — Priorizar Spec 018 em `backlog.md` com dependency explícita em Spec 017 e documentar saneamento pós-auditoria em `plan.md` Spec 017.
+- [x] T5.5 — Priorizar Spec 019 em `backlog.md` com dependency explícita em Spec 017 e documentar saneamento pós-auditoria em `plan.md` Spec 017.
 
 ## Fase 6 — Isolamento Hermético e Mocking de Rede nos Testes E2E Web (Playwright)
 
@@ -54,7 +54,7 @@
 - [x] Testes E2E do backend e Playwright do frontend integrados ao pipeline
 - [x] Isolamento hermético e mocks de rede implementados nas suítes E2E Playwright
 - [x] Suíte E2E Web validada e aprovada com sucesso no CI e localmente
-- [x] Gancho preparatório para E2E Mobile da Spec 018 configurado e desligado por padrão
+- [x] Gancho preparatório para E2E Mobile da Spec 019 configurado e desligado por padrão
 - [x] Builds de APK (Android) e IPA (iOS) gerados e publicados como artefatos no GitHub Actions
 - [x] Deploys automáticos (Render e Vercel) condicionados ao sucesso dos builds na `main`
 - [x] Inconsistências residuais da auditoria da Spec 016 saneadas e sincronizadas
