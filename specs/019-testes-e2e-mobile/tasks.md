@@ -35,7 +35,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 ## Fase 2 — Suíte E2E do Fluxo de Autenticação (`auth_flow_test.dart`)
 
-- [ ] T2.1 — Implementar o teste E2E de login com sucesso em `mobile/integration_test/auth_flow_test.dart`:
+- [x] T2.1 — Implementar o teste E2E de login com sucesso em `mobile/integration_test/auth_flow_test.dart`:
   - Abertura na rota `/login`, toque no banner, preenchimento de e-mail/senha válidos, submissão e validação de navegação para a `PrincipalScreen`.
   - Critério: Teste executa e valida a transição de tela com sucesso.
 - [ ] T2.2 — Implementar o teste E2E de credenciais inválidas em `mobile/integration_test/auth_flow_test.dart`:
