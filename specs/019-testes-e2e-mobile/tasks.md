@@ -28,7 +28,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
   - Critério: Helpers compilando e reutilizáveis nas suítes de teste.
 - [x] T1.3 — Adicionar `ValueKey`s semânticas nos elementos principais de interação da UI (formulário de login, tela de perfil, botões da agenda e diálogo de exclusão) sem alterar layout ou funcionalidade.
   - Critério: Chaves semânticas presentes e acessíveis via `find.byKey(...)`.
-- [ ] T1.4 — Executar `flutter analyze` na pasta `mobile/` e corrigir eventuais avisos de lint.
+- [x] T1.4 — Executar `flutter analyze` na pasta `mobile/` e corrigir eventuais avisos de lint.
   - Critério: Análise estática com 0 erros e 0 warnings.
 
 ---
