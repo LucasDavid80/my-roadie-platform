@@ -110,6 +110,31 @@ describe('UsersService', () => {
     });
   });
 
+  describe('updateRole', () => {
+    it('deve atualizar o papel do usuário', async () => {
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(mockUser);
+      jest
+        .spyOn(prisma.user, 'update')
+        .mockResolvedValue({ ...mockUser, role: Role.ADMIN });
+
+      const updated = await service.updateRole('uuid-123', Role.ADMIN);
+
+      expect(updated.role).toBe(Role.ADMIN);
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: mockUser.id },
+        data: { role: Role.ADMIN },
+      });
+    });
+
+    it('deve lançar NotFoundException se o usuário não for encontrado', async () => {
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(null);
+
+      await expect(
+        service.updateRole('id-inexistente', Role.ADMIN),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
   describe('remove', () => {
     it('deve remover um usuário', async () => {
       const removed = await service.remove('uuid-123');

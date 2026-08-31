@@ -8,6 +8,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { OwnershipGuard } from '../auth/guards/ownership.guard';
 
+import { Role } from '@prisma/client';
+
 describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
@@ -18,6 +20,7 @@ describe('UsersController', () => {
     findAll: jest.fn(() => [{ id: '1', email: 'teste@myroadie.br' }]),
     findOne: jest.fn((id) => ({ id, email: 'teste@myroadie.br' })),
     update: jest.fn((id, dto) => ({ id, ...dto })),
+    updateRole: jest.fn((id, role) => ({ id, role })),
     remove: jest.fn((id) => ({ id, email: 'teste@myroadie.br' })),
   };
 
@@ -104,6 +107,16 @@ describe('UsersController', () => {
         .mockRejectedValueOnce(new Error('Erro de Banco'));
 
       await expect(controller.update(id, dto)).rejects.toThrow('Erro de Banco');
+    });
+  });
+
+  describe('updateRole', () => {
+    it('deve chamar o updateRole do service com ID e role corretos', async () => {
+      const id = '1';
+      const dto = { role: Role.ADMIN };
+      const result = await controller.updateRole(id, dto);
+      expect(service.updateRole).toHaveBeenCalledWith(id, Role.ADMIN);
+      expect(result).toEqual({ id: '1', role: Role.ADMIN });
     });
   });
 
