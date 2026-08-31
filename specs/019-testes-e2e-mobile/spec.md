@@ -35,7 +35,34 @@ Além disso, esta spec conecta a execução dos testes ao job `mobile-e2e-emulat
 - **Dependências de Produção Verificadas:** `flutter_riverpod: ^3.3.1`, `go_router: ^17.0.0`, `supabase_flutter: ^2.16.0`, `http: ^1.6.0`, `table_calendar: ^3.0.9`, `intl: ^0.20.2`, `modal_bottom_sheet: ^3.0.0` — todas compatíveis e prontas para interação na suíte E2E.
 
 ### 2. Mapeamento de Finders, Chaves (`Key`s) e Semântica de UI nos 3 Fluxos — Task T0.2
-- **Status:** *A ser documentado na Fase 0*
+- **Status:** Concluído com sucesso.
+- **Tabela de Mapeamento de Elementos de UI e Chaves Semânticas:**
+
+| Fluxo | Tela / Widget | Elemento de UI | Tipo do Widget | `ValueKey` Planejada (T1.3) |
+|---|---|---|---|---|
+| **Auth** | `LoginPage` | Botão "Toque para entrar" | `GestureDetector` / `Text` | `login_start_button` |
+| **Auth** | `LoginForm` | Campo E-mail | `TextFormField` | `login_email_field` |
+| **Auth** | `LoginForm` | Campo Senha | `TextFormField` | `login_password_field` |
+| **Auth** | `LoginForm` | Botão "ENTRAR" | `ElevatedButton` | `login_submit_button` |
+| **Auth** | `LoginForm` | Caixa de Feedback de Erro | `Container` | `login_error_box` *(já existente)* |
+| **Perfil** | `MyRoadieAppBar` | Botão Ícone Perfil na AppBar | `IconButton` | `profile_appbar_button` |
+| **Perfil** | `MyRoadieAppBar` | Botão Ícone Agenda na AppBar | `IconButton` | `calendar_appbar_button` |
+| **Perfil** | `InfoWidget` | Campo Nome Artístico | `CustomTextField` | `profile_name_field` |
+| **Perfil** | `InfoWidget` | Campo Cidade | `CustomTextField` | `profile_city_field` |
+| **Perfil** | `InfoWidget` | Campo Telefone | `CustomTextField` | `profile_phone_field` |
+| **Perfil** | `InfoWidget` | Campo Estado (UF) | `CustomTextField` | `profile_state_field` |
+| **Perfil** | `InfoWidget` | Campo Cachê Mínimo | `CustomTextField` | `profile_min_cache_field` |
+| **Perfil** | `PersonScreen` | Botão "Salvar Perfil" | `ElevatedButton.icon` | `profile_save_button` |
+| **Agenda** | `PrincipalScreen` | Botão Adicionar (+) | `FloatingActionButton` | `agenda_add_button` |
+| **Agenda** | `NewAppointmentWidget` | Campo Título | `TextField` | `appointment_title_field` |
+| **Agenda** | `NewAppointmentWidget` | Dropdown de Tipo | `DropdownButton<String>` | `appointment_type_dropdown` |
+| **Agenda** | `NewAppointmentWidget` | Campo Cachê | `TextField` | `appointment_fee_field` |
+| **Agenda** | `NewAppointmentWidget` | Campo Local | `TextField` | `appointment_location_field` |
+| **Agenda** | `NewAppointmentWidget` | Botão Confirmar/Salvar | `ElevatedButton` | `appointment_confirm_button` |
+| **Agenda** | `CommitmentCard` | Card de Compromisso | `Container` | `commitment_card_item` |
+| **Agenda** | `CommitmentCard` | Botão Editar no Card | `IconButton` | `commitment_card_edit_button` |
+| **Agenda** | `CommitmentCard` | Botão Excluir no Card | `IconButton` | `commitment_card_delete_button` |
+| **Agenda** | `CommitmentCard` (Dialog) | Botão Confirmar Exclusão | `TextButton` | `dialog_confirm_delete_button` |
 
 ### 3. Diagnóstico da Estrutura de Execução no CI/CD (`.github/workflows/ci.yml`) — Task T0.3
 - **Status:** *A ser documentado na Fase 0*
