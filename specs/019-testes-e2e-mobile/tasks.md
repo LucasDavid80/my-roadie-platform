@@ -19,7 +19,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 ## Fase 1 — Fundação & Helpers da Suíte de Integração E2E
 
-- [ ] T1.1 — Criar a estrutura de diretórios `mobile/integration_test/` e `mobile/integration_test/test_helpers/`.
+- [x] T1.1 — Criar a estrutura de diretórios `mobile/integration_test/` e `mobile/integration_test/test_helpers/`.
   - Critério: Estrutura de pastas criada conforme o `plan.md`.
 - [ ] T1.2 — Implementar os helpers compartilhados:
   - `mobile/integration_test/test_helpers/e2e_binding.dart`: inicialização do binding e utilitários assíncronos (`pumpAndSettleWithTimeout`).
