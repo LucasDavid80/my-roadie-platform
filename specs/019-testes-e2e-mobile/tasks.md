@@ -58,7 +58,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
   - Critério: Teste valida o fluxo completo de atualização com sucesso.
 - [x] T3.3 — Executar a suíte de perfil localmente (`flutter test integration_test/profile_flow_test.dart`).
   - Critério: Suíte de perfil aprovada com 100% de sucesso.
-- [ ] T3.4 — Executar `flutter analyze` na pasta `mobile/`.
+- [x] T3.4 — Executar `flutter analyze` na pasta `mobile/`.
   - Critério: 0 erros e 0 warnings.
 
 ---
