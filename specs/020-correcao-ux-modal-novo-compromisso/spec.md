@@ -19,8 +19,8 @@ Corrigir falhas de experiência do usuário (UX) e usabilidade visual no modal/d
 
 1. **Otimização de Espaçamento e Margens**:
    - Ajustar o espaçamento externo e interno do modal de compromisso (`NewAppointmentWidget`), eliminando bordas internas redundantes para maximizar o aproveitamento da largura da tela.
-2. **Correção do Campo Cachê e Proporções de Entrada**:
-   - Rebalancear a distribuição de largura entre "Local" e "Cachê" (ou adotar disposição otimizada) para garantir que valores de cachê com decimais e múltiplos dígitos sejam totalmente visíveis.
+2. **Linha Dedicada para Local e Cachê**:
+   - Reestruturar o formulário para que o campo "Local" ocupe a largura total (100%), permitindo a visualização de endereços longos, e o campo "Cachê" seja posicionado em sua própria linha dedicada (100% de largura) condicional aos tipos *Show* e *Gravação*, garantindo visualização sem cortes de qualquer valor numérico/monetário.
 3. **Padronização dos Botões de Ação**:
    - Adequar o posicionamento, largura, espaçamento e estilo visual dos botões "Cancelar" e "Criar Compromisso" / "Salvar Alterações", garantindo que ambos tenham limites claros e visual consistente.
 4. **Refinamento da Seleção de Horários**:
@@ -51,7 +51,7 @@ Corrigir falhas de experiência do usuário (UX) e usabilidade visual no modal/d
 | **390x844** (iPhone 12/13/14) | 390px | **238px** (61,0%) | **326px** (83,6%) | **+88px (+37,0%)** |
 | **412x915** (Android Moderno) | 412px | **260px** (63,1%) | **348px** (84,5%) | **+88px (+33,8%)** |
 
-### 3. Diagnóstico do Campo "Cachê" e Comportamento de Valores Altos (T0.2)
+### 3. Diagnóstico do Campo "Cachê" e Decisão de Layout em Linha Própria (T0.2)
 - **Cálculo de Renderização Tipográfica (Roboto / 16px)**:
   - Largura média por dígito: ~`9.5px`.
   - Largura da vírgula/ponto: ~`4.5px`.
@@ -60,9 +60,9 @@ Corrigir falhas de experiência do usuário (UX) e usabilidade visual no modal/d
   - `"1500,00"` (7 chars / 61.5px texto + 34px overhead/cursor): **~95.5px**.
   - `"10000,00"` / `"12500,00"` (8 chars / 71.0px texto + 34px overhead/cursor): **~105.0px**.
   - `"100000,00"` (9 chars / 80.5px texto + 34px overhead/cursor): **~114.5px**.
-- **Comparativo de Comportamento em Viewport 360px**:
-  - *Atual (`flex: 1` de 3 / 65.3px total / 39.3px texto)*: Truncamento e corte visual de ~31.6% em `1500,00` e ~37.8% em `10000,00`.
-  - *Otimizado (`flex: 2` de 5 / 113.6px total / 91.6px texto com padding 10px)*: Exibição completa e confortável para valores até `100.000,00` sem nenhum corte.
+- **Decisão Técnica de Layout (Abordagem A — Linhas Dedicadas)**:
+  - O campo "Local" ocupará a linha inteira (100% de largura / 296px em 360px), acomodando endereços longos.
+  - O campo "Cachê" passará para uma linha dedicada própria logo abaixo do "Local" (100% de largura condicional a *Show* ou *Gravação*), eliminando qualquer aperto e garantindo consistência estrutural entre todos os tipos de compromisso.
 
 ---
 

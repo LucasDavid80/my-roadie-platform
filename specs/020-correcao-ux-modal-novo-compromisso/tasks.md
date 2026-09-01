@@ -18,11 +18,11 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 - [ ] T1.2 — Ajustar `NewAppointmentWidget` removendo a margem redundante (`margin: EdgeInsets.zero`) no container principal e ajustando o padding interno do formulário para `EdgeInsets.symmetric(horizontal: 16, vertical: 20)`.
   - Critério: espaço horizontal útil dos campos aumentado significativamente em telas compactas.
 
-## Fase 2 — Rebalanceamento do Campo Cachê e Inputs
+## Fase 2 — Estruturação de Linhas Dedicadas para Local e Cachê
 
-- [ ] T2.1 — Rebalancear as proporções dos campos "Local" e "Cachê" na linha compartilhada do `NewAppointmentWidget` (`flex: 3` para Local e `flex: 2` para Cachê).
-  - Critério: o campo Cachê ganha espaço suficiente para exibir valores extensos sem sobreposição.
-- [ ] T2.2 — Otimizar o `contentPadding` e propriedades de entrada em `_buildSimpleInput` para campos monetários (`isMoney: true`).
+- [ ] T2.1 — Reestruturar os campos "Local" e "Cachê" em linhas dedicadas individuais (100% de largura para Local e 100% de largura para Cachê condicional ao tipo `Show` ou `Gravação`).
+  - Critério: campo Local e campo Cachê com largura total (100%), permitindo visualização de endereços completos e valores monetários sem corte.
+- [ ] T2.2 — Otimizar propriedades de entrada em `_buildSimpleInput` para campos monetários (`isMoney: true`).
   - Critério: digitação de valores como `1500,00` e `12500,00` exibida sem cortes laterais ou truncamento de dígitos.
 
 ## Fase 3 — Padronização dos Botões de Ação e Seletores de Horário

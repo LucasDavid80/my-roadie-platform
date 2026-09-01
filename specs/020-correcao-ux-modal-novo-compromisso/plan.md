@@ -13,11 +13,12 @@ O modal de criação/edição de compromissos é implementado pelo widget `NewAp
      - Zerar a margem externa desnecessária (`margin: EdgeInsets.zero`) no `Container` principal do `NewAppointmentWidget`.
      - Ajustar o padding interno do formulário para `EdgeInsets.symmetric(horizontal: 16, vertical: 20)`, garantindo respiro visual e maximizando o espaço horizontal útil dos inputs.
 
-2. **Campo "Cachê" cortando valores altos**:
-   - **Causa Raiz**: Quando o tipo é `Show` ou `Gravação`, o formulário divide a linha entre "Local" e "Cachê" usando `Expanded(flex: 2)` para Local e `Expanded(flex: 1)` para Cachê. Em uma tela com largura espremida, o campo de Cachê ficava com apenas ~65px de largura. Descontando o `contentPadding` horizontal (24px) e o ícone de cifrão (18px), sobravam menos de 30px para os dígitos, provocando corte imediato em valores como `1500,00` ou `3500,00`.
-   - **Solução**:
-     - Rebalancear a proporção da linha para `flex: 3` (Local) e `flex: 2` (Cachê) ou utilizar proporção `5:4`, garantindo largura confortável para digitação de valores com centavos e múltiplos dígitos.
-     - Ajustar o `contentPadding` específico de inputs monetários (`horizontal: 10, vertical: 14`), permitindo que valores extensos (ex.: `12500,00`) sejam visualizados integralmente.
+2. **Campo "Cachê" cortando valores altos e aperto em "Local"**:
+   - **Causa Raiz**: Quando o tipo é `Show` ou `Gravação`, o formulário dividia a linha entre "Local" e "Cachê" usando `Expanded(flex: 2)` para Local e `Expanded(flex: 1)` para Cachê. Em uma tela com largura espremida, o campo de Cachê ficava com apenas ~65px de largura, provocando corte imediato em valores como `1500,00` ou `3500,00`, enquanto "Local" ficava limitado para endereços longos.
+   - **Solução (Abordagem A — Linhas Dedicadas)**:
+     - Reestruturar o layout para que o campo "Local" ocupe a linha inteira (100% de largura), acomodando endereços completos sem aperto.
+     - Posicionar o campo "Cachê" em sua própria linha dedicada logo abaixo (100% de largura), exibido apenas quando o tipo for `Show` ou `Gravação`.
+     - Ajustar o `contentPadding` de inputs monetários (`horizontal: 12, vertical: 14`), permitindo que valores extensos (ex.: `12500,00`, `150000,00`) sejam visualizados com folga total.
 
 3. **Botão "Criar Compromisso" sem bordas laterais e desalinhado com "Cancelar"**:
    - **Causa Raiz**: O botão "Cancelar" é um `OutlinedButton` esticado por padrão na coluna (`CrossAxisAlignment.stretch`), enquanto o botão de confirmação ("Criar Compromisso" / "Salvar Alterações") foi envolvido em um `Center(child: ElevatedButton(...))`. Isso forçou o botão primário a encolher apenas para a largura do seu texto, quebrando a consistência de largura, o alinhamento com o botão secundário e gerando assimetria visual.
@@ -47,10 +48,11 @@ O modal de criação/edição de compromissos é implementado pelo widget `NewAp
   - Remover `margin: const EdgeInsets.all(16)` do `Container` principal.
   - Ajustar o padding interno do formulário para `EdgeInsets.symmetric(horizontal: 16, vertical: 20)`.
 
-### Fase 2 — Rebalanceamento do Campo Cachê e Inputs
-- Modificar o layout do bloco "Local e Cachê" no `NewAppointmentWidget`:
-  - Ajustar proporções dos `Expanded` (`flex: 3` para Local e `flex: 2` para Cachê).
-  - Ajustar `contentPadding` e propriedades de entrada no `_buildSimpleInput`.
+### Fase 2 — Estruturação de Linhas Dedicadas para Local e Cachê
+- Modificar o layout dos campos "Local" e "Cachê" no `NewAppointmentWidget`:
+  - Definir "Local" como campo de largura total (100%).
+  - Posicionar "Cachê" em linha própria dedicada abaixo de "Local" (100% de largura), renderizado condicionalmente quando `showsFee == true`.
+  - Ajustar propriedades de entrada monetária no `_buildSimpleInput`.
 - Garantir visualização completa sem corte para strings numéricas com formatação monetária.
 
 ### Fase 3 — Padronização dos Botões de Ação e Seletores de Horário
