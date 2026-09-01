@@ -26,7 +26,7 @@ Pré-requisitos: nenhum bloqueante direto. Recomendado rodar depois (ou junto) d
 
 - [x] T3.1 — Atualizar `PrincipalScreen`: `CommitmentsWidget` passa a receber `upcomingEvents` em vez de `events`.
 - [x] T3.2 — Adicionar o atalho/botão de navegação para `HistoryScreen`, no local definido em T0.2.
-- [ ] T3.3 — Ajustar `InfosWidget`/`compromissosTotal` para usar `upcomingEvents.length`, coordenando com a spec 022 conforme T0.4.
+- [x] T3.3 — Ajustar `InfosWidget`/`compromissosTotal` para usar `upcomingEvents.length`, coordenando com a spec 022 conforme T0.4.
 - [ ] T3.4 — Atualizar `test/principal_screen_test.dart`: evento passado não aparece mais em "Próximos Compromissos"; navegação para o Histórico funciona.
 
 ## Fase 4 — Fechamento

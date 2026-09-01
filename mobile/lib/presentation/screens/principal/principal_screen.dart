@@ -86,7 +86,7 @@ class PrincipalScreen extends ConsumerWidget {
 
               // Os Widgets agora recebem os dados atualizados automaticamente
               InfosWidget(
-                compromissosTotal: events.length,
+                compromissosTotal: upcomingEvents.length,
                 compromissosConcluidos: 0,
                 shows: showsCount,
                 faturamento: totalFee,
