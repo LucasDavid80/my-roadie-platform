@@ -21,8 +21,8 @@ Separar, na Agenda do aplicativo mobile, os compromissos passados dos futuros: a
   - Passar `upcomingEvents` (em vez da lista bruta `events`) para "Próximos Compromissos".
   - Adicionar um botão/atalho ("Ver histórico" ou ícone dedicado) próximo ao cabeçalho da lista de compromissos, navegando para a nova tela de histórico.
 - **Nova tela `HistoryScreen` (`mobile/lib/presentation/screens/history/`)**:
-  - Reutilizar `CommitmentCard`/`CommitmentsWidget` (ou uma variação somente-leitura) para exibir `pastEvents` agrupados por data, no mesmo estilo visual da Agenda.
-  - Ações de editar/excluir um compromisso passado: **decidir no início da Fase 0** se ficam habilitadas (útil para corrigir um cachê lançado errado) ou desabilitadas (histórico como registro imutável) — não presumir uma opção sem validar com o usuário antes de implementar.
+  - Reutilizar `CommitmentCard`/`CommitmentsWidget` para exibir `pastEvents` agrupados por data, no mesmo estilo visual da Agenda.
+  - Ações de editar/excluir um compromisso passado: **Habilitadas** (definido na Fase 0 / T0.1), permitindo editar (corrigir cachê, notas, etc.) e excluir compromissos passados, reaproveitando as ações padrão do `CommitmentCard`.
   - Estado vazio ("Nenhum compromisso no histórico ainda") para bandas novas sem eventos passados.
 - **Dashboard (`InfosWidget`)**:
   - Ajustar `compromissosTotal`/`proximosCompromissos` para usarem `upcomingEvents` como base, evitando reabrir o mesmo bug documentado no backlog para o card "Este Mês"/"Próximos" (ver spec 022, se ainda não concluída ao iniciar esta).

@@ -4,7 +4,7 @@ Pré-requisitos: nenhum bloqueante direto. Recomendado rodar depois (ou junto) d
 
 ## Fase 0 — Confirmar decisões em aberto antes de codar
 
-- [ ] T0.1 — Definir com o usuário: ações de editar/excluir ficam habilitadas ou desabilitadas na tela de Histórico.
+- [x] T0.1 — Definir com o usuário: ações de editar/excluir ficam habilitadas ou desabilitadas na tela de Histórico. (Definido: Habilitadas)
 - [ ] T0.2 — Inspecionar o layout atual de `PrincipalScreen`/`CommitmentsWidget`/`MyRoadieAppBar` e decidir onde entra o atalho para o Histórico.
 - [ ] T0.3 — Decidir `upcomingEvents`/`pastEvents` como getters no `AgendaController` (padrão atual de `totalFee`/`monthlyShows`) ou como `Provider` derivado — registrar a decisão e o motivo aqui antes de implementar.
 - [ ] T0.4 — Checar se a spec 022 (bug dos cards do dashboard) já foi concluída; se sim, alinhar para que `InfosWidget` consuma o mesmo getter `upcomingEvents` criado aqui, evitando lógica de filtro de data duplicada.

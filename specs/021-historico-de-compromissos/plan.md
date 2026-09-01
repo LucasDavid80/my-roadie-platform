@@ -36,7 +36,7 @@ Comparar apenas ano/mês/dia (via `_startOfDay`) evita que um evento de hoje com
   - Adicionar botão/ícone de navegação para `HistoryScreen` próximo ao cabeçalho de "Próximos Compromissos" (dentro de `CommitmentsWidget` ou como ação no `HeaderWidget`/`AppBar` — decidir no design da Fase 1 olhando o layout atual).
 
 - **Nova pasta `mobile/lib/presentation/screens/history/`**:
-  - `history_screen.dart`: `ConsumerWidget` que lê `pastEvents` do `agendaProvider.notifier`, reaproveita `CommitmentsWidget`/`CommitmentCard` (avaliar se precisa de uma variante `readOnly` conforme a decisão de escopo sobre editar/excluir).
+  - `history_screen.dart`: `ConsumerWidget` que lê `pastEvents` do `agendaProvider.notifier`, reaproveita `CommitmentsWidget`/`CommitmentCard` com ações de editar/excluir habilitadas (conforme definido em T0.1).
   - Rota registrada onde as demais telas da Agenda já são navegadas (verificar se o projeto usa `Navigator.push` direto ou uma camada de rotas nomeadas antes de escolher a abordagem, para manter consistência).
 
 - **`infos_widget.dart` / `principal_screen.dart`**:
@@ -49,7 +49,7 @@ Comparar apenas ano/mês/dia (via `_startOfDay`) evita que um evento de hoje com
 
 ## Decisões a confirmar na Fase 0 (antes de codar)
 
-1. **Editar/excluir no histórico**: habilitar as mesmas ações do `CommitmentCard` atual, ou tela somente leitura? Impacta se `HistoryScreen` reaproveita `CommitmentCard` como está ou precisa de uma variante.
+1. **Editar/excluir no histórico**: **Habilitadas** (definido na Fase 0 / T0.1). A tela de Histórico reaproveitará o `CommitmentCard` com as ações padrão de edição e exclusão.
 2. **Local do atalho para o histórico**: botão dedicado perto de "Próximos Compromissos", ou entrada no menu/app bar já existente (`MyRoadieAppBar`)? Depende do espaço disponível no layout atual — inspecionar antes de implementar.
 3. **Provider derivado vs. getter no notifier**: manter o padrão já usado (`totalFee`, `monthlyShows` como getters lidos com `ref.read`) ou migrar para `Provider.autoDispose` derivado, dado que `upcomingEvents`/`pastEvents` serão lidos com `ref.watch` em duas telas diferentes agora (mais motivo para reatividade correta do que os getters atuais, que só são lidos uma vez por build).
 
