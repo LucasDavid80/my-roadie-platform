@@ -54,8 +54,8 @@ O modal de criação/edição de compromissos é implementado pelo widget `NewAp
   - Posicionar "Cachê" em linha própria dedicada abaixo de "Local" (100% de largura), renderizado condicionalmente quando `showsFee == true`.
   - Configurar o campo "Cachê" como input monetário especializado:
     - `prefixText: 'R$ '` no `InputDecoration`.
-    - `keyboardType: const TextInputType.numberWithOptions(decimal: true)`.
-    - `inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+([.,]\d{0,2})?'))]` para validação estrita de valores decimais monetários.
+    - `keyboardType: TextInputType.number` (teclado puramente numérico).
+    - Máscara monetária em tempo real (`CurrencyInputFormatter`) onde a digitação de dígitos inteiros atualiza automaticamente os centavos e posiciona duas casas decimais da direita para a esquerda sem necessidade de inserir vírgula.
     - Sanitização segura na extração: `double.tryParse(_cacheController.text.replaceAll(',', '.')) ?? 0.0`.
 - Garantir visualização completa sem corte para strings numéricas com formatação monetária.
 

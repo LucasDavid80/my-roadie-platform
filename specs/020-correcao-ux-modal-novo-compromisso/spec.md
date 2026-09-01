@@ -21,7 +21,7 @@ Corrigir falhas de experiência do usuário (UX) e usabilidade visual no modal/d
    - Ajustar o espaçamento externo e interno do modal de compromisso (`NewAppointmentWidget`), eliminando bordas internas redundantes para maximizar o aproveitamento da largura da tela.
 2. **Linha Dedicada e Formato Especializado para Local e Cachê**:
    - Reestruturar o formulário para que o campo "Local" ocupe a largura total (100%), permitindo a visualização de endereços longos.
-   - Posicionar o campo "Cachê" em linha própria dedicada (100% de largura) condicional aos tipos *Show* e *Gravação*, tratando-o como campo monetário especializado com prefixo visual `R$ `, teclado decimal e validação por regex (`r'^\d+([.,]\d{0,2})?'`) para limitar a entrada estritamente a números com até duas casas decimais.
+   - Posicionar o campo "Cachê" em linha própria dedicada (100% de largura) condicional aos tipos *Show* e *Gravação*, tratando-o como campo monetário especializado com prefixo visual `R$ `, teclado puramente numérico (`TextInputType.number`) e máscara monetária automática em tempo real (`CurrencyInputFormatter` estilo ATM/bancário), onde os dígitos entram nos centavos e são deslocados automaticamente para a esquerda sem necessidade de digitação manual de vírgula.
 3. **Padronização dos Botões de Ação**:
    - Adequar o posicionamento, largura, espaçamento e estilo visual dos botões "Cancelar" e "Criar Compromisso" / "Salvar Alterações", garantindo que ambos tenham limites claros e visual consistente.
 4. **Refinamento da Seleção de Horários**:

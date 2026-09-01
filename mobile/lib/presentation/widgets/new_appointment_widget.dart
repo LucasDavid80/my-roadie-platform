@@ -366,13 +366,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                         hint: '0,00',
                         isMoney: true,
                         prefixText: 'R\$ ',
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
+                        keyboardType: TextInputType.number,
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d+([.,]\d{0,2})?'),
-                          ),
+                          CurrencyInputFormatter(),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -642,3 +638,45 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
     );
   }
 }
+
+/// Formata valores numéricos para moeda em tempo real (centavos da direita para a esquerda).
+class CurrencyInputFormatter extends TextInputFormatter {
+  final int maxDigits;
+
+  CurrencyInputFormatter({this.maxDigits = 10});
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+
+    // Extrai apenas dígitos
+    String digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    if (digitsOnly.isEmpty) {
+      return const TextEditingValue(
+        text: '',
+        selection: TextSelection.collapsed(offset: 0),
+      );
+    }
+
+    if (digitsOnly.length > maxDigits) {
+      digitsOnly = digitsOnly.substring(0, maxDigits);
+    }
+
+    // Converte os dígitos inteiros em centavos
+    final parsed = int.tryParse(digitsOnly) ?? 0;
+    final double value = parsed / 100.0;
+    final formatted = value.toStringAsFixed(2).replaceAll('.', ',');
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+}
+

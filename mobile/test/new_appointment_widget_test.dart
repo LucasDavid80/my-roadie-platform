@@ -580,5 +580,50 @@ void main() {
     expect(cancelSize.height, greaterThanOrEqualTo(48.0));
     expect(confirmSize.height, greaterThanOrEqualTo(48.0));
   });
+
+  testWidgets('Should format raw digit input automatically into currency with 2 decimal places (CurrencyInputFormatter)', (WidgetTester tester) async {
+    EventEntity? createdEvent;
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          onConfirm: (e) async {
+            createdEvent = e;
+          },
+        ),
+      ),
+    ));
+
+    // Fill Title and Date
+    final titleField = find.byKey(const ValueKey('appointment_title_field'));
+    await tester.ensureVisible(titleField);
+    await tester.enterText(titleField, 'Show Especial');
+
+    final datePicker = find.text('Selecionar');
+    await tester.ensureVisible(datePicker);
+    await tester.tap(datePicker);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    // Type raw digits without comma (e.g. 150000 -> 1500,00)
+    final feeFinder = find.byKey(const ValueKey('appointment_fee_field'));
+    await tester.ensureVisible(feeFinder);
+    await tester.enterText(feeFinder, '150000');
+    await tester.pumpAndSettle();
+
+    // Verify formatted text displayed
+    expect(find.text('1500,00'), findsOneWidget);
+
+    // Confirm form
+    final confirmButton = find.byKey(const ValueKey('appointment_confirm_button'));
+    await tester.ensureVisible(confirmButton);
+    await tester.tap(confirmButton);
+    await tester.pumpAndSettle();
+
+    expect(createdEvent, isNotNull);
+    expect(createdEvent!.fee, 1500.0);
+  });
 }
+
 

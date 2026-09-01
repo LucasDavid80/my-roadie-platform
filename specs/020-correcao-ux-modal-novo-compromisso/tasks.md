@@ -22,8 +22,8 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 - [x] T2.1 — Reestruturar os campos "Local" e "Cachê" em linhas dedicadas individuais (100% de largura para Local e 100% de largura para Cachê condicional ao tipo `Show` ou `Gravação`).
   - Critério: campo Local e campo Cachê com largura total (100%), permitindo visualização de endereços completos e valores monetários sem corte.
-- [x] T2.2 — Configurar o campo "Cachê" como input monetário especializado (`prefixText: 'R$ '`, `keyboardType: decimal` e `inputFormatters` com regex para dígitos e decimais).
-  - Critério: validação por regex bloqueia caracteres não-numéricos e permite digitação e visualização de valores como `1500,00` e `12500,00` com prefixo `R$` e sem truncamento.
+- [x] T2.2 — Configurar o campo "Cachê" como input monetário especializado com máscara em tempo real (`prefixText: 'R$ '`, `keyboardType: number` e `CurrencyInputFormatter` com cálculo automático de centavos).
+  - Critério: usuário digita números diretamente e o campo formata automaticamente com 2 casas decimais (ex.: `150000` vira `1500,00` e `1250000` vira `12500,00`) com prefixo `R$` e sem necessidade de digitar vírgula.
 
 ## Fase 3 — Padronização dos Botões de Ação e Seletores de Horário
 
@@ -50,13 +50,13 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
     3. Observe a distribuição horizontal do modal na tela.
   - **O que validar**: O formulário aproveita a largura da tela com respiro lateral equilibrado (16px), sem o aperto/esmagamento visual anterior provocado pelo aninhamento excessivo de margens.
 
-- [ ] T5.2 — Validação de Entrada e Legibilidade de Valores Altos no Campo "Cachê"
+- [ ] T5.2 — Validação de Entrada com Máscara Monetária Automática no Campo "Cachê"
   - **Como testar**:
     1. No modal aberto, mantenha o tipo como `Show` (ou mude para `Gravação`).
     2. Toque no campo "Local" e digite um endereço longo (ex.: `Av. Paulista, 1578 - Bela Vista, São Paulo - SP`).
-    3. Toque no campo "Cachê" e digite valores altos com decimais (ex.: `1500,00`, `12500,00` e `150000,00`).
-    4. Tente digitar caracteres alfabéticos ou múltiplos pontos/vírgulas.
-  - **O que validar**: O campo "Local" ocupa 100% da linha sem espremer outros inputs; o campo "Cachê" exibe o prefixo `R$ `, permite digitar valores altos com visualização completa sem corte ou truncamento de texto, e bloqueia caracteres não-numéricos via validação por regex.
+    3. Toque no campo "Cachê" e digite apenas números no teclado numérico (ex.: digite `150000` para `1500,00`, `1250000` para `12500,00` e `15000000` para `150000,00`).
+    4. Teste apagar (backspace) para ver o recuo automático das casas decimais.
+  - **O que validar**: O campo "Local" ocupa 100% da linha sem espremer outros inputs; o campo "Cachê" exibe o teclado numérico, formata automaticamente com 2 casas decimais sem precisar digitar vírgula, exibe o prefixo `R$ `, e permite visualização completa sem corte ou truncamento de texto.
 
 - [ ] T5.3 — Validação da Dinâmica de Tipos de Compromisso e Seletores de Horário
   - **Como testar**:
