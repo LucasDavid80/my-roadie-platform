@@ -33,14 +33,14 @@ Pré-requisitos: nenhum bloqueante direto. Recomendado rodar depois (ou junto) d
 
 - [x] T4.1 — Rodar `flutter test` completo do módulo mobile, sem regressão nos testes existentes (`agenda_controller_test.dart`, `principal_screen_test.dart`, `infos_widget_test.dart`).
 - [x] T4.2 — Atualizar `backlog.md`: mover "Histórico de Compromissos e Filtragem de Próximos Eventos (Mobile)" de `em spec` para `concluído (specs/021-historico-de-compromissos/)`.
-- [ ] T4.3 — Revisar `spec.md` desta pasta e marcar cada item de "Critérios de Sucesso" como `[x]`, um a um, confirmando manualmente antes de marcar (junto com o checklist abaixo, no mesmo passo — conforme convenção do `AGENTS.md`).
+- [x] T4.3 — Revisar `spec.md` desta pasta e marcar cada item de "Critérios de Sucesso" como `[x]`, um a um, confirmando manualmente antes de marcar (junto com o checklist abaixo, no mesmo passo — conforme convenção do `AGENTS.md`).
 
 ## Checklist de fechamento da feature
 
-- [ ] Agenda mostra só compromissos futuros (`>= hoje`) em "Próximos Compromissos"
-- [ ] Histórico mostra todos os compromissos passados (`< hoje`), mais recente primeiro
-- [ ] Atalho de navegação Agenda ↔ Histórico funcionando nos dois sentidos
-- [ ] Estados vazios tratados em ambas as telas
-- [ ] Decisão sobre editar/excluir no histórico implementada conforme T0.1
-- [ ] `flutter test` 100% verde, sem regressão
-- [ ] `backlog.md` atualizado
+- [x] Agenda mostra só compromissos futuros (`>= hoje`) em "Próximos Compromissos"
+- [x] Histórico mostra todos os compromissos passados (`< hoje`), mais recente primeiro
+- [x] Atalho de navegação Agenda ↔ Histórico funcionando nos dois sentidos
+- [x] Estados vazios tratados em ambas as telas
+- [x] Decisão sobre editar/excluir no histórico implementada conforme T0.1
+- [x] `flutter test` 100% verde, sem regressão
+- [x] `backlog.md` atualizado

@@ -40,10 +40,10 @@ Separar, na Agenda do aplicativo mobile, os compromissos passados dos futuros: a
 
 ## Critérios de Sucesso
 
-- [ ] "Próximos Compromissos" na Agenda exibe somente eventos com `date >= hoje`.
-- [ ] Nova tela de Histórico acessível a partir da Agenda, exibindo todos os eventos com `date < hoje`, ordenados do mais recente para o mais antigo.
-- [ ] Cards "Este Mês"/"Próximos" do dashboard continuam consistentes com a nova filtragem (sem regressão do bug documentado no backlog).
-- [ ] Estado vazio tratado tanto na Agenda (sem próximos compromissos) quanto no Histórico (sem compromissos passados).
-- [ ] Decisão sobre editar/excluir eventos passados tomada e documentada nesta spec antes da implementação (Fase 0), não assumida por padrão.
-- [ ] Testes unitários (`AgendaController`) e de widget (`HistoryScreen`, `PrincipalScreen`) cobrindo os cenários acima, `flutter test` 100% verde.
-- [ ] `backlog.md` atualizado ao final, movendo esta entrada de "em spec" para "concluído (specs/021-historico-de-compromissos/)".
+- [x] "Próximos Compromissos" na Agenda exibe somente eventos com `date >= hoje`.
+- [x] Nova tela de Histórico acessível a partir da Agenda, exibindo todos os eventos com `date < hoje`, ordenados do mais recente para o mais antigo.
+- [x] Cards "Este Mês"/"Próximos" do dashboard continuam consistentes com a nova filtragem (sem regressão do bug documentado no backlog).
+- [x] Estado vazio tratado tanto na Agenda (sem próximos compromissos) quanto no Histórico (sem compromissos passados).
+- [x] Decisão sobre editar/excluir eventos passados tomada e documentada nesta spec antes da implementação (Fase 0), não assumida por padrão.
+- [x] Testes unitários (`AgendaController`) e de widget (`HistoryScreen`, `PrincipalScreen`) cobrindo os cenários acima, `flutter test` 100% verde.
+- [x] `backlog.md` atualizado ao final, movendo esta entrada de "em spec" para "concluído (specs/021-historico-de-compromissos/)".
