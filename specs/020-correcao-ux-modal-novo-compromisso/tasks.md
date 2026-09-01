@@ -8,7 +8,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
   - Critério: diagnósticos de paddings redundantes documentados em `plan.md` e `spec.md`.
 - [x] T0.2 — Inspecionar o comportamento do campo "Cachê" ao digitar valores como `1500,00` e `10000,00`, identificando a largura mínima requerida para exibição sem corte.
   - Critério: valores de flex e padding validados e documentados em `plan.md`.
-- [ ] T0.3 — Inspecionar o layout dos botões de ação e a usabilidade dos seletores de horário ("Início" e "Término").
+- [x] T0.3 — Inspecionar o layout dos botões de ação e a usabilidade dos seletores de horário ("Início" e "Término").
   - Critério: confirmação do alinhamento dos botões e preservação da compatibilidade com o formato `"HH:mm"`.
 
 ## Fase 1 — Otimização de Espaçamentos e Margens do Modal

@@ -64,6 +64,14 @@ Corrigir falhas de experiência do usuário (UX) e usabilidade visual no modal/d
   - O campo "Local" ocupará a linha inteira (100% de largura / 296px em 360px), acomodando endereços longos.
   - O campo "Cachê" passará para uma linha dedicada própria logo abaixo do "Local" (100% de largura condicional a *Show* ou *Gravação*), eliminando qualquer aperto e garantindo consistência estrutural entre todos os tipos de compromisso.
 
+### 4. Diagnóstico dos Botões de Ação e Seletores de Horário (T0.3)
+- **Botões de Ação**:
+  - Identificado `Center(child: ElevatedButton(...))` que quebra o esticamento da coluna, reduzindo a largura do botão principal em relação ao `OutlinedButton` ("Cancelar").
+  - Solução: remoção do `Center` para que ambos os botões ocupem largura total uniforme (100%) com espaçamento vertical de 12px e altura ergonômica.
+- **Seletores de Horário ("Início" e "Término")**:
+  - Confirmada compatibilidade total com o modelo de dados e API NestJS persistindo formato `"HH:mm"`.
+  - O seletor utiliza `showTimePicker` temático e área de toque de 48px, com layout limpo e dividido em 50% / 50%.
+
 ---
 
 ## Critérios de Sucesso
