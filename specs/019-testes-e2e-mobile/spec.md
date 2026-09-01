@@ -119,12 +119,12 @@ Todos os diagnósticos e auditorias prévias foram concluídos com sucesso. Não
 
 ## Critérios de Sucesso
 
-- [ ] Pacote `integration_test` configurado e operacional no ecossistema mobile.
-- [ ] Chaves semânticas (`ValueKey`) adicionadas aos elementos-chave das telas de login, perfil e agenda sem alterar o design ou a experiência visual.
-- [ ] Suíte E2E de Autenticação (`auth_flow_test.dart`) cobrindo login com sucesso e tratamento de credenciais inválidas.
-- [ ] Suíte E2E de Perfil (`profile_flow_test.dart`) cobrindo navegação, visualização de dados, edição e salvamento com feedback de SnackBar.
-- [ ] Suíte E2E de Agenda (`agenda_flow_test.dart`) cobrindo ciclo completo de CRUD (criação de evento, verificação de listagem, edição e exclusão confirmada).
-- [ ] Runner agregador `app_test.dart` executando todos os fluxos sequencialmente com 100% de aprovação.
-- [ ] Job `mobile-e2e-emulator` no `.github/workflows/ci.yml` configurado para rodar a suíte `integration_test/` quando `run_mobile_e2e: true`.
-- [ ] Análise estática (`flutter analyze`) passando com 0 warnings/erros.
-- [ ] Checklist de fechamento em `tasks.md` e Critérios de Sucesso em `spec.md` marcados atomicamente juntos na conclusão da spec.
+- [x] Pacote `integration_test` configurado e operacional no ecossistema mobile.
+- [x] Chaves semânticas (`ValueKey`) adicionadas aos elementos-chave das telas de login, perfil e agenda sem alterar o design ou a experiência visual.
+- [x] Suíte E2E de Autenticação (`auth_flow_test.dart`) cobrindo login com sucesso e tratamento de credenciais inválidas.
+- [x] Suíte E2E de Perfil (`profile_flow_test.dart`) cobrindo navegação, visualização de dados, edição e salvamento com feedback de SnackBar.
+- [x] Suíte E2E de Agenda (`agenda_flow_test.dart`) cobrindo ciclo completo de CRUD (criação de evento, verificação de listagem, edição e exclusão confirmada).
+- [x] Runner agregador `app_test.dart` executando todos os fluxos sequencialmente com 100% de aprovação.
+- [x] Job `mobile-e2e-emulator` no `.github/workflows/ci.yml` configurado para rodar a suíte `integration_test/` quando `run_mobile_e2e: true`.
+- [x] Análise estática (`flutter analyze`) passando com 0 warnings/erros.
+- [x] Checklist de fechamento em `tasks.md` e Critérios de Sucesso em `spec.md` marcados atomicamente juntos na conclusão da spec.

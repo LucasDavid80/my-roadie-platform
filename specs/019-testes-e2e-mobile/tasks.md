@@ -94,12 +94,12 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 ## Fase 6 — Checklist de Fechamento da Feature (Fechamento Atômico)
 
-- [ ] `spec.md`, `plan.md` e `tasks.md` da spec 019 alinhados e sem pendências
-- [ ] Suíte E2E de Autenticação (`auth_flow_test.dart`) implementada e aprovada
-- [ ] Suíte E2E de Perfil (`profile_flow_test.dart`) implementada e aprovada
-- [ ] Suíte E2E de Agenda (`agenda_flow_test.dart`) implementada e aprovada
-- [ ] Runner agregador (`app_test.dart`) executando os 3 fluxos com 100% de aprovação
-- [ ] Job `mobile-e2e-emulator` no `.github/workflows/ci.yml` configurado e funcional
-- [ ] Análise estática (`flutter analyze`) com 0 erros e 0 warnings
-- [ ] Entrada em `backlog.md` atualizada para "concluído (specs/019-testes-e2e-mobile/)"
-- [ ] Critérios de Sucesso no `spec.md` marcados atomicamente juntos com este checklist
+- [x] `spec.md`, `plan.md` e `tasks.md` da spec 019 alinhados e sem pendências
+- [x] Suíte E2E de Autenticação (`auth_flow_test.dart`) implementada e aprovada
+- [x] Suíte E2E de Perfil (`profile_flow_test.dart`) implementada e aprovada
+- [x] Suíte E2E de Agenda (`agenda_flow_test.dart`) implementada e aprovada
+- [x] Runner agregador (`app_test.dart`) executando os 3 fluxos com 100% de aprovação
+- [x] Job `mobile-e2e-emulator` no `.github/workflows/ci.yml` configurado e funcional
+- [x] Análise estática (`flutter analyze`) com 0 erros e 0 warnings
+- [x] Entrada em `backlog.md` atualizada para "concluído (specs/019-testes-e2e-mobile/)"
+- [x] Critérios de Sucesso no `spec.md` marcados atomicamente juntos com este checklist

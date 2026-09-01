@@ -125,6 +125,12 @@
 - Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Preparação para Release do MVP (spec 016)
 - Status: concluído (specs/018-distribuicao-executaveis-mvp/; baseline raiz sincronizada em spec.md e plan.md)
 
+### Testes de Integração Ponta a Ponta (E2E) no Mobile
+- Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
+- Impacto esperado: alto (qualidade e confiabilidade de entrega)
+- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012), Hospedagem e Distribuição de Executáveis de Release do MVP (spec 018)
+- Status: concluído (specs/019-testes-e2e-mobile/; baseline raiz sincronizada em spec.md e plan.md)
+
 ---
 
 ## 🚀 Trilhas de Evolução Priorizadas
@@ -138,7 +144,7 @@
 - Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
 - Impacto esperado: alto (qualidade e confiabilidade de entrega)
 - Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012), Hospedagem e Distribuição de Executáveis de Release do MVP (spec 018)
-- Status: em spec (specs/019-testes-e2e-mobile/)
+- Status: concluído (specs/019-testes-e2e-mobile/)
 
 ---
 
