@@ -101,14 +101,9 @@ export class UsersService {
       const userEmail = dto.email || reqUser?.email || `${id}@supabase.user`;
       const validRoles = Object.values(Role);
       const userRole =
-        dto.role && validRoles.includes(dto.role as Role)
-          ? (dto.role as Role)
-          : reqUser?.role && validRoles.includes(reqUser.role)
-            ? reqUser.role
-            : Role.MUSICIAN;
-
-      const restDto = { ...dto };
-      delete restDto.role;
+        reqUser?.role && validRoles.includes(reqUser.role)
+          ? reqUser.role
+          : Role.MUSICIAN;
 
       return await this.prisma.user.create({
         data: {
@@ -116,7 +111,7 @@ export class UsersService {
           email: userEmail,
           name: dto.name || '',
           role: userRole,
-          ...restDto,
+          ...dto,
         },
       });
     }
@@ -129,6 +124,29 @@ export class UsersService {
     return await this.prisma.user.update({
       where: { id: user.id },
       data: updateData,
+    });
+  }
+
+  async updateRole(id: string, role: Role) {
+    const searchConditions: Prisma.UserWhereInput[] = [
+      { id },
+      { supabaseId: id },
+      { email: id },
+    ];
+
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: searchConditions,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+    }
+
+    return await this.prisma.user.update({
+      where: { id: user.id },
+      data: { role },
     });
   }
 
