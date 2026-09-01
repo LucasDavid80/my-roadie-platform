@@ -50,7 +50,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
     3. Observe a distribuição horizontal do modal na tela.
   - **O que validar**: O formulário aproveita a largura da tela com respiro lateral equilibrado (16px), sem o aperto/esmagamento visual anterior provocado pelo aninhamento excessivo de margens.
 
-- [ ] T5.2 — Validação de Entrada com Máscara Monetária Automática no Campo "Cachê"
+- [x] T5.2 — Validação de Entrada com Máscara Monetária Automática no Campo "Cachê"
   - **Como testar**:
     1. No modal aberto, mantenha o tipo como `Show` (ou mude para `Gravação`).
     2. Toque no campo "Local" e digite um endereço longo (ex.: `Av. Paulista, 1578 - Bela Vista, São Paulo - SP`).
