@@ -15,7 +15,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 - [x] T1.1 — Ajustar a exibição do `Dialog` em `principal_screen.dart` e `commitment_card.dart` configurando `insetPadding` controlado (`EdgeInsets.symmetric(horizontal: 16, vertical: 24)`).
   - Critério: o diálogo ocupa a largura disponível da tela respeitando a margem externa controlada.
-- [ ] T1.2 — Ajustar `NewAppointmentWidget` removendo a margem redundante (`margin: EdgeInsets.zero`) no container principal e ajustando o padding interno do formulário para `EdgeInsets.symmetric(horizontal: 16, vertical: 20)`.
+- [x] T1.2 — Ajustar `NewAppointmentWidget` removendo a margem redundante (`margin: EdgeInsets.zero`) no container principal e ajustando o padding interno do formulário para `EdgeInsets.symmetric(horizontal: 16, vertical: 20)`.
   - Critério: espaço horizontal útil dos campos aumentado significativamente em telas compactas.
 
 ## Fase 2 — Estruturação de Linhas Dedicadas para Local e Cachê

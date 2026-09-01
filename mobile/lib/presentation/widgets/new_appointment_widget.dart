@@ -131,7 +131,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
       child: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          margin: const EdgeInsets.all(16),
+          margin: EdgeInsets.zero,
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(12),
@@ -188,8 +188,8 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
               // --- FORMULÁRIO ---
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 24,
+                  horizontal: 16,
+                  vertical: 20,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
