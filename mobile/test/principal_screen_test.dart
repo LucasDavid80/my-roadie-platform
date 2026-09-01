@@ -1,11 +1,13 @@
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_agenda_repository.dart';
 import 'package:agenda_musical/presentation/controllers/agenda_controller.dart';
+import 'package:agenda_musical/presentation/screens/history/history_screen.dart';
 import 'package:agenda_musical/presentation/screens/principal/principal_screen.dart';
 import 'package:agenda_musical/presentation/screens/principal/widgets/custom_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -141,6 +143,111 @@ void main() {
 
     final updatedOffset = tester.state<ScrollableState>(scrollableFinder).position.pixels;
     expect(updatedOffset, greaterThan(initialOffset));
+  });
+
+  testWidgets('Should not display past events in Upcoming Commitments on PrincipalScreen (T3.4)', (WidgetTester tester) async {
+    final now = DateTime.now();
+    final pastEvent = EventEntity(
+      id: 'past-event-1',
+      title: 'Show Ontem Já Ocorrido',
+      type: 'Show',
+      date: now.subtract(const Duration(days: 1)),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Local Passado',
+      fee: 400.0,
+      notes: '',
+    );
+    final upcomingEvent = EventEntity(
+      id: 'upcoming-event-1',
+      title: 'Show Amanhã Confirmado',
+      type: 'Show',
+      date: now.add(const Duration(days: 1)),
+      startTime: '21:00',
+      endTime: '23:00',
+      location: 'Local Futuro',
+      fee: 800.0,
+      notes: '',
+    );
+
+    when(() => mockAgendaRepository.getEvents()).thenAnswer(
+      (_) async => [pastEvent, upcomingEvent],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        agendaRepositoryProvider.overrideWithValue(mockAgendaRepository),
+      ],
+    );
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(
+          home: PrincipalScreen(),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Evento futuro deve estar presente
+    expect(find.text('Show Amanhã Confirmado'), findsOneWidget);
+    expect(find.text('Local Futuro'), findsOneWidget);
+
+    // Evento passado NÃO deve aparecer em Próximos Compromissos
+    expect(find.text('Show Ontem Já Ocorrido'), findsNothing);
+    expect(find.text('Local Passado'), findsNothing);
+  });
+
+  testWidgets('Should navigate to HistoryScreen when tapping view history button (T3.4)', (WidgetTester tester) async {
+    final testRouter = GoRouter(
+      initialLocation: '/',
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const PrincipalScreen(),
+          routes: [
+            GoRoute(
+              path: 'history',
+              builder: (context, state) => const HistoryScreen(),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        agendaRepositoryProvider.overrideWithValue(mockAgendaRepository),
+      ],
+    );
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp.router(
+          routerConfig: testRouter,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Encontra e clica no botão "Ver histórico"
+    final viewHistoryButton = find.byKey(const ValueKey('view_history_button'));
+    expect(viewHistoryButton, findsOneWidget);
+    expect(find.text('Ver histórico'), findsOneWidget);
+
+    await tester.ensureVisible(viewHistoryButton);
+    await tester.pumpAndSettle();
+
+    await tester.tap(viewHistoryButton);
+    await tester.pumpAndSettle();
+
+    // Verifica que navegou para a tela de histórico
+    expect(find.byType(HistoryScreen), findsOneWidget);
+    expect(find.text('Histórico de Compromissos'), findsOneWidget);
   });
 }
 
