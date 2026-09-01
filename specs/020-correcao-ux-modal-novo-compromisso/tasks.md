@@ -34,7 +34,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 ## Fase 4 — Testes Automatizados, Widget Tests e Validação de Cobertura
 
-- [ ] T4.1 — Atualizar e expandir a suíte de testes de widget (`test/new_appointment_widget_test.dart`) cobrindo cenários com valores de cachê altos (`1500,00`, `10000,00`), alinhamento de botões e integridade do formulário.
+- [x] T4.1 — Atualizar e expandir a suíte de testes de widget (`test/new_appointment_widget_test.dart`) cobrindo cenários com valores de cachê altos (`1500,00`, `10000,00`), alinhamento de botões e integridade do formulário.
   - Critério: todos os testes de widget passam com sucesso (`flutter test test/new_appointment_widget_test.dart`).
 - [ ] T4.2 — Executar a suíte de testes unitários e de integração do mobile (`flutter test` e `integration_test/agenda_flow_test.dart`).
   - Critério: 100% dos testes do mobile passando sem regressões.

@@ -3,7 +3,6 @@ import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // Para formatar a data
 
 class NewAppointmentWidget extends StatefulWidget {
@@ -184,7 +183,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                     ),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () => context.pop(),
+                      onTap: () => Navigator.of(context).pop(),
                       child: const Icon(
                         Icons.close,
                         color: AppColors.textGrey,
@@ -394,7 +393,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         OutlinedButton(
-                          onPressed: () => context.pop(),
+                          onPressed: () => Navigator.of(context).pop(),
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             side: BorderSide(color: Colors.grey.shade300),
