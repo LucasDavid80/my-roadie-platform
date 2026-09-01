@@ -2,6 +2,7 @@ import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:agenda_musical/presentation/screens/principal/widgets/commitment_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class CommitmentsWidget extends StatelessWidget {
@@ -9,12 +10,14 @@ class CommitmentsWidget extends StatelessWidget {
   final List<EventEntity> commitments;
   final Future<void> Function(EventEntity) onConfirm;
   final Future<void> Function(String id) onDelete;
+  final VoidCallback? onHistoryTap;
 
   const CommitmentsWidget({
     super.key,
     required this.commitments,
     required this.onConfirm,
     required this.onDelete,
+    this.onHistoryTap,
   });
 
   @override
@@ -27,19 +30,52 @@ class CommitmentsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Cabeçalho da Seção
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.calendar_month_outlined,
                 size: 28,
                 color: AppColors.primary, // Usando a cor primária do tema
               ),
-              SizedBox(width: 8),
-              Text(
-                "Próximos Compromissos",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  "Próximos Compromissos",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextButton.icon(
+                key: const ValueKey('view_history_button'),
+                onPressed: () {
+                  if (onHistoryTap != null) {
+                    onHistoryTap!();
+                  } else {
+                    context.push('/history');
+                  }
+                },
+                icon: const Icon(
+                  Icons.history,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
+                label: const Text(
+                  'Ver histórico',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               ),
             ],
           ),

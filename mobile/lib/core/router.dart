@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // Importe suas telas aqui
 import 'package:agenda_musical/presentation/screens/principal/principal_screen.dart';
 import 'package:agenda_musical/presentation/screens/person/person_screen.dart';
+import 'package:agenda_musical/presentation/screens/history/history_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/login', // <--- Mude para começar no login
@@ -23,6 +24,14 @@ final GoRouter router = GoRouter(
           name: 'profile',
           builder: (BuildContext context, GoRouterState state) {
             return const PersonScreen();
+          },
+        ),
+        // Rota do Histórico
+        GoRoute(
+          path: 'history',
+          name: 'history',
+          builder: (BuildContext context, GoRouterState state) {
+            return const HistoryScreen();
           },
         ),
       ],
