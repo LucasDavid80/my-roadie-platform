@@ -20,7 +20,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 ## Fase 2 — Estruturação de Linhas Dedicadas para Local e Cachê
 
-- [ ] T2.1 — Reestruturar os campos "Local" e "Cachê" em linhas dedicadas individuais (100% de largura para Local e 100% de largura para Cachê condicional ao tipo `Show` ou `Gravação`).
+- [x] T2.1 — Reestruturar os campos "Local" e "Cachê" em linhas dedicadas individuais (100% de largura para Local e 100% de largura para Cachê condicional ao tipo `Show` ou `Gravação`).
   - Critério: campo Local e campo Cachê com largura total (100%), permitindo visualização de endereços completos e valores monetários sem corte.
 - [ ] T2.2 — Configurar o campo "Cachê" como input monetário especializado (`prefixText: 'R$ '`, `keyboardType: decimal` e `inputFormatters` com regex para dígitos e decimais).
   - Critério: validação por regex bloqueia caracteres não-numéricos e permite digitação e visualização de valores como `1500,00` e `12500,00` com prefixo `R$` e sem truncamento.

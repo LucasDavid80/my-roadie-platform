@@ -337,42 +337,27 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                     ),
                     const SizedBox(height: 16),
 
-                    // LOCAL E CACHÊ
-                    if (showsFee)
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: _buildSimpleInput(
-                              key: const ValueKey(
-                                'appointment_location_field',
-                              ),
-                              controller: _locationController,
-                              label: 'Local',
-                              hint: 'Endereço...',
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildSimpleInput(
-                              key: const ValueKey('appointment_fee_field'),
-                              controller: _cacheController,
-                              label: 'Cachê',
-                              hint: '0,00',
-                              isMoney: true,
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      _buildSimpleInput(
-                        key: const ValueKey('appointment_location_field'),
-                        controller: _locationController,
-                        label: 'Local',
-                        hint: 'Endereço...',
-                      ),
+                    // LOCAL
+                    _buildSimpleInput(
+                      key: const ValueKey('appointment_location_field'),
+                      controller: _locationController,
+                      label: 'Local',
+                      hint: 'Endereço...',
+                    ),
                     const SizedBox(height: 16),
+
+                    // CACHÊ (Condicional ao tipo Show ou Gravação)
+                    if (showsFee) ...[
+                      _buildSimpleInput(
+                        key: const ValueKey('appointment_fee_field'),
+                        controller: _cacheController,
+                        label: 'Cachê',
+                        hint: '0,00',
+                        isMoney: true,
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
 
                     // OBSERVAÇÕES
                     _buildLabel('Observações'),
