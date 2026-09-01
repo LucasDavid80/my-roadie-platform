@@ -71,6 +71,20 @@ class AgendaController extends Notifier<List<EventEntity>> {
         .where((e) => e.date.month == now.month && e.date.year == now.year)
         .length;
   }
+
+  DateTime _startOfDay(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  List<EventEntity> get upcomingEvents {
+    final today = _startOfDay(DateTime.now());
+    return state.where((e) => !_startOfDay(e.date).isBefore(today)).toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  List<EventEntity> get pastEvents {
+    final today = _startOfDay(DateTime.now());
+    return state.where((e) => _startOfDay(e.date).isBefore(today)).toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
+  }
 }
 
 // O Provider que a UI vai escutar

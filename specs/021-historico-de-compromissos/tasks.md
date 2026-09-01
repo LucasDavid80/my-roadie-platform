@@ -11,7 +11,7 @@ Pré-requisitos: nenhum bloqueante direto. Recomendado rodar depois (ou junto) d
 
 ## Fase 1 — `AgendaController`: getters de passado/futuro
 
-- [ ] T1.1 — Implementar `_startOfDay`, `upcomingEvents` e `pastEvents` em `agenda_controller.dart`, conforme a abordagem escolhida em T0.3.
+- [x] T1.1 — Implementar `_startOfDay`, `upcomingEvents` e `pastEvents` em `agenda_controller.dart`, conforme a abordagem escolhida em T0.3.
   - Critério de teste: evento com `date` = hoje aparece em `upcomingEvents`; evento com `date` = ontem aparece em `pastEvents`; ambos ordenados conforme especificado no plan.md.
 - [ ] T1.2 — Testes unitários cobrindo hoje/ontem/amanhã/lista vazia para os dois getters.
 
