@@ -29,7 +29,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 - [x] T3.1 — Padronizar o layout dos botões de ação ("Cancelar" e "Criar Compromisso" / "Salvar Alterações") no `NewAppointmentWidget`, removendo o `Center` restritivo e definindo largura total uniforme (`width: double.infinity`) com espaçamento vertical de 12px e altura consistente.
   - Critério: botões com limites e bordas bem delineadas, sem sobreposição ou assimetria visual.
-- [ ] T3.2 — Refinar a apresentação visual dos seletores de horário ("Início" e "Término"), garantindo feedback tátil, ícones alinhados e exibição clara de horários preenchidos.
+- [x] T3.2 — Refinar a apresentação visual dos seletores de horário ("Início" e "Término"), garantindo feedback tátil, ícones alinhados e exibição clara de horários preenchidos.
   - Critério: seleção e cancelamento de horários operam com precisão mantendo o formato `"HH:mm"`.
 
 ## Fase 4 — Testes Automatizados, Widget Tests e Validação de Cobertura

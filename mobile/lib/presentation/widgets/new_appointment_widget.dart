@@ -74,11 +74,19 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
     super.dispose();
   }
 
+  // Função auxiliar para formatar TimeOfDay no formato estrito "HH:mm"
+  String _formatTimeOfDay(TimeOfDay? time) {
+    if (time == null) return '--:--';
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
   // --- Lógica para abrir o Calendário ---
   Future<void> _pickDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2030),
       builder: (context, child) {
@@ -100,9 +108,10 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
 
   // --- Lógica para abrir o Relógio ---
   Future<void> _pickTime(bool isStart) async {
+    final initial = (isStart ? _startTime : _endTime) ?? TimeOfDay.now();
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: initial,
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -324,6 +333,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                             'Início',
                             _startTime,
                             () => _pickTime(true),
+                            key: const ValueKey('appointment_start_time_field'),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -332,6 +342,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                             'Término',
                             _endTime,
                             () => _pickTime(false),
+                            key: const ValueKey('appointment_end_time_field'),
                           ),
                         ),
                       ],
@@ -429,11 +440,8 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                     title: _titleController.text.trim(),
                                     type: _selectedType,
                                     date: _selectedDate!,
-                                    startTime:
-                                        _startTime?.format(context) ??
-                                        '--:--',
-                                    endTime:
-                                        _endTime?.format(context) ?? '--:--',
+                                    startTime: _formatTimeOfDay(_startTime),
+                                    endTime: _formatTimeOfDay(_endTime),
                                     location: _locationController.text.trim(),
                                     fee: showsFee
                                         ? double.tryParse(
@@ -566,16 +574,19 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
   Widget _buildClickableTimeField(
     String label,
     TimeOfDay? time,
-    VoidCallback onTap,
-  ) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildLabel(label),
-          const SizedBox(height: 6),
-          Container(
+    VoidCallback onTap, {
+    Key? key,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLabel(label),
+        const SizedBox(height: 6),
+        InkWell(
+          key: key,
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             height: 48,
             decoration: _boxDecoration(),
@@ -583,15 +594,18 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  time == null ? '--:--' : time.format(context),
-                  style: const TextStyle(color: Colors.black87),
+                  _formatTimeOfDay(time),
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,
+                  ),
                 ),
                 const Icon(Icons.access_time, size: 18, color: Colors.black54),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
