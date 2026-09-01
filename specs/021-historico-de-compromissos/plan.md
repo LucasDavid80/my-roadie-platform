@@ -51,7 +51,7 @@ Comparar apenas ano/mês/dia (via `_startOfDay`) evita que um evento de hoje com
 
 1. **Editar/excluir no histórico**: **Habilitadas** (definido na Fase 0 / T0.1). A tela de Histórico reaproveitará o `CommitmentCard` com as ações padrão de edição e exclusão.
 2. **Local do atalho para o histórico**: **Cabeçalho de "Próximos Compromissos" em `CommitmentsWidget`** (definido na Fase 0 / T0.2), com botão/atalho "Ver histórico" alinhado à direita no cabeçalho da seção, mantendo a `MyRoadieAppBar` limpa e a navegação contextualmente associada aos compromissos.
-3. **Provider derivado vs. getter no notifier**: manter o padrão já usado (`totalFee`, `monthlyShows` como getters lidos com `ref.read`) ou migrar para `Provider.autoDispose` derivado, dado que `upcomingEvents`/`pastEvents` serão lidos com `ref.watch` em duas telas diferentes agora (mais motivo para reatividade correta do que os getters atuais, que só são lidos uma vez por build).
+3. **Provider derivado vs. getter no notifier**: **Getters no `AgendaController`** (definido na Fase 0 / T0.3). Mantém a consistência com o padrão existente de `totalFee`/`monthlyShows`, simplicidade de manutenção e facilidade para testes unitários com baixo custo computacional.
 
 ## Conformidade com a Constituição (`constitution.md`)
 

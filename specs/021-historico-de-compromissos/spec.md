@@ -14,7 +14,7 @@ Separar, na Agenda do aplicativo mobile, os compromissos passados dos futuros: a
 ## Escopo
 
 - **`AgendaController` (`mobile/lib/presentation/controllers/agenda_controller.dart`)**:
-  - Adicionar getters derivados do `state` (lista completa de eventos), sem duplicar a fonte de dados:
+  - Adicionar getters derivados do `state` (lista completa de eventos) diretamente no `AgendaController` (definido na Fase 0 / T0.3, mantendo padrão de `totalFee` e `monthlyShows`), sem duplicar a fonte de dados:
     - `upcomingEvents`: eventos com `date >= hoje` (considerando apenas a data, ignorando hora), ordenados ascendente.
     - `pastEvents`: eventos com `date < hoje`, ordenados descendente (mais recente primeiro).
 - **`PrincipalScreen` / `CommitmentsWidget`**:
