@@ -2,6 +2,7 @@ import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // Para formatar a data
 
@@ -354,7 +355,15 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                         label: 'Cachê',
                         hint: '0,00',
                         isMoney: true,
-                        keyboardType: TextInputType.number,
+                        prefixText: 'R\$ ',
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+([.,]\d{0,2})?'),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -523,9 +532,14 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
 
   // --- WIDGETS AUXILIARES REUTILIZÁVEIS ---
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration _inputDecoration(String hint, {String? prefixText}) {
     return InputDecoration(
       hintText: hint,
+      prefixText: prefixText,
+      prefixStyle: const TextStyle(
+        fontWeight: FontWeight.w600,
+        color: Colors.black87,
+      ),
       hintStyle: TextStyle(color: Colors.grey[400]),
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       enabledBorder: OutlineInputBorder(
@@ -589,7 +603,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
     required String label,
     required String hint,
     bool isMoney = false,
+    String? prefixText,
     TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -608,7 +624,8 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
           key: key,
           controller: controller,
           keyboardType: keyboardType,
-          decoration: _inputDecoration(hint),
+          inputFormatters: inputFormatters,
+          decoration: _inputDecoration(hint, prefixText: prefixText),
         ),
       ],
     );
