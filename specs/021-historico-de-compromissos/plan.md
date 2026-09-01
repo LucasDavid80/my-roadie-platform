@@ -40,7 +40,7 @@ Comparar apenas ano/mês/dia (via `_startOfDay`) evita que um evento de hoje com
   - Rota registrada onde as demais telas da Agenda já são navegadas (verificar se o projeto usa `Navigator.push` direto ou uma camada de rotas nomeadas antes de escolher a abordagem, para manter consistência).
 
 - **`infos_widget.dart` / `principal_screen.dart`**:
-  - Ajustar a fonte de `compromissosTotal` para `upcomingEvents.length` em vez de `events.length` — **checar se a spec 022 (correção dos cards do dashboard) já foi implementada antes de iniciar esta**; se sim, apenas garantir que a correção lá já usa `upcomingEvents` desta spec como fonte (evitar duas fontes de verdade divergentes); se não, esta spec pode implementar a troca localmente e a 022 herda o getter já pronto.
+  - Ajustar a fonte de `compromissosTotal` para `upcomingEvents.length` em vez de `events.length` — spec 022 verificada na Fase 0 / T0.4 (está em status `ideia` no backlog); esta spec 021 implementará a troca na `PrincipalScreen` e a 022 herdará o getter `upcomingEvents` já pronto.
 
 - **Testes (`flutter_test`)**:
   - `test/agenda_controller_test.dart`: casos para `upcomingEvents`/`pastEvents` — evento hoje, ontem, amanhã, lista vazia.
@@ -52,6 +52,7 @@ Comparar apenas ano/mês/dia (via `_startOfDay`) evita que um evento de hoje com
 1. **Editar/excluir no histórico**: **Habilitadas** (definido na Fase 0 / T0.1). A tela de Histórico reaproveitará o `CommitmentCard` com as ações padrão de edição e exclusão.
 2. **Local do atalho para o histórico**: **Cabeçalho de "Próximos Compromissos" em `CommitmentsWidget`** (definido na Fase 0 / T0.2), com botão/atalho "Ver histórico" alinhado à direita no cabeçalho da seção, mantendo a `MyRoadieAppBar` limpa e a navegação contextualmente associada aos compromissos.
 3. **Provider derivado vs. getter no notifier**: **Getters no `AgendaController`** (definido na Fase 0 / T0.3). Mantém a consistência com o padrão existente de `totalFee`/`monthlyShows`, simplicidade de manutenção e facilidade para testes unitários com baixo custo computacional.
+4. **Alinhamento com spec 022**: **Spec 022 está em status `ideia` no backlog** (definido na Fase 0 / T0.4). A spec 021 atualizará a `PrincipalScreen` para passar `upcomingEvents.length` para `compromissosTotal`, servindo de fonte de verdade para a futura spec 022.
 
 ## Conformidade com a Constituição (`constitution.md`)
 
