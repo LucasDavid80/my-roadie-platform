@@ -377,4 +377,253 @@ void main() {
     expect(find.text('Show Festival'), findsOneWidget);
     expect(find.text('Arena Show'), findsOneWidget);
   });
+
+  testWidgets('Should close modal when clicking Cancelar button (T4.1)', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  child: NewAppointmentWidget(
+                    onConfirm: (e) async {},
+                  ),
+                ),
+              );
+            },
+            child: const Text('Open Modal'),
+          ),
+        ),
+      ),
+    ));
+
+    // Opens dialog
+    await tester.tap(find.text('Open Modal'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NewAppointmentWidget), findsOneWidget);
+
+    final cancelButton = find.widgetWithText(OutlinedButton, 'Cancelar');
+    await tester.ensureVisible(cancelButton);
+    await tester.tap(cancelButton);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NewAppointmentWidget), findsNothing);
+  });
+
+  testWidgets('Should handle high fee values (e.g. 12500,00) and parse accurately on submission (T4.1)', (WidgetTester tester) async {
+    EventEntity? createdEvent;
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          onConfirm: (e) async {
+            createdEvent = e;
+          },
+        ),
+      ),
+    ));
+
+    // Fill Title
+    await tester.enterText(find.byKey(const ValueKey('appointment_title_field')), 'Mega Show Festival');
+
+    // Pick Date
+    await tester.tap(find.text('Selecionar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    // Enter high fee value
+    final feeFinder = find.byKey(const ValueKey('appointment_fee_field'));
+    await tester.ensureVisible(feeFinder);
+    await tester.enterText(feeFinder, '12500,00');
+
+    // Verify prefix R$ is shown and input text is 12500,00
+    expect(find.text('R\$ '), findsOneWidget);
+    expect(find.text('12500,00'), findsOneWidget);
+
+    // Submit form
+    final confirmButton = find.byKey(const ValueKey('appointment_confirm_button'));
+    await tester.ensureVisible(confirmButton);
+    await tester.tap(confirmButton);
+    await tester.pumpAndSettle();
+
+    expect(createdEvent, isNotNull);
+    expect(createdEvent!.fee, 12500.0);
+    expect(createdEvent!.title, 'Mega Show Festival');
+  });
+
+  testWidgets('Should display and update high fee value when editing existing event (T4.1)', (WidgetTester tester) async {
+    EventEntity? updatedEvent;
+
+    final existingEvent = EventEntity(
+      id: 'evt-high-fee-999',
+      title: 'Festival Internacional',
+      type: 'Show',
+      date: DateTime(2026, 8, 15),
+      startTime: '20:00',
+      endTime: '23:30',
+      location: 'Estádio Municipal',
+      fee: 10000.0,
+      notes: 'Palco principal',
+    );
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          event: existingEvent,
+          onConfirm: (e) async {
+            updatedEvent = e;
+          },
+        ),
+      ),
+    ));
+
+    // Verify initial high fee is loaded formatted as '10000,00'
+    expect(find.text('10000,00'), findsOneWidget);
+    expect(find.text('R\$ '), findsOneWidget);
+
+    // Update fee to 15000,50
+    final feeFinder = find.byKey(const ValueKey('appointment_fee_field'));
+    await tester.ensureVisible(feeFinder);
+    await tester.enterText(feeFinder, '15000,50');
+
+    // Submit form
+    final saveButton = find.byKey(const ValueKey('appointment_confirm_button'));
+    await tester.ensureVisible(saveButton);
+    await tester.tap(saveButton);
+    await tester.pumpAndSettle();
+
+    expect(updatedEvent, isNotNull);
+    expect(updatedEvent!.id, 'evt-high-fee-999');
+    expect(updatedEvent!.fee, 15000.50);
+  });
+
+  testWidgets('Should select and format start and end times properly (T4.1)', (WidgetTester tester) async {
+    EventEntity? createdEvent;
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          onConfirm: (e) async {
+            createdEvent = e;
+          },
+        ),
+      ),
+    ));
+
+    // Pick Start Time
+    final startField = find.byKey(const ValueKey('appointment_start_time_field'));
+    await tester.ensureVisible(startField);
+    await tester.tap(startField);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    // Pick End Time
+    final endField = find.byKey(const ValueKey('appointment_end_time_field'));
+    await tester.ensureVisible(endField);
+    await tester.tap(endField);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    // Fill required title and date
+    final titleField = find.byKey(const ValueKey('appointment_title_field'));
+    await tester.ensureVisible(titleField);
+    await tester.enterText(titleField, 'Ensaio com Horário');
+
+    final datePicker = find.text('Selecionar');
+    await tester.ensureVisible(datePicker);
+    await tester.tap(datePicker);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    final confirmButton = find.byKey(const ValueKey('appointment_confirm_button'));
+    await tester.ensureVisible(confirmButton);
+    await tester.tap(confirmButton);
+    await tester.pumpAndSettle();
+
+    expect(createdEvent, isNotNull);
+    expect(createdEvent!.startTime, isNot('--:--'));
+    expect(createdEvent!.endTime, isNot('--:--'));
+    expect(createdEvent!.startTime.contains(':'), isTrue);
+    expect(createdEvent!.endTime.contains(':'), isTrue);
+  });
+
+  testWidgets('Should render action buttons with consistent styling and equal widths (T4.1)', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          onConfirm: (e) async {},
+        ),
+      ),
+    ));
+
+    final cancelButton = find.widgetWithText(OutlinedButton, 'Cancelar');
+    final confirmButton = find.byKey(const ValueKey('appointment_confirm_button'));
+
+    expect(cancelButton, findsOneWidget);
+    expect(confirmButton, findsOneWidget);
+
+    await tester.ensureVisible(cancelButton);
+    await tester.ensureVisible(confirmButton);
+
+    final cancelSize = tester.getSize(cancelButton);
+    final confirmSize = tester.getSize(confirmButton);
+
+    // Both buttons should have the exact same full width in the form
+    expect(cancelSize.width, equals(confirmSize.width));
+    expect(cancelSize.height, greaterThanOrEqualTo(48.0));
+    expect(confirmSize.height, greaterThanOrEqualTo(48.0));
+  });
+
+  testWidgets('Should format raw digit input automatically into currency with 2 decimal places (CurrencyInputFormatter)', (WidgetTester tester) async {
+    EventEntity? createdEvent;
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: NewAppointmentWidget(
+          onConfirm: (e) async {
+            createdEvent = e;
+          },
+        ),
+      ),
+    ));
+
+    // Fill Title and Date
+    final titleField = find.byKey(const ValueKey('appointment_title_field'));
+    await tester.ensureVisible(titleField);
+    await tester.enterText(titleField, 'Show Especial');
+
+    final datePicker = find.text('Selecionar');
+    await tester.ensureVisible(datePicker);
+    await tester.tap(datePicker);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    // Type raw digits without comma (e.g. 150000 -> 1500,00)
+    final feeFinder = find.byKey(const ValueKey('appointment_fee_field'));
+    await tester.ensureVisible(feeFinder);
+    await tester.enterText(feeFinder, '150000');
+    await tester.pumpAndSettle();
+
+    // Verify formatted text displayed
+    expect(find.text('1500,00'), findsOneWidget);
+
+    // Confirm form
+    final confirmButton = find.byKey(const ValueKey('appointment_confirm_button'));
+    await tester.ensureVisible(confirmButton);
+    await tester.tap(confirmButton);
+    await tester.pumpAndSettle();
+
+    expect(createdEvent, isNotNull);
+    expect(createdEvent!.fee, 1500.0);
+  });
 }
+
+

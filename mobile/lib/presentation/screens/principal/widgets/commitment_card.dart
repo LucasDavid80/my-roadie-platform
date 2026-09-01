@@ -156,6 +156,10 @@ class CommitmentCard extends StatelessWidget {
       context: context,
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 24,
+        ),
         child: NewAppointmentWidget(
           event: event,
           onConfirm: (edited) => onConfirm(edited),

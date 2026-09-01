@@ -2,7 +2,7 @@ import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart'; // Para formatar a data
 
 class NewAppointmentWidget extends StatefulWidget {
@@ -73,11 +73,19 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
     super.dispose();
   }
 
+  // Função auxiliar para formatar TimeOfDay no formato estrito "HH:mm"
+  String _formatTimeOfDay(TimeOfDay? time) {
+    if (time == null) return '--:--';
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
   // --- Lógica para abrir o Calendário ---
   Future<void> _pickDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2030),
       builder: (context, child) {
@@ -99,9 +107,10 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
 
   // --- Lógica para abrir o Relógio ---
   Future<void> _pickTime(bool isStart) async {
+    final initial = (isStart ? _startTime : _endTime) ?? TimeOfDay.now();
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: initial,
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -131,7 +140,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
       child: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          margin: const EdgeInsets.all(16),
+          margin: EdgeInsets.zero,
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(12),
@@ -174,7 +183,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                     ),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () => context.pop(),
+                      onTap: () => Navigator.of(context).pop(),
                       child: const Icon(
                         Icons.close,
                         color: AppColors.textGrey,
@@ -188,8 +197,8 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
               // --- FORMULÁRIO ---
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 24,
+                  horizontal: 16,
+                  vertical: 20,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,6 +332,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                             'Início',
                             _startTime,
                             () => _pickTime(true),
+                            key: const ValueKey('appointment_start_time_field'),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -331,48 +341,38 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                             'Término',
                             _endTime,
                             () => _pickTime(false),
+                            key: const ValueKey('appointment_end_time_field'),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
 
-                    // LOCAL E CACHÊ
-                    if (showsFee)
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: _buildSimpleInput(
-                              key: const ValueKey(
-                                'appointment_location_field',
-                              ),
-                              controller: _locationController,
-                              label: 'Local',
-                              hint: 'Endereço...',
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildSimpleInput(
-                              key: const ValueKey('appointment_fee_field'),
-                              controller: _cacheController,
-                              label: 'Cachê',
-                              hint: '0,00',
-                              isMoney: true,
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      _buildSimpleInput(
-                        key: const ValueKey('appointment_location_field'),
-                        controller: _locationController,
-                        label: 'Local',
-                        hint: 'Endereço...',
-                      ),
+                    // LOCAL
+                    _buildSimpleInput(
+                      key: const ValueKey('appointment_location_field'),
+                      controller: _locationController,
+                      label: 'Local',
+                      hint: 'Endereço...',
+                    ),
                     const SizedBox(height: 16),
+
+                    // CACHÊ (Condicional ao tipo Show ou Gravação)
+                    if (showsFee) ...[
+                      _buildSimpleInput(
+                        key: const ValueKey('appointment_fee_field'),
+                        controller: _cacheController,
+                        label: 'Cachê',
+                        hint: '0,00',
+                        isMoney: true,
+                        prefixText: 'R\$ ',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyInputFormatter(),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                    ],
 
                     // OBSERVAÇÕES
                     _buildLabel('Observações'),
@@ -389,7 +389,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         OutlinedButton(
-                          onPressed: () => context.pop(),
+                          onPressed: () => Navigator.of(context).pop(),
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             side: BorderSide(color: Colors.grey.shade300),
@@ -403,126 +403,121 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        Center(
-                          child: ElevatedButton(
-                            key: const ValueKey('appointment_confirm_button'),
-                            onPressed: _isLoading
-                                ? null
-                                : () async {
-                                    if (_titleController.text.trim().isEmpty ||
-                                        _selectedDate == null) {
+                        ElevatedButton(
+                          key: const ValueKey('appointment_confirm_button'),
+                          onPressed: _isLoading
+                              ? null
+                              : () async {
+                                  if (_titleController.text.trim().isEmpty ||
+                                      _selectedDate == null) {
+                                    ScaffoldMessenger.of(
+                                      context,
+                                    ).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Por favor, preencha o título e selecione uma data.',
+                                        ),
+                                        backgroundColor: AppColors.erro,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+
+                                  final newEvent = EventEntity(
+                                    // Se estiver editando, MANTÉM o ID original. Se for novo, gera um novo.
+                                    id: isEditing
+                                        ? widget.event!.id
+                                        : DateTime.now().toString(),
+                                    title: _titleController.text.trim(),
+                                    type: _selectedType,
+                                    date: _selectedDate!,
+                                    startTime: _formatTimeOfDay(_startTime),
+                                    endTime: _formatTimeOfDay(_endTime),
+                                    location: _locationController.text.trim(),
+                                    fee: showsFee
+                                        ? double.tryParse(
+                                                _cacheController.text
+                                                    .replaceAll(',', '.'),
+                                              ) ??
+                                              0.0
+                                        : 0.0,
+                                    notes: _notesController.text.trim(),
+                                    bandId: widget.event?.bandId,
+                                  );
+
+                                  try {
+                                    await widget.onConfirm(newEvent);
+                                    if (context.mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  } catch (error, stackTrace) {
+                                    AppLogger.error(
+                                      'Erro ao salvar compromisso',
+                                      error,
+                                      stackTrace,
+                                    );
+                                    if (context.mounted) {
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
+                                      final rawMessage = error
+                                          .toString()
+                                          .replaceFirst('Exception: ', '')
+                                          .trim();
+                                      final message = rawMessage.isNotEmpty
+                                          ? rawMessage
+                                          : 'Erro ao salvar compromisso. Tente novamente.';
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
-                                        const SnackBar(
+                                        SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          duration: const Duration(
+                                            seconds: 15,
+                                          ),
                                           content: Text(
-                                            'Por favor, preencha o título e selecione uma data.',
+                                            'Erro ao salvar compromisso:\n$message',
+                                            maxLines: 6,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                           backgroundColor: AppColors.erro,
                                         ),
                                       );
-                                      return;
                                     }
-
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-
-                                    final newEvent = EventEntity(
-                                      // Se estiver editando, MANTÉM o ID original. Se for novo, gera um novo.
-                                      id: isEditing
-                                          ? widget.event!.id
-                                          : DateTime.now().toString(),
-                                      title: _titleController.text.trim(),
-                                      type: _selectedType,
-                                      date: _selectedDate!,
-                                      startTime:
-                                          _startTime?.format(context) ??
-                                          '--:--',
-                                      endTime:
-                                          _endTime?.format(context) ?? '--:--',
-                                      location: _locationController.text.trim(),
-                                      fee: showsFee
-                                          ? double.tryParse(
-                                                  _cacheController.text
-                                                      .replaceAll(',', '.'),
-                                                ) ??
-                                                0.0
-                                          : 0.0,
-                                      notes: _notesController.text.trim(),
-                                      bandId: widget.event?.bandId,
-                                    );
-
-                                    try {
-                                      await widget.onConfirm(newEvent);
-                                      if (context.mounted) {
-                                        Navigator.of(context).pop();
-                                      }
-                                    } catch (error, stackTrace) {
-                                      AppLogger.error(
-                                        'Erro ao salvar compromisso',
-                                        error,
-                                        stackTrace,
-                                      );
-                                      if (context.mounted) {
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
-                                        final rawMessage = error
-                                            .toString()
-                                            .replaceFirst('Exception: ', '')
-                                            .trim();
-                                        final message = rawMessage.isNotEmpty
-                                            ? rawMessage
-                                            : 'Erro ao salvar compromisso. Tente novamente.';
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            behavior: SnackBarBehavior.floating,
-                                            duration: const Duration(
-                                              seconds: 15,
-                                            ),
-                                            content: Text(
-                                              'Erro ao salvar compromisso:\n$message',
-                                              maxLines: 6,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            backgroundColor: AppColors.erro,
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              elevation: 0,
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: _isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        AppColors.textLight,
-                                      ),
-                                    ),
-                                  )
-                                : Text(
-                                    isEditing
-                                        ? 'Salvar Alterações'
-                                        : 'Criar Compromisso',
-                                    style: const TextStyle(
-                                      color: AppColors.textLight,
-                                      fontWeight: FontWeight.bold,
+                            elevation: 0,
+                          ),
+                          child: _isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.textLight,
                                     ),
                                   ),
-                          ),
+                                )
+                              : Text(
+                                  isEditing
+                                      ? 'Salvar Alterações'
+                                      : 'Criar Compromisso',
+                                  style: const TextStyle(
+                                    color: AppColors.textLight,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -538,9 +533,14 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
 
   // --- WIDGETS AUXILIARES REUTILIZÁVEIS ---
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration _inputDecoration(String hint, {String? prefixText}) {
     return InputDecoration(
       hintText: hint,
+      prefixText: prefixText,
+      prefixStyle: const TextStyle(
+        fontWeight: FontWeight.w600,
+        color: Colors.black87,
+      ),
       hintStyle: TextStyle(color: Colors.grey[400]),
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       enabledBorder: OutlineInputBorder(
@@ -569,16 +569,19 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
   Widget _buildClickableTimeField(
     String label,
     TimeOfDay? time,
-    VoidCallback onTap,
-  ) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildLabel(label),
-          const SizedBox(height: 6),
-          Container(
+    VoidCallback onTap, {
+    Key? key,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLabel(label),
+        const SizedBox(height: 6),
+        InkWell(
+          key: key,
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             height: 48,
             decoration: _boxDecoration(),
@@ -586,15 +589,18 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  time == null ? '--:--' : time.format(context),
-                  style: const TextStyle(color: Colors.black87),
+                  _formatTimeOfDay(time),
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,
+                  ),
                 ),
                 const Icon(Icons.access_time, size: 18, color: Colors.black54),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -604,7 +610,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
     required String label,
     required String hint,
     bool isMoney = false,
+    String? prefixText,
     TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -623,9 +631,52 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
           key: key,
           controller: controller,
           keyboardType: keyboardType,
-          decoration: _inputDecoration(hint),
+          inputFormatters: inputFormatters,
+          decoration: _inputDecoration(hint, prefixText: prefixText),
         ),
       ],
     );
   }
 }
+
+/// Formata valores numéricos para moeda em tempo real (centavos da direita para a esquerda).
+class CurrencyInputFormatter extends TextInputFormatter {
+  final int maxDigits;
+
+  CurrencyInputFormatter({this.maxDigits = 10});
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+
+    // Extrai apenas dígitos
+    String digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    if (digitsOnly.isEmpty) {
+      return const TextEditingValue(
+        text: '',
+        selection: TextSelection.collapsed(offset: 0),
+      );
+    }
+
+    if (digitsOnly.length > maxDigits) {
+      digitsOnly = digitsOnly.substring(0, maxDigits);
+    }
+
+    // Converte os dígitos inteiros em centavos
+    final parsed = int.tryParse(digitsOnly) ?? 0;
+    final double value = parsed / 100.0;
+    final formatted = value.toStringAsFixed(2).replaceAll('.', ',');
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+}
+

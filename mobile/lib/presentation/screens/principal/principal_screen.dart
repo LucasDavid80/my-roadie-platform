@@ -49,6 +49,11 @@ class PrincipalScreen extends ConsumerWidget {
             showDialog(
               context: context,
               builder: (context) => Dialog(
+                backgroundColor: Colors.transparent,
+                insetPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
+                ),
                 child: NewAppointmentWidget(
                   onConfirm: (newEvent) async {
                     // Aqui a mágica acontece: avisamos o motor para adicionar o evento
