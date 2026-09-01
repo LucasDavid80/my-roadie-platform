@@ -33,7 +33,7 @@ Comparar apenas ano/mês/dia (via `_startOfDay`) evita que um evento de hoje com
 
 - **`principal_screen.dart`**:
   - Trocar `commitments: events` por `commitments: ref.watch(agendaProvider.notifier).upcomingEvents` (ou expor `upcomingEvents` como um `Provider` derivado, se preferível para evitar recomputar a cada rebuild — decidir na Fase 1 conforme o padrão já usado por `totalFee`/`monthlyShows`, que também são getters lidos diretamente do notifier).
-  - Adicionar botão/ícone de navegação para `HistoryScreen` próximo ao cabeçalho de "Próximos Compromissos" (dentro de `CommitmentsWidget` ou como ação no `HeaderWidget`/`AppBar` — decidir no design da Fase 1 olhando o layout atual).
+  - Adicionar botão/atalho de navegação para `HistoryScreen` ("Ver histórico") alinhado à direita no cabeçalho da lista de "Próximos Compromissos" em `CommitmentsWidget`.
 
 - **Nova pasta `mobile/lib/presentation/screens/history/`**:
   - `history_screen.dart`: `ConsumerWidget` que lê `pastEvents` do `agendaProvider.notifier`, reaproveita `CommitmentsWidget`/`CommitmentCard` com ações de editar/excluir habilitadas (conforme definido em T0.1).
@@ -50,7 +50,7 @@ Comparar apenas ano/mês/dia (via `_startOfDay`) evita que um evento de hoje com
 ## Decisões a confirmar na Fase 0 (antes de codar)
 
 1. **Editar/excluir no histórico**: **Habilitadas** (definido na Fase 0 / T0.1). A tela de Histórico reaproveitará o `CommitmentCard` com as ações padrão de edição e exclusão.
-2. **Local do atalho para o histórico**: botão dedicado perto de "Próximos Compromissos", ou entrada no menu/app bar já existente (`MyRoadieAppBar`)? Depende do espaço disponível no layout atual — inspecionar antes de implementar.
+2. **Local do atalho para o histórico**: **Cabeçalho de "Próximos Compromissos" em `CommitmentsWidget`** (definido na Fase 0 / T0.2), com botão/atalho "Ver histórico" alinhado à direita no cabeçalho da seção, mantendo a `MyRoadieAppBar` limpa e a navegação contextualmente associada aos compromissos.
 3. **Provider derivado vs. getter no notifier**: manter o padrão já usado (`totalFee`, `monthlyShows` como getters lidos com `ref.read`) ou migrar para `Provider.autoDispose` derivado, dado que `upcomingEvents`/`pastEvents` serão lidos com `ref.watch` em duas telas diferentes agora (mais motivo para reatividade correta do que os getters atuais, que só são lidos uma vez por build).
 
 ## Conformidade com a Constituição (`constitution.md`)
