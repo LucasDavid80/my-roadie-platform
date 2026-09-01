@@ -237,7 +237,7 @@ jobs:
       - run: flutter test
 
   mobile-e2e-emulator:
-    name: Mobile E2E Emulator (Spec 018)
+    name: Mobile E2E Emulator (Spec 019)
     needs: mobile-test
     if: github.event.inputs.run_mobile_e2e == 'true' || inputs.run_mobile_e2e == true
     runs-on: macos-latest
@@ -251,10 +251,8 @@ jobs:
           channel: 'stable'
           cache: true
       - run: flutter pub get
-      - name: Placeholder para suíte de testes E2E Mobile (Spec 018)
-        run: |
-          echo "Hook de E2E Mobile sob demanda ativado."
-          echo "Os cenários detalhados com emulador serão implementados na Spec 018."
+      - name: Executar Suíte de Testes E2E Mobile
+        run: flutter test integration_test/app_test.dart
 
   # ==========================================
   # BUILD JOBS

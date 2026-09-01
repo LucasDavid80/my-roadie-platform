@@ -85,7 +85,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 ## Fase 5 — Integração com o Pipeline CI/CD (`mobile-e2e-emulator`)
 
-- [ ] T5.1 — Atualizar o job `mobile-e2e-emulator` em `.github/workflows/ci.yml` para executar `flutter test integration_test/app_test.dart` quando `run_mobile_e2e: true`.
+- [x] T5.1 — Atualizar o job `mobile-e2e-emulator` em `.github/workflows/ci.yml` para executar `flutter test integration_test/app_test.dart` quando `run_mobile_e2e: true`.
   - Critério: Job configurado e conectado à suíte oficial de integração.
 - [ ] T5.2 — Validar a formatação e a sintaxe do arquivo `.github/workflows/ci.yml`.
   - Critério: Workflow YAML válido.
