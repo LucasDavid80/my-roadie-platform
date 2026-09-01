@@ -100,7 +100,6 @@ describe('TransactionsService', () => {
         type: TransactionType.INCOME,
         date: '2026-07-28T00:00:00.000Z',
         bandId: 'band-uuid-1',
-        userId: 'user-uuid-1',
         eventId: 'event-uuid-1',
       };
 
@@ -115,12 +114,22 @@ describe('TransactionsService', () => {
         where: { id: dto.bandId },
       });
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
-        where: { id: dto.userId },
+        where: { id: mockUserPayload.userId },
       });
       expect(prisma.event.findUnique).toHaveBeenCalledWith({
         where: { id: dto.eventId },
       });
-      expect(prisma.transaction.create).toHaveBeenCalled();
+      expect(prisma.transaction.create).toHaveBeenCalledWith({
+        data: {
+          description: dto.description,
+          amount: dto.amount,
+          type: dto.type,
+          date: new Date(dto.date),
+          bandId: dto.bandId,
+          userId: mockUserPayload.userId,
+          eventId: dto.eventId,
+        },
+      });
       expect(result).toEqual(mockTransaction);
     });
 
@@ -131,7 +140,6 @@ describe('TransactionsService', () => {
         type: TransactionType.EXPENSE,
         date: '2026-07-28T00:00:00.000Z',
         bandId: 'band-uuid-1',
-        userId: 'user-uuid-1',
       };
 
       const result = await service.create(dto, mockUserPayload);
@@ -140,9 +148,19 @@ describe('TransactionsService', () => {
         where: { id: dto.bandId },
       });
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
-        where: { id: dto.userId },
+        where: { id: mockUserPayload.userId },
       });
-      expect(prisma.transaction.create).toHaveBeenCalled();
+      expect(prisma.transaction.create).toHaveBeenCalledWith({
+        data: {
+          description: dto.description,
+          amount: dto.amount,
+          type: dto.type,
+          date: new Date(dto.date),
+          bandId: dto.bandId,
+          userId: mockUserPayload.userId,
+          eventId: undefined,
+        },
+      });
       expect(result).toEqual(mockTransaction);
     });
 
@@ -155,7 +173,6 @@ describe('TransactionsService', () => {
         type: TransactionType.INCOME,
         date: '2026-07-28T00:00:00.000Z',
         bandId: 'band-inexistente',
-        userId: 'user-uuid-1',
       };
 
       await expect(service.create(dto, mockUserPayload)).rejects.toThrow(
@@ -172,7 +189,6 @@ describe('TransactionsService', () => {
         type: TransactionType.INCOME,
         date: '2026-07-28T00:00:00.000Z',
         bandId: 'band-uuid-1',
-        userId: 'user-inexistente',
       };
 
       await expect(service.create(dto, mockUserPayload)).rejects.toThrow(
@@ -189,7 +205,6 @@ describe('TransactionsService', () => {
         type: TransactionType.INCOME,
         date: '2026-07-28T00:00:00.000Z',
         bandId: 'band-uuid-1',
-        userId: 'user-uuid-1',
         eventId: 'event-inexistente',
       };
 

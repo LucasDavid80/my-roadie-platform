@@ -31,10 +31,6 @@ export class CreateTransactionDto {
   @IsNotEmpty({ message: 'O bandId é obrigatório' })
   bandId!: string;
 
-  @IsUUID('4', { message: 'O userId deve ser um UUID válido' })
-  @IsNotEmpty({ message: 'O userId é obrigatório' })
-  userId!: string;
-
   @IsOptional()
   @IsUUID('4', { message: 'O eventId deve ser um UUID válido' })
   eventId?: string;
