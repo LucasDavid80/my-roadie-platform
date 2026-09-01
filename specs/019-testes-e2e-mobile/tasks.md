@@ -65,7 +65,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 
 ## Fase 4 — Suíte E2E do Ciclo Completo da Agenda (`agenda_flow_test.dart`)
 
-- [ ] T4.1 — Implementar o teste E2E de criação de compromisso em `mobile/integration_test/agenda_flow_test.dart`:
+- [x] T4.1 — Implementar o teste E2E de criação de compromisso em `mobile/integration_test/agenda_flow_test.dart`:
   - Abertura do modal `NewAppointmentWidget`, preenchimento do formulário (título, tipo, horário, cachê, local), confirmação e validação do novo card na listagem.
   - Critério: Teste valida a inserção do `CommitmentCard` na lista.
 - [ ] T4.2 — Implementar o teste E2E de edição de compromisso:
