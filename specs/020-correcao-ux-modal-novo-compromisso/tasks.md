@@ -36,7 +36,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 - [x] T4.1 — Atualizar e expandir a suíte de testes de widget (`test/new_appointment_widget_test.dart`) cobrindo cenários com valores de cachê altos (`1500,00`, `10000,00`), alinhamento de botões e integridade do formulário.
   - Critério: todos os testes de widget passam com sucesso (`flutter test test/new_appointment_widget_test.dart`).
-- [ ] T4.2 — Executar a suíte de testes unitários e de integração do mobile (`flutter test` e `integration_test/agenda_flow_test.dart`).
+- [x] T4.2 — Executar a suíte de testes unitários e de integração do mobile (`flutter test` e `integration_test/agenda_flow_test.dart`).
   - Critério: 100% dos testes do mobile passando sem regressões.
 - [ ] T4.3 — Medir a cobertura de testes no app mobile (`flutter test --coverage`).
   - Critério: cobertura mantida ou ampliada em conformidade com `constitution.md §5`.
