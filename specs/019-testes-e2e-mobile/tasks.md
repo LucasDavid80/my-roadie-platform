@@ -68,7 +68,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 - [x] T4.1 — Implementar o teste E2E de criação de compromisso em `mobile/integration_test/agenda_flow_test.dart`:
   - Abertura do modal `NewAppointmentWidget`, preenchimento do formulário (título, tipo, horário, cachê, local), confirmação e validação do novo card na listagem.
   - Critério: Teste valida a inserção do `CommitmentCard` na lista.
-- [ ] T4.2 — Implementar o teste E2E de edição de compromisso:
+- [x] T4.2 — Implementar o teste E2E de edição de compromisso:
   - Clique no botão de editar no card, alteração de dados no modal, salvamento e verificação da atualização na listagem.
   - Critério: Teste valida a persistência visual das alterações no card.
 - [ ] T4.3 — Implementar o teste E2E de exclusão de compromisso:

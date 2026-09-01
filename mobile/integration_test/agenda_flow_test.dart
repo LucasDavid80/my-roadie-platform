@@ -99,5 +99,72 @@ void main() {
         expect(find.text('R\$ 3500.00'), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'deve editar um compromisso existente e atualizar a listagem da agenda (T4.2)',
+      (WidgetTester tester) async {
+        E2EBindingHelper.setupTestViewport(tester);
+
+        final mockUser = MockSupabaseUser();
+        when(() => mockUser.id).thenReturn(TestSeedData.testUserId);
+        when(() => mockUser.email).thenReturn(TestSeedData.testUserEmail);
+
+        final context = createHermeticTestContext(
+          initialAuthUser: mockUser,
+          initialUserProfile: TestSeedData.defaultUserEntity,
+          initialEvents: [TestSeedData.defaultEventEntity],
+        );
+        final app = context.buildApp(initialLocation: '/');
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 600));
+        await tester.pumpAndSettle();
+
+        // 1. Valida que a aplicação inicia na tela principal com o card existente
+        expect(find.byType(PrincipalScreen), findsOneWidget);
+        expect(find.byType(CommitmentCard), findsOneWidget);
+        expect(find.text(TestSeedData.testEventTitle), findsOneWidget);
+        expect(find.text('R\$ 3500.00'), findsOneWidget);
+
+        // 2. Clica no botão de edição no CommitmentCard
+        final editButtonFinder = find.byKey(
+          const ValueKey('commitment_card_edit_button'),
+        );
+        expect(editButtonFinder, findsOneWidget);
+        await tester.tap(editButtonFinder);
+        await tester.pumpAndSettle();
+
+        // 3. Valida reabertura do modal no modo de edição
+        expect(find.byType(NewAppointmentWidget), findsOneWidget);
+        expect(find.text('Editar Compromisso'), findsOneWidget);
+
+        // 4. Altera o título e o cachê
+        final titleField = find.byKey(
+          const ValueKey('appointment_title_field'),
+        );
+        final feeField = find.byKey(const ValueKey('appointment_fee_field'));
+        expect(titleField, findsOneWidget);
+        expect(feeField, findsOneWidget);
+
+        await tester.enterText(titleField, TestSeedData.updatedEventTitle);
+        await tester.enterText(feeField, '4000,00');
+        await tester.pumpAndSettle();
+
+        // 5. Clica no botão de salvar/confirmar alterações
+        final confirmButton = find.byKey(
+          const ValueKey('appointment_confirm_button'),
+        );
+        expect(confirmButton, findsOneWidget);
+        await tester.tap(confirmButton);
+        await tester.pumpAndSettle();
+
+        // 6. Valida que o modal fechou e a listagem reflete os novos dados
+        expect(find.byType(NewAppointmentWidget), findsNothing);
+        expect(find.byType(CommitmentCard), findsOneWidget);
+        expect(find.text(TestSeedData.updatedEventTitle), findsOneWidget);
+        expect(find.text('R\$ 4000.00'), findsOneWidget);
+        expect(find.text(TestSeedData.testEventTitle), findsNothing);
+      },
+    );
   });
 }
