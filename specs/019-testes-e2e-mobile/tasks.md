@@ -78,7 +78,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
   - Critério: Arquivo runner criado e estruturado.
 - [x] T4.5 — Executar a suíte agregada localmente (`flutter test integration_test/app_test.dart`).
   - Critério: Todos os cenários executam sequencialmente com 100% de aprovação.
-- [ ] T4.6 — Executar `flutter analyze` na pasta `mobile/`.
+- [x] T4.6 — Executar `flutter analyze` na pasta `mobile/`.
   - Critério: 0 erros e 0 warnings.
 
 ---
