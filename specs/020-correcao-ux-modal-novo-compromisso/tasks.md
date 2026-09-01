@@ -58,7 +58,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
     4. Teste apagar (backspace) para ver o recuo automático das casas decimais.
   - **O que validar**: O campo "Local" ocupa 100% da linha sem espremer outros inputs; o campo "Cachê" exibe o teclado numérico, formata automaticamente com 2 casas decimais sem precisar digitar vírgula, exibe o prefixo `R$ `, e permite visualização completa sem corte ou truncamento de texto.
 
-- [ ] T5.3 — Validação da Dinâmica de Tipos de Compromisso e Seletores de Horário
+- [x] T5.3 — Validação da Dinâmica de Tipos de Compromisso e Seletores de Horário
   - **Como testar**:
     1. No dropdown "Tipo", altere a opção de `Show` para `Ensaio` ou `Reunião`.
     2. Observe o desaparecimento imediato do campo "Cachê".
