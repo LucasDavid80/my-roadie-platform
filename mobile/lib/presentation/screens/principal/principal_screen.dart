@@ -39,6 +39,7 @@ class PrincipalScreen extends ConsumerWidget {
 
         // 4. Botão Flutuante para Adicionar
         floatingActionButton: FloatingActionButton(
+          key: const ValueKey('agenda_add_button'),
           backgroundColor: AppColors.primary, // Laranja
           child: const Icon(
             Icons.add,

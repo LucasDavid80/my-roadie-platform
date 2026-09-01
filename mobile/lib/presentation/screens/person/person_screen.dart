@@ -82,6 +82,7 @@ class _PersonScreenState extends ConsumerState<PersonScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton.icon(
+        key: const ValueKey('profile_save_button'),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           minimumSize: const Size(double.infinity, 54),

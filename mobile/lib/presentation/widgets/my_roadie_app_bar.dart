@@ -41,6 +41,7 @@ class MyRoadieAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           // 1. Ícone Calendário (Home)
           IconButton(
+            key: const ValueKey('calendar_appbar_button'),
             icon: const Icon(Icons.calendar_today),
             // Lógica ternária: Se for 'calendar' usa laranja, senão usa azul escuro
             color: selectedScreen == 'calendar'
@@ -57,6 +58,7 @@ class MyRoadieAppBar extends StatelessWidget implements PreferredSizeWidget {
 
           // 2. Ícone Perfil
           IconButton(
+            key: const ValueKey('profile_appbar_button'),
             icon: const Icon(Icons.person),
             color: selectedScreen == 'profile'
                 ? AppColors.primary
