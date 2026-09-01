@@ -41,6 +41,42 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 - [x] T4.3 — Medir a cobertura de testes no app mobile (`flutter test --coverage`).
   - Critério: cobertura mantida ou ampliada em conformidade com `constitution.md §5`.
 
+## Fase 5 — Validação Manual e Testes do Usuário
+
+- [ ] T5.1 — Validação Visual de Espaçamento e Margens do Modal
+  - **Como testar**:
+    1. Inicie o aplicativo mobile no dispositivo físico ou emulador (`flutter run` dentro da pasta `mobile/`).
+    2. Na tela principal (Agenda), clique no botão flutuante `+` (FAB) para abrir o modal "Novo Compromisso".
+    3. Observe a distribuição horizontal do modal na tela.
+  - **O que validar**: O formulário aproveita a largura da tela com respiro lateral equilibrado (16px), sem o aperto/esmagamento visual anterior provocado pelo aninhamento excessivo de margens.
+
+- [ ] T5.2 — Validação de Entrada e Legibilidade de Valores Altos no Campo "Cachê"
+  - **Como testar**:
+    1. No modal aberto, mantenha o tipo como `Show` (ou mude para `Gravação`).
+    2. Toque no campo "Local" e digite um endereço longo (ex.: `Av. Paulista, 1578 - Bela Vista, São Paulo - SP`).
+    3. Toque no campo "Cachê" e digite valores altos com decimais (ex.: `1500,00`, `12500,00` e `150000,00`).
+    4. Tente digitar caracteres alfabéticos ou múltiplos pontos/vírgulas.
+  - **O que validar**: O campo "Local" ocupa 100% da linha sem espremer outros inputs; o campo "Cachê" exibe o prefixo `R$ `, permite digitar valores altos com visualização completa sem corte ou truncamento de texto, e bloqueia caracteres não-numéricos via validação por regex.
+
+- [ ] T5.3 — Validação da Dinâmica de Tipos de Compromisso e Seletores de Horário
+  - **Como testar**:
+    1. No dropdown "Tipo", altere a opção de `Show` para `Ensaio` ou `Reunião`.
+    2. Observe o desaparecimento imediato do campo "Cachê".
+    3. Alterne novamente para `Show` e confirme a reaparição do campo "Cachê".
+    4. Toque no card de horário "Início" e selecione um horário no relógio (ex.: `20:00`).
+    5. Toque no card de horário "Término" e selecione um horário no relógio (ex.: `23:30`).
+  - **O que validar**: A alternância de tipo oculta/exibe o campo Cachê de forma reativa; os seletores de horário abrem o diálogo `showTimePicker` temático e exibem claramente as horas formatadas no padrão `"HH:mm"`.
+
+- [ ] T5.4 — Validação dos Botões de Ação e Ciclo de Criação e Edição
+  - **Como testar**:
+    1. No rodapé do modal, observe o alinhamento dos botões "Cancelar" e "Criar Compromisso".
+    2. Toque no botão "Cancelar" e confirme que o modal fecha sem persistir alterações.
+    3. Abra novamente o modal, preencha os dados completos (Título, Data, Horários, Local, Cachê de `3500,00`, Observações) e toque em "Criar Compromisso".
+    4. Na listagem da Agenda, localize o card recém-criado e toque no botão de editar (ícone de lápis).
+    5. No modal "Editar Compromisso", confirme que todos os dados foram carregados (inclusive o cachê `"3500,00"` e horários).
+    6. Altere o cachê para `5000,00` e toque em "Salvar Alterações".
+  - **O que validar**: Ambos os botões têm largura total uniforme (100%), espaçamento vertical de 12px e bordas bem delineadas; o modal cancela e fecha corretamente; a criação e a edição persistem e atualizam os dados da agenda na interface sem falhas.
+
 ## Checklist de fechamento da feature
 
 - [ ] Margens internas do modal ajustadas, eliminando o aperto visual dos campos em aparelhos mobile

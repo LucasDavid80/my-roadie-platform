@@ -72,6 +72,13 @@ O modal de criação/edição de compromissos é implementado pelo widget `NewAp
 - Validar a suíte E2E mobile (`mobile/integration_test/agenda_flow_test.dart`).
 - Medir cobertura de testes do mobile com `flutter test --coverage`.
 
+### Fase 5 — Validação Manual e Testes do Usuário
+- Executar roteiro de validação interativa no dispositivo físico ou emulador.
+- Validar visualmente as margens e área útil em tela real.
+- Validar digitação de valores monetários longos e comportamento do teclado.
+- Validar seleção e persistência dos seletores de horário.
+- Validar proporção, clique e fluxo dos botões de ação na criação e na edição de compromissos.
+
 ---
 
 ## 3. Riscos e Mitigações
