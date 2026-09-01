@@ -74,7 +74,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 - [x] T4.3 — Implementar o teste E2E de exclusão de compromisso:
   - Clique no botão de deletar no card, confirmação no diálogo de exclusão e validação de que o card foi removido da lista.
   - Critério: Teste valida a remoção do card após confirmação.
-- [ ] T4.4 — Criar o runner agregador `mobile/integration_test/app_test.dart` agrupando as três suítes (Auth, Perfil e Agenda).
+- [x] T4.4 — Criar o runner agregador `mobile/integration_test/app_test.dart` agrupando as três suítes (Auth, Perfil e Agenda).
   - Critério: Arquivo runner criado e estruturado.
 - [ ] T4.5 — Executar a suíte agregada localmente (`flutter test integration_test/app_test.dart`).
   - Critério: Todos os cenários executam sequencialmente com 100% de aprovação.
