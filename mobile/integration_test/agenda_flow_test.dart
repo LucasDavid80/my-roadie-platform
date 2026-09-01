@@ -166,5 +166,67 @@ void main() {
         expect(find.text(TestSeedData.testEventTitle), findsNothing);
       },
     );
+
+    testWidgets(
+      'deve excluir um compromisso após confirmação no diálogo (T4.3)',
+      (WidgetTester tester) async {
+        E2EBindingHelper.setupTestViewport(tester);
+
+        final mockUser = MockSupabaseUser();
+        when(() => mockUser.id).thenReturn(TestSeedData.testUserId);
+        when(() => mockUser.email).thenReturn(TestSeedData.testUserEmail);
+
+        final context = createHermeticTestContext(
+          initialAuthUser: mockUser,
+          initialUserProfile: TestSeedData.defaultUserEntity,
+          initialEvents: [TestSeedData.defaultEventEntity],
+        );
+        final app = context.buildApp(initialLocation: '/');
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 600));
+        await tester.pumpAndSettle();
+
+        // 1. Valida que a aplicação inicia na tela principal com o card existente
+        expect(find.byType(PrincipalScreen), findsOneWidget);
+        expect(find.byType(CommitmentCard), findsOneWidget);
+        expect(find.text(TestSeedData.testEventTitle), findsOneWidget);
+
+        // 2. Clica no botão de exclusão no CommitmentCard
+        final deleteButtonFinder = find.byKey(
+          const ValueKey('commitment_card_delete_button'),
+        );
+        expect(deleteButtonFinder, findsOneWidget);
+        await tester.tap(deleteButtonFinder);
+        await tester.pumpAndSettle();
+
+        // 3. Valida que o diálogo de confirmação de exclusão é exibido
+        expect(find.text('Excluir Compromisso'), findsOneWidget);
+        expect(
+          find.text(
+            'Tem certeza de que deseja excluir este compromisso? Esta ação não pode ser desfeita.',
+          ),
+          findsOneWidget,
+        );
+
+        final confirmDeleteButton = find.byKey(
+          const ValueKey('dialog_confirm_delete_button'),
+        );
+        expect(confirmDeleteButton, findsOneWidget);
+
+        // 4. Clica em "Excluir" no diálogo de confirmação
+        await tester.tap(confirmDeleteButton);
+        await tester.pumpAndSettle();
+
+        // 5. Valida a exibição do SnackBar de sucesso
+        expect(find.text('Compromisso excluído com sucesso!'), findsOneWidget);
+
+        // 6. Valida que o diálogo fechou e o card foi removido da listagem
+        expect(find.text('Excluir Compromisso'), findsNothing);
+        expect(find.byType(CommitmentCard), findsNothing);
+        expect(find.text(TestSeedData.testEventTitle), findsNothing);
+        expect(find.text('Nenhum compromisso para este dia.'), findsOneWidget);
+      },
+    );
   });
 }

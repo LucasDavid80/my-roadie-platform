@@ -71,7 +71,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
 - [x] T4.2 — Implementar o teste E2E de edição de compromisso:
   - Clique no botão de editar no card, alteração de dados no modal, salvamento e verificação da atualização na listagem.
   - Critério: Teste valida a persistência visual das alterações no card.
-- [ ] T4.3 — Implementar o teste E2E de exclusão de compromisso:
+- [x] T4.3 — Implementar o teste E2E de exclusão de compromisso:
   - Clique no botão de deletar no card, confirmação no diálogo de exclusão e validação de que o card foi removido da lista.
   - Critério: Teste valida a remoção do card após confirmação.
 - [ ] T4.4 — Criar o runner agregador `mobile/integration_test/app_test.dart` agrupando as três suítes (Auth, Perfil e Agenda).
