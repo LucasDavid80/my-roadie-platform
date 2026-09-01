@@ -43,7 +43,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 ## Fase 5 — Validação Manual e Testes do Usuário
 
-- [ ] T5.1 — Validação Visual de Espaçamento e Margens do Modal
+- [x] T5.1 — Validação Visual de Espaçamento e Margens do Modal
   - **Como testar**:
     1. Inicie o aplicativo mobile no dispositivo físico ou emulador (`flutter run` dentro da pasta `mobile/`).
     2. Na tela principal (Agenda), clique no botão flutuante `+` (FAB) para abrir o modal "Novo Compromisso".
