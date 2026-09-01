@@ -40,31 +40,46 @@ class HistoryScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: pastEvents.length,
-                itemBuilder: (context, index) {
-                  final commitment = pastEvents[index];
-                  final bool showHeader = index == 0 ||
-                      !_isSameDay(commitment.date, pastEvents[index - 1].date);
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (showHeader) _buildDateHeader(commitment.date),
-                        CommitmentCard(
-                          event: commitment,
-                          onConfirm: handleOnConfirm,
-                          onDelete: handleOnDelete,
-                        ),
-                      ],
+              if (pastEvents.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: Center(
+                    child: Text(
+                      'Nenhum compromisso no histórico ainda',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                },
-              ),
+                  ),
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: pastEvents.length,
+                  itemBuilder: (context, index) {
+                    final commitment = pastEvents[index];
+                    final bool showHeader = index == 0 ||
+                        !_isSameDay(commitment.date, pastEvents[index - 1].date);
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (showHeader) _buildDateHeader(commitment.date),
+                          CommitmentCard(
+                            event: commitment,
+                            onConfirm: handleOnConfirm,
+                            onDelete: handleOnDelete,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               const SizedBox(height: 32),
             ],
           ),

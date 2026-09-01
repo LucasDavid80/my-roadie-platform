@@ -19,7 +19,7 @@ Pré-requisitos: nenhum bloqueante direto. Recomendado rodar depois (ou junto) d
 
 - [x] T2.1 — Criar `history_screen.dart` em `mobile/lib/presentation/screens/history/`, consumindo `pastEvents`.
 - [x] T2.2 — Reaproveitar `CommitmentCard`/`CommitmentsWidget` (ou variante somente-leitura, conforme T0.1) para renderizar a lista agrupada por data.
-- [ ] T2.3 — Implementar estado vazio ("Nenhum compromisso no histórico ainda").
+- [x] T2.3 — Implementar estado vazio ("Nenhum compromisso no histórico ainda").
 - [ ] T2.4 — Teste de widget: lista renderiza `pastEvents`, estado vazio quando não há eventos passados.
 
 ## Fase 3 — Integração na Agenda
