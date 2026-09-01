@@ -68,7 +68,6 @@ describe('TransactionsController', () => {
         type: TransactionType.INCOME,
         date: '2026-07-28T00:00:00.000Z',
         bandId: 'band-uuid-1',
-        userId: 'user-uuid-1',
         eventId: 'event-uuid-1',
       };
 
@@ -85,7 +84,6 @@ describe('TransactionsController', () => {
         type: TransactionType.INCOME,
         date: '2026-07-28T00:00:00.000Z',
         bandId: 'band-inexistente',
-        userId: 'user-uuid-1',
       };
 
       jest

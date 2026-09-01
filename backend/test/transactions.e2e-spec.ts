@@ -188,7 +188,7 @@ describe('TransactionsController (e2e)', () => {
     });
 
     describe('POST /transactions', () => {
-      it('deve retornar 201 ao criar transação com payload válido', () => {
+      it('deve retornar 201 ao criar transação com payload válido e associar ao userId autenticado', () => {
         return request(app.getHttpServer())
           .post('/transactions')
           .send({
@@ -197,7 +197,6 @@ describe('TransactionsController (e2e)', () => {
             type: TransactionType.INCOME,
             date: '2026-07-28T00:00:00.000Z',
             bandId: mockBandId,
-            userId: mockUserId,
             eventId: mockEventId,
           })
           .expect(201)
@@ -205,7 +204,32 @@ describe('TransactionsController (e2e)', () => {
             const body = res.body as { id: string; description: string };
             expect(body).toHaveProperty('id', mockTransactionId);
             expect(body.description).toBe('Cachê do show');
+            expect(mockPrismaService.transaction.create).toHaveBeenCalledWith({
+              data: {
+                description: 'Cachê do show',
+                amount: 1500.0,
+                type: TransactionType.INCOME,
+                date: new Date('2026-07-28T00:00:00.000Z'),
+                bandId: mockBandId,
+                userId: mockUserId,
+                eventId: mockEventId,
+              },
+            });
           });
+      });
+
+      it('deve retornar 400 ao tentar enviar userId no payload (prevenção de spoofing via forbidNonWhitelisted)', () => {
+        return request(app.getHttpServer())
+          .post('/transactions')
+          .send({
+            description: 'Cachê do show',
+            amount: 1500.0,
+            type: TransactionType.INCOME,
+            date: '2026-07-28T00:00:00.000Z',
+            bandId: mockBandId,
+            userId: '00000000-0000-4000-8000-999999999999',
+          })
+          .expect(400);
       });
 
       it('deve retornar 404 ao tentar criar transação para banda inexistente', () => {
@@ -217,7 +241,6 @@ describe('TransactionsController (e2e)', () => {
             type: TransactionType.INCOME,
             date: '2026-07-28T00:00:00.000Z',
             bandId: '00000000-0000-4000-8000-000000000000',
-            userId: mockUserId,
           })
           .expect(404);
       });
@@ -231,7 +254,6 @@ describe('TransactionsController (e2e)', () => {
             type: TransactionType.INCOME,
             date: '2026-07-28T00:00:00.000Z',
             bandId: mockBandId,
-            userId: mockUserId,
             campoInvalido: 'teste',
           })
           .expect(400);
@@ -246,7 +268,6 @@ describe('TransactionsController (e2e)', () => {
             type: 'TIPO_INVALIDO',
             date: '2026-07-28T00:00:00.000Z',
             bandId: mockBandId,
-            userId: mockUserId,
           })
           .expect(400);
       });

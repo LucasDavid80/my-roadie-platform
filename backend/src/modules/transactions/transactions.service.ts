@@ -41,12 +41,12 @@ export class TransactionsService {
     }
 
     const dbUser = await this.prisma.user.findUnique({
-      where: { id: createTransactionDto.userId },
+      where: { id: user.userId },
     });
 
     if (!dbUser) {
       throw new NotFoundException(
-        `Usuário com ID ${createTransactionDto.userId} não encontrado`,
+        `Usuário com ID ${user.userId} não encontrado`,
       );
     }
 
@@ -69,7 +69,7 @@ export class TransactionsService {
         type: createTransactionDto.type,
         date: new Date(createTransactionDto.date),
         bandId: createTransactionDto.bandId,
-        userId: createTransactionDto.userId,
+        userId: user.userId,
         eventId: createTransactionDto.eventId,
       },
     });
