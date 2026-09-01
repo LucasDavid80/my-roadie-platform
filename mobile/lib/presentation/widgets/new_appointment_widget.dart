@@ -397,126 +397,124 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        Center(
-                          child: ElevatedButton(
-                            key: const ValueKey('appointment_confirm_button'),
-                            onPressed: _isLoading
-                                ? null
-                                : () async {
-                                    if (_titleController.text.trim().isEmpty ||
-                                        _selectedDate == null) {
+                        ElevatedButton(
+                          key: const ValueKey('appointment_confirm_button'),
+                          onPressed: _isLoading
+                              ? null
+                              : () async {
+                                  if (_titleController.text.trim().isEmpty ||
+                                      _selectedDate == null) {
+                                    ScaffoldMessenger.of(
+                                      context,
+                                    ).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Por favor, preencha o título e selecione uma data.',
+                                        ),
+                                        backgroundColor: AppColors.erro,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+
+                                  final newEvent = EventEntity(
+                                    // Se estiver editando, MANTÉM o ID original. Se for novo, gera um novo.
+                                    id: isEditing
+                                        ? widget.event!.id
+                                        : DateTime.now().toString(),
+                                    title: _titleController.text.trim(),
+                                    type: _selectedType,
+                                    date: _selectedDate!,
+                                    startTime:
+                                        _startTime?.format(context) ??
+                                        '--:--',
+                                    endTime:
+                                        _endTime?.format(context) ?? '--:--',
+                                    location: _locationController.text.trim(),
+                                    fee: showsFee
+                                        ? double.tryParse(
+                                                _cacheController.text
+                                                    .replaceAll(',', '.'),
+                                              ) ??
+                                              0.0
+                                        : 0.0,
+                                    notes: _notesController.text.trim(),
+                                    bandId: widget.event?.bandId,
+                                  );
+
+                                  try {
+                                    await widget.onConfirm(newEvent);
+                                    if (context.mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  } catch (error, stackTrace) {
+                                    AppLogger.error(
+                                      'Erro ao salvar compromisso',
+                                      error,
+                                      stackTrace,
+                                    );
+                                    if (context.mounted) {
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
+                                      final rawMessage = error
+                                          .toString()
+                                          .replaceFirst('Exception: ', '')
+                                          .trim();
+                                      final message = rawMessage.isNotEmpty
+                                          ? rawMessage
+                                          : 'Erro ao salvar compromisso. Tente novamente.';
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
-                                        const SnackBar(
+                                        SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          duration: const Duration(
+                                            seconds: 15,
+                                          ),
                                           content: Text(
-                                            'Por favor, preencha o título e selecione uma data.',
+                                            'Erro ao salvar compromisso:\n$message',
+                                            maxLines: 6,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                           backgroundColor: AppColors.erro,
                                         ),
                                       );
-                                      return;
                                     }
-
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-
-                                    final newEvent = EventEntity(
-                                      // Se estiver editando, MANTÉM o ID original. Se for novo, gera um novo.
-                                      id: isEditing
-                                          ? widget.event!.id
-                                          : DateTime.now().toString(),
-                                      title: _titleController.text.trim(),
-                                      type: _selectedType,
-                                      date: _selectedDate!,
-                                      startTime:
-                                          _startTime?.format(context) ??
-                                          '--:--',
-                                      endTime:
-                                          _endTime?.format(context) ?? '--:--',
-                                      location: _locationController.text.trim(),
-                                      fee: showsFee
-                                          ? double.tryParse(
-                                                  _cacheController.text
-                                                      .replaceAll(',', '.'),
-                                                ) ??
-                                                0.0
-                                          : 0.0,
-                                      notes: _notesController.text.trim(),
-                                      bandId: widget.event?.bandId,
-                                    );
-
-                                    try {
-                                      await widget.onConfirm(newEvent);
-                                      if (context.mounted) {
-                                        Navigator.of(context).pop();
-                                      }
-                                    } catch (error, stackTrace) {
-                                      AppLogger.error(
-                                        'Erro ao salvar compromisso',
-                                        error,
-                                        stackTrace,
-                                      );
-                                      if (context.mounted) {
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
-                                        final rawMessage = error
-                                            .toString()
-                                            .replaceFirst('Exception: ', '')
-                                            .trim();
-                                        final message = rawMessage.isNotEmpty
-                                            ? rawMessage
-                                            : 'Erro ao salvar compromisso. Tente novamente.';
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            behavior: SnackBarBehavior.floating,
-                                            duration: const Duration(
-                                              seconds: 15,
-                                            ),
-                                            content: Text(
-                                              'Erro ao salvar compromisso:\n$message',
-                                              maxLines: 6,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            backgroundColor: AppColors.erro,
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              elevation: 0,
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: _isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        AppColors.textLight,
-                                      ),
-                                    ),
-                                  )
-                                : Text(
-                                    isEditing
-                                        ? 'Salvar Alterações'
-                                        : 'Criar Compromisso',
-                                    style: const TextStyle(
-                                      color: AppColors.textLight,
-                                      fontWeight: FontWeight.bold,
+                            elevation: 0,
+                          ),
+                          child: _isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.textLight,
                                     ),
                                   ),
-                          ),
+                                )
+                              : Text(
+                                  isEditing
+                                      ? 'Salvar Alterações'
+                                      : 'Criar Compromisso',
+                                  style: const TextStyle(
+                                    color: AppColors.textLight,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ],
                     ),
