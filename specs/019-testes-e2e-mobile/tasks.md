@@ -76,7 +76,7 @@ Pré-requisitos: specs 012, 014, 017 e 018 concluídas.
   - Critério: Teste valida a remoção do card após confirmação.
 - [x] T4.4 — Criar o runner agregador `mobile/integration_test/app_test.dart` agrupando as três suítes (Auth, Perfil e Agenda).
   - Critério: Arquivo runner criado e estruturado.
-- [ ] T4.5 — Executar a suíte agregada localmente (`flutter test integration_test/app_test.dart`).
+- [x] T4.5 — Executar a suíte agregada localmente (`flutter test integration_test/app_test.dart`).
   - Critério: Todos os cenários executam sequencialmente com 100% de aprovação.
 - [ ] T4.6 — Executar `flutter analyze` na pasta `mobile/`.
   - Critério: 0 erros e 0 warnings.
