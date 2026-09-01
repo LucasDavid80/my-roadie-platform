@@ -32,7 +32,7 @@ Pré-requisitos: nenhum bloqueante direto. Recomendado rodar depois (ou junto) d
 ## Fase 4 — Fechamento
 
 - [x] T4.1 — Rodar `flutter test` completo do módulo mobile, sem regressão nos testes existentes (`agenda_controller_test.dart`, `principal_screen_test.dart`, `infos_widget_test.dart`).
-- [ ] T4.2 — Atualizar `backlog.md`: mover "Histórico de Compromissos e Filtragem de Próximos Eventos (Mobile)" de `em spec` para `concluído (specs/021-historico-de-compromissos/)`.
+- [x] T4.2 — Atualizar `backlog.md`: mover "Histórico de Compromissos e Filtragem de Próximos Eventos (Mobile)" de `em spec` para `concluído (specs/021-historico-de-compromissos/)`.
 - [ ] T4.3 — Revisar `spec.md` desta pasta e marcar cada item de "Critérios de Sucesso" como `[x]`, um a um, confirmando manualmente antes de marcar (junto com o checklist abaixo, no mesmo passo — conforme convenção do `AGENTS.md`).
 
 ## Checklist de fechamento da feature

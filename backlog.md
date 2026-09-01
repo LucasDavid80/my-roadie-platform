@@ -156,7 +156,7 @@
 - Intenção: Evitar poluição visual e confusão de UX na tela de Agenda exibindo em "Próximos Compromissos" exclusivamente eventos a partir da data atual (>= hoje) e adicionar botão/atalho que direciona para uma tela dedicada de histórico de compromissos anteriores.
 - Impacto esperado: alto (usabilidade/UX)
 - Depende de: Ajustes de UX na Agenda (spec 013), Extensão do Modelo de Eventos (spec 015)
-- Status: em spec (specs/021-historico-de-compromissos/) — decisões em aberto (ações de editar/excluir no histórico, local do atalho) documentadas na Fase 0 de tasks.md
+- Status: concluído (specs/021-historico-de-compromissos/)
 
 ---
 
