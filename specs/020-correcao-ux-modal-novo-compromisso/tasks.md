@@ -79,9 +79,9 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 ## Checklist de fechamento da feature
 
-- [ ] Margens internas do modal ajustadas, eliminando o aperto visual dos campos em aparelhos mobile
-- [ ] Campo "Cachê" exibe valores altos (ex.: `1500,00`, `12500,00`) com legibilidade completa e sem corte
-- [ ] Botões de ação padronizados com bordas laterais, largura uniforme e sem sobreposição
-- [ ] Seletores de horário mantidos intuitivos e compatíveis com persistência `"HH:mm"`
-- [ ] Testes unitários, de widget e de integração passando no mobile
-- [ ] `backlog.md` e baseline sincronizados ao final da spec
+- [x] Margens internas do modal ajustadas, eliminando o aperto visual dos campos em aparelhos mobile
+- [x] Campo "Cachê" exibe valores altos (ex.: `1500,00`, `12500,00`) com legibilidade completa e sem corte
+- [x] Botões de ação padronizados com bordas laterais, largura uniforme e sem sobreposição
+- [x] Seletores de horário mantidos intuitivos e compatíveis com persistência `"HH:mm"`
+- [x] Testes unitários, de widget e de integração passando no mobile
+- [x] `backlog.md` e baseline sincronizados ao final da spec

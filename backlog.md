@@ -137,14 +137,20 @@
 
 ---
 
-## Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
+### Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
 *Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
 
-### Testes de Integração Ponta a Ponta (E2E) no Mobile
-- Intenção: Criar suíte de testes E2E para o aplicativo mobile utilizando o pacote `integration_test` do Flutter, validando fluxos completos (autenticação, visualização/edição de perfil e ciclo da agenda) em ambiente de execução real/emulador.
-- Impacto esperado: alto (qualidade e confiabilidade de entrega)
-- Depende de: Pipeline CI/CD Unificado & Modernizado (spec 017), Corrigir criação de compromisso no dispositivo físico (spec 014), Validar e testar fluxo de Login com API Real (spec 012), Hospedagem e Distribuição de Executáveis de Release do MVP (spec 018)
-- Status: concluído (specs/019-testes-e2e-mobile/)
+### Correção de UX no Modal "Novo Compromisso" (Mobile)
+- Intenção: Corrigir falhas de UX identificadas no modal de criação de compromisso: borda interna excessiva apertando os campos do formulário (deveria ser praticamente zero/zerada); botão "Criar Compromisso" sem bordas laterais, ficando sobreposto ao botão "Cancelar"; campo "Cachê" cortando o texto ao digitar valores altos (ex.: 1500,00); e avaliar substituir os campos separados de "Início" e "Término" por um único campo de duração onde o usuário define início e fim de uma vez.
+- Impacto esperado: alto (bug crítico de usabilidade, não verificado antes do release)
+- Depende de: Extensão do Modelo de Eventos (spec 015)
+- Status: concluído (specs/020-correcao-ux-modal-novo-compromisso/; baseline raiz sincronizada em spec.md e plan.md)
+
+### Histórico de Compromissos e Filtragem de Próximos Eventos (Mobile)
+- Intenção: Evitar poluição visual e confusão de UX na tela de Agenda exibindo em "Próximos Compromissos" exclusivamente eventos a partir da data atual (>= hoje) e adicionar botão/atalho que direciona para uma tela dedicada de histórico de compromissos anteriores.
+- Impacto esperado: alto (usabilidade/UX)
+- Depende de: Ajustes de UX na Agenda (spec 013), Extensão do Modelo de Eventos (spec 015)
+- Status: ideia
 
 ---
 

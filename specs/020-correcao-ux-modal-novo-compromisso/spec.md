@@ -77,9 +77,9 @@ Corrigir falhas de experiência do usuário (UX) e usabilidade visual no modal/d
 
 ## Critérios de Sucesso
 
-- [ ] Margens internas do modal ajustadas, aproveitando adequadamente a largura da tela sem espremer os campos em aparelhos mobile.
-- [ ] Campo "Cachê" permite visualizar e digitar valores altos (ex.: `1500,00`, `12500,00`) com clareza e sem truncamento de texto.
-- [ ] Botões "Cancelar" e "Criar Compromisso" / "Salvar Alterações" exibidos com bordas, alinhamento, espaçamento e proporções harmônicas, sem sobreposição visual.
-- [ ] Seletores de horário ("Início" e "Término") funcionam de maneira clara, rápida e intuitiva, preservando a persistência no formato `"HH:mm"`.
-- [ ] 100% dos testes unitários, de widget e de integração do mobile executando com sucesso e sem regressões.
-- [ ] `backlog.md` e baseline atualizados ao final da spec.
+- [x] Margens internas do modal ajustadas, aproveitando adequadamente a largura da tela sem espremer os campos em aparelhos mobile.
+- [x] Campo "Cachê" permite visualizar e digitar valores altos (ex.: `1500,00`, `12500,00`) com clareza e sem truncamento de texto.
+- [x] Botões "Cancelar" e "Criar Compromisso" / "Salvar Alterações" exibidos com bordas, alinhamento, espaçamento e proporções harmônicas, sem sobreposição visual.
+- [x] Seletores de horário ("Início" e "Término") funcionam de maneira clara, rápida e intuitiva, preservando a persistência no formato `"HH:mm"`.
+- [x] 100% dos testes unitários, de widget e de integração do mobile executando com sucesso e sem regressões.
+- [x] `backlog.md` e baseline atualizados ao final da spec.
