@@ -48,11 +48,15 @@ O modal de criação/edição de compromissos é implementado pelo widget `NewAp
   - Remover `margin: const EdgeInsets.all(16)` do `Container` principal.
   - Ajustar o padding interno do formulário para `EdgeInsets.symmetric(horizontal: 16, vertical: 20)`.
 
-### Fase 2 — Estruturação de Linhas Dedicadas para Local e Cachê
+### Fase 2 — Estruturação de Linhas Dedicadas e Especialização do Campo Cachê
 - Modificar o layout dos campos "Local" e "Cachê" no `NewAppointmentWidget`:
   - Definir "Local" como campo de largura total (100%).
   - Posicionar "Cachê" em linha própria dedicada abaixo de "Local" (100% de largura), renderizado condicionalmente quando `showsFee == true`.
-  - Ajustar propriedades de entrada monetária no `_buildSimpleInput`.
+  - Configurar o campo "Cachê" como input monetário especializado:
+    - `prefixText: 'R$ '` no `InputDecoration`.
+    - `keyboardType: const TextInputType.numberWithOptions(decimal: true)`.
+    - `inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+([.,]\d{0,2})?'))]` para validação estrita de valores decimais monetários.
+    - Sanitização segura na extração: `double.tryParse(_cacheController.text.replaceAll(',', '.')) ?? 0.0`.
 - Garantir visualização completa sem corte para strings numéricas com formatação monetária.
 
 ### Fase 3 — Padronização dos Botões de Ação e Seletores de Horário

@@ -22,8 +22,8 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
 
 - [ ] T2.1 — Reestruturar os campos "Local" e "Cachê" em linhas dedicadas individuais (100% de largura para Local e 100% de largura para Cachê condicional ao tipo `Show` ou `Gravação`).
   - Critério: campo Local e campo Cachê com largura total (100%), permitindo visualização de endereços completos e valores monetários sem corte.
-- [ ] T2.2 — Otimizar propriedades de entrada em `_buildSimpleInput` para campos monetários (`isMoney: true`).
-  - Critério: digitação de valores como `1500,00` e `12500,00` exibida sem cortes laterais ou truncamento de dígitos.
+- [ ] T2.2 — Configurar o campo "Cachê" como input monetário especializado (`prefixText: 'R$ '`, `keyboardType: decimal` e `inputFormatters` com regex para dígitos e decimais).
+  - Critério: validação por regex bloqueia caracteres não-numéricos e permite digitação e visualização de valores como `1500,00` e `12500,00` com prefixo `R$` e sem truncamento.
 
 ## Fase 3 — Padronização dos Botões de Ação e Seletores de Horário
 
