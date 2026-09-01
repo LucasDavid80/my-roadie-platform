@@ -67,7 +67,7 @@ Pré-requisitos: Extensão do Modelo de Eventos (spec 015 concluída).
     5. Toque no card de horário "Término" e selecione um horário no relógio (ex.: `23:30`).
   - **O que validar**: A alternância de tipo oculta/exibe o campo Cachê de forma reativa; os seletores de horário abrem o diálogo `showTimePicker` temático e exibem claramente as horas formatadas no padrão `"HH:mm"`.
 
-- [ ] T5.4 — Validação dos Botões de Ação e Ciclo de Criação e Edição
+- [x] T5.4 — Validação dos Botões de Ação e Ciclo de Criação e Edição
   - **Como testar**:
     1. No rodapé do modal, observe o alinhamento dos botões "Cancelar" e "Criar Compromisso".
     2. Toque no botão "Cancelar" e confirme que o modal fecha sem persistir alterações.
