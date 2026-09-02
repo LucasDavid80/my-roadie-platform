@@ -46,7 +46,7 @@
     4. Observe o valor exibido no card "Shows/Mês".
   - **O que validar**: O card "Este Mês" contabiliza rigorosamente todos os eventos do mês corrente; o card "Shows/Mês" contabiliza estritamente os eventos do tipo `Show`, desconsiderando ensaios e reuniões.
 
-- [ ] T5.3 — Validação da Formatação Monetária e Isolamento do "Cachê/Mês"
+- [x] T5.3 — Validação da Formatação Monetária e Isolamento do "Cachê/Mês"
   - **Como testar**:
     1. Observe o valor exibido no card "Cachê/Mês".
     2. Se não houver compromissos com cachê no mês atual, confirme a exibição de `R$ 0,00`.
