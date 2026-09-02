@@ -65,6 +65,8 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
    - Confirmar se faturamento zero deve ser exibido como `R$ 0,00` ou `-` (padrão monetário formal `R$ 0,00` recomendado).
 3. **Resiliência do tipo de evento para "Shows/Mês"**:
    - Padronizar checagem de tipo case-insensitive (`e.type.trim().toLowerCase() == 'show'`) para aceitar variações legadas caso existam.
+4. **Captura de Screenshots pós-spec 021**:
+   - Registrar no app atualizado novas capturas com o botão "Ver histórico" e o estado atual dos cards, servindo de linha de base visual pré-correção.
 
 ## Conformidade com a Constituição (`constitution.md`)
 

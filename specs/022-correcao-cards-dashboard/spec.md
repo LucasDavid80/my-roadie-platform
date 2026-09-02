@@ -37,6 +37,9 @@ As capturas abaixo foram obtidas em dispositivo físico/ambiente de execução r
 
 A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o card de cachê somava indiscriminadamente eventos passados de outros meses.
 
+> [!NOTE]
+> As capturas acima representam a linha de base visual capturada antes da conclusão da Spec 021 (antes da separação de Histórico de Compromissos). Na Fase 0 (T0.5), serão anexadas novas capturas com o aplicativo atualizado (exibindo o botão "Ver histórico" e o estado atual dos cards).
+
 ## Escopo
 
 - **`AgendaController` (`mobile/lib/presentation/controllers/agenda_controller.dart`)**:
