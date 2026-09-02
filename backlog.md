@@ -1,6 +1,6 @@
 # 🧭 Backlog — My Roadie Platform
 
-> Ideias de features futuras ficam aqui, organizadas por **fases lógicas de desenvolvimento** para garantir dependências claras, estabilidade contínua e evolução progressiva da plataforma.
+> Ideias e especificações ficam aqui, organizadas por **Releases** para garantir entregas com marcos previsíveis, dependências claras e evolução contínua da plataforma.
 > Quando uma entrada é escolhida para entrar em desenvolvimento, ela ganha uma pasta `specs/<numero>-<nome-curto>/` com `spec.md`, `plan.md` e `tasks.md`, e seu status é atualizado nesta lista.
 
 ## Como preencher uma entrada
@@ -16,15 +16,8 @@
 
 ---
 
-## 🏷️ Histórico de Releases Publicadas
-
-- **`v1.0.0`** (29/08/2026): Release MVP para testes fechados (Specs 001 a 019).
-- **`v1.0.1`** (01/09/2026): Patch de segurança (roles e transações) e permissão de internet no Android.
-- **`v1.1.0`** *(planejada)*: Ciclo de refinamento da Agenda e Home mobile (Specs 020, 021 e 022).
-
----
-
-## 📌 Status Atual de Specs (Baseline)
+## 📦 Release v1.0.0 — MVP Inicial (Concluída em 29/08/2026)
+> Escopo: Fundação da plataforma, autenticação Web/Mobile via Supabase, APIs de eventos, tarefas, repertório e financeiro, além da distribuição dos primeiros executáveis (APK e IPA) para testes fechados.
 
 ### Auditoria de Infraestrutura
 - Intenção: Medir cobertura real de testes em todas as frentes e confirmar a stack do frontend-web.
@@ -161,12 +154,18 @@
 
 ---
 
-## 🚀 Trilhas de Evolução Priorizadas
+## 📦 Release v1.0.1 — Patch de Segurança & Permissões (Concluída em 01/09/2026)
+> Escopo: Hotfixes emergenciais de segurança contra escalonamento de privilégio no campo `role`, prevenção de forjamento de `userId` derivando da sessão autenticada em transações e adição da permissão `INTERNET` no `AndroidManifest`.
+
+- Resolução dos achados do checkpoint 02 e governança em AGENTS.md (PR #33)
+- Prevenir escalonamento de privilégio no campo `role` e adicionar endpoint admin (PR #34)
+- Prevenir forjamento de `userId` derivando da sessão autenticada em transações (PR #35)
+- Adicionar permissão `INTERNET` no `AndroidManifest` (PR #36)
 
 ---
 
-### Fase 1: Estabilização, Segurança & Bugs Críticos (Fundação Sólida)
-*Justificativa:* Correção de falhas bloqueantes e vulnerabilidades de segurança antes do lançamento de novas funcionalidades de negócios. Garante estabilidade base em Auth e UI.
+## 🚀 Release v1.1.0 — Refinamento de UX da Agenda & Dashboard (Em andamento / Próxima)
+> Escopo: Refinamento visual da tela principal mobile, separação de eventos passados e futuros no Histórico e correção de cálculos e formatação dos cards.
 
 ### Correção de UX no Modal "Novo Compromisso" (Mobile)
 - Intenção: Corrigir falhas de UX identificadas no modal de criação de compromisso: borda interna excessiva apertando os campos do formulário (deveria ser praticamente zero/zerada); botão "Criar Compromisso" sem bordas laterais, ficando sobreposto ao botão "Cancelar"; campo "Cachê" cortando o texto ao digitar valores altos (ex.: 1500,00); e avaliar substituir os campos separados de "Início" e "Término" por um único campo de duração onde o usuário define início e fim de uma vez.
@@ -191,116 +190,118 @@
 
 ---
 
-### Fase 2: Conformidade Legal, Privacidade & Governança (LGPD)
-*Justificativa:* Estabelece as regras jurídicas, privacidade de dados e conformidade antes do onboarding em massa de músicos e roadies.
+## 🔮 Releases Futuras (Planejamento)
 
-### Termos de Uso e Políticas da Plataforma
+### Release v1.2.0 — Conformidade Legal, Privacidade & Governança (LGPD)
+> Objetivo: Estabelecer as regras jurídicas, privacidade de dados e conformidade antes do onboarding em massa de músicos e roadies.
+
+#### Termos de Uso e Políticas da Plataforma
 - Intenção: Exibir e colher consentimento dos Termos de Uso e Políticas de Privacidade durante o cadastro no mobile e web.
 - Impacto esperado: alto (legal/LGPD)
 - Depende de: nenhum
-- Release: a definir
+- Release: v1.2.0
 - Status: ideia
 
-### Fechar gaps de LGPD (ver constitution.md §10)
+#### Fechar gaps de LGPD (ver constitution.md §10)
 - Intenção: Consentimento explícito no cadastro, política de exclusão de conta (hard delete vs. anonimização), endpoint de exportação de dados, confirmar região/criptografia do Supabase.
 - Impacto esperado: alto (risco legal/reputacional)
 - Depende de: Termos de Uso e Políticas da Plataforma
-- Release: a definir
+- Release: v1.2.0
 - Status: ideia
 
 ---
 
-### Fase 3: Operação de Show & Experiência de Palco (Aproveitamento das APIs nativas)
-*Justificativa:* Constrói as ferramentas operacionais de uso direto no ensaio e show, alavancando as APIs já desenvolvidas (`Repertoire` — spec 005 e `Tasks` — spec 004).
+### Release v1.3.0 — Operação de Show & Experiência de Palco
+> Objetivo: Construir as ferramentas operacionais de uso direto no ensaio e show, alavancando as APIs já desenvolvidas (`Repertoire` — spec 005 e `Tasks` — spec 004).
 
-### Gestão de Setlists com Visualizador de Letras/Cifras (Modo Palco)
+#### Gestão de Setlists com Visualizador de Letras/Cifras (Modo Palco)
 - Intenção: Permitir que os músicos criem setlists de shows a partir do repertório cadastrado e utilizem o Modo Palco (offline, letras e cifras ampliadas).
 - Impacto esperado: alto
 - Depende de: API de Repertoire (spec 005)
-- Release: a definir
+- Release: v1.3.0
 - Status: ideia
 
-### Checklist Operacional de Eventos & Inventário de Carga (Roadie Check)
+#### Checklist Operacional de Eventos & Inventário de Carga (Roadie Check)
 - Intenção: Conectar a API de Tasks (spec 004) à interface mobile, permitindo gerenciar checklists operacionais vinculados a cada evento (passagem de som, afazeres técnicos, check-in/check-out de carga da van) com barra de progresso no card de compromisso e contagem real de tarefas concluídas no painel inicial (`InfosWidget`).
 - Impacto esperado: alto (operação de estrada e valor para roadies)
 - Depende de: API de Tasks (spec 004), Extensão do Modelo de Eventos (spec 015)
-- Release: a definir
+- Release: v1.3.0
 - Status: ideia
 
-### Persistência Local e Sincronização Offline (Offline-First)
+#### Persistência Local e Sincronização Offline (Offline-First)
 - Intenção: Implementar cache/banco local (ex.: Hive ou SQLite) no app mobile para permitir criar, visualizar e editar compromissos sem sinal de internet, sincronizando os dados com o backend NestJS quando a conexão for reestabelecida.
 - Impacto esperado: alto (confiabilidade em palcos, festivais e estradas)
 - Depende de: Atualização da lista de compromissos após criação (spec 007)
-- Release: a definir
+- Release: v1.3.0
 - Status: ideia
 
 ---
 
-### Fase 4: Logística, Geolocalização & Integração de Agenda
-*Justificativa:* Estende a gestão de compromissos para a rotina de viagem e rotas da equipe técnica e músicos.
+### Release v1.4.0 — Logística, Geolocalização & Integração de Agenda
+> Objetivo: Estender a gestão de compromissos para a rotina de viagem e rotas da equipe técnica e músicos.
 
-### Notificações locais/push no App Mobile
+#### Notificações locais/push no App Mobile
 - Intenção: Implementar alertas e lembretes de compromissos por notificações (push/locais) no aplicativo móvel.
 - Impacto esperado: alto
 - Depende de: Atualização da lista de compromissos após criação (spec 007)
-- Release: a definir
+- Release: v1.4.0
 - Status: ideia
 
-### Integração de Localização com Google Maps
+#### Integração de Localização com Google Maps
 - Intenção: Integrar a API do Google Maps para exibir o endereço do compromisso e permitir a navegação a partir da tela do evento.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: a definir
+- Release: v1.4.0
 - Status: ideia
 
-### Painel de Logística de Viagem (Roadbook Digital)
+#### Painel de Logística de Viagem (Roadbook Digital)
 - Intenção: Centralizar detalhes operacionais de logística como ponto de encontro, hotel, passagens, alimentação e horários da estrada em formato digital.
 - Impacto esperado: alto
 - Depende de: Integração de Localização com Google Maps, Notificações locais/push
-- Release: a definir
+- Release: v1.4.0
 - Status: ideia
 
-### Sincronização de Agenda com Calendários Externos
+#### Sincronização de Agenda com Calendários Externos
 - Intenção: Permitir a exportação/sincronização automática dos compromissos da plataforma com Google Calendar e Apple Calendar.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: a definir
+- Release: v1.4.0
 - Status: ideia
 
 ---
 
-### Fase 5: Módulo Financeiro Avançado
-*Justificativa:* Potencializa a API financeira (`Transactions` — spec 006) criando utilitários de divisão de receitas entre integrantes e equipe.
+### Release v1.5.0 — Módulo Financeiro Avançado
+> Objetivo: Potencializar a API financeira (`Transactions` — spec 006) criando utilitários de divisão de receitas entre integrantes e equipe.
 
-### Divisão Automatizada de Cachê (Cache Splitter)
+#### Divisão Automatizada de Cachê (Cache Splitter)
 - Intenção: Dividir automaticamente o cachê do show entre músicos e roadies com base em percentuais ou valores fixos configurados na banda.
 - Impacto esperado: alto
 - Depende de: API de Transactions (spec 006)
-- Release: a definir
+- Release: v1.5.0
 - Status: ideia
 
 ---
 
-### Fase 6: Suporte, Governança & Sustentabilidade da Plataforma
-*Justificativa:* Recursos de suporte, manutenção contínua, governança de acesso e sustentabilidade do projeto.
+### Release v1.6.0 — Suporte, Governança & Sustentabilidade da Plataforma
+> Objetivo: Recursos de suporte, manutenção contínua, governança de acesso e sustentabilidade do projeto.
 
-### Tela de Ajuda e Relatório de Erros
+#### Tela de Ajuda e Relatório de Erros
 - Intenção: Apresentar guias de suporte e permitir copiar/reportar o nome e a descrição detalhada de eventuais erros da plataforma.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: a definir
+- Release: v1.6.0
 - Status: ideia
 
-### Avaliação de Módulo Administrativo no Mobile
+#### Avaliação de Módulo Administrativo no Mobile
 - Intenção: Decidir/implementar se haverá um painel de administração simplificado no app móvel ou se a gestão ficará 100% restrita ao painel Web.
 - Impacto esperado: baixo/médio
 - Depende de: Isolar rotas de admin em Route Group próprio
-- Release: a definir
+- Release: v1.6.0
 - Status: ideia
 
-### Tela de Contribuições (Apoio Monetário)
+#### Tela de Contribuições (Apoio Monetário)
 - Intenção: Oferecer uma área de contribuição ou doações para apoiar o financiamento e manutenção do projeto.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: a definir
+- Release: v1.6.0
 - Status: ideia
