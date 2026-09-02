@@ -59,8 +59,10 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
 
 ## Decisões a confirmar na Fase 0 (antes de codar)
 
-1. **Card "Este Mês" vs "Próximos"**:
-   - Confirmar se "Este Mês" deve exibir o total de eventos ocorridos e previstos no mês corrente (`monthlyEvents.length`), enquanto "Próximos" exibe a quantidade restante a partir de hoje (`upcomingEvents.length` ou eventos do mês com data `>= hoje`).
+1. **Card "Este Mês" vs "Próximos"** (Confirmado em T0.1):
+   - "Este Mês" exibe o total de eventos ocorridos e previstos no mês corrente (`monthlyEvents.length`).
+   - "Próximos" exibe a quantidade total de compromissos a partir de hoje (`upcomingEvents.length`), sincronizado com a lista de próximos compromissos da tela.
+   - O `InfosWidget` passará a receber o total de próximos diretamente (ex.: `proximos: upcomingEvents.length`), eliminando o cálculo interno legado `compromissosTotal - compromissosConcluidos`.
 2. **Formatação de Cachê Zero**:
    - Confirmar se faturamento zero deve ser exibido como `R$ 0,00` ou `-` (padrão monetário formal `R$ 0,00` recomendado).
 3. **Resiliência do tipo de evento para "Shows/Mês"**:

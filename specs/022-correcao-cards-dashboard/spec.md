@@ -52,9 +52,14 @@ A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o c
   - Aplicar ajuste no `infoCard` (ex.: `FittedBox` ou tamanho de fonte ajustado) para acomodar valores de cachê mais altos sem truncamento ou overflow visual.
 - **`PrincipalScreen` (`mobile/lib/presentation/screens/principal/principal_screen.dart`)**:
   - Conectar os novos getters no `InfosWidget`:
-    - `compromissosTotal`: eventos do mês corrente.
+    - `compromissosTotal`: eventos do mês corrente (`monthlyEvents.length`).
+    - `proximos`: eventos futuros a partir de hoje (`upcomingEvents.length`), mantendo paridade com a lista "Próximos Compromissos".
     - `shows`: `monthlyShows`.
     - `faturamento`: `monthlyFee`.
+
+### Decisões tomadas na Fase 0
+
+- **T0.1 — Comportamento dos cards "Este Mês" e "Próximos":** Confirmado que o card **"Este Mês"** exibe todos os compromissos do mês corrente (passados + futuros deste mês). O card **"Próximos"** exibe todos os compromissos a partir de hoje (`upcomingEvents.length`), sincronizado com a lista de próximos compromissos da tela. O `InfosWidget` passará a receber esse valor diretamente, eliminando o cálculo legado `compromissosTotal - compromissosConcluidos`.
 - **Testes (`mobile/test/`)**:
   - Testes unitários no `AgendaController` para `monthlyEvents`, `monthlyShows` (com e sem eventos que não sejam show) e `monthlyFee` (isolando eventos deste mês de meses futuros).
   - Testes de widget em `infos_widget_test.dart` validando formatação monetária e renderização.
