@@ -86,10 +86,10 @@ A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o c
 
 ## Critérios de Sucesso
 
-- [ ] Card "Este Mês" exibe a quantidade exata de compromissos pertencentes ao mês e ano atuais.
-- [ ] Card "Shows/Mês" exibe a quantidade de eventos do mês atual com tipo igual a "Show" (case-insensitive).
-- [ ] Card "Cachê/Mês" totaliza apenas cachês de eventos do mês atual e não inclui meses futuros.
-- [ ] O valor do cachê é exibido formatado em moeda brasileira (ex.: `R$ 1.500,00` ou `R$ 0,00`).
-- [ ] Valores de cachê altos cabem no card sem estourar a tela (overflow) ou quebrar de forma defeituosa.
-- [ ] Suíte de testes unitários e de widget cobrindo os novos cenários passando em 100% com `flutter test`.
-- [ ] `backlog.md` atualizado com o encerramento da spec na Release `v1.1.0`.
+- [x] Card "Este Mês" exibe a quantidade exata de compromissos pertencentes ao mês e ano atuais.
+- [x] Card "Shows/Mês" exibe a quantidade de eventos do mês atual com tipo igual a "Show" (case-insensitive).
+- [x] Card "Cachê/Mês" totaliza apenas cachês de eventos do mês atual e não inclui meses futuros.
+- [x] O valor do cachê é exibido formatado em moeda brasileira (ex.: `R$ 1.500,00` ou `R$ 0,00`).
+- [x] Valores de cachê altos cabem no card sem estourar a tela (overflow) ou quebrar de forma defeituosa.
+- [x] Suíte de testes unitários e de widget cobrindo os novos cenários passando em 100% com `flutter test`.
+- [x] `backlog.md` atualizado com o encerramento da spec na Release `v1.1.0`.

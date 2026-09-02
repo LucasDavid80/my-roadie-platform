@@ -28,14 +28,14 @@
 
 - [x] T4.1 — Rodar `flutter test` completo no mobile garantindo 100% dos testes verdes e sem regressões.
 - [x] T4.2 — Atualizar `backlog.md`: mover a entrada da Spec 022 para `concluído (specs/022-correcao-cards-dashboard/)`.
-- [ ] T4.3 — Fechar checklist de fechamento abaixo e critérios de sucesso em `spec.md` atomicamente no mesmo passo.
+- [x] T4.3 — Fechar checklist de fechamento abaixo e critérios de sucesso em `spec.md` atomicamente no mesmo passo.
 
 ## Checklist de fechamento da feature
 
-- [ ] Card "Este Mês" contabiliza compromissos do mês corrente
-- [ ] Card "Shows/Mês" contabiliza apenas eventos de tipo "Show" no mês corrente
-- [ ] Card "Cachê/Mês" soma apenas cachês de eventos do mês corrente
-- [ ] Valor de faturamento formatado com `R$` e separador de milhar brasileiro
-- [ ] Valores altos redimensionados sem estourar o card ou quebrar linha
-- [ ] `flutter test` 100% verde sem regressões
-- [ ] `backlog.md` atualizado
+- [x] Card "Este Mês" contabiliza compromissos do mês corrente
+- [x] Card "Shows/Mês" contabiliza apenas eventos de tipo "Show" no mês corrente
+- [x] Card "Cachê/Mês" soma apenas cachês de eventos do mês corrente
+- [x] Valor de faturamento formatado com `R$` e separador de milhar brasileiro
+- [x] Valores altos redimensionados sem estourar o card ou quebrar linha
+- [x] `flutter test` 100% verde sem regressões
+- [x] `backlog.md` atualizado
