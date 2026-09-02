@@ -37,8 +37,11 @@ As capturas abaixo foram obtidas em dispositivo físico/ambiente de execução r
 
 A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o card de cachê somava indiscriminadamente eventos passados de outros meses.
 
-> [!NOTE]
-> As capturas acima representam a linha de base visual capturada antes da conclusão da Spec 021 (antes da separação de Histórico de Compromissos). Na Fase 0 (T0.5), serão anexadas novas capturas com o aplicativo atualizado (exibindo o botão "Ver histórico" e o estado atual dos cards).
+### 3. Linha de base visual pós-spec 021 (Capturada em 02/09/2026 via ADB)
+![Dashboard pós-spec 021 com cards no topo](./assets/flutter_04.png)
+![Lista com botão Ver histórico pós-spec 021](./assets/flutter_05.png)
+- **Cards no topo (`flutter_04.png`):** O card "Este Mês" e "Próximos" exibem `1` (pois a lista exibe apenas o evento de 05/09). O card "Cachê/Mês" continua exibindo o valor bruto `18500.` na linha de cima e `0` na linha de baixo (quebra inadequada sem símbolo monetário `R$`), acumulando incorretamente os cachês de agosto no mês de setembro.
+- **Lista de compromissos (`flutter_05.png`):** Exibe com sucesso o botão "Ver histórico" e o único evento futuro de setembro (`R$ 15000.00`), comprovando que os eventos passados já foram movidos para o histórico na spec 021.
 
 ## Escopo
 
@@ -69,6 +72,7 @@ A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o c
   - Em `test/infos_widget_test.dart`: identificada expectativa literal pela string bruta `'2500.0'`, que falhará propositalmente quando a máscara `R$` for implementada (previsto para atualização controlada na task T2.3), além da adaptação do parâmetro `proximos`.
   - Em `test/agenda_controller_test.dart`: o teste de `totalFee` continuará passando ao preservar o getter legado para retrocompatibilidade; os novos testes de `monthlyFee` e restrição de tipos de `monthlyShows` serão adicionados isoladamente em T1.2.
   - Em `test/principal_screen_test.dart`: nenhum dos 4 testes existentes verifica os textos dos cards de resumo do `InfosWidget`, assegurando que não haverá efeitos colaterais na tela principal.
+- **T0.5 — Linha de base visual pós-spec 021:** Capturadas e anexadas novas screenshots em dispositivo físico via ADB (`flutter_04.png` e `flutter_05.png`), registrando a persistência do valor bruto/quebra no card de cachê (`18500.` / `0`) e a presença do botão "Ver histórico" e filtro de compromissos introduzidos na spec 021.
 - **Testes (`mobile/test/`)**:
   - Testes unitários no `AgendaController` para `monthlyEvents`, `monthlyShows` (com e sem eventos que não sejam show) e `monthlyFee` (isolando eventos deste mês de meses futuros).
   - Testes de widget em `infos_widget_test.dart` validando formatação monetária e renderização.

@@ -69,8 +69,8 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
    - Faturamento zerado exibirá estritamente `R$ 0,00`, aplicando o comportamento padrão de `NumberFormat.currency(locale: 'pt_BR', symbol: 'R$')`.
 3. **Resiliência do tipo de evento para "Shows/Mês"**:
    - Padronizar checagem de tipo case-insensitive (`e.type.trim().toLowerCase() == 'show'`) para aceitar variações legadas caso existam.
-4. **Captura de Screenshots pós-spec 021**:
-   - Registrar no app atualizado novas capturas com o botão "Ver histórico" e o estado atual dos cards, servindo de linha de base visual pré-correção.
+4. **Captura de Screenshots pós-spec 021** (Concluído em T0.5):
+   - Novas capturas registradas em `assets/flutter_04.png` (cards com layout e valor incorretos) e `assets/flutter_05.png` (botão 'Ver histórico' e lista de compromissos), devidamente anexadas à `spec.md` como linha de base visual.
 
 ## Conformidade com a Constituição (`constitution.md`)
 
