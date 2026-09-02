@@ -59,6 +59,13 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
   - `test/principal_screen_test.dart`:
     - Validar integração entre o controller e os cards renderizados na tela principal.
 
+### Fase 5 — Validação Manual e Testes em Dispositivo Físico
+- Executar roteiro de validação interativa no dispositivo físico conectado ao backend local (`flutter run`).
+- Validar visualmente o layout, proporção e ausência de overflow nos 4 cards de métricas do dashboard.
+- Validar a contagem exata dos cards "Este Mês" e "Shows/Mês" (filtrando estritamente eventos do tipo Show e ignorando ensaios).
+- Validar a formatação monetária brasileira (`R$ X.XXX,XX` ou `R$ 0,00`) e o isolamento estrito de cachês no card "Cachê/Mês" sem acúmulo de outros meses.
+- Validar o ajuste responsivo com `FittedBox` no card "Cachê/Mês" com valores de cachê elevados.
+
 ## Decisões a confirmar na Fase 0 (antes de codar)
 
 1. **Card "Este Mês" vs "Próximos"** (Confirmado em T0.1):
