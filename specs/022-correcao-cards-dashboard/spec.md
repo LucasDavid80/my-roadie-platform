@@ -17,6 +17,26 @@ Corrigir os cálculos e a formatação visual dos cards de resumo exibidos no to
   3. **`monthlyShows` (card "Shows/Mês")**: Em [`AgendaController.monthlyShows`](file:///C:/dev/my-roadie-platform/mobile/lib/presentation/controllers/agenda_controller.dart#L68-L73), filtra por `month` e `year`, mas calcula o tamanho da lista total sem checar `type == 'Show'`. Se a banda tiver 3 ensaios e 1 show no mês, exibe "4 Shows/Mês".
   4. **Formatação monetária**: Em [`InfosWidget.infoCard`](file:///C:/dev/my-roadie-platform/mobile/lib/presentation/screens/principal/widgets/infos_widget.dart#L52), o valor é interpolado com `faturamento.toString()` puro (ex.: `"18500.0"`), sem símbolo monetário `R$`, sem pontuação de milhar e com tamanho de fonte que quebra desordenadamente dentro dos 180px de largura do card.
 
+## Evidências dos Bugs (Screenshots)
+
+As capturas abaixo foram obtidas em dispositivo físico/ambiente de execução real (01/09/2026) e documentam visualmente as causas-raiz:
+
+### 1. Dashboard com contagem incorreta e quebra de layout no Cachê
+![Dashboard com falha nos cards](./assets/flutter_01.png)
+- **Card "Este Mês":** exibe `4`, mas em setembro de 2026 existe apenas **1** evento cadastrado (05/09). Os outros 3 ocorreram em agosto (20/08, 24/08 e 25/08).
+- **Card "Próximos":** exibe `4`, idêntico ao card "Este Mês".
+- **Card "Cachê/Mês":** exibe `18500.` na linha superior e `0` na inferior (valor cru sem formatação `R$` e quebrando a linha desordenadamente). Além disso, o valor totaliza a soma de todos os eventos da base (`1.500 + 2.000 + 15.000 = 18.500`), acumulando o cachê de agosto no card que diz "Cachê/Mês" de setembro.
+
+### 2. Compromissos cadastrados na base (Agosto e Setembro)
+![Compromissos de 20 e 24 de agosto](./assets/flutter_02.png)
+![Compromissos de 25 de agosto e 05 de setembro](./assets/flutter_03.png)
+- **20 de agosto (Agosto):** Show `pagode do Leme` — Cachê: `R$ 1500.00`
+- **24 de agosto (Agosto):** Ensaio `pagode22222222` — Cachê: `R$ 0.00`
+- **25 de agosto (Agosto):** Show `Show de Teste` — Cachê: `R$ 2000.00`
+- **05 de setembro (Setembro):** Show `pagode` — Cachê: `R$ 15000.00` *(único evento de setembro)*
+
+A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o card de cachê somava indiscriminadamente eventos passados de outros meses.
+
 ## Escopo
 
 - **`AgendaController` (`mobile/lib/presentation/controllers/agenda_controller.dart`)**:
