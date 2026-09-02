@@ -16,7 +16,7 @@
 ## Fase 2 — `InfosWidget`: formatação monetária e responsividade
 
 - [x] T2.1 — Implementar formatação monetária padrão brasileiro (`R$ X.XXX,XX`) no campo de faturamento do `InfosWidget`.
-- [ ] T2.2 — Adicionar ajuste responsivo com `FittedBox` no `infoCard` para evitar overflow e quebras de linha defeituosas com números grandes.
+- [x] T2.2 — Adicionar ajuste responsivo com `FittedBox` no `infoCard` para evitar overflow e quebras de linha defeituosas com números grandes.
 - [ ] T2.3 — Atualizar e executar `test/infos_widget_test.dart` validando os novos formatos textuais e limites visuais.
 
 ## Fase 3 — Integração na `PrincipalScreen`

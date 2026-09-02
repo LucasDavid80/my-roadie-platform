@@ -97,12 +97,17 @@ Widget infoCard(String title, String description, IconData icon, Color color) {
             fontWeight: FontWeight.w600,
           ),
         ),
-        subtitle: Text(
-          description,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+        subtitle: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            description,
+            maxLines: 1,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
