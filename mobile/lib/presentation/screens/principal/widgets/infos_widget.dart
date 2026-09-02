@@ -3,20 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class InfosWidget extends StatelessWidget {
-  final int compromissosTotal, compromissosConcluidos, shows;
+  final int compromissosTotal;
+  final int? proximos;
+  final int compromissosConcluidos;
+  final int shows;
   final double faturamento;
 
   const InfosWidget({
     super.key,
     required this.compromissosTotal,
-    required this.compromissosConcluidos,
+    this.proximos,
+    this.compromissosConcluidos = 0,
     required this.shows,
     required this.faturamento,
   });
 
   @override
   Widget build(BuildContext context) {
-    int proximosCompromissos = compromissosTotal - compromissosConcluidos;
+    int proximosCompromissos =
+        proximos ?? (compromissosTotal - compromissosConcluidos);
     final currencyFormatter = NumberFormat.currency(
       locale: 'pt_BR',
       symbol: r'R$',

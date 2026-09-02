@@ -20,8 +20,8 @@ class PrincipalScreen extends ConsumerWidget {
     final events = ref.watch(agendaProvider);
 
     // 2. Pega os cálculos do controller
-    final totalFee = ref.read(agendaProvider.notifier).totalFee;
-    // final totalFee = ref.watch(agendaProvider.notifier).totalFee; // Se totalFee for um Provider separado, use watch. Se for um método, use read.
+    final monthlyEvents = ref.read(agendaProvider.notifier).monthlyEvents;
+    final monthlyFee = ref.read(agendaProvider.notifier).monthlyFee;
     final showsCount = ref.read(agendaProvider.notifier).monthlyShows;
     final upcomingEvents = ref.read(agendaProvider.notifier).upcomingEvents;
 
@@ -86,10 +86,10 @@ class PrincipalScreen extends ConsumerWidget {
 
               // Os Widgets agora recebem os dados atualizados automaticamente
               InfosWidget(
-                compromissosTotal: upcomingEvents.length,
-                compromissosConcluidos: 0,
+                compromissosTotal: monthlyEvents.length,
+                proximos: upcomingEvents.length,
                 shows: showsCount,
-                faturamento: totalFee,
+                faturamento: monthlyFee,
               ),
 
               CustomCalendar(events: events), // <-- Passando a lista observada
