@@ -27,7 +27,7 @@
 ## Fase 4 — Fechamento
 
 - [x] T4.1 — Rodar `flutter test` completo no mobile garantindo 100% dos testes verdes e sem regressões.
-- [ ] T4.2 — Atualizar `backlog.md`: mover a entrada da Spec 022 para `concluído (specs/022-correcao-cards-dashboard/)`.
+- [x] T4.2 — Atualizar `backlog.md`: mover a entrada da Spec 022 para `concluído (specs/022-correcao-cards-dashboard/)`.
 - [ ] T4.3 — Fechar checklist de fechamento abaixo e critérios de sucesso em `spec.md` atomicamente no mesmo passo.
 
 ## Checklist de fechamento da feature
