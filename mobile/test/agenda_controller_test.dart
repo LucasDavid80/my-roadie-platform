@@ -293,4 +293,98 @@ void main() {
     await container.read(agendaProvider.notifier).fetchEvents();
     expect(container.read(agendaProvider), isEmpty);
   });
+
+  group('upcomingEvents and pastEvents (T1.2)', () {
+    test('Should return empty lists when state is empty', () {
+      final controller = container.read(agendaProvider.notifier);
+      expect(controller.upcomingEvents, isEmpty);
+      expect(controller.pastEvents, isEmpty);
+    });
+
+    test('Should separate and sort upcomingEvents (ascending) and pastEvents (descending)', () async {
+      final now = DateTime.now();
+      final todayMorning = DateTime(now.year, now.month, now.day, 8, 0);
+      final tomorrow = DateTime(now.year, now.month, now.day + 1, 20, 0);
+      final inTwoDays = DateTime(now.year, now.month, now.day + 2, 19, 0);
+      final yesterday = DateTime(now.year, now.month, now.day - 1, 21, 0);
+      final twoDaysAgo = DateTime(now.year, now.month, now.day - 2, 18, 0);
+
+      final eventToday = EventEntity(
+        id: 'event-today',
+        title: 'Show Hoje',
+        type: 'Show',
+        date: todayMorning,
+        startTime: '08:00',
+        endTime: '10:00',
+        location: 'Local Hoje',
+        fee: 300.0,
+      );
+
+      final eventTomorrow = EventEntity(
+        id: 'event-tomorrow',
+        title: 'Show Amanhã',
+        type: 'Show',
+        date: tomorrow,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local Amanhã',
+        fee: 400.0,
+      );
+
+      final eventInTwoDays = EventEntity(
+        id: 'event-future',
+        title: 'Show Futuro',
+        type: 'Show',
+        date: inTwoDays,
+        startTime: '19:00',
+        endTime: '21:00',
+        location: 'Local Futuro',
+        fee: 500.0,
+      );
+
+      final eventYesterday = EventEntity(
+        id: 'event-yesterday',
+        title: 'Show Ontem',
+        type: 'Show',
+        date: yesterday,
+        startTime: '21:00',
+        endTime: '23:00',
+        location: 'Local Ontem',
+        fee: 200.0,
+      );
+
+      final eventTwoDaysAgo = EventEntity(
+        id: 'event-past',
+        title: 'Show Mais Antigo',
+        type: 'Show',
+        date: twoDaysAgo,
+        startTime: '18:00',
+        endTime: '20:00',
+        location: 'Local Passado',
+        fee: 250.0,
+      );
+
+      // Adiciona fora de ordem para validar ordenação
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventTomorrow);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventTwoDaysAgo);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventToday);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventYesterday);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventInTwoDays);
+
+      final controller = container.read(agendaProvider.notifier);
+
+      // upcomingEvents: hoje, amanhã, depois de amanhã (ordem ascendente)
+      final upcoming = controller.upcomingEvents;
+      expect(upcoming.length, 3);
+      expect(upcoming[0].id, 'event-today');
+      expect(upcoming[1].id, 'event-tomorrow');
+      expect(upcoming[2].id, 'event-future');
+
+      // pastEvents: ontem, 2 dias atrás (ordem descendente - mais recente primeiro)
+      final past = controller.pastEvents;
+      expect(past.length, 2);
+      expect(past[0].id, 'event-yesterday');
+      expect(past[1].id, 'event-past');
+    });
+  });
 }

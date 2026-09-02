@@ -146,11 +146,17 @@
 - Depende de: Extensão do Modelo de Eventos (spec 015)
 - Status: concluído (specs/020-correcao-ux-modal-novo-compromisso/; baseline raiz sincronizada em spec.md e plan.md)
 
+### Correção dos Cards de Estatísticas do Dashboard (InfosWidget)
+- Intenção: Corrigir cálculos incorretos nos cards "Este Mês", "Shows/Mês" e "Cachê/Mês" da tela principal (mobile). Causas-raiz identificadas em `principal_screen.dart`/`agenda_controller.dart`: (1) `compromissosTotal` (card "Este Mês") recebe `events.length`, contando todos os compromissos futuros sem filtrar pelo mês corrente — por isso hoje exibe o mesmo valor do card "Próximos"; (2) `totalFee` (card "Cachê/Mês") soma o `fee` de todos os eventos do estado, também sem filtro de mês, somando cachês de meses futuros junto; (3) `monthlyShows` (card "Shows/Mês") filtra corretamente por mês, mas conta todos os tipos de evento (inclusive "Ensaio"), não apenas os do tipo "Show". Também ajustar a formatação do valor de `faturamento` (hoje exibido cru, ex. "18500.0", sem `R$`, sem separador de milhar e quebrando de forma estranha em duas linhas).
+- Impacto esperado: alto (bug de dados incorretos visíveis na tela principal, primeira impressão do usuário)
+- Depende de: Extensão do Modelo de Eventos (spec 015)
+- Status: ideia
+
 ### Histórico de Compromissos e Filtragem de Próximos Eventos (Mobile)
 - Intenção: Evitar poluição visual e confusão de UX na tela de Agenda exibindo em "Próximos Compromissos" exclusivamente eventos a partir da data atual (>= hoje) e adicionar botão/atalho que direciona para uma tela dedicada de histórico de compromissos anteriores.
 - Impacto esperado: alto (usabilidade/UX)
 - Depende de: Ajustes de UX na Agenda (spec 013), Extensão do Modelo de Eventos (spec 015)
-- Status: ideia
+- Status: concluído (specs/021-historico-de-compromissos/; baseline raiz sincronizada em spec.md e plan.md)
 
 ---
 

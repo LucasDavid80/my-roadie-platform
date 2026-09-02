@@ -23,6 +23,7 @@ class PrincipalScreen extends ConsumerWidget {
     final totalFee = ref.read(agendaProvider.notifier).totalFee;
     // final totalFee = ref.watch(agendaProvider.notifier).totalFee; // Se totalFee for um Provider separado, use watch. Se for um método, use read.
     final showsCount = ref.read(agendaProvider.notifier).monthlyShows;
+    final upcomingEvents = ref.read(agendaProvider.notifier).upcomingEvents;
 
     // 3. Criamos uma função simples para os widgets filhos chamarem o controller
     Future<void> handleOnConfirm(newEvent) async {
@@ -85,7 +86,7 @@ class PrincipalScreen extends ConsumerWidget {
 
               // Os Widgets agora recebem os dados atualizados automaticamente
               InfosWidget(
-                compromissosTotal: events.length,
+                compromissosTotal: upcomingEvents.length,
                 compromissosConcluidos: 0,
                 shows: showsCount,
                 faturamento: totalFee,
@@ -94,7 +95,7 @@ class PrincipalScreen extends ConsumerWidget {
               CustomCalendar(events: events), // <-- Passando a lista observada
 
               CommitmentsWidget(
-                commitments: events, // <-- Passando a lista observada
+                commitments: upcomingEvents, // <-- Passando a lista de próximos compromissos
                 onConfirm:
                     handleOnConfirm, // <-- Passando a função do controller
                 onDelete: handleOnDelete,
