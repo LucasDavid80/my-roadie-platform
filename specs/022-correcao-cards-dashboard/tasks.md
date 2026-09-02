@@ -32,7 +32,7 @@
 
 ## Fase 5 — Validação Manual e Testes em Dispositivo Físico
 
-- [ ] T5.1 — Validação Visual e Ausência de Overflow nos Cards do Dashboard
+- [x] T5.1 — Validação Visual e Ausência de Overflow nos Cards do Dashboard
   - **Como testar**:
     1. Inicie o aplicativo mobile no dispositivo físico (`flutter run` dentro da pasta `mobile/`).
     2. Na tela principal (Agenda), observe o bloco superior de métricas (`InfosWidget`) contendo os cards: "Este Mês", "Próximos", "Shows/Mês" e "Cachê/Mês".
