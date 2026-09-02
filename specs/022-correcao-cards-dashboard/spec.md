@@ -64,6 +64,11 @@ A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o c
   - *Ponto de quebra:* O `infoCard` possui largura fixa de 180px (`Container`). Dentro dele, o `ListTile` aloca cerca de 40px para o ícone `leading` mais paddings e gaps internos do Material, restando entre 70px e 80px úteis para o `subtitle`. Com `fontSize: 20` em negrito, valores com mais de 6 caracteres (como `"18500.0"` ou o valor formatado `"R$ 15.000,00"`) não cabem na linha e sofrem quebra indesejada.
   - *Estratégia definida:* Envolver o `Text` do `subtitle` em um `FittedBox` com `fit: BoxFit.scaleDown` e `alignment: Alignment.centerLeft`, configurando o `Text` com `maxLines: 1`. Isso força o texto a permanecer em linha única e sofrer redução de escala proporcional e elegante apenas se o número exceder a largura disponível.
 - **T0.3 — Formatação de cachê zerado:** Confirmado que quando o faturamento for zero (`0.0`), o card "Cachê/Mês" exibirá formalmente `R$ 0,00`, através de `NumberFormat.currency(locale: 'pt_BR', symbol: 'R$')`, mantendo consistência monetária.
+- **T0.4 — Mapeamento de regressões na suíte de testes:**
+  - Suíte completa executada via `flutter test` (122 testes passando com sucesso).
+  - Em `test/infos_widget_test.dart`: identificada expectativa literal pela string bruta `'2500.0'`, que falhará propositalmente quando a máscara `R$` for implementada (previsto para atualização controlada na task T2.3), além da adaptação do parâmetro `proximos`.
+  - Em `test/agenda_controller_test.dart`: o teste de `totalFee` continuará passando ao preservar o getter legado para retrocompatibilidade; os novos testes de `monthlyFee` e restrição de tipos de `monthlyShows` serão adicionados isoladamente em T1.2.
+  - Em `test/principal_screen_test.dart`: nenhum dos 4 testes existentes verifica os textos dos cards de resumo do `InfosWidget`, assegurando que não haverá efeitos colaterais na tela principal.
 - **Testes (`mobile/test/`)**:
   - Testes unitários no `AgendaController` para `monthlyEvents`, `monthlyShows` (com e sem eventos que não sejam show) e `monthlyFee` (isolando eventos deste mês de meses futuros).
   - Testes de widget em `infos_widget_test.dart` validando formatação monetária e renderização.

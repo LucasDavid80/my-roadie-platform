@@ -51,9 +51,11 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
     - `faturamento`: `ref.read(agendaProvider.notifier).monthlyFee`
 - **Testes (`flutter_test`)**:
   - `test/agenda_controller_test.dart`:
+    - Preservar o getter existente `totalFee` para não quebrar o teste existente.
     - Adicionar testes cobrindo `monthlyEvents`, `monthlyShows` (garantindo que tipos como "Ensaio" não são contados como show) e `monthlyFee` (garantindo que cachês de meses anteriores e posteriores não sejam somados).
   - `test/infos_widget_test.dart`:
-    - Validar formatação do texto monetário `R$` e comportamento de renderização dos cards.
+    - Atualizar a asserção legada de `'2500.0'` para `'R$ 2.500,00'`, além de validar cachê zero `'R$ 0,00'`.
+    - Adaptar os parâmetros de teste para a passagem direta de `proximos`.
   - `test/principal_screen_test.dart`:
     - Validar integração entre o controller e os cards renderizados na tela principal.
 
