@@ -38,7 +38,7 @@
     2. Na tela principal (Agenda), observe o bloco superior de métricas (`InfosWidget`) contendo os cards: "Este Mês", "Próximos", "Shows/Mês" e "Cachê/Mês".
   - **O que validar**: Os 4 cards são renderizados com layout uniforme, espaçamento harmonioso (180px de largura por card), tipografia legível e sem advertências visuais de estouro de layout (overflow).
 
-- [ ] T5.2 — Validação da Contagem de "Este Mês" e "Shows/Mês"
+- [x] T5.2 — Validação da Contagem de "Este Mês" e "Shows/Mês"
   - **Como testar**:
     1. No dispositivo físico, examine os compromissos cadastrados para o mês atual (ex.: setembro/2026).
     2. Compare a contagem do card "Este Mês" com o total de eventos desse mês (incluindo passados e futuros do próprio mês).
