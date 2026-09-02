@@ -43,6 +43,13 @@ A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o c
 - **Cards no topo (`flutter_04.png`):** O card "Este Mês" e "Próximos" exibem `1` (pois a lista exibe apenas o evento de 05/09). O card "Cachê/Mês" continua exibindo o valor bruto `18500.` na linha de cima e `0` na linha de baixo (quebra inadequada sem símbolo monetário `R$`), acumulando incorretamente os cachês de agosto no mês de setembro.
 - **Lista de compromissos (`flutter_05.png`):** Exibe com sucesso o botão "Ver histórico" e o único evento futuro de setembro (`R$ 15000.00`), comprovando que os eventos passados já foram movidos para o histórico na spec 021.
 
+### 4. Resultado Final Aprovado (Pós-Spec 022 — Capturada em 02/09/2026 via ADB)
+![Dashboard final com cards corrigidos](./assets/flutter_final.png)
+- **Cards perfeitamente simétricos:** Todos os 4 cards possuem dimensões rigorosamente idênticas (`180px × 96px`), respeitando o sistema de grid de 4/8pt.
+- **Tipografia padronizada em negrito:** Título e valor em `16px bold`, garantindo alta legibilidade e sem quebras defeituosas.
+- **Isolamento e Formatação:** O card "Cachê/Mês" exibe o valor formatado no padrão brasileiro (testado até `R$ 15.000.000,00`), perfeitamente contido em uma única linha e sem overflow graças ao `FittedBox`.
+- **Contagem rigorosa:** O card "Este Mês" contabiliza todos os compromissos de setembro (2 eventos: show + ensaio), enquanto "Shows/Mês" contabiliza estritamente os eventos de tipo Show (1 show).
+
 ## Escopo
 
 - **`AgendaController` (`mobile/lib/presentation/controllers/agenda_controller.dart`)**:
