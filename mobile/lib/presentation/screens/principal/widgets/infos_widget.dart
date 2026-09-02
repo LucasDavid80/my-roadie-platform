@@ -1,5 +1,6 @@
 import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class InfosWidget extends StatelessWidget {
   final int compromissosTotal, compromissosConcluidos, shows;
@@ -16,6 +17,10 @@ class InfosWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int proximosCompromissos = compromissosTotal - compromissosConcluidos;
+    final currencyFormatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: r'R$',
+    );
     return Column(
       spacing: 16.0,
       children: [
@@ -49,7 +54,7 @@ class InfosWidget extends StatelessWidget {
             ),
             infoCard(
               "Cachê/Mês",
-              faturamento.toString(),
+              currencyFormatter.format(faturamento),
               Icons.attach_money,
               AppColors.cardPurple,
             ),
