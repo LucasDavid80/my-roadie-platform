@@ -54,7 +54,7 @@
     4. Verifique se cachês de compromissos de meses anteriores (histórico) ou meses futuros distantes NÃO são somados no "Cachê/Mês".
   - **O que validar**: O card "Cachê/Mês" exibe o valor formatado com prefixo `R$` e separador de milhar brasileiro, somando apenas os cachês pertencentes ao mês corrente.
 
-- [ ] T5.4 — Validação de Responsividade e Escala com Valores Altos de Cachê (FittedBox)
+- [x] T5.4 — Validação de Responsividade e Escala com Valores Altos de Cachê (FittedBox)
   - **Como testar**:
     1. Crie ou edite um compromisso no mês atual com um valor de cachê elevado (ex.: digite `15000000` no formulário para obter `R$ 150.000,00`).
     2. Retorne à tela principal e observe a renderização do card "Cachê/Mês".
@@ -69,4 +69,4 @@
 - [x] Valores altos redimensionados sem estourar o card ou quebrar linha
 - [x] `flutter test` 100% verde sem regressões
 - [x] `backlog.md` atualizado
-- [ ] Validação dos cards concluída no dispositivo físico
+- [x] Validação dos cards concluída no dispositivo físico
