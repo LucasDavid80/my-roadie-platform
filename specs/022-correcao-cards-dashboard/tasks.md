@@ -11,7 +11,7 @@
 ## Fase 1 — `AgendaController`: novos getters de mês corrente
 
 - [x] T1.1 — Implementar `_isSameMonth`, `monthlyEvents`, `monthlyFee` e ajustar `monthlyShows` com filtro estrito de tipo no `agenda_controller.dart`.
-- [ ] T1.2 — Adicionar testes unitários em `test/agenda_controller_test.dart` cobrindo cálculo de `monthlyFee`, `monthlyShows` (ignorando ensaios/outros tipos) e `monthlyEvents` (isolando outros meses e anos).
+- [x] T1.2 — Adicionar testes unitários em `test/agenda_controller_test.dart` cobrindo cálculo de `monthlyFee`, `monthlyShows` (ignorando ensaios/outros tipos) e `monthlyEvents` (isolando outros meses e anos).
 
 ## Fase 2 — `InfosWidget`: formatação monetária e responsividade
 
