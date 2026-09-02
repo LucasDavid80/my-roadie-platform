@@ -60,6 +60,9 @@ A soma dos três cachês (`1.500 + 2.000 + 15.000 = 18.500,00`) comprova que o c
 ### Decisões tomadas na Fase 0
 
 - **T0.1 — Comportamento dos cards "Este Mês" e "Próximos":** Confirmado que o card **"Este Mês"** exibe todos os compromissos do mês corrente (passados + futuros deste mês). O card **"Próximos"** exibe todos os compromissos a partir de hoje (`upcomingEvents.length`), sincronizado com a lista de próximos compromissos da tela. O `InfosWidget` passará a receber esse valor diretamente, eliminando o cálculo legado `compromissosTotal - compromissosConcluidos`.
+- **T0.2 — Diagnóstico da quebra de layout e estratégia com `FittedBox`:**
+  - *Ponto de quebra:* O `infoCard` possui largura fixa de 180px (`Container`). Dentro dele, o `ListTile` aloca cerca de 40px para o ícone `leading` mais paddings e gaps internos do Material, restando entre 70px e 80px úteis para o `subtitle`. Com `fontSize: 20` em negrito, valores com mais de 6 caracteres (como `"18500.0"` ou o valor formatado `"R$ 15.000,00"`) não cabem na linha e sofrem quebra indesejada.
+  - *Estratégia definida:* Envolver o `Text` do `subtitle` em um `FittedBox` com `fit: BoxFit.scaleDown` e `alignment: Alignment.centerLeft`, configurando o `Text` com `maxLines: 1`. Isso força o texto a permanecer em linha única e sofrer redução de escala proporcional e elegante apenas se o número exceder a largura disponível.
 - **Testes (`mobile/test/`)**:
   - Testes unitários no `AgendaController` para `monthlyEvents`, `monthlyShows` (com e sem eventos que não sejam show) e `monthlyFee` (isolando eventos deste mês de meses futuros).
   - Testes de widget em `infos_widget_test.dart` validando formatação monetária e renderização.

@@ -43,7 +43,7 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
   - Adicionar getter `monthlyFee` (ou substituir `totalFee` por um cálculo baseado no mês corrente, mantendo retrocompatibilidade se necessário).
 - **`infos_widget.dart`**:
   - Utilizar `DateFormat`/`NumberFormat` do pacote `intl` (já importado no projeto mobile) para converter `faturamento` em texto formatado `R$ #.##0,00`.
-  - No widget `infoCard`, envolver o `Text` de valor com `FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft)` ou ajustar o estilo para evitar quebra de linha inadequada ou overflow.
+  - No widget `infoCard`, envolver o `Text` de subtitle com `FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft)` e adicionar `maxLines: 1` no `Text`, impedindo a quebra de linha prematura e redimensionando suavemente valores extensos sem overflow.
 - **`principal_screen.dart`**:
   - Obter os novos valores via `ref.read(agendaProvider.notifier)` ou `ref.watch(agendaProvider)` e repassar para o `InfosWidget`:
     - `compromissosTotal`: `ref.read(agendaProvider.notifier).monthlyEvents.length`

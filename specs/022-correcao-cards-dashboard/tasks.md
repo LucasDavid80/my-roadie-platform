@@ -3,7 +3,7 @@
 ## Fase 0 — Confirmar decisões em aberto antes de codar
 
 - [x] T0.1 — Confirmar com o usuário o comportamento exato dos cards "Este Mês" e "Próximos" em relação aos eventos passados do mesmo mês.
-- [ ] T0.2 — Inspecionar `InfosWidget` e `infoCard` para identificar o ponto exato de quebra de layout de valores monetários e definir a estratégia de escala/responsividade (`FittedBox`).
+- [x] T0.2 — Inspecionar `InfosWidget` e `infoCard` para identificar o ponto exato de quebra de layout de valores monetários e definir a estratégia de escala/responsividade (`FittedBox`).
 - [ ] T0.3 — Confirmar a formatação esperada para cachê zerado (`R$ 0,00`).
 - [ ] T0.4 — Inspecionar a suíte existente de testes (`test/infos_widget_test.dart`, `test/agenda_controller_test.dart`) para mapear regressões potenciais.
 - [ ] T0.5 — Capturar e anexar novas screenshots do aplicativo no estado pós-spec 021 (com botão "Ver histórico" e comportamento atual dos cards) como linha de base visual atualizada.
