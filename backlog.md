@@ -179,7 +179,7 @@
 - Impacto esperado: alto (bug de dados incorretos visíveis na tela principal, primeira impressão do usuário)
 - Depende de: Extensão do Modelo de Eventos (spec 015)
 - Release: v1.1.0
-- Status: ideia
+- Status: em spec (specs/022-correcao-cards-dashboard/)
 
 ### Histórico de Compromissos e Filtragem de Próximos Eventos (Mobile)
 - Intenção: Evitar poluição visual e confusão de UX na tela de Agenda exibindo em "Próximos Compromissos" exclusivamente eventos a partir da data atual (>= hoje) e adicionar botão/atalho que direciona para uma tela dedicada de histórico de compromissos anteriores.
