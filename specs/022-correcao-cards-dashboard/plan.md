@@ -63,8 +63,8 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
    - "Este Mês" exibe o total de eventos ocorridos e previstos no mês corrente (`monthlyEvents.length`).
    - "Próximos" exibe a quantidade total de compromissos a partir de hoje (`upcomingEvents.length`), sincronizado com a lista de próximos compromissos da tela.
    - O `InfosWidget` passará a receber o total de próximos diretamente (ex.: `proximos: upcomingEvents.length`), eliminando o cálculo interno legado `compromissosTotal - compromissosConcluidos`.
-2. **Formatação de Cachê Zero**:
-   - Confirmar se faturamento zero deve ser exibido como `R$ 0,00` ou `-` (padrão monetário formal `R$ 0,00` recomendado).
+2. **Formatação de Cachê Zero** (Confirmado em T0.3):
+   - Faturamento zerado exibirá estritamente `R$ 0,00`, aplicando o comportamento padrão de `NumberFormat.currency(locale: 'pt_BR', symbol: 'R$')`.
 3. **Resiliência do tipo de evento para "Shows/Mês"**:
    - Padronizar checagem de tipo case-insensitive (`e.type.trim().toLowerCase() == 'show'`) para aceitar variações legadas caso existam.
 4. **Captura de Screenshots pós-spec 021**:
