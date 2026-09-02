@@ -22,7 +22,7 @@
 ## Fase 3 — Integração na `PrincipalScreen`
 
 - [x] T3.1 — Atualizar a invocação do `InfosWidget` na `PrincipalScreen` para consumir os getters corrigidos do `AgendaController`.
-- [ ] T3.2 — Atualizar `test/principal_screen_test.dart` validando que os cards na tela principal refletem fielmente os valores do mês corrente.
+- [x] T3.2 — Atualizar `test/principal_screen_test.dart` validando que os cards na tela principal refletem fielmente os valores do mês corrente.
 
 ## Fase 4 — Fechamento
 
