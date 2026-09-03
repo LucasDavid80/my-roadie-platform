@@ -291,7 +291,7 @@ export default async function TestersPage() {
                       <span>Baixar IPA do My Roadie</span>
                     </a>
                     <p className="text-[11px] text-zinc-400 text-center mt-1.5">
-                      Arquivo .ipa para instalação via Sideloadly / AltStore
+                      Arquivo .ipa para instalação via sideload no iOS
                     </p>
                   </>
                 ) : (
