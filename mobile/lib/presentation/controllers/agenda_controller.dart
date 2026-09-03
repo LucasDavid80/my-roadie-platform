@@ -63,13 +63,30 @@ class AgendaController extends Notifier<List<EventEntity>> {
     }
   }
 
+  bool _isSameMonth(DateTime d, DateTime now) =>
+      d.year == now.year && d.month == now.month;
+
+  List<EventEntity> get monthlyEvents {
+    final now = DateTime.now();
+    return state.where((e) => _isSameMonth(e.date, now)).toList();
+  }
+
   double get totalFee => state.fold(0.0, (sum, event) => sum + event.fee);
 
   int get monthlyShows {
     final now = DateTime.now();
     return state
-        .where((e) => e.date.month == now.month && e.date.year == now.year)
+        .where((e) =>
+            _isSameMonth(e.date, now) &&
+            e.type.trim().toLowerCase() == 'show')
         .length;
+  }
+
+  double get monthlyFee {
+    final now = DateTime.now();
+    return state
+        .where((e) => _isSameMonth(e.date, now))
+        .fold(0.0, (sum, event) => sum + event.fee);
   }
 
   DateTime _startOfDay(DateTime d) => DateTime(d.year, d.month, d.day);

@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAgendaRepository extends Mock implements IAgendaRepository {}
@@ -248,6 +249,205 @@ void main() {
     // Verifica que navegou para a tela de histórico
     expect(find.byType(HistoryScreen), findsOneWidget);
     expect(find.text('Histórico de Compromissos'), findsOneWidget);
+  });
+
+  Finder findCardValue(String cardTitle, String expectedValue) {
+    final card = find.ancestor(
+      of: find.text(cardTitle),
+      matching: find.byType(Card),
+    );
+    return find.descendant(
+      of: card,
+      matching: find.text(expectedValue),
+    );
+  }
+
+  testWidgets('Should display accurate current month metrics in dashboard cards on PrincipalScreen (T3.2)', (WidgetTester tester) async {
+    final currencyFormatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: r'R$',
+    );
+    final now = DateTime.now();
+
+    final showThisMonth = EventEntity(
+      id: 'show-this-month',
+      title: 'Show Deste Mês',
+      type: 'Show',
+      date: DateTime(now.year, now.month, now.day, 21, 0),
+      startTime: '21:00',
+      endTime: '23:00',
+      location: 'Palco Principal',
+      fee: 1500.0,
+      notes: '',
+    );
+    final rehearsalThisMonth = EventEntity(
+      id: 'rehearsal-this-month',
+      title: 'Ensaio Geral',
+      type: 'Ensaio',
+      date: DateTime(now.year, now.month, now.day, 18, 0),
+      startTime: '18:00',
+      endTime: '20:00',
+      location: 'Estúdio',
+      fee: 0.0,
+      notes: '',
+    );
+    final showNextMonth = EventEntity(
+      id: 'show-next-month',
+      title: 'Show Mês Que Vem',
+      type: 'Show',
+      date: DateTime(now.year, now.month + 1, 15, 20, 0),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Outro Estado',
+      fee: 5000.0,
+      notes: '',
+    );
+    final showPastMonth = EventEntity(
+      id: 'show-past-month',
+      title: 'Show Mês Passado',
+      type: 'Show',
+      date: DateTime(now.year, now.month - 1, 15, 20, 0),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Teatro Velho',
+      fee: 3000.0,
+      notes: '',
+    );
+
+    when(() => mockAgendaRepository.getEvents()).thenAnswer(
+      (_) async => [
+        showThisMonth,
+        rehearsalThisMonth,
+        showNextMonth,
+        showPastMonth,
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        agendaRepositoryProvider.overrideWithValue(mockAgendaRepository),
+      ],
+    );
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(
+          home: PrincipalScreen(),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // 1. "Este Mês": 2 eventos no mês atual (showThisMonth + rehearsalThisMonth)
+    expect(findCardValue('Este Mês', '2'), findsOneWidget);
+
+    // 2. "Próximos": 3 eventos futuros a partir de hoje (showThisMonth + rehearsalThisMonth + showNextMonth)
+    expect(findCardValue('Próximos', '3'), findsOneWidget);
+
+    // 3. "Shows/Mês": 1 show no mês atual (apenas showThisMonth, excluindo rehearsal e outros meses)
+    expect(findCardValue('Shows/Mês', '1'), findsOneWidget);
+
+    // 4. "Cachê/Mês": R$ 1.500,00 (apenas showThisMonth.fee, ignorando 5000 e 3000)
+    expect(
+      findCardValue('Cachê/Mês', currencyFormatter.format(1500.0)),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('Should display zeroed metrics and R\$ 0,00 when there are no events (T3.2)', (WidgetTester tester) async {
+    final currencyFormatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: r'R$',
+    );
+
+    when(() => mockAgendaRepository.getEvents()).thenAnswer(
+      (_) async => [],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        agendaRepositoryProvider.overrideWithValue(mockAgendaRepository),
+      ],
+    );
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(
+          home: PrincipalScreen(),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(findCardValue('Este Mês', '0'), findsOneWidget);
+    expect(findCardValue('Próximos', '0'), findsOneWidget);
+    expect(findCardValue('Shows/Mês', '0'), findsOneWidget);
+    expect(
+      findCardValue('Cachê/Mês', currencyFormatter.format(0.0)),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('Should reactively update dashboard cards when a new event is added to current month (T3.2)', (WidgetTester tester) async {
+    final currencyFormatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: r'R$',
+    );
+    final now = DateTime.now();
+
+    final container = ProviderContainer(
+      overrides: [
+        agendaRepositoryProvider.overrideWithValue(mockAgendaRepository),
+      ],
+    );
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(
+          home: PrincipalScreen(),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Começa vazio
+    expect(findCardValue('Este Mês', '0'), findsOneWidget);
+    expect(findCardValue('Shows/Mês', '0'), findsOneWidget);
+    expect(
+      findCardValue('Cachê/Mês', currencyFormatter.format(0.0)),
+      findsOneWidget,
+    );
+
+    // Adiciona show no mês atual com cachê de 2500
+    final newShow = EventEntity(
+      id: 'reactive-card-event-1',
+      title: 'Show Adicionado Reativo',
+      type: 'Show',
+      date: DateTime(now.year, now.month, now.day, 20, 0),
+      startTime: '20:00',
+      endTime: '22:00',
+      location: 'Palco Externo',
+      fee: 2500.0,
+      notes: '',
+    );
+
+    await container.read(agendaProvider.notifier).addOrUpdateEvent(newShow);
+    await tester.pumpAndSettle();
+
+    // Cards atualizados reativamente
+    expect(findCardValue('Este Mês', '1'), findsOneWidget);
+    expect(findCardValue('Próximos', '1'), findsOneWidget);
+    expect(findCardValue('Shows/Mês', '1'), findsOneWidget);
+    expect(
+      findCardValue('Cachê/Mês', currencyFormatter.format(2500.0)),
+      findsOneWidget,
+    );
   });
 }
 

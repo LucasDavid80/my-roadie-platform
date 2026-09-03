@@ -387,4 +387,204 @@ void main() {
       expect(past[1].id, 'event-past');
     });
   });
+
+  group('Monthly statistics getters (T1.2)', () {
+    test('monthlyEvents should return only events belonging to the current month and year', () async {
+      final now = DateTime.now();
+      final thisMonth = DateTime(now.year, now.month, 10);
+      final lastMonth = DateTime(now.year, now.month - 1, 10);
+      final nextMonth = DateTime(now.year, now.month + 1, 10);
+      final lastYearSameMonth = DateTime(now.year - 1, now.month, 10);
+
+      final eventThisMonth = EventEntity(
+        id: 'e-this-month',
+        title: 'Compromisso Este Mês',
+        type: 'Show',
+        date: thisMonth,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local 1',
+        fee: 500.0,
+      );
+
+      final eventLastMonth = EventEntity(
+        id: 'e-last-month',
+        title: 'Compromisso Mês Passado',
+        type: 'Show',
+        date: lastMonth,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local 2',
+        fee: 400.0,
+      );
+
+      final eventNextMonth = EventEntity(
+        id: 'e-next-month',
+        title: 'Compromisso Próximo Mês',
+        type: 'Ensaio',
+        date: nextMonth,
+        startTime: '19:00',
+        endTime: '21:00',
+        location: 'Local 3',
+        fee: 0.0,
+      );
+
+      final eventLastYear = EventEntity(
+        id: 'e-last-year',
+        title: 'Compromisso Ano Passado',
+        type: 'Show',
+        date: lastYearSameMonth,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local 4',
+        fee: 600.0,
+      );
+
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventThisMonth);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventLastMonth);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventNextMonth);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(eventLastYear);
+
+      final monthlyEvents = container.read(agendaProvider.notifier).monthlyEvents;
+      expect(monthlyEvents.length, 1);
+      expect(monthlyEvents.first.id, 'e-this-month');
+    });
+
+    test('monthlyShows should only count events in the current month with type show (case-insensitive and trimmed)', () async {
+      final now = DateTime.now();
+      final thisMonth = DateTime(now.year, now.month, 12);
+      final nextMonth = DateTime(now.year, now.month + 1, 12);
+
+      final showLower = EventEntity(
+        id: 's-lower',
+        title: 'Show Minúsculo',
+        type: 'show',
+        date: thisMonth,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local A',
+        fee: 1000.0,
+      );
+
+      final showSpaces = EventEntity(
+        id: 's-spaces',
+        title: 'Show com Espaços',
+        type: '  Show  ',
+        date: thisMonth,
+        startTime: '21:00',
+        endTime: '23:00',
+        location: 'Local B',
+        fee: 1500.0,
+      );
+
+      final ensaioThisMonth = EventEntity(
+        id: 'e-ensaio',
+        title: 'Ensaio Geral',
+        type: 'Ensaio',
+        date: thisMonth,
+        startTime: '14:00',
+        endTime: '17:00',
+        location: 'Estúdio',
+        fee: 0.0,
+      );
+
+      final reuniaoThisMonth = EventEntity(
+        id: 'r-reuniao',
+        title: 'Reunião de Banda',
+        type: 'Reunião',
+        date: thisMonth,
+        startTime: '10:00',
+        endTime: '11:00',
+        location: 'Escritório',
+        fee: 0.0,
+      );
+
+      final showNextMonth = EventEntity(
+        id: 's-next-month',
+        title: 'Show Próximo Mês',
+        type: 'Show',
+        date: nextMonth,
+        startTime: '22:00',
+        endTime: '01:00',
+        location: 'Local C',
+        fee: 2000.0,
+      );
+
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(showLower);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(showSpaces);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(ensaioThisMonth);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(reuniaoThisMonth);
+      await container.read(agendaProvider.notifier).addOrUpdateEvent(showNextMonth);
+
+      final showsCount = container.read(agendaProvider.notifier).monthlyShows;
+      expect(showsCount, 2);
+    });
+
+    test('monthlyFee should sum fees strictly for current month events, ignoring past and future months', () async {
+      final now = DateTime.now();
+      final thisMonth1 = DateTime(now.year, now.month, 5);
+      final thisMonth2 = DateTime(now.year, now.month, 20);
+      final pastMonth = DateTime(now.year, now.month - 1, 15);
+      final futureMonth = DateTime(now.year, now.month + 1, 15);
+
+      final event1ThisMonth = EventEntity(
+        id: 'fee-1',
+        title: 'Show 1 Mês Atual',
+        type: 'Show',
+        date: thisMonth1,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local 1',
+        fee: 1500.0,
+      );
+
+      final event2ThisMonth = EventEntity(
+        id: 'fee-2',
+        title: 'Show 2 Mês Atual',
+        type: 'Show',
+        date: thisMonth2,
+        startTime: '21:00',
+        endTime: '23:00',
+        location: 'Local 2',
+        fee: 2500.0,
+      );
+
+      final pastEvent = EventEntity(
+        id: 'fee-past',
+        title: 'Show Mês Passado',
+        type: 'Show',
+        date: pastMonth,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local 3',
+        fee: 5000.0,
+      );
+
+      final futureEvent = EventEntity(
+        id: 'fee-future',
+        title: 'Show Mês Futuro',
+        type: 'Show',
+        date: futureMonth,
+        startTime: '20:00',
+        endTime: '22:00',
+        location: 'Local 4',
+        fee: 10000.0,
+      );
+
+      final controller = container.read(agendaProvider.notifier);
+
+      // Estado inicial sem eventos
+      expect(controller.monthlyFee, 0.0);
+
+      await controller.addOrUpdateEvent(event1ThisMonth);
+      await controller.addOrUpdateEvent(event2ThisMonth);
+      await controller.addOrUpdateEvent(pastEvent);
+      await controller.addOrUpdateEvent(futureEvent);
+
+      // monthlyFee deve somar apenas 1500 + 2500 = 4000.0 (ignorando 5000 e 10000)
+      expect(controller.monthlyFee, 4000.0);
+      // Enquanto o totalFee legado acumula tudo (1500 + 2500 + 5000 + 10000 = 19000.0)
+      expect(controller.totalFee, 19000.0);
+    });
+  });
 }

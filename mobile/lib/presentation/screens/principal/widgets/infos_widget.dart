@@ -1,21 +1,31 @@
 import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class InfosWidget extends StatelessWidget {
-  final int compromissosTotal, compromissosConcluidos, shows;
+  final int compromissosTotal;
+  final int? proximos;
+  final int compromissosConcluidos;
+  final int shows;
   final double faturamento;
 
   const InfosWidget({
     super.key,
     required this.compromissosTotal,
-    required this.compromissosConcluidos,
+    this.proximos,
+    this.compromissosConcluidos = 0,
     required this.shows,
     required this.faturamento,
   });
 
   @override
   Widget build(BuildContext context) {
-    int proximosCompromissos = compromissosTotal - compromissosConcluidos;
+    int proximosCompromissos =
+        proximos ?? (compromissosTotal - compromissosConcluidos);
+    final currencyFormatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: r'R$',
+    );
     return Column(
       spacing: 16.0,
       children: [
@@ -49,7 +59,7 @@ class InfosWidget extends StatelessWidget {
             ),
             infoCard(
               "Cachê/Mês",
-              faturamento.toString(),
+              currencyFormatter.format(faturamento),
               Icons.attach_money,
               AppColors.cardPurple,
             ),
@@ -74,32 +84,51 @@ Widget infoCard(String title, String description, IconData icon, Color color) {
 
     child: Container(
       width: 180,
-      padding: EdgeInsets.all(8),
-      child: ListTile(
-        leading: Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(8),
+      height: 96,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 24, color: color),
           ),
-          child: Icon(icon, size: 24, color: color),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-            fontWeight: FontWeight.w600,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    description,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        subtitle: Text(
-          description,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
+        ],
       ),
     ),
   );
