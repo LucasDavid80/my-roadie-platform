@@ -43,7 +43,9 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
   - Adicionar getter `monthlyFee` (ou substituir `totalFee` por um cálculo baseado no mês corrente, mantendo retrocompatibilidade se necessário).
 - **`infos_widget.dart`**:
   - Utilizar `DateFormat`/`NumberFormat` do pacote `intl` (já importado no projeto mobile) para converter `faturamento` em texto formatado `R$ #.##0,00`.
-  - No widget `infoCard`, envolver o `Text` de subtitle com `FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft)` e adicionar `maxLines: 1` no `Text`, impedindo a quebra de linha prematura e redimensionando suavemente valores extensos sem overflow.
+  - No widget `infoCard`, substituir a estrutura legada de `ListTile` por layout customizado utilizando `Row` com ícone em `Container` e `Expanded(child: Column(...))`, fixando as dimensões em `180px × 96px` para garantir simetria rigorosa entre todos os cards no grid de 4/8pt.
+  - Padronizar a tipografia do título e do valor em `16px bold` para legibilidade uniforme.
+  - Envolver o `Text` do valor com `FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft)` e adicionar `maxLines: 1` no `Text`, impedindo a quebra de linha prematura e redimensionando suavemente valores extensos sem overflow.
 - **`principal_screen.dart`**:
   - Obter os novos valores via `ref.read(agendaProvider.notifier)` ou `ref.watch(agendaProvider)` e repassar para o `InfosWidget`:
     - `compromissosTotal`: `ref.read(agendaProvider.notifier).monthlyEvents.length`
@@ -66,7 +68,7 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
 - Validar a formatação monetária brasileira (`R$ X.XXX,XX` ou `R$ 0,00`) e o isolamento estrito de cachês no card "Cachê/Mês" sem acúmulo de outros meses.
 - Validar o ajuste responsivo com `FittedBox` no card "Cachê/Mês" com valores de cachê elevados.
 
-## Decisões a confirmar na Fase 0 (antes de codar)
+## Decisões a confirmar na Fase 0 (antes de codar) e refinamentos da Fase 5
 
 1. **Card "Este Mês" vs "Próximos"** (Confirmado em T0.1):
    - "Este Mês" exibe o total de eventos ocorridos e previstos no mês corrente (`monthlyEvents.length`).
@@ -78,6 +80,8 @@ Na camada visual (`InfosWidget`), o valor de `faturamento` passa a ser formatado
    - Padronizar checagem de tipo case-insensitive (`e.type.trim().toLowerCase() == 'show'`) para aceitar variações legadas caso existam.
 4. **Captura de Screenshots pós-spec 021** (Concluído em T0.5):
    - Novas capturas registradas em `assets/flutter_04.png` (cards com layout e valor incorretos) e `assets/flutter_05.png` (botão 'Ver histórico' e lista de compromissos), devidamente anexadas à `spec.md` como linha de base visual.
+5. **Substituição de `ListTile` e Simetria dos Cards** (Refinado em T5.1):
+   - Durante a validação em dispositivo físico, constatou-se que o `ListTile` do Material 3 aplicava paddings e alinhamentos intrínsecos variáveis, impedindo a simetria uniforme de altura entre os cards. A estrutura foi refatorada para `Row` com `Expanded(Column)` com `height: 96` explícito e tipografia unificada em `16px bold`.
 
 ## Conformidade com a Constituição (`constitution.md`)
 
