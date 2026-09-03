@@ -164,8 +164,8 @@
 
 ---
 
-## 🚀 Release v1.1.0 — Refinamento de UX da Agenda & Dashboard (Em andamento / Próxima)
-> Escopo: Refinamento visual da tela principal mobile, separação de eventos passados e futuros no Histórico e correção de cálculos e formatação dos cards.
+## 📦 Release v1.1.0 — Refinamento de UX da Agenda & Dashboard (Concluída em 03/09/2026)
+> Escopo: Refinamento visual da tela principal mobile, separação de eventos passados e futuros no Histórico, correção de cálculos e formatação dos cards do dashboard, automação de versão e downloads via GitHub API na rota `/testers` e deploy hook unificado.
 
 ### Correção de UX no Modal "Novo Compromisso" (Mobile)
 - Intenção: Corrigir falhas de UX identificadas no modal de criação de compromisso: borda interna excessiva apertando os campos do formulário (deveria ser praticamente zero/zerada); botão "Criar Compromisso" sem bordas laterais, ficando sobreposto ao botão "Cancelar"; campo "Cachê" cortando o texto ao digitar valores altos (ex.: 1500,00); e avaliar substituir os campos separados de "Início" e "Término" por um único campo de duração onde o usuário define início e fim de uma vez.
