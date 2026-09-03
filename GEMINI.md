@@ -53,6 +53,7 @@ O projeto é estruturado como um monorepo (gerenciado manualmente ou via pastas 
 - **Node.js:** Versão 20 (LTS).
 - **Gerenciador de Pacotes:** `npm`.
 - **Commits:** Mensagens claras e em inglês ou português (seguindo o padrão do repositório), preferencialmente com escopo (ex: `backend: add event service`).
+- **Integração na main:** Sempre via Pull Request (push direto ou merge manual direto na branch `main` são proibidos).
 
 ### Backend (NestJS)
 - **Validação:** Uso rigoroso de `ValidationPipe` com DTOs (`class-validator`).

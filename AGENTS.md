@@ -63,6 +63,7 @@ Ver `constitution.md` §1 (stack) e `docs/architecture/*.md` para comandos de ca
   Se um item corrigir algo quebrado por um commit anterior (ex.: durante revisão de
   outro agente), use `fix` mesmo que a mudança esteja dentro da mesma fase.
 - Não abra Pull Request nem faça merge para `main` sem eu pedir explicitamente.
+- **Toda integração para a `main` deve ser realizada exclusivamente via Pull Request**: nunca faça push direto ou merge manual direto na branch `main`.
 - Se em algum momento não estiver claro se uma ação conta como "push" (ex.: criar tag, criar release, sincronizar branch remota), trate como push e peça confirmação antes.
 
 ---
