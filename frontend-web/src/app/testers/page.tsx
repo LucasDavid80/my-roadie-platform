@@ -45,11 +45,68 @@ export function isValidDownloadUrl(url?: string | null): boolean {
   return false;
 }
 
-export default function TestersPage() {
-  const rawApkUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL || '/downloads/my-roadie-release.apk';
-  const rawIpaUrl = process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL || '/downloads/my-roadie-release.ipa';
-  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || 'MVP 1.0.0';
-  const githubReleasesUrl = process.env.NEXT_PUBLIC_GITHUB_RELEASES_URL || 'https://github.com/LucasDavid80/my-roadie-platform/releases';
+interface GitHubReleaseAsset {
+  name: string;
+  browser_download_url: string;
+}
+
+export interface GitHubReleaseData {
+  tag_name: string;
+  name?: string;
+  assets?: GitHubReleaseAsset[];
+}
+
+/**
+ * Consulta a última release pública publicada no GitHub via ISR (cache de 1 hora no Edge).
+ * Retorna null em caso de indisponibilidade ou falha de rede, acionando os fallbacks locais.
+ */
+export async function getLatestGitHubRelease(): Promise<GitHubReleaseData | null> {
+  try {
+    const res = await fetch(
+      'https://api.github.com/repos/LucasDavid80/my-roadie-platform/releases/latest',
+      {
+        next: { revalidate: 3600 },
+        headers: {
+          Accept: 'application/vnd.github.v3+json',
+          'User-Agent': 'my-roadie-platform-testers',
+        },
+      }
+    );
+    if (!res.ok) return null;
+    return (await res.json()) as GitHubReleaseData;
+  } catch {
+    return null;
+  }
+}
+
+export default async function TestersPage() {
+  const latestRelease = await getLatestGitHubRelease();
+
+  const releaseApkAsset = latestRelease?.assets?.find((a) =>
+    a.name.toLowerCase().endsWith('.apk')
+  );
+  const releaseIpaAsset = latestRelease?.assets?.find((a) =>
+    a.name.toLowerCase().endsWith('.ipa')
+  );
+
+  const rawApkUrl =
+    process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL ||
+    releaseApkAsset?.browser_download_url ||
+    '/downloads/my-roadie-release.apk';
+
+  const rawIpaUrl =
+    process.env.NEXT_PUBLIC_IPA_DOWNLOAD_URL ||
+    releaseIpaAsset?.browser_download_url ||
+    '/downloads/my-roadie-release.ipa';
+
+  const appVersion =
+    latestRelease?.tag_name ||
+    process.env.NEXT_PUBLIC_APP_VERSION ||
+    'MVP 1.0.0';
+
+  const githubReleasesUrl =
+    process.env.NEXT_PUBLIC_GITHUB_RELEASES_URL ||
+    'https://github.com/LucasDavid80/my-roadie-platform/releases';
 
   const isApkAvailable = isValidDownloadUrl(rawApkUrl);
   const isIpaAvailable = isValidDownloadUrl(rawIpaUrl);
@@ -234,7 +291,7 @@ export default function TestersPage() {
                       <span>Baixar IPA do My Roadie</span>
                     </a>
                     <p className="text-[11px] text-zinc-400 text-center mt-1.5">
-                      Arquivo .ipa para instalação via Sideloadly / AltStore
+                      Arquivo .ipa para instalação via sideload no iOS
                     </p>
                   </>
                 ) : (
@@ -275,7 +332,7 @@ export default function TestersPage() {
                       2
                     </span>
                     <span>
-                      Conecte o iPhone via cabo ao computador e abra o programa de sideload gratuito (recomendado: <strong>Sideloadly</strong> ou <strong>AltStore</strong>).
+                      Conecte o iPhone via cabo ao computador e abra a ferramenta de sideload (recomendado: <strong>Sideloadly</strong> ou <strong>AltStore</strong>).
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
