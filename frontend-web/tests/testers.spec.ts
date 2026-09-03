@@ -59,7 +59,7 @@ test.describe('Página de Testadores e Distribuição de Builds (/testers)', () 
         const isLinkVisible = await downloadLink.isVisible();
         if (isLinkVisible) {
             await expect(downloadLink).toHaveAttribute('download', 'my-roadie-release.ipa');
-            await expect(page.getByText('Sideload Gratuito')).toBeVisible();
+            await expect(page.getByText('Sideload Gratuito', { exact: true })).toBeVisible();
         } else {
             await expect(disabledButton.last()).toBeVisible();
             await expect(disabledButton.last()).toBeDisabled();

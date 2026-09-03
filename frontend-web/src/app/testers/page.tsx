@@ -332,7 +332,7 @@ export default async function TestersPage() {
                       2
                     </span>
                     <span>
-                      Conecte o iPhone via cabo ao computador e abra o programa de sideload gratuito (recomendado: <strong>Sideloadly</strong> ou <strong>AltStore</strong>).
+                      Conecte o iPhone via cabo ao computador e abra a ferramenta de sideload (recomendado: <strong>Sideloadly</strong> ou <strong>AltStore</strong>).
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
