@@ -192,114 +192,242 @@
 
 ## 🔮 Releases Futuras (Planejamento)
 
-### Release v1.2.0 — Conformidade Legal, Privacidade & Governança (LGPD)
-> Objetivo: Estabelecer as regras jurídicas, privacidade de dados e conformidade antes do onboarding em massa de músicos e roadies.
+### Release v1.1.1 — Lembretes Locais de Compromissos (Quick-Win Mobile)
+> Objetivo: Entregar pontualidade e retenção imediata para os testers do app mobile através de alarmes e notificações locais disparadas diretamente pelo dispositivo para eventos próximos, com custo zero de infraestrutura de servidor.
 
-#### Termos de Uso e Políticas da Plataforma
-- Intenção: Exibir e colher consentimento dos Termos de Uso e Políticas de Privacidade durante o cadastro no mobile e web.
-- Impacto esperado: alto (legal/LGPD)
-- Depende de: nenhum
-- Release: v1.2.0
+#### Lembretes Locais de Eventos Próximos na Agenda (Mobile)
+- Intenção: Agendar e disparar notificações locais nativas no dispositivo móvel (Android e iOS via `flutter_local_notifications`) para avisar o usuário sobre shows, ensaios e compromissos que estão chegando (ex.: 24h e 2h antes do início), operando 100% offline e sem necessidade de conexão com a internet.
+- Impacto esperado: alto (valor imediato para os usuários que já utilizam a agenda do app em produção)
+- Depende de: Extensão do Modelo de Eventos (spec 015)
+- Release: v1.1.1
 - Status: ideia
 
-#### Fechar gaps de LGPD (ver constitution.md §10)
-- Intenção: Consentimento explícito no cadastro, política de exclusão de conta (hard delete vs. anonimização), endpoint de exportação de dados, confirmar região/criptografia do Supabase.
-- Impacto esperado: alto (risco legal/reputacional)
-- Depende de: Termos de Uso e Políticas da Plataforma
+---
+
+### Release v1.2.0 — Conformidade Jurídica Essencial (Onboarding Legal)
+> Objetivo: Estabelecer os termos legais e colher consentimento antes da abertura para convites de terceiros e crescimento da base.
+
+#### 1. Consentimento de Termos de Uso e Políticas de Privacidade no Onboarding
+- Intenção: Exibir termos e colher consentimento explícito e auditável (com versão dos termos e timestamp) no cadastro Web e Mobile, garantindo conformidade legal mínima para a entrada de novos usuários.
+- Impacto esperado: alto (blindagem jurídica/LGPD)
+- Depende de: nenhum
 - Release: v1.2.0
 - Status: ideia
 
 ---
 
-### Release v1.3.0 — Operação de Show & Experiência de Palco
-> Objetivo: Construir as ferramentas operacionais de uso direto no ensaio e show, alavancando as APIs já desenvolvidas (`Repertoire` — spec 005 e `Tasks` — spec 004).
+### Release v1.3.0 — Gestão de Bandas, Convites & Push Notifications de Equipe (Modelo Híbrido)
+> Objetivo: Transformar o My Roadie em uma plataforma colaborativa de equipe, permitindo criar bandas, convidar integrantes por @username ou WhatsApp e receber alertas de equipe em tempo real.
 
-#### Gestão de Setlists com Visualizador de Letras/Cifras (Modo Palco)
-- Intenção: Permitir que os músicos criem setlists de shows a partir do repertório cadastrado e utilizem o Modo Palco (offline, letras e cifras ampliadas).
-- Impacto esperado: alto
+#### 1. Gestão Básica de Bandas e Múltiplos Workspaces
+- Intenção: Permitir ao usuário criar, editar, excluir e alternar entre múltiplas bandas e projetos musicais (Workspace Switcher) no Web e Mobile, associando o criador automaticamente como `OWNER` em `BandMember`.
+- Impacto esperado: alto (fundação de colaboração e múltiplos projetos na plataforma)
+- Depende de: Autorização por Banda (spec 011)
+- Release: v1.3.0
+- Status: ideia
+
+#### 2. Identidade Única por @username e Busca de Usuários
+- Intenção: Adicionar o campo `username` único (`@unique`) no modelo `User` do Prisma com regras de validação (letras minúsculas, números, `_` e `.`), endpoint de busca dinâmica de perfis (`GET /users/search?q=`) e seleção de `@` no cadastro e tela de perfil.
+- Impacto esperado: alto (identidade estilo rede social, base para busca e perfis públicos)
+- Depende de: nenhum
+- Release: v1.3.0
+- Status: ideia
+
+#### 3. Sistema de Convites Internos por @username (BandInvite)
+- Intenção: Permitir que o líder da banda convide integrantes buscando diretamente pelo `@username`, gerando registro com ciclo de vida (`PENDING`, `ACCEPTED`, `REJECTED`, `EXPIRED`, `CANCELLED`), central de convites e badge de notificação no perfil, vinculando o usuário como `BandMember` somente após confirmação.
+- Impacto esperado: alto (colaboração in-app segura, com consentimento e sem risco de spam)
+- Depende de: Gestão Básica de Bandas, Identidade Única por @username
+- Release: v1.3.0
+- Status: ideia
+
+#### 4. Links e Códigos de Convite Compartilháveis (WhatsApp / Onboarding Externo)
+- Intenção: Resolver o problema do "ovo e a galinha" gerando links rápidos (`myroadie.app/join/band-xyz`) e códigos de acesso compartilháveis diretamente no WhatsApp, direcionando novos integrantes para cadastro simplificado com ingresso automático na banda.
+- Impacto esperado: alto (crescimento viral, eliminação de atrito de onboarding para quem ainda não tem o app)
+- Depende de: Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
+#### 5. Push Notifications Remotas (Convites de Banda & Atualizações da Equipe)
+- Intenção: Integrar serviço de push notifications (FCM) para alertar integrantes em tempo real quando receberem um convite para entrar em uma banda ou quando um evento da banda for criado/remarcado.
+- Impacto esperado: alto (comunicação em tempo real para equipes musicais)
+- Depende de: Sistema de Convites Internos por @username
+- Release: v1.3.0
+- Status: ideia
+
+#### 6. Dashboard Central de Métricas do Admin (Web /admin)
+- Intenção: Criar a página inicial do Route Group `(admin)` na Web (`/admin`) com cards de métricas em tempo real (total de usuários cadastrados, divisão músico/roadie, bandas ativas, eventos no mês e faturamento global movimentado), servindo de central de comando da plataforma.
+- Impacto esperado: alto (visibilidade executiva e monitoramento da plataforma)
+- Depende de: Isolar rotas de admin em Route Group próprio (spec 002), Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
+#### 7. Gestão e Moderação de Bandas no Admin (Web /admin/bands)
+- Intenção: Criar interface no Admin Web para listar todas as bandas criadas na plataforma, visualizar donos, integrantes e histórico de eventos, com ações de moderação (suspensão/exclusão de bandas impróprias).
+- Impacto esperado: médio (governança de conteúdo e comunidades)
+- Depende de: Dashboard Central de Métricas do Admin, Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
+#### 8. Detector de Conflitos de Agenda Multi-Banda
+- Intenção: Alertar o músico visualmente com aviso destacado caso um novo evento ou convite de show coincida em data e faixa de horário com outro compromisso já confirmado em outra banda da qual ele participe, prevenindo duplo agendamento.
+- Impacto esperado: alto (proteção profissional e credibilidade do músico)
+- Depende de: Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
+#### Considerações de Design de Bandas e Convites:
+- **Vantagens adotadas:** Identidade por `@username`, busca visual com foto e instrumentos, zero dependência de e-mails de terceiros e base para contratação freelance.
+- **Mitigações técnicas:** Links para WhatsApp mitigam o problema do usuário não cadastrado; `BandInvite` com máquina de estados previne spam; notificações locais de agenda (v1.1.1) garantem lembretes sem internet.
+
+---
+
+### Release v1.4.0 — Operação de Estrada & Experiência de Palco (Kit do Dia do Show)
+> Objetivo: Entregar as utilidades práticas essenciais para o deslocamento até o local e a execução do show, com alta performance e sem dependência de internet.
+
+#### 1. Navegação Direta para o Local do Evento (Deep Links Waze & Google Maps)
+- Intenção: Permitir abrir rotas no Waze, Google Maps ou Apple Maps com 1 clique a partir do endereço do evento via deep link nativo (`url_launcher`), eliminando a necessidade de SDKs pesados de mapas e custos de nuvem.
+- Impacto esperado: alto (usabilidade imediata no deslocamento até a apresentação)
+- Depende de: nenhum
+- Release: v1.4.0
+- Status: ideia
+
+#### 2. Sincronização com a Agenda Nativa do Aparelho (iOS & Android Calendar)
+- Intenção: Permitir salvar o evento na agenda pessoal do celular (Google Calendar, Apple Calendar, Outlook) com 1 toque através da API nativa do sistema operacional (`add_2_calendar`), sem exigência de OAuth2 burocrático.
+- Impacto esperado: médio (conveniência e centralização de agenda pessoal)
+- Depende de: nenhum
+- Release: v1.4.0
+- Status: ideia
+
+#### 3. Gestão e Ordenação de Setlists por Show
+- Intenção: Permitir que os músicos criem setlists vinculadas a shows específicos, reordenando músicas do repertório (`RepertoireSong`), calculando tempo total estimado de apresentação e exportando em PDF formatado para impressão ou envio rápido.
+- Impacto esperado: alto (preparação de repertório de shows)
 - Depende de: API de Repertoire (spec 005)
-- Release: v1.3.0
+- Release: v1.4.0
 - Status: ideia
 
-#### Checklist Operacional de Eventos & Inventário de Carga (Roadie Check)
-- Intenção: Conectar a API de Tasks (spec 004) à interface mobile, permitindo gerenciar checklists operacionais vinculados a cada evento (passagem de som, afazeres técnicos, check-in/check-out de carga da van) com barra de progresso no card de compromisso e contagem real de tarefas concluídas no painel inicial (`InfosWidget`).
-- Impacto esperado: alto (operação de estrada e valor para roadies)
+#### 4. Modo Palco Mobile (Stage Mode UI)
+- Intenção: Interface mobile em tela cheia com modo escuro de alto contraste, tipografia ampliada de letras e cifras, prevenção de bloqueio de tela (*wakelock*) e rolagem configurável para visualização durante o show.
+- Impacto esperado: alto (experiência do músico no palco)
+- Depende de: Gestão e Ordenação de Setlists por Show
+- Release: v1.4.0
+- Status: ideia
+
+#### 5. Conexão do Checklist de Tarefas na UI Mobile
+- Intenção: Conectar a API de Tasks (spec 004) à interface mobile, permitindo gerenciar checklists operacionais vinculados a cada evento com barra de progresso no card de compromisso e contagem no painel inicial (`InfosWidget`).
+- Impacto esperado: alto (operação técnica de estrada)
 - Depende de: API de Tasks (spec 004), Extensão do Modelo de Eventos (spec 015)
-- Release: v1.3.0
-- Status: ideia
-
-#### Persistência Local e Sincronização Offline (Offline-First)
-- Intenção: Implementar cache/banco local (ex.: Hive ou SQLite) no app mobile para permitir criar, visualizar e editar compromissos sem sinal de internet, sincronizando os dados com o backend NestJS quando a conexão for reestabelecida.
-- Impacto esperado: alto (confiabilidade em palcos, festivais e estradas)
-- Depende de: Atualização da lista de compromissos após criação (spec 007)
-- Release: v1.3.0
-- Status: ideia
-
----
-
-### Release v1.4.0 — Logística, Geolocalização & Integração de Agenda
-> Objetivo: Estender a gestão de compromissos para a rotina de viagem e rotas da equipe técnica e músicos.
-
-#### Notificações locais/push no App Mobile
-- Intenção: Implementar alertas e lembretes de compromissos por notificações (push/locais) no aplicativo móvel.
-- Impacto esperado: alto
-- Depende de: Atualização da lista de compromissos após criação (spec 007)
 - Release: v1.4.0
 - Status: ideia
 
-#### Integração de Localização com Google Maps
-- Intenção: Integrar a API do Google Maps para exibir o endereço do compromisso e permitir a navegação a partir da tela do evento.
-- Impacto esperado: médio
+#### 6. Leitura Offline com Cache Local Inteligente (Garantia de Palco)
+- Intenção: Implementar cache local (Hive/SQLite) no app mobile para garantir que agenda, setlists, repertório e tarefas fiquem acessíveis para visualização mesmo em locais de show sem sinal de internet.
+- Impacto esperado: alto (confiabilidade operacional indispensável)
 - Depende de: nenhum
 - Release: v1.4.0
 - Status: ideia
 
-#### Painel de Logística de Viagem (Roadbook Digital)
-- Intenção: Centralizar detalhes operacionais de logística como ponto de encontro, hotel, passagens, alimentação e horários da estrada em formato digital.
-- Impacto esperado: alto
-- Depende de: Integração de Localização com Google Maps, Notificações locais/push
+#### 7. Cronograma Operacional do Dia do Show (Run of Show)
+- Intenção: Permitir cadastrar e acompanhar os horários da jornada do show (descarregamento, montagem, passagem de som, camarim, início do show e desmontagem), com status em tempo real e compartilhamento rápido para músicos e equipe técnica.
+- Impacto esperado: alto (organização pontual indispensável para roadies e artistas)
+- Depende de: Conexão do Checklist de Tarefas na UI Mobile
 - Release: v1.4.0
 - Status: ideia
 
-#### Sincronização de Agenda com Calendários Externos
-- Intenção: Permitir a exportação/sincronização automática dos compromissos da plataforma com Google Calendar e Apple Calendar.
-- Impacto esperado: médio
+#### 8. Rider Técnico, Mapa de Palco & Input List Compartilhável
+- Intenção: Disponibilizar gerador e visualizador de mapa de palco (posicionamento de instrumentos e retornos) e tabela de canais de áudio (Input List), com botão de exportação em PDF e link público compartilhável para a equipe de som e produção do local.
+- Impacto esperado: alto (agilidade e padronização técnica para roadies)
 - Depende de: nenhum
 - Release: v1.4.0
 - Status: ideia
 
 ---
 
-### Release v1.5.0 — Módulo Financeiro Avançado
-> Objetivo: Potencializar a API financeira (`Transactions` — spec 006) criando utilitários de divisão de receitas entre integrantes e equipe.
+### Release v1.5.0 — Logística de Viagem & Módulo Financeiro Avançado
+> Objetivo: Apoiar bandas com turnês e logística complexa através de Roadbook digital e rateio automático de receitas.
 
-#### Divisão Automatizada de Cachê (Cache Splitter)
-- Intenção: Dividir automaticamente o cachê do show entre músicos e roadies com base em percentuais ou valores fixos configurados na banda.
-- Impacto esperado: alto
-- Depende de: API de Transactions (spec 006)
+#### 1. Painel de Logística de Viagem (Roadbook Digital)
+- Intenção: Centralizar detalhes de viagem da banda (ponto de encontro, horários de van, reserva de hotel/hospedagem e horários de alimentação) em um painel digital do evento.
+- Impacto esperado: alto (organização de viagens e turnês)
+- Depende de: Navegação Direta para o Local do Evento
+- Release: v1.5.0
+- Status: ideia
+
+#### 2. Inventário de Carga e Equipamentos (Roadie Check)
+- Intenção: Checklist especializado para controle e conferência de equipamentos, caixas, instrumentos e cabos no carregamento e descarregamento da van/veículo.
+- Impacto esperado: alto (logística técnica de carga)
+- Depende de: Conexão do Checklist de Tarefas na UI Mobile
+- Release: v1.5.0
+- Status: ideia
+
+#### 3. Regras e Parâmetros de Rateio de Cachê por Banda
+- Intenção: Configurar regras de divisão financeira na banda (percentuais por integrante ou valores fixos por função/roadie).
+- Impacto esperado: alto (transparência financeira)
+- Depende de: API de Transactions (spec 006), Gestão Básica de Bandas
+- Release: v1.5.0
+- Status: ideia
+
+#### 4. Liquidação de Shows e Geração Automática de Repasses
+- Intenção: Ao concluir um show com cachê recebido, calcular a divisão automaticamente, gerar os lançamentos individuais de repasse aos músicos/equipe e emitir extrato de prestação de contas.
+- Impacto esperado: alto (fechamento financeiro sem planilhas externas)
+- Depende de: Regras e Parâmetros de Rateio de Cachê por Banda
 - Release: v1.5.0
 - Status: ideia
 
 ---
 
-### Release v1.6.0 — Suporte, Governança & Sustentabilidade da Plataforma
-> Objetivo: Recursos de suporte, manutenção contínua, governança de acesso e sustentabilidade do projeto.
+### Release v1.6.0 — Governança Avançada, LGPD Completa & Sustentabilidade
+> Objetivo: Governança de dados de longo prazo, conformidade legal madura e sustentabilidade da plataforma.
 
-#### Tela de Ajuda e Relatório de Erros
+#### 1. Exclusão de Conta e Anonimização de Dados (LGPD Art. 18)
+- Intenção: Disponibilizar endpoint e fluxo de exclusão de conta (`DELETE /users/me`), garantindo a remoção de dados pessoais sensíveis e anonimização de dados históricos (eventos e transações de bandas com outros membros).
+- Impacto esperado: alto (risco legal/LGPD)
+- Depende de: Consentimento de Termos de Uso e Políticas de Privacidade no Onboarding
+- Release: v1.6.0
+- Status: ideia
+
+#### 2. Portabilidade e Exportação de Dados do Usuário (LGPD Art. 18, V)
+- Intenção: Disponibilizar endpoint e interface para o usuário baixar um dump estruturado (JSON) com todos os seus dados pessoais e histórico na plataforma.
+- Impacto esperado: médio (legal/LGPD)
+- Depende de: nenhum
+- Release: v1.6.0
+- Status: ideia
+
+#### 3. Tela de Ajuda e Relatório de Erros
 - Intenção: Apresentar guias de suporte e permitir copiar/reportar o nome e a descrição detalhada de eventuais erros da plataforma.
 - Impacto esperado: médio
 - Depende de: nenhum
 - Release: v1.6.0
 - Status: ideia
 
-#### Avaliação de Módulo Administrativo no Mobile
-- Intenção: Decidir/implementar se haverá um painel de administração simplificado no app móvel ou se a gestão ficará 100% restrita ao painel Web.
-- Impacto esperado: baixo/médio
-- Depende de: Isolar rotas de admin em Route Group próprio
+#### 4. Monitoramento Operacional e Financeiro Global no Admin (Web /admin/events e /admin/transactions)
+- Intenção: Disponibilizar painel no Admin Web para visualização de todos os eventos e fluxo financeiro agregado na plataforma, com filtros por data, status e exportação em CSV para relatórios de gestão.
+- Impacto esperado: médio (visão de negócio e governança)
+- Depende de: Dashboard Central de Métricas do Admin
 - Release: v1.6.0
 - Status: ideia
 
-#### Tela de Contribuições (Apoio Monetário)
+#### 5. Responsividade Mobile do Painel Administrativo Web
+- Intenção: Garantir layout 100% responsivo com Tailwind CSS para todo o Route Group `(admin)`, permitindo ao administrador auditar usuários, moderar bandas e acompanhar métricas diretamente pelo navegador do celular (Chrome/Safari) sem o custo de manutenção de código duplicado no Flutter.
+- Impacto esperado: alto (gestão prática de qualquer lugar com custo zero de manutenção mobile)
+- Depende de: Dashboard Central de Métricas do Admin
+- Release: v1.6.0
+- Status: ideia
+
+#### 6. Comunicados da Plataforma (Broadcast In-App & Banners Globais)
+- Intenção: Permitir ao administrador disparar comunicados globais ou segmentados (músicos ou roadies) exibidos como banner no topo da aplicação e notificações push (avisos de manutenção, novas versões e alertas do ecossistema).
+- Impacto esperado: médio (comunicação institucional e alertas de sistema)
+- Depende de: Dashboard Central de Métricas do Admin
+- Release: v1.6.0
+- Status: ideia
+
+#### 7. Modo Diagnóstico e Suporte ao Usuário (Impersonate Administrativo)
+- Intenção: Permitir ao administrador visualizar o app temporariamente com a perspectiva de um usuário específico para reprodução rápida de bugs e suporte técnico sem necessidade de senhas.
+- Impacto esperado: médio (agilidade e qualidade no suporte)
+- Depende de: Dashboard Central de Métricas do Admin
+- Release: v1.6.0
+- Status: ideia
+
+#### 8. Tela de Contribuições (Apoio Monetário)
 - Intenção: Oferecer uma área de contribuição ou doações para apoiar o financiamento e manutenção do projeto.
 - Impacto esperado: médio
 - Depende de: nenhum
