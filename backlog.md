@@ -268,6 +268,13 @@
 - Release: v1.3.0
 - Status: ideia
 
+#### 8. Detector de Conflitos de Agenda Multi-Banda
+- Intenção: Alertar o músico visualmente com aviso destacado caso um novo evento ou convite de show coincida em data e faixa de horário com outro compromisso já confirmado em outra banda da qual ele participe, prevenindo duplo agendamento.
+- Impacto esperado: alto (proteção profissional e credibilidade do músico)
+- Depende de: Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
 #### Considerações de Design de Bandas e Convites:
 - **Vantagens adotadas:** Identidade por `@username`, busca visual com foto e instrumentos, zero dependência de e-mails de terceiros e base para contratação freelance.
 - **Mitigações técnicas:** Links para WhatsApp mitigam o problema do usuário não cadastrado; `BandInvite` com máquina de estados previne spam; notificações locais de agenda (v1.1.1) garantem lembretes sem internet.
@@ -292,7 +299,7 @@
 - Status: ideia
 
 #### 3. Gestão e Ordenação de Setlists por Show
-- Intenção: Permitir que os músicos criem setlists vinculadas a shows específicos, reordenando músicas do repertório (`RepertoireSong`) e calculando tempo total estimado de apresentação.
+- Intenção: Permitir que os músicos criem setlists vinculadas a shows específicos, reordenando músicas do repertório (`RepertoireSong`), calculando tempo total estimado de apresentação e exportando em PDF formatado para impressão ou envio rápido.
 - Impacto esperado: alto (preparação de repertório de shows)
 - Depende de: API de Repertoire (spec 005)
 - Release: v1.4.0
@@ -315,6 +322,20 @@
 #### 6. Leitura Offline com Cache Local Inteligente (Garantia de Palco)
 - Intenção: Implementar cache local (Hive/SQLite) no app mobile para garantir que agenda, setlists, repertório e tarefas fiquem acessíveis para visualização mesmo em locais de show sem sinal de internet.
 - Impacto esperado: alto (confiabilidade operacional indispensável)
+- Depende de: nenhum
+- Release: v1.4.0
+- Status: ideia
+
+#### 7. Cronograma Operacional do Dia do Show (Run of Show)
+- Intenção: Permitir cadastrar e acompanhar os horários da jornada do show (descarregamento, montagem, passagem de som, camarim, início do show e desmontagem), com status em tempo real e compartilhamento rápido para músicos e equipe técnica.
+- Impacto esperado: alto (organização pontual indispensável para roadies e artistas)
+- Depende de: Conexão do Checklist de Tarefas na UI Mobile
+- Release: v1.4.0
+- Status: ideia
+
+#### 8. Rider Técnico, Mapa de Palco & Input List Compartilhável
+- Intenção: Disponibilizar gerador e visualizador de mapa de palco (posicionamento de instrumentos e retornos) e tabela de canais de áudio (Input List), com botão de exportação em PDF e link público compartilhável para a equipe de som e produção do local.
+- Impacto esperado: alto (agilidade e padronização técnica para roadies)
 - Depende de: nenhum
 - Release: v1.4.0
 - Status: ideia
@@ -392,7 +413,21 @@
 - Release: v1.6.0
 - Status: ideia
 
-#### 6. Tela de Contribuições (Apoio Monetário)
+#### 6. Comunicados da Plataforma (Broadcast In-App & Banners Globais)
+- Intenção: Permitir ao administrador disparar comunicados globais ou segmentados (músicos ou roadies) exibidos como banner no topo da aplicação e notificações push (avisos de manutenção, novas versões e alertas do ecossistema).
+- Impacto esperado: médio (comunicação institucional e alertas de sistema)
+- Depende de: Dashboard Central de Métricas do Admin
+- Release: v1.6.0
+- Status: ideia
+
+#### 7. Modo Diagnóstico e Suporte ao Usuário (Impersonate Administrativo)
+- Intenção: Permitir ao administrador visualizar o app temporariamente com a perspectiva de um usuário específico para reprodução rápida de bugs e suporte técnico sem necessidade de senhas.
+- Impacto esperado: médio (agilidade e qualidade no suporte)
+- Depende de: Dashboard Central de Métricas do Admin
+- Release: v1.6.0
+- Status: ideia
+
+#### 8. Tela de Contribuições (Apoio Monetário)
 - Intenção: Oferecer uma área de contribuição ou doações para apoiar o financiamento e manutenção do projeto.
 - Impacto esperado: médio
 - Depende de: nenhum
