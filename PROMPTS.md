@@ -615,8 +615,80 @@ Pergunte se eu quero seguir pro próximo ou revisar algo antes. Não avance sozi
 
 ---
 
+## 21. Auditoria Noturna de Segurança Autônoma (/goal)
+
+```
+Você vai conduzir uma auditoria completa e aprofundada de segurança no ecossistema
+do My Roadie de forma 100% autônoma e em modo estritamente LEITURA (read-only).
+Você tem autorização total para investigar o código local, mas NÃO deve modificar
+nenhum arquivo de código-fonte, configuração ou banco de dados.
+
+Seu objetivo é vasculhar todo o repositório procurando vulnerabilidades e
+vetores de ataque, organizando todas as descobertas em um relatório estruturado
+salvo em audits/security/audit-noturna-<data>.md.
+
+Antes de começar:
+1. Certifique-se de que a pasta audits/security/ está listada no .gitignore
+   para evitar vazamento acidental de relatórios sensíveis. Se não estiver, pare.
+2. Não altere arquivos de produto nem rode comandos destrutivos.
+3. Não faça commits nem git push.
+
+Foque nos seguintes eixos críticos:
+
+1. Quebra de Autorização e Isolamento Multitenant (BOLA / IDOR / Band Isolation):
+   - Verifique controllers e services do Backend (backend/src/): todo endpoint
+     que manipula recursos (Event, Task, Repertoire, Transaction, User) valida
+     corretamente o bandId e a adesão do usuário solicitante (BandAccessService
+     ou OwnershipGuard)?
+   - Existem queries diretas via Prisma onde o filtro por usuário ou banda foi
+     esquecido, permitindo que um usuário veja ou modifique dados de outra banda?
+
+2. Injeções e Sanitização de Entrada:
+   - Há uso de prisma.$queryRawUnsafe ou concatenação direta de strings em
+     consultas SQL?
+   - No frontend-web ou backend, existem brechas para Cross-Site Scripting (XSS),
+     como uso inseguro de dangerouslySetInnerHTML ou interpolação de markdown não
+     sanitizado?
+   - Existem comandos executados via shell (child_process.exec, etc.) com parâmetros
+     não validados?
+
+3. Autenticação e Validação de Sessão / Tokens:
+   - Analise JwtStrategy e os guards: existe brecha para "alg: none" ou confusão de
+     algoritmos de assinatura (RS256 vs HS256)?
+   - Os tokens expirados ou revogados são rejeitados confiavelmente?
+   - O frontend-web e mobile lidam com refresh tokens e armazenamento seguro de
+     credenciais de forma adequada?
+
+4. Vazamento de Segredos e Credenciais:
+   - Faça uma busca por chaves de API, segredos do Supabase, JWT secrets ou credenciais
+     hardcoded no código-fonte, arquivos de configuração ou fixtures de teste.
+   - Verifique o histórico de commits do git procurando por remoções de .env que ainda
+     possam estar persistidas no histórico (git log -S, grep).
+
+5. Falhas em Regras de Negócio e Financeiro:
+   - No módulo transactions, examine se é possível forjar transações com valores
+     negativos impróprios, contornar totalizadores ou criar transações sem banda válida.
+   - O auto-provisionamento de bandas possui brechas para exaustão de recursos (DoS lógico)?
+
+6. CI/CD, Dependências e Supply Chain:
+   - Analise .github/workflows/ci.yml: existem actions de terceiros sem pin por commit SHA?
+   - Há inputs de workflow_dispatch interpolados diretamente em scripts shell?
+   - Permissões do GITHUB_TOKEN seguem o princípio de privilégio mínimo?
+
+Ao concluir a varredura:
+- Crie o arquivo audits/security/audit-noturna-<data>.md contendo:
+  - Resumo executivo da postura de segurança.
+  - Tabela consolidada de achados:
+    | ID | Componente | Vulnerabilidade / Risco | Severidade (Crítica/Alta/Média/Baixa) | Arquivo / Linha | Evidência / PoC Teórica | Mitigação Recomendada |
+  - Seção especial destacada no topo para vulnerabilidades de severidade Crítica e Alta.
+- Apresente um resumo executivo com os totais de cada severidade e termine a execução sem alterar mais nada.
+```
+
+---
+
 ## Notas de uso
 
+- **Prompt 21 (/goal)**: Projetado para execução autônoma noturna ou prolongada via comando `/goal`. É estritamente leitura (read-only) e consolida todas as vulnerabilidades encontradas em `audits/security/audit-noturna-<data>.md`, sem alterar código ou criar commits/push.
 - Sempre rode um prompt por vez e confira o resultado antes do próximo — mesmo dentro da mesma fase.
 - Se o agente tentar "adiantar" tasks futuras sem você pedir, interrompa e reforce o escopo do prompt 1.
 - Prompts 6 e 7 exigem sua confirmação explícita antes de qualquer ação em infraestrutura real — não pule essa etapa mesmo com pressa.
