@@ -81,6 +81,26 @@ Não escreva código ainda. Faça até 3 ou 4 perguntas desafiadoras por vez par
 
 ---
 
+## 0.3 Prototipagem Visual Interativa (/generative_ui)
+
+> **Quando usar:** Na Fase 0 (planejamento) ou durante o refinamento de itens visuais/interativos do `backlog.md` (ex.: Mapa de Palco, Timeline do Run of Show, Simulador de Cachê, Dashboards) antes de implementar.
+
+```
+Leia a descrição da funcionalidade em <specs/pasta-da-feature/spec.md ou backlog.md> e a skill generative_ui.
+
+Gere um artefato HTML interativo autocontido usando Tailwind CSS (via CDN do Antigravity) e JavaScript puro.
+
+Diretrizes do protótipo:
+1. Simule a interface de <ex.: Mapa de Palco interativo / Simulador de Divisão de Cachê com sliders / Timeline do Run of Show / Dashboard Admin>.
+2. Use variáveis semânticas de tema (bg-[var(--card)], text-[var(--foreground)], border-[var(--border)], bg-[var(--primary)]) para garantir alto contraste nos temas claro e escuro.
+3. Adicione interatividade real (sliders de valores com recálculo automático, botões de alternância de estado ou elementos arrastáveis).
+4. Salve como um artefato HTML para visualização imediata no painel lateral.
+
+Não altere nenhum arquivo de código de produção do projeto. Pare e apresente o protótipo para que possamos validar a experiência do usuário.
+```
+
+---
+
 ## 2. Rodar e revisar testes (com cobertura)
 
 ```
@@ -709,6 +729,7 @@ Ao concluir a varredura:
 ## Notas de uso
 
 - **Prompt 0.2 (/grill-me)**: Roda na fronteira entre a Fase 0 e a Fase 1. Use para sabatinar a tríade da spec (spec.md, plan.md, tasks.md) e blindar o plano antes de autorizar a primeira linha de código de produção.
+- **Prompt 0.3 (/generative_ui)**: Usado na Fase 0 para prototipar interfaces visuais complexas (mapas de palco, timelines de show, dashboards) ou simuladores de cálculos (rateio de cachê) em HTML/Tailwind antes de implementar no código final.
 - **Prompt 21 (/goal)**: Projetado para execução autônoma noturna ou prolongada via comando `/goal`. É estritamente leitura (read-only) e consolida todas as vulnerabilidades encontradas em `audits/security/audit-noturna-<data>.md`, sem alterar código ou criar commits/push.
 - Sempre rode um prompt por vez e confira o resultado antes do próximo — mesmo dentro da mesma fase.
 - Se o agente tentar "adiantar" tasks futuras sem você pedir, interrompa e reforce o escopo do prompt 1.
