@@ -192,6 +192,18 @@
 
 ## 🔮 Releases Futuras (Planejamento)
 
+### Release v1.1.1 — Lembretes Locais de Compromissos (Quick-Win Mobile)
+> Objetivo: Entregar pontualidade e retenção imediata para os testers do app mobile através de alarmes e notificações locais disparadas diretamente pelo dispositivo para eventos próximos, com custo zero de infraestrutura de servidor.
+
+#### Lembretes Locais de Eventos Próximos na Agenda (Mobile)
+- Intenção: Agendar e disparar notificações locais nativas no dispositivo móvel (Android e iOS via `flutter_local_notifications`) para avisar o usuário sobre shows, ensaios e compromissos que estão chegando (ex.: 24h e 2h antes do início), operando 100% offline e sem necessidade de conexão com a internet.
+- Impacto esperado: alto (valor imediato para os usuários que já utilizam a agenda do app em produção)
+- Depende de: Extensão do Modelo de Eventos (spec 015)
+- Release: v1.1.1
+- Status: ideia
+
+---
+
 ### Release v1.2.0 — Conformidade Legal, Privacidade & Governança (LGPD)
 > Objetivo: Estabelecer as regras jurídicas, privacidade de dados e conformidade antes do onboarding em massa de músicos e roadies.
 
@@ -218,8 +230,8 @@
 
 ---
 
-### Release v1.3.0 — Gestão de Bandas, Convites & Notificações de Equipe (Modelo Híbrido)
-> Objetivo: Viabilizar a criação explícita e gestão de múltiplas bandas, sistema híbrido de convites (@username + WhatsApp) e alertas automáticos de eventos da agenda e comunicados da equipe.
+### Release v1.3.0 — Gestão de Bandas, Convites & Push Notifications de Equipe (Modelo Híbrido)
+> Objetivo: Viabilizar a criação explícita e gestão de múltiplas bandas, sistema híbrido de convites (@username + WhatsApp) e alertas em tempo real da equipe via push notifications.
 
 #### 1. Gestão Básica de Bandas e Múltiplos Workspaces
 - Intenção: Permitir ao usuário criar, editar, excluir e alternar entre múltiplas bandas e projetos musicais (Workspace Switcher) no Web e Mobile, associando o criador automaticamente como `OWNER` em `BandMember`.
@@ -249,14 +261,7 @@
 - Release: v1.3.0
 - Status: ideia
 
-#### 5. Notificações Locais Programadas (Lembretes de Eventos Próximos na Agenda)
-- Intenção: Alertar músicos e roadies no app mobile sobre shows e compromissos que estão chegando (ex.: 24h e 2h antes do horário de início/passagem de som) utilizando agendamento local no dispositivo, sem depender de conexão de rede no momento do disparo.
-- Impacto esperado: alto (usabilidade imediata na agenda já entregue aos testers)
-- Depende de: nenhum
-- Release: v1.3.0
-- Status: ideia
-
-#### 6. Push Notifications Remotas (Convites de Banda & Atualizações da Equipe)
+#### 5. Push Notifications Remotas (Convites de Banda & Atualizações da Equipe)
 - Intenção: Integrar serviço de push notifications (FCM) para alertar integrantes em tempo real quando receberem um convite para entrar em uma banda ou quando um evento da banda for criado/remarcado.
 - Impacto esperado: alto (comunicação em tempo real para equipes musicais)
 - Depende de: Sistema de Convites Internos por @username
@@ -265,7 +270,7 @@
 
 #### Considerações de Design de Bandas e Convites:
 - **Vantagens adotadas:** Identidade por `@username`, busca visual com foto e instrumentos, zero dependência de e-mails de terceiros e base para contratação freelance.
-- **Mitigações técnicas:** Links para WhatsApp mitigam o problema do usuário não cadastrado; `BandInvite` com máquina de estados previne spam; notificações locais garantem lembretes de agenda mesmo sem internet.
+- **Mitigações técnicas:** Links para WhatsApp mitigam o problema do usuário não cadastrado; `BandInvite` com máquina de estados previne spam; notificações locais de agenda (já entregues na v1.1.1) garantem lembretes sem internet.
 
 ---
 
