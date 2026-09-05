@@ -61,6 +61,46 @@ Não siga para a próxima task sem eu confirmar.
 
 ---
 
+## 0.2 Sabatina de Arquitetura e Validação de Spec (/grill-me)
+
+> **Quando usar:** Imediatamente após gerar `spec.md`, `plan.md` e `tasks.md` (Fase 0 concluída), antes de autorizar a primeira linha de código na Fase 1.
+
+```
+/grill-me Leia AGENTS.md, constitution.md e specs/<pasta-da-feature>/{spec.md,plan.md,tasks.md}.
+
+Atue como um arquiteto de software / tech lead sênior e implacável. Sabatine o plano e as especificações desta feature procurando ativamente:
+
+1. Furos de arquitetura ou premissas implícitas não documentadas.
+2. Casos de borda não cobertos pelos critérios de aceitação de spec.md (ex.: falhas de rede, concorrência, estados vazios, limites de dados).
+3. Riscos de segurança e isolamento multitenant (validação de bandId, guards, permissões e sanitização de dados).
+4. Omissões ou inconsistências na ordem das tarefas em tasks.md (ex.: esquecer de migrations, DTOs, cobertura mínima ou testes de regressão).
+5. Conformidade com a Constitution (piso de 80% de cobertura, uso rigoroso de DTOs tipados, Conventional Commits).
+
+Não escreva código ainda. Faça até 3 ou 4 perguntas desafiadoras por vez para que possamos blindar a spec e o tasks.md antes de aprovar o início da Fase 1.
+```
+
+---
+
+## 0.3 Prototipagem Visual Interativa (/generative_ui)
+
+> **Quando usar:** Na Fase 0 (planejamento) ou durante o refinamento de itens visuais/interativos do `backlog.md` (ex.: Mapa de Palco, Timeline do Run of Show, Simulador de Cachê, Dashboards) antes de implementar.
+
+```
+Leia a descrição da funcionalidade em <specs/pasta-da-feature/spec.md ou backlog.md> e a skill generative_ui.
+
+Gere um artefato HTML interativo autocontido usando Tailwind CSS (via CDN do Antigravity) e JavaScript puro.
+
+Diretrizes do protótipo:
+1. Simule a interface de <ex.: Mapa de Palco interativo / Simulador de Divisão de Cachê com sliders / Timeline do Run of Show / Dashboard Admin>.
+2. Use variáveis semânticas de tema (bg-[var(--card)], text-[var(--foreground)], border-[var(--border)], bg-[var(--primary)]) para garantir alto contraste nos temas claro e escuro.
+3. Adicione interatividade real (sliders de valores com recálculo automático, botões de alternância de estado ou elementos arrastáveis).
+4. Salve como um artefato HTML para visualização imediata no painel lateral.
+
+Não altere nenhum arquivo de código de produção do projeto. Pare e apresente o protótipo para que possamos validar a experiência do usuário.
+```
+
+---
+
 ## 2. Rodar e revisar testes (com cobertura)
 
 ```
@@ -615,8 +655,82 @@ Pergunte se eu quero seguir pro próximo ou revisar algo antes. Não avance sozi
 
 ---
 
+## 21. Auditoria Noturna de Segurança Autônoma (/goal)
+
+```
+Você vai conduzir uma auditoria completa e aprofundada de segurança no ecossistema
+do My Roadie de forma 100% autônoma e em modo estritamente LEITURA (read-only).
+Você tem autorização total para investigar o código local, mas NÃO deve modificar
+nenhum arquivo de código-fonte, configuração ou banco de dados.
+
+Seu objetivo é vasculhar todo o repositório procurando vulnerabilidades e
+vetores de ataque, organizando todas as descobertas em um relatório estruturado
+salvo em audits/security/audit-noturna-<data>.md.
+
+Antes de começar:
+1. Certifique-se de que a pasta audits/security/ está listada no .gitignore
+   para evitar vazamento acidental de relatórios sensíveis. Se não estiver, pare.
+2. Não altere arquivos de produto nem rode comandos destrutivos.
+3. Não faça commits nem git push.
+
+Foque nos seguintes eixos críticos:
+
+1. Quebra de Autorização e Isolamento Multitenant (BOLA / IDOR / Band Isolation):
+   - Verifique controllers e services do Backend (backend/src/): todo endpoint
+     que manipula recursos (Event, Task, Repertoire, Transaction, User) valida
+     corretamente o bandId e a adesão do usuário solicitante (BandAccessService
+     ou OwnershipGuard)?
+   - Existem queries diretas via Prisma onde o filtro por usuário ou banda foi
+     esquecido, permitindo que um usuário veja ou modifique dados de outra banda?
+
+2. Injeções e Sanitização de Entrada:
+   - Há uso de prisma.$queryRawUnsafe ou concatenação direta de strings em
+     consultas SQL?
+   - No frontend-web ou backend, existem brechas para Cross-Site Scripting (XSS),
+     como uso inseguro de dangerouslySetInnerHTML ou interpolação de markdown não
+     sanitizado?
+   - Existem comandos executados via shell (child_process.exec, etc.) com parâmetros
+     não validados?
+
+3. Autenticação e Validação de Sessão / Tokens:
+   - Analise JwtStrategy e os guards: existe brecha para "alg: none" ou confusão de
+     algoritmos de assinatura (RS256 vs HS256)?
+   - Os tokens expirados ou revogados são rejeitados confiavelmente?
+   - O frontend-web e mobile lidam com refresh tokens e armazenamento seguro de
+     credenciais de forma adequada?
+
+4. Vazamento de Segredos e Credenciais:
+   - Faça uma busca por chaves de API, segredos do Supabase, JWT secrets ou credenciais
+     hardcoded no código-fonte, arquivos de configuração ou fixtures de teste.
+   - Verifique o histórico de commits do git procurando por remoções de .env que ainda
+     possam estar persistidas no histórico (git log -S, grep).
+
+5. Falhas em Regras de Negócio e Financeiro:
+   - No módulo transactions, examine se é possível forjar transações com valores
+     negativos impróprios, contornar totalizadores ou criar transações sem banda válida.
+   - O auto-provisionamento de bandas possui brechas para exaustão de recursos (DoS lógico)?
+
+6. CI/CD, Dependências e Supply Chain:
+   - Analise .github/workflows/ci.yml: existem actions de terceiros sem pin por commit SHA?
+   - Há inputs de workflow_dispatch interpolados diretamente em scripts shell?
+   - Permissões do GITHUB_TOKEN seguem o princípio de privilégio mínimo?
+
+Ao concluir a varredura:
+- Crie o arquivo audits/security/audit-noturna-<data>.md contendo:
+  - Resumo executivo da postura de segurança.
+  - Tabela consolidada de achados:
+    | ID | Componente | Vulnerabilidade / Risco | Severidade (Crítica/Alta/Média/Baixa) | Arquivo / Linha | Evidência / PoC Teórica | Mitigação Recomendada |
+  - Seção especial destacada no topo para vulnerabilidades de severidade Crítica e Alta.
+- Apresente um resumo executivo com os totais de cada severidade e termine a execução sem alterar mais nada.
+```
+
+---
+
 ## Notas de uso
 
+- **Prompt 0.2 (/grill-me)**: Roda na fronteira entre a Fase 0 e a Fase 1. Use para sabatinar a tríade da spec (spec.md, plan.md, tasks.md) e blindar o plano antes de autorizar a primeira linha de código de produção.
+- **Prompt 0.3 (/generative_ui)**: Usado na Fase 0 para prototipar interfaces visuais complexas (mapas de palco, timelines de show, dashboards) ou simuladores de cálculos (rateio de cachê) em HTML/Tailwind antes de implementar no código final.
+- **Prompt 21 (/goal)**: Projetado para execução autônoma noturna ou prolongada via comando `/goal`. É estritamente leitura (read-only) e consolida todas as vulnerabilidades encontradas em `audits/security/audit-noturna-<data>.md`, sem alterar código ou criar commits/push.
 - Sempre rode um prompt por vez e confira o resultado antes do próximo — mesmo dentro da mesma fase.
 - Se o agente tentar "adiantar" tasks futuras sem você pedir, interrompa e reforce o escopo do prompt 1.
 - Prompts 6 e 7 exigem sua confirmação explícita antes de qualquer ação em infraestrutura real — não pule essa etapa mesmo com pressa.
@@ -639,3 +753,28 @@ Pergunte se eu quero seguir pro próximo ou revisar algo antes. Não avance sozi
   exploração por engano num push automático.
 - O prompt 19 (triagem) é o único que toca `backlog.md` nessa categoria —
   os prompts 14-18 são estritamente leitura/relatório.
+
+---
+
+## ⚡ Guia Rápido de Atalhos e Produtividade do agy CLI
+
+### 1. Atalhos no Terminal (TUI)
+- `@<arquivo>`: Autocompletar interativo de caminhos e arquivos do repositório (ex.: `@events.service.ts`).
+- `!<comando>`: Executa comandos nativos do shell diretamente da caixa de prompt sem fechar o CLI (ex.: `!git status`, `!npm test`, `!flutter analyze`).
+- `?`: Exibe o menu instantâneo com todos os comandos e atalhos disponíveis.
+- `Ctrl + K`: Aprova instantaneamente permissões pendentes de ferramentas e subagentes.
+- `Esc Esc`: Limpa todo o texto digitado no prompt de uma só vez.
+- `Ctrl + C`: Interrompe imediatamente uma resposta em streaming.
+- `Ctrl + D Ctrl + D`: Sai do agy CLI.
+
+### 2. Comandos de Histórico e Sessão
+- `/resume` ou `/switch`: Lista e retoma conversas e sessões anteriores.
+- `/rewind` ou `/undo`: Volta a conversa para um ponto anterior para tentar outra abordagem.
+- `/fork`: Bifurca a conversa atual a partir de um ponto sem perder o histórico principal.
+- `/clear`: Limpa o contexto do chat para iniciar uma nova tarefa do zero (essencial para checklist de fechamento).
+
+### 3. Flags Úteis ao Iniciar o CLI
+- `agy -c` (ou `--continue`): Reabre o agy continuando automaticamente no último chat.
+- `agy -p "<prompt>"`: Executa um prompt rápido de forma não-interativa e imprime a resposta.
+- `agy --effort low`: Reduz a intensidade de raciocínio para economizar tokens em tarefas simples.
+- `agy --mode plan`: Força o agente a rodar apenas em modo de planejamento (sem editar arquivos).

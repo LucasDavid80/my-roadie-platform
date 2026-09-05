@@ -260,6 +260,7 @@
 - Depende de: Isolar rotas de admin em Route Group próprio (spec 002), Gestão Básica de Bandas
 - Release: v1.3.0
 - Status: ideia
+- Dica Generative UI: Na Fase 0 da spec, use a skill `generative_ui` para gerar um protótipo visual interativo de dashboard com cards e gráficos em HTML/Tailwind, validando a hierarquia dos KPIs antes de codificar as páginas Next.js.
 
 #### 7. Gestão e Moderação de Bandas no Admin (Web /admin/bands)
 - Intenção: Criar interface no Admin Web para listar todas as bandas criadas na plataforma, visualizar donos, integrantes e histórico de eventos, com ações de moderação (suspensão/exclusão de bandas impróprias).
@@ -311,6 +312,7 @@
 - Depende de: Gestão e Ordenação de Setlists por Show
 - Release: v1.4.0
 - Status: ideia
+- Dica Generative UI: Use a skill `generative_ui` para simular a tela escura de alto contraste, cifras ampliadas e rolagem contínua em um widget HTML/Tailwind antes de implementar no Flutter.
 
 #### 5. Conexão do Checklist de Tarefas na UI Mobile
 - Intenção: Conectar a API de Tasks (spec 004) à interface mobile, permitindo gerenciar checklists operacionais vinculados a cada evento com barra de progresso no card de compromisso e contagem no painel inicial (`InfosWidget`).
@@ -332,6 +334,7 @@
 - Depende de: Conexão do Checklist de Tarefas na UI Mobile
 - Release: v1.4.0
 - Status: ideia
+- Dica Generative UI: Prototipar com `generative_ui` uma timeline interativa do dia do show (passagem de som, camarim, showtime) com estados dinâmicos para validar a ergonomia de uso pelo roadie.
 
 #### 8. Rider Técnico, Mapa de Palco & Input List Compartilhável
 - Intenção: Disponibilizar gerador e visualizador de mapa de palco (posicionamento de instrumentos e retornos) e tabela de canais de áudio (Input List), com botão de exportação em PDF e link público compartilhável para a equipe de som e produção do local.
@@ -339,6 +342,7 @@
 - Depende de: nenhum
 - Release: v1.4.0
 - Status: ideia
+- Dica Generative UI: Ideal para `generative_ui`: criar um protótipo interativo de mapa de palco permitindo posicionar baterias, amplificadores e microfones em um grid visual antes de programar o gerador final.
 
 ---
 
@@ -365,6 +369,7 @@
 - Depende de: API de Transactions (spec 006), Gestão Básica de Bandas
 - Release: v1.5.0
 - Status: ideia
+- Dica Generative UI: Criar um simulador interativo de Cache Splitter com sliders de porcentagem e valores em tempo real para validar as regras matemáticas de divisão e repasse antes da implementação.
 
 #### 4. Liquidação de Shows e Geração Automática de Repasses
 - Intenção: Ao concluir um show com cachê recebido, calcular a divisão automaticamente, gerar os lançamentos individuais de repasse aos músicos/equipe e emitir extrato de prestação de contas.
