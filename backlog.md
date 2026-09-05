@@ -254,6 +254,20 @@
 - Release: v1.3.0
 - Status: ideia
 
+#### 6. Dashboard Central de Métricas do Admin (Web /admin)
+- Intenção: Criar a página inicial do Route Group `(admin)` na Web (`/admin`) com cards de métricas em tempo real (total de usuários cadastrados, divisão músico/roadie, bandas ativas, eventos no mês e faturamento global movimentado), servindo de central de comando da plataforma.
+- Impacto esperado: alto (visibilidade executiva e monitoramento da plataforma)
+- Depende de: Isolar rotas de admin em Route Group próprio (spec 002), Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
+#### 7. Gestão e Moderação de Bandas no Admin (Web /admin/bands)
+- Intenção: Criar interface no Admin Web para listar todas as bandas criadas na plataforma, visualizar donos, integrantes e histórico de eventos, com ações de moderação (suspensão/exclusão de bandas impróprias).
+- Impacto esperado: médio (governança de conteúdo e comunidades)
+- Depende de: Dashboard Central de Métricas do Admin, Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
 #### Considerações de Design de Bandas e Convites:
 - **Vantagens adotadas:** Identidade por `@username`, busca visual com foto e instrumentos, zero dependência de e-mails de terceiros e base para contratação freelance.
 - **Mitigações técnicas:** Links para WhatsApp mitigam o problema do usuário não cadastrado; `BandInvite` com máquina de estados previne spam; notificações locais de agenda (v1.1.1) garantem lembretes sem internet.
@@ -364,14 +378,21 @@
 - Release: v1.6.0
 - Status: ideia
 
-#### 4. Avaliação de Módulo Administrativo no Mobile
-- Intenção: Decidir/implementar se haverá um painel de administração simplificado no app móvel ou se a gestão ficará 100% restrita ao painel Web.
-- Impacto esperado: baixo/médio
-- Depende de: Isolar rotas de admin em Route Group próprio (spec 002)
+#### 4. Monitoramento Operacional e Financeiro Global no Admin (Web /admin/events e /admin/transactions)
+- Intenção: Disponibilizar painel no Admin Web para visualização de todos os eventos e fluxo financeiro agregado na plataforma, com filtros por data, status e exportação em CSV para relatórios de gestão.
+- Impacto esperado: médio (visão de negócio e governança)
+- Depende de: Dashboard Central de Métricas do Admin
 - Release: v1.6.0
 - Status: ideia
 
-#### 5. Tela de Contribuições (Apoio Monetário)
+#### 5. Responsividade Mobile do Painel Administrativo Web
+- Intenção: Garantir layout 100% responsivo com Tailwind CSS para todo o Route Group `(admin)`, permitindo ao administrador auditar usuários, moderar bandas e acompanhar métricas diretamente pelo navegador do celular (Chrome/Safari) sem o custo de manutenção de código duplicado no Flutter.
+- Impacto esperado: alto (gestão prática de qualquer lugar com custo zero de manutenção mobile)
+- Depende de: Dashboard Central de Métricas do Admin
+- Release: v1.6.0
+- Status: ideia
+
+#### 6. Tela de Contribuições (Apoio Monetário)
 - Intenção: Oferecer uma área de contribuição ou doações para apoiar o financiamento e manutenção do projeto.
 - Impacto esperado: médio
 - Depende de: nenhum
