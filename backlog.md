@@ -211,97 +211,128 @@
 
 ---
 
-### Release v1.3.0 — Operação de Show & Experiência de Palco
+### Release v1.3.0 — Gestão de Bandas & Colaboração de Equipe (Modelo Híbrido)
+> Objetivo: Viabilizar a criação explícita e gestão de múltiplas bandas, controle de integrantes e sistema colaborativo de convites combinando a agilidade do `@username` para usuários cadastrados com links compartilháveis para onboarding externo.
+
+#### Criação e Gestão de Bandas
+- Intenção: Permitir ao usuário criar, editar, excluir e alternar entre múltiplas bandas e projetos musicais (Workspace Switcher) no Web e Mobile, associando o criador automaticamente como `OWNER` em `BandMember`.
+- Impacto esperado: alto (fundação de colaboração e múltiplos projetos na plataforma)
+- Depende de: Autorização por Banda (spec 011)
+- Release: v1.3.0
+- Status: ideia
+
+#### Convites de Integrantes por @username e Link Compartilhável (Modelo Híbrido)
+- Intenção: Permitir que o líder da banda convide músicos e roadies buscando diretamente pelo `@username` dentro do app ou gerando links/códigos dinâmicos de convite para compartilhamento direto no WhatsApp, com fluxo obrigatório de aceite (`BandInvite`).
+- Impacto esperado: alto (crescimento viral, usabilidade e facilidade de onboarding)
+- Depende de: Criação e Gestão de Bandas
+- Release: v1.3.0
+- Status: ideia
+- Considerações de Design (Trade-offs, Vantagens e Mitigações):
+  - **Vantagens adotadas:**
+    - Identidade amigável por `@username` único (ex.: `@lucasAdmin`, `@marcos_batera`), reduzindo atrito cognitivo por ser o padrão natural de comunicação em redes sociais.
+    - Busca visual e instantânea no app exibindo foto, nome e instrumentos/especialidades técnicas (evita convidar homônimos).
+    - Desassociação da dependência de e-mail (músicos frequentemente não lembram o e-mail de login de terceiros).
+    - Fundação arquitetural para futuros perfis públicos e contratação de músicos freelancers ("sideman").
+  - **Desvantagens mapeadas & Mitigações técnicas:**
+    - *Problema do "Ovo e a Galinha" (convidar quem ainda não tem conta):* Resolvido com suporte nativo a **Links/Códigos de Convite** compartilháveis no WhatsApp (ex.: `myroadie.app/join/band-xyz`). O integrante clica no link, conclui o cadastro e já entra automaticamente na banda com a função pré-definida.
+    - *Disputa por nomes (Username Squatting) e fricção no cadastro:* O `@username` é validado em tempo real com regras simples (letras minúsculas, números, `_` e `.`), podendo ser sugerido automaticamente a partir do nome/e-mail no cadastro com opção de alteração posterior.
+    - *Risco de Spam e Convites Não Solicitados:* Mitigado pelo modelo de entidade `BandInvite` com controle de estados (`PENDING`, `ACCEPTED`, `REJECTED`, `EXPIRED`, `CANCELLED`). Nenhum usuário entra em uma banda sem seu consentimento explícito.
+    - *Convites Esquecidos / Gargalo de Notificação:* Implementação de badges visuais destacados na tela inicial e área de convites no perfil, com expiração automática após 14 dias para manter a base limpa.
+    - *Migração de Usuários Existentes:* Adição de `username String? @unique` em `User` no Prisma como campo opcional, com solicitação suave de preenchimento na próxima sessão do usuário.
+
+---
+
+### Release v1.4.0 — Operação de Show & Experiência de Palco
 > Objetivo: Construir as ferramentas operacionais de uso direto no ensaio e show, alavancando as APIs já desenvolvidas (`Repertoire` — spec 005 e `Tasks` — spec 004).
 
 #### Gestão de Setlists com Visualizador de Letras/Cifras (Modo Palco)
 - Intenção: Permitir que os músicos criem setlists de shows a partir do repertório cadastrado e utilizem o Modo Palco (offline, letras e cifras ampliadas).
 - Impacto esperado: alto
 - Depende de: API de Repertoire (spec 005)
-- Release: v1.3.0
+- Release: v1.4.0
 - Status: ideia
 
 #### Checklist Operacional de Eventos & Inventário de Carga (Roadie Check)
 - Intenção: Conectar a API de Tasks (spec 004) à interface mobile, permitindo gerenciar checklists operacionais vinculados a cada evento (passagem de som, afazeres técnicos, check-in/check-out de carga da van) com barra de progresso no card de compromisso e contagem real de tarefas concluídas no painel inicial (`InfosWidget`).
 - Impacto esperado: alto (operação de estrada e valor para roadies)
 - Depende de: API de Tasks (spec 004), Extensão do Modelo de Eventos (spec 015)
-- Release: v1.3.0
+- Release: v1.4.0
 - Status: ideia
 
 #### Persistência Local e Sincronização Offline (Offline-First)
 - Intenção: Implementar cache/banco local (ex.: Hive ou SQLite) no app mobile para permitir criar, visualizar e editar compromissos sem sinal de internet, sincronizando os dados com o backend NestJS quando a conexão for reestabelecida.
 - Impacto esperado: alto (confiabilidade em palcos, festivais e estradas)
 - Depende de: Atualização da lista de compromissos após criação (spec 007)
-- Release: v1.3.0
+- Release: v1.4.0
 - Status: ideia
 
 ---
 
-### Release v1.4.0 — Logística, Geolocalização & Integração de Agenda
+### Release v1.5.0 — Logística, Geolocalização & Integração de Agenda
 > Objetivo: Estender a gestão de compromissos para a rotina de viagem e rotas da equipe técnica e músicos.
 
 #### Notificações locais/push no App Mobile
 - Intenção: Implementar alertas e lembretes de compromissos por notificações (push/locais) no aplicativo móvel.
 - Impacto esperado: alto
 - Depende de: Atualização da lista de compromissos após criação (spec 007)
-- Release: v1.4.0
+- Release: v1.5.0
 - Status: ideia
 
 #### Integração de Localização com Google Maps
 - Intenção: Integrar a API do Google Maps para exibir o endereço do compromisso e permitir a navegação a partir da tela do evento.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: v1.4.0
+- Release: v1.5.0
 - Status: ideia
 
 #### Painel de Logística de Viagem (Roadbook Digital)
 - Intenção: Centralizar detalhes operacionais de logística como ponto de encontro, hotel, passagens, alimentação e horários da estrada em formato digital.
 - Impacto esperado: alto
 - Depende de: Integração de Localização com Google Maps, Notificações locais/push
-- Release: v1.4.0
+- Release: v1.5.0
 - Status: ideia
 
 #### Sincronização de Agenda com Calendários Externos
 - Intenção: Permitir a exportação/sincronização automática dos compromissos da plataforma com Google Calendar e Apple Calendar.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: v1.4.0
+- Release: v1.5.0
 - Status: ideia
 
 ---
 
-### Release v1.5.0 — Módulo Financeiro Avançado
+### Release v1.6.0 — Módulo Financeiro Avançado
 > Objetivo: Potencializar a API financeira (`Transactions` — spec 006) criando utilitários de divisão de receitas entre integrantes e equipe.
 
 #### Divisão Automatizada de Cachê (Cache Splitter)
 - Intenção: Dividir automaticamente o cachê do show entre músicos e roadies com base em percentuais ou valores fixos configurados na banda.
 - Impacto esperado: alto
 - Depende de: API de Transactions (spec 006)
-- Release: v1.5.0
+- Release: v1.6.0
 - Status: ideia
 
 ---
 
-### Release v1.6.0 — Suporte, Governança & Sustentabilidade da Plataforma
+### Release v1.7.0 — Suporte, Governança & Sustentabilidade da Plataforma
 > Objetivo: Recursos de suporte, manutenção contínua, governança de acesso e sustentabilidade do projeto.
 
 #### Tela de Ajuda e Relatório de Erros
 - Intenção: Apresentar guias de suporte e permitir copiar/reportar o nome e a descrição detalhada de eventuais erros da plataforma.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: v1.6.0
+- Release: v1.7.0
 - Status: ideia
 
 #### Avaliação de Módulo Administrativo no Mobile
 - Intenção: Decidir/implementar se haverá um painel de administração simplificado no app móvel ou se a gestão ficará 100% restrita ao painel Web.
 - Impacto esperado: baixo/médio
 - Depende de: Isolar rotas de admin em Route Group próprio
-- Release: v1.6.0
+- Release: v1.7.0
 - Status: ideia
 
 #### Tela de Contribuições (Apoio Monetário)
 - Intenção: Oferecer uma área de contribuição ou doações para apoiar o financiamento e manutenção do projeto.
 - Impacto esperado: médio
 - Depende de: nenhum
-- Release: v1.6.0
+- Release: v1.7.0
 - Status: ideia
