@@ -753,3 +753,28 @@ Ao concluir a varredura:
   exploração por engano num push automático.
 - O prompt 19 (triagem) é o único que toca `backlog.md` nessa categoria —
   os prompts 14-18 são estritamente leitura/relatório.
+
+---
+
+## ⚡ Guia Rápido de Atalhos e Produtividade do agy CLI
+
+### 1. Atalhos no Terminal (TUI)
+- `@<arquivo>`: Autocompletar interativo de caminhos e arquivos do repositório (ex.: `@events.service.ts`).
+- `!<comando>`: Executa comandos nativos do shell diretamente da caixa de prompt sem fechar o CLI (ex.: `!git status`, `!npm test`, `!flutter analyze`).
+- `?`: Exibe o menu instantâneo com todos os comandos e atalhos disponíveis.
+- `Ctrl + K`: Aprova instantaneamente permissões pendentes de ferramentas e subagentes.
+- `Esc Esc`: Limpa todo o texto digitado no prompt de uma só vez.
+- `Ctrl + C`: Interrompe imediatamente uma resposta em streaming.
+- `Ctrl + D Ctrl + D`: Sai do agy CLI.
+
+### 2. Comandos de Histórico e Sessão
+- `/resume` ou `/switch`: Lista e retoma conversas e sessões anteriores.
+- `/rewind` ou `/undo`: Volta a conversa para um ponto anterior para tentar outra abordagem.
+- `/fork`: Bifurca a conversa atual a partir de um ponto sem perder o histórico principal.
+- `/clear`: Limpa o contexto do chat para iniciar uma nova tarefa do zero (essencial para checklist de fechamento).
+
+### 3. Flags Úteis ao Iniciar o CLI
+- `agy -c` (ou `--continue`): Reabre o agy continuando automaticamente no último chat.
+- `agy -p "<prompt>"`: Executa um prompt rápido de forma não-interativa e imprime a resposta.
+- `agy --effort low`: Reduz a intensidade de raciocínio para economizar tokens em tarefas simples.
+- `agy --mode plan`: Força o agente a rodar apenas em modo de planejamento (sem editar arquivos).
