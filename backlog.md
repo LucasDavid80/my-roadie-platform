@@ -214,31 +214,46 @@
 ### Release v1.3.0 — Gestão de Bandas & Colaboração de Equipe (Modelo Híbrido)
 > Objetivo: Viabilizar a criação explícita e gestão de múltiplas bandas, controle de integrantes e sistema colaborativo de convites combinando a agilidade do `@username` para usuários cadastrados com links compartilháveis para onboarding externo.
 
-#### Criação e Gestão de Bandas
+#### 1. Gestão Básica de Bandas e Múltiplos Workspaces
 - Intenção: Permitir ao usuário criar, editar, excluir e alternar entre múltiplas bandas e projetos musicais (Workspace Switcher) no Web e Mobile, associando o criador automaticamente como `OWNER` em `BandMember`.
 - Impacto esperado: alto (fundação de colaboração e múltiplos projetos na plataforma)
 - Depende de: Autorização por Banda (spec 011)
 - Release: v1.3.0
 - Status: ideia
 
-#### Convites de Integrantes por @username e Link Compartilhável (Modelo Híbrido)
-- Intenção: Permitir que o líder da banda convide músicos e roadies buscando diretamente pelo `@username` dentro do app ou gerando links/códigos dinâmicos de convite para compartilhamento direto no WhatsApp, com fluxo obrigatório de aceite (`BandInvite`).
-- Impacto esperado: alto (crescimento viral, usabilidade e facilidade de onboarding)
-- Depende de: Criação e Gestão de Bandas
+#### 2. Identidade Única por @username e Busca de Usuários
+- Intenção: Adicionar o campo `username` único (`@unique`) no modelo `User` do Prisma com regras de validação (letras minúsculas, números, `_` e `.`), endpoint de busca dinâmica de perfis (`GET /users/search?q=`) e seleção de `@` no cadastro e tela de perfil.
+- Impacto esperado: alto (identidade estilo rede social, base para busca e perfis públicos)
+- Depende de: nenhum
 - Release: v1.3.0
 - Status: ideia
-- Considerações de Design (Trade-offs, Vantagens e Mitigações):
-  - **Vantagens adotadas:**
-    - Identidade amigável por `@username` único (ex.: `@lucasAdmin`, `@marcos_batera`), reduzindo atrito cognitivo por ser o padrão natural de comunicação em redes sociais.
-    - Busca visual e instantânea no app exibindo foto, nome e instrumentos/especialidades técnicas (evita convidar homônimos).
-    - Desassociação da dependência de e-mail (músicos frequentemente não lembram o e-mail de login de terceiros).
-    - Fundação arquitetural para futuros perfis públicos e contratação de músicos freelancers ("sideman").
-  - **Desvantagens mapeadas & Mitigações técnicas:**
-    - *Problema do "Ovo e a Galinha" (convidar quem ainda não tem conta):* Resolvido com suporte nativo a **Links/Códigos de Convite** compartilháveis no WhatsApp (ex.: `myroadie.app/join/band-xyz`). O integrante clica no link, conclui o cadastro e já entra automaticamente na banda com a função pré-definida.
-    - *Disputa por nomes (Username Squatting) e fricção no cadastro:* O `@username` é validado em tempo real com regras simples (letras minúsculas, números, `_` e `.`), podendo ser sugerido automaticamente a partir do nome/e-mail no cadastro com opção de alteração posterior.
-    - *Risco de Spam e Convites Não Solicitados:* Mitigado pelo modelo de entidade `BandInvite` com controle de estados (`PENDING`, `ACCEPTED`, `REJECTED`, `EXPIRED`, `CANCELLED`). Nenhum usuário entra em uma banda sem seu consentimento explícito.
-    - *Convites Esquecidos / Gargalo de Notificação:* Implementação de badges visuais destacados na tela inicial e área de convites no perfil, com expiração automática após 14 dias para manter a base limpa.
-    - *Migração de Usuários Existentes:* Adição de `username String? @unique` em `User` no Prisma como campo opcional, com solicitação suave de preenchimento na próxima sessão do usuário.
+
+#### 3. Sistema de Convites Internos por @username (BandInvite)
+- Intenção: Permitir que o líder da banda convide integrantes buscando diretamente pelo `@username`, gerando registro com ciclo de vida (`PENDING`, `ACCEPTED`, `REJECTED`, `EXPIRED`, `CANCELLED`), central de convites e badge de notificação no perfil, vinculando o usuário como `BandMember` somente após confirmação.
+- Impacto esperado: alto (colaboração in-app segura, com consentimento e sem risco de spam)
+- Depende de: Gestão Básica de Bandas, Identidade Única por @username
+- Release: v1.3.0
+- Status: ideia
+
+#### 4. Links e Códigos de Convite Compartilháveis (WhatsApp / Onboarding Externo)
+- Intenção: Resolver o problema do "ovo e a galinha" gerando links rápidos (`myroadie.app/join/band-xyz`) e códigos de acesso compartilháveis diretamente no WhatsApp, direcionando novos integrantes para cadastro simplificado com ingresso automático na banda.
+- Impacto esperado: alto (crescimento viral, eliminação de atrito de onboarding para quem ainda não tem o app)
+- Depende de: Gestão Básica de Bandas
+- Release: v1.3.0
+- Status: ideia
+
+#### Considerações de Design (Trade-offs, Vantagens e Mitigações):
+- **Vantagens adotadas:**
+  - Identidade amigável por `@username` único (ex.: `@lucasAdmin`, `@marcos_batera`), reduzindo atrito cognitivo por ser o padrão natural de comunicação em redes sociais.
+  - Busca visual e instantânea no app exibindo foto, nome e instrumentos/especialidades técnicas (evita convidar homônimos).
+  - Desassociação da dependência de e-mail (músicos frequentemente não lembram o e-mail de login de terceiros).
+  - Fundação arquitetural para futuros perfis públicos e contratação de músicos freelancers ("sideman").
+- **Desvantagens mapeadas & Mitigações técnicas:**
+  - *Problema do "Ovo e a Galinha" (convidar quem ainda não tem conta):* Resolvido na sub-spec 4 com links/códigos para WhatsApp. O integrante conclui o cadastro e já entra automaticamente na banda com a função pré-definida.
+  - *Disputa por nomes (Username Squatting) e fricção no cadastro:* Resolvido na sub-spec 2 com validação assíncrona, sugestão automática baseada no nome/e-mail e permissão de alteração futura.
+  - *Risco de Spam e Convites Não Solicitados:* Resolvido na sub-spec 3 pela entidade `BandInvite`. Nenhum usuário é adicionado a uma banda sem consentimento explícito.
+  - *Convites Esquecidos / Gargalo de Notificação:* Resolvido na sub-spec 3 com badges visuais, central de convites e expiração automática após 14 dias.
+  - *Migração de Usuários Existentes:* Resolvido na sub-spec 2 com campo opcional e solicitação amigável no próximo login.
 
 ---
 
