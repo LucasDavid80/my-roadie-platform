@@ -61,6 +61,26 @@ Não siga para a próxima task sem eu confirmar.
 
 ---
 
+## 0.2 Sabatina de Arquitetura e Validação de Spec (/grill-me)
+
+> **Quando usar:** Imediatamente após gerar `spec.md`, `plan.md` e `tasks.md` (Fase 0 concluída), antes de autorizar a primeira linha de código na Fase 1.
+
+```
+/grill-me Leia AGENTS.md, constitution.md e specs/<pasta-da-feature>/{spec.md,plan.md,tasks.md}.
+
+Atue como um arquiteto de software / tech lead sênior e implacável. Sabatine o plano e as especificações desta feature procurando ativamente:
+
+1. Furos de arquitetura ou premissas implícitas não documentadas.
+2. Casos de borda não cobertos pelos critérios de aceitação de spec.md (ex.: falhas de rede, concorrência, estados vazios, limites de dados).
+3. Riscos de segurança e isolamento multitenant (validação de bandId, guards, permissões e sanitização de dados).
+4. Omissões ou inconsistências na ordem das tarefas em tasks.md (ex.: esquecer de migrations, DTOs, cobertura mínima ou testes de regressão).
+5. Conformidade com a Constitution (piso de 80% de cobertura, uso rigoroso de DTOs tipados, Conventional Commits).
+
+Não escreva código ainda. Faça até 3 ou 4 perguntas desafiadoras por vez para que possamos blindar a spec e o tasks.md antes de aprovar o início da Fase 1.
+```
+
+---
+
 ## 2. Rodar e revisar testes (com cobertura)
 
 ```
@@ -688,6 +708,7 @@ Ao concluir a varredura:
 
 ## Notas de uso
 
+- **Prompt 0.2 (/grill-me)**: Roda na fronteira entre a Fase 0 e a Fase 1. Use para sabatinar a tríade da spec (spec.md, plan.md, tasks.md) e blindar o plano antes de autorizar a primeira linha de código de produção.
 - **Prompt 21 (/goal)**: Projetado para execução autônoma noturna ou prolongada via comando `/goal`. É estritamente leitura (read-only) e consolida todas as vulnerabilidades encontradas em `audits/security/audit-noturna-<data>.md`, sem alterar código ou criar commits/push.
 - Sempre rode um prompt por vez e confira o resultado antes do próximo — mesmo dentro da mesma fase.
 - Se o agente tentar "adiantar" tasks futuras sem você pedir, interrompa e reforce o escopo do prompt 1.
