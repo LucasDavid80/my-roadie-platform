@@ -93,12 +93,17 @@ class NotificationService {
         tz.TZDateTime.from(eventDateTime, tz.local);
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
 
+    print('--- SCHEDULING NOTIFICATION ---');
+    print('Current time (now): $now');
+    print('Event time (eventTz): $eventTz');
+
     // Cancela os lembretes existentes antes de agendar os novos.
     await cancelEventReminders(event.id);
 
     // Lembrete de 24 horas antes.
     final tz.TZDateTime reminder24h =
         eventTz.subtract(const Duration(hours: 24));
+    print('Reminder 24h: $reminder24h | isAfter(now)? ${reminder24h.isAfter(now)}');
     if (reminder24h.isAfter(now)) {
       await _plugin.zonedSchedule(
         event.id.hashCode,
@@ -106,7 +111,7 @@ class NotificationService {
         'Seu evento comeca amanha!',
         reminder24h,
         _buildNotificationDetails(),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.alarmClock,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: event.id,
@@ -116,6 +121,7 @@ class NotificationService {
     // Lembrete de 2 horas antes.
     final tz.TZDateTime reminder2h =
         eventTz.subtract(const Duration(hours: 2));
+    print('Reminder 2h: $reminder2h | isAfter(now)? ${reminder2h.isAfter(now)}');
     if (reminder2h.isAfter(now)) {
       await _plugin.zonedSchedule(
         event.id.hashCode + 1,
@@ -123,7 +129,7 @@ class NotificationService {
         'Seu evento comeca em 2 horas!',
         reminder2h,
         _buildNotificationDetails(),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.alarmClock,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: event.id,
@@ -154,6 +160,7 @@ class NotificationService {
       channelDescription: _channelDescription,
       importance: Importance.high,
       priority: Priority.high,
+      largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
     );
 
     const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(

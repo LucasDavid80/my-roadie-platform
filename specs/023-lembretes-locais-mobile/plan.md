@@ -5,6 +5,7 @@
 ### Biblioteca escolhida
 - **`flutter_local_notifications`** (versão estável mais recente compatível com Flutter 3.x): solução madura, sem dependência de servidor, suporte nativo a Android e iOS com agendamento por timestamp absoluto (`zonedSchedule`).
 - **`timezone`**: dependência obrigatória de `flutter_local_notifications` para agendamento com fuso horário correto. Requer inicialização com `tz.initializeTimeZones()` no startup.
+- **`flutter_timezone`**: adicionado na fase de QA para configurar o `tz.local` com o fuso real do dispositivo, evitando bugs matemáticos de tempo por conta do UTC padrão.
 
 ### Padrão de design
 - **`NotificationService`** — classe Singleton responsável por toda a lógica de notificações. Encapsula `FlutterLocalNotificationsPlugin` e expõe métodos públicos chamados pelo `AgendaController`.
@@ -28,7 +29,8 @@ Excluir Evento
 ```
 
 ### Plataformas e permissões
-- **Android**: criar `NotificationChannel` com `importance: Importance.high` e `priority: Priority.high` no startup. Sem necessidade de permissão explícita no Android < 13. No Android 13+ (`POST_NOTIFICATIONS`), o plugin solicita automaticamente.
+- **Android**: criar `NotificationChannel` com `importance: Importance.high` e `priority: Priority.high` no startup. 
+- **Agendamento no Android**: Uso de `AndroidScheduleMode.inexactAllowWhileIdle`. Após testes QA em aparelhos Xiaomi (MIUI), alarmes exatos (`exactAllowWhileIdle`) sofrem bloqueios severos de bateria e não disparam. O uso de alarmes inexatos (que tocam numa janela de poucos minutos de diferença) contorna a restrição e é perfeitamente aceitável para um lembrete de evento, garantindo a entrega sem forçar o usuário a configurar permissões de bateria.
 - **Android Build**: o pacote exige habilitar o `core library desugaring` no `build.gradle.kts` do app, ativando `isCoreLibraryDesugaringEnabled = true` em `compileOptions` e adicionando a dependência `coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")`.
 - **iOS**: solicitar permissão via `requestPermissions(alert: true, badge: true, sound: true)` no `initialize()`.
 

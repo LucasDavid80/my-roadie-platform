@@ -28,6 +28,14 @@
 - [x] T4.1: Verificar que o app compila sem erros para Android (`flutter build apk --debug`) e confirmar ausência de erros de análise estática (`flutter analyze`)
 - [x] T4.2: Marcar checklist de fechamento e critérios de sucesso da spec (`tasks.md` e `spec.md` simultaneamente)
 
+## Fase 5: QA e Testes Manuais em Dispositivo (Físico/Emulador)
+
+- [x] T5.1: Instalar o app em um aparelho Android físico ou emulador (`flutter run -d <device>`)
+- [x] T5.1.1 [Correção QA]: Instalar `flutter_timezone` e configurar o `tz.setLocalLocation` no `main.dart` para resolver inconsistência do UTC na criação de notificações locais.
+- [x] T5.2: Criar um novo evento na agenda definindo o `startTime` para **daqui a 2 horas e 2 minutos**. Aguardar os 2 minutos com o app em background ou fechado e verificar se a notificação de 2h é exibida pelo sistema operacional
+- [x] T5.3: Editar o mesmo evento, alterando o `startTime` para **daqui a 24 horas e 2 minutos**. Aguardar 2 minutos e verificar se a notificação de 24h é disparada com sucesso (provando que o cancelamento do agendamento antigo funcionou)
+- [x] T5.4: Excluir o evento, definir um temporizador no aparelho e comprovar que nenhuma notificação "fantasma" é disparada no horário em que o evento ocorreria
+
 ---
 
 ## Checklist de Fechamento (preencher atomicamente com os critérios de `spec.md`)
