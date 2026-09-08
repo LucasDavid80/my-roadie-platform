@@ -20,7 +20,7 @@
 ## Fase 3: Testes Automatizados & Qualidade
 
 - [x] T3.1: Criar `mobile/test/services/notification_service_test.dart` cobrindo os 6 casos definidos no `plan.md` (T-U1 a T-U6): agendamento com startTime futuro > 24h, entre 2h e 24h, passado, nulo, cancelamento individual e cancelamento total
-- [ ] T3.2: Executar `flutter test --coverage` em `mobile/` e verificar cobertura >= 80% no `NotificationService`
+- [x] T3.2: Executar `flutter test --coverage` em `mobile/` e verificar cobertura >= 80% no `NotificationService`
 
 ## Fase 4: Fechamento & Sincronização
 
