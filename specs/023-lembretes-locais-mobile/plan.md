@@ -30,7 +30,9 @@ Excluir Evento
 
 ### Plataformas e permissões
 - **Android**: criar `NotificationChannel` com `importance: Importance.high` e `priority: Priority.high` no startup. 
-- **Agendamento no Android**: Uso de `AndroidScheduleMode.inexactAllowWhileIdle`. Após testes QA em aparelhos Xiaomi (MIUI), alarmes exatos (`exactAllowWhileIdle`) sofrem bloqueios severos de bateria e não disparam. O uso de alarmes inexatos (que tocam numa janela de poucos minutos de diferença) contorna a restrição e é perfeitamente aceitável para um lembrete de evento, garantindo a entrega sem forçar o usuário a configurar permissões de bateria.
+- **Ícones**: Utilizar `largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher')` para garantir que o ícone colorido seja exibido no corpo da notificação (visto que o smallIcon original é restrito a uma máscara monocromática pelo Android).
+- **Agendamento no Android**: Uso de `AndroidScheduleMode.alarmClock`. Após testes extensivos de QA em aparelhos Xiaomi (MIUI), alarmes inexatos ou exatos convencionais sofrem bloqueios severos de bateria em background. O modo "Despertador" (`alarmClock`) força a ativação do rádio e do display em background, sendo o único capaz de romper as restrições da MIUI.
+- **Manifest do Android**: O agendamento exige a adição obrigatória dos Receivers nativos (`ScheduledNotificationReceiver` e `ScheduledNotificationBootReceiver`), além da permissão `RECEIVE_BOOT_COMPLETED` no `AndroidManifest.xml` (para evitar a falha silenciosa de broadcast do AlarmManager e garantir a persistência pós-reboot).
 - **Android Build**: o pacote exige habilitar o `core library desugaring` no `build.gradle.kts` do app, ativando `isCoreLibraryDesugaringEnabled = true` em `compileOptions` e adicionando a dependência `coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")`.
 - **iOS**: solicitar permissão via `requestPermissions(alert: true, badge: true, sound: true)` no `initialize()`.
 
