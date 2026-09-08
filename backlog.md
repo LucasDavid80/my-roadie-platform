@@ -200,7 +200,7 @@
 - Impacto esperado: alto (valor imediato para os usuários que já utilizam a agenda do app em produção)
 - Depende de: Extensão do Modelo de Eventos (spec 015)
 - Release: v1.1.1
-- Status: ideia
+- Status: em spec (specs/023-lembretes-locais-mobile/)
 
 ---
 
