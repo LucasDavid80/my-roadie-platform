@@ -64,6 +64,7 @@ class AgendaController extends Notifier<List<EventEntity>> {
     try {
       await _repository.deleteEvent(id);
       state = state.where((e) => e.id != id).toList();
+      await NotificationService.instance.cancelEventReminders(id);
     } catch (e) {
       // Trata erros de forma segura
     }

@@ -15,7 +15,7 @@
 
 - [x] T2.1: Chamar `NotificationService.scheduleEventReminders(event)` ao final do fluxo de criação de evento em `agenda_controller.dart`
 - [x] T2.2: Chamar `NotificationService.cancelEventReminders(eventId)` + `scheduleEventReminders(event)` ao editar um evento (cancelar antigos e agendar novos)
-- [ ] T2.3: Chamar `NotificationService.cancelEventReminders(eventId)` ao excluir um evento em `agenda_controller.dart`
+- [x] T2.3: Chamar `NotificationService.cancelEventReminders(eventId)` ao excluir um evento em `agenda_controller.dart`
 
 ## Fase 3: Testes Automatizados & Qualidade
 
