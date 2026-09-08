@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -8,14 +9,19 @@ import '../domain/models/event_model.dart';
 /// Encapsula [FlutterLocalNotificationsPlugin] e expoe metodos publicos
 /// chamados pelo AgendaController para agendar/cancelar lembretes de eventos.
 class NotificationService {
-  NotificationService._internal();
+  NotificationService._internal({FlutterLocalNotificationsPlugin? plugin})
+      : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
-  static final NotificationService instance = NotificationService._internal();
+  static NotificationService instance = NotificationService._internal();
 
   factory NotificationService() => instance;
 
-  final FlutterLocalNotificationsPlugin _plugin =
-      FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _plugin;
+
+  @visibleForTesting
+  static void setMockPlugin(FlutterLocalNotificationsPlugin mockPlugin) {
+    instance = NotificationService._internal(plugin: mockPlugin);
+  }
 
   static const String _channelId = 'agenda_events';
   static const String _channelName = 'Eventos da Agenda';
