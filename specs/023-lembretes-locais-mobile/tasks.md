@@ -5,6 +5,7 @@
 - [x] T0.1: Criar branch `spec/023-lembretes-locais-mobile` e inicializar documentação da spec (`spec.md`, `plan.md`, `tasks.md`)
 - [x] T0.2: Adicionar dependências `flutter_local_notifications` e `timezone` ao `pubspec.yaml` e rodar `flutter pub get`
 - [x] T0.3: Adicionar permissão `SCHEDULE_EXACT_ALARM` ao `AndroidManifest.xml` do app mobile
+- [x] T0.4: Configurar `core library desugaring` no `mobile/android/app/build.gradle.kts`
 
 ## Fase 1: Implementação do Serviço de Notificações
 
@@ -24,7 +25,7 @@
 
 ## Fase 4: Fechamento & Sincronização
 
-- [ ] T4.1: Verificar que o app compila sem erros para Android (`flutter build apk --debug`) e confirmar ausência de erros de análise estática (`flutter analyze`)
+- [x] T4.1: Verificar que o app compila sem erros para Android (`flutter build apk --debug`) e confirmar ausência de erros de análise estática (`flutter analyze`)
 - [ ] T4.2: Marcar checklist de fechamento e critérios de sucesso da spec (`tasks.md` e `spec.md` simultaneamente)
 
 ---

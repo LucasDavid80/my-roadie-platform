@@ -29,6 +29,7 @@ Excluir Evento
 
 ### Plataformas e permissões
 - **Android**: criar `NotificationChannel` com `importance: Importance.high` e `priority: Priority.high` no startup. Sem necessidade de permissão explícita no Android < 13. No Android 13+ (`POST_NOTIFICATIONS`), o plugin solicita automaticamente.
+- **Android Build**: o pacote exige habilitar o `core library desugaring` no `build.gradle.kts` do app, ativando `isCoreLibraryDesugaringEnabled = true` em `compileOptions` e adicionando a dependência `coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")`.
 - **iOS**: solicitar permissão via `requestPermissions(alert: true, badge: true, sound: true)` no `initialize()`.
 
 ## 2. Modelagem de Dados / Contratos
