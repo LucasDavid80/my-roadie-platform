@@ -7,9 +7,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:agenda_musical/core/router.dart';
 import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
+  await NotificationService.instance.initialize();
   await initializeDateFormatting('pt_BR', null);
 
   if (AppConfig.isConfigured) {
