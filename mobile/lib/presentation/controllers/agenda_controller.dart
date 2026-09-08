@@ -48,6 +48,8 @@ class AgendaController extends Notifier<List<EventEntity>> {
             else
               e,
         ];
+        await NotificationService.instance
+            .scheduleEventReminders(savedEvent as EventModel);
       } else {
         state = [...state, savedEvent];
         await NotificationService.instance
