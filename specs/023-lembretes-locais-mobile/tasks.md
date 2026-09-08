@@ -8,7 +8,7 @@
 
 ## Fase 1: Implementação do Serviço de Notificações
 
-- [ ] T1.1: Criar `mobile/lib/services/notification_service.dart` com a classe `NotificationService` (singleton) — métodos `initialize`, `scheduleEventReminders`, `cancelEventReminders` e `cancelAll`
+- [x] T1.1: Criar `mobile/lib/services/notification_service.dart` com a classe `NotificationService` (singleton) — métodos `initialize`, `scheduleEventReminders`, `cancelEventReminders` e `cancelAll`
 - [ ] T1.2: Inicializar `NotificationService` e `tz.initializeTimeZones()` em `main.dart` antes do `runApp`
 
 ## Fase 2: Integração ao AgendaController
