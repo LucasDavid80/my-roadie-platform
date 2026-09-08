@@ -4,7 +4,7 @@
 
 - [x] T0.1: Criar branch `spec/023-lembretes-locais-mobile` e inicializar documentação da spec (`spec.md`, `plan.md`, `tasks.md`)
 - [x] T0.2: Adicionar dependências `flutter_local_notifications` e `timezone` ao `pubspec.yaml` e rodar `flutter pub get`
-- [ ] T0.3: Adicionar permissão `SCHEDULE_EXACT_ALARM` ao `AndroidManifest.xml` do app mobile
+- [x] T0.3: Adicionar permissão `SCHEDULE_EXACT_ALARM` ao `AndroidManifest.xml` do app mobile
 
 ## Fase 1: Implementação do Serviço de Notificações
 
