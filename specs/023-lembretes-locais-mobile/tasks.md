@@ -26,14 +26,14 @@
 ## Fase 4: Fechamento & Sincronização
 
 - [x] T4.1: Verificar que o app compila sem erros para Android (`flutter build apk --debug`) e confirmar ausência de erros de análise estática (`flutter analyze`)
-- [ ] T4.2: Marcar checklist de fechamento e critérios de sucesso da spec (`tasks.md` e `spec.md` simultaneamente)
+- [x] T4.2: Marcar checklist de fechamento e critérios de sucesso da spec (`tasks.md` e `spec.md` simultaneamente)
 
 ---
 
 ## Checklist de Fechamento (preencher atomicamente com os critérios de `spec.md`)
 
-- [ ] Todas as fases acima concluídas e commitadas
-- [ ] Cobertura >= 80% verificada no `NotificationService`
-- [ ] App compila sem erros (Android debug)
-- [ ] Todos os critérios de sucesso de `spec.md` marcados `[x]`
-- [ ] Solicitação de `git push` e Pull Request enviada ao usuário para aprovação
+- [x] Todas as fases acima concluídas e commitadas
+- [x] Cobertura >= 80% verificada no `NotificationService`
+- [x] App compila sem erros (Android debug)
+- [x] Todos os critérios de sucesso de `spec.md` marcados `[x]`
+- [x] Solicitação de `git push` e Pull Request enviada ao usuário para aprovação

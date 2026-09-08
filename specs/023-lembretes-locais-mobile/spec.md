@@ -33,11 +33,11 @@ A `constitution.md` §4 prioriza valor imediato para o usuário antes de complex
 
 ## 5. Critérios de Sucesso
 
-- [ ] O pacote `flutter_local_notifications` está instalado e configurado no `pubspec.yaml`.
-- [ ] A permissão de notificação é solicitada ao usuário no primeiro acesso ao app (iOS) ou o canal é criado corretamente (Android).
-- [ ] Ao criar um evento com `startTime`, dois lembretes são agendados: 24h antes e 2h antes.
-- [ ] Ao excluir um evento, seus lembretes são cancelados no sistema operacional.
-- [ ] Ao editar um evento com novo `startTime`, os lembretes antigos são cancelados e novos são agendados.
-- [ ] Notificações não são agendadas para eventos cujo `startTime` já passou (passado).
-- [ ] O `NotificationService` possui cobertura de testes unitários >= 80%.
-- [ ] O app continua compilando sem erros para Android e iOS após a integração.
+- [x] O pacote `flutter_local_notifications` está instalado e configurado no `pubspec.yaml`.
+- [x] A permissão de notificação é solicitada ao usuário no primeiro acesso ao app (iOS) ou o canal é criado corretamente (Android).
+- [x] Ao criar um evento com `startTime`, dois lembretes são agendados: 24h antes e 2h antes.
+- [x] Ao excluir um evento, seus lembretes são cancelados no sistema operacional.
+- [x] Ao editar um evento com novo `startTime`, os lembretes antigos são cancelados e novos são agendados.
+- [x] Notificações não são agendadas para eventos cujo `startTime` já passou (passado).
+- [x] O `NotificationService` possui cobertura de testes unitários >= 80%.
+- [x] O app continua compilando sem erros para Android e iOS após a integração.
