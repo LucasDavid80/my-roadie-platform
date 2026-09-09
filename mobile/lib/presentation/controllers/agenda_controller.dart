@@ -74,7 +74,7 @@ class AgendaController extends Notifier<List<EventEntity>> {
 
   List<EventEntity> get monthlyEvents {
     final now = DateTime.now();
-    return state.where((e) => _isSameMonth(e.date, now)).toList();
+    return state.where((e) => _isSameMonth(e.startsAt, now)).toList();
   }
 
   double get totalFee => state.fold(0.0, (sum, event) => sum + event.fee);
@@ -83,7 +83,7 @@ class AgendaController extends Notifier<List<EventEntity>> {
     final now = DateTime.now();
     return state
         .where((e) =>
-            _isSameMonth(e.date, now) &&
+            _isSameMonth(e.startsAt, now) &&
             e.type.trim().toLowerCase() == 'show')
         .length;
   }
@@ -91,7 +91,7 @@ class AgendaController extends Notifier<List<EventEntity>> {
   double get monthlyFee {
     final now = DateTime.now();
     return state
-        .where((e) => _isSameMonth(e.date, now))
+        .where((e) => _isSameMonth(e.startsAt, now))
         .fold(0.0, (sum, event) => sum + event.fee);
   }
 
@@ -99,14 +99,14 @@ class AgendaController extends Notifier<List<EventEntity>> {
 
   List<EventEntity> get upcomingEvents {
     final today = _startOfDay(DateTime.now());
-    return state.where((e) => !_startOfDay(e.date).isBefore(today)).toList()
-      ..sort((a, b) => a.date.compareTo(b.date));
+    return state.where((e) => !_startOfDay(e.startsAt).isBefore(today)).toList()
+      ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
   }
 
   List<EventEntity> get pastEvents {
     final today = _startOfDay(DateTime.now());
-    return state.where((e) => _startOfDay(e.date).isBefore(today)).toList()
-      ..sort((a, b) => b.date.compareTo(a.date));
+    return state.where((e) => _startOfDay(e.startsAt).isBefore(today)).toList()
+      ..sort((a, b) => b.startsAt.compareTo(a.startsAt));
   }
 }
 

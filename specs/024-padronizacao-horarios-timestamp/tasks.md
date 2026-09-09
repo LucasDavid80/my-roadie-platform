@@ -20,7 +20,7 @@
 
 ## Fase 3: Interface & Integração (Mobile)
 - [x] T3.1: Atualizar `EventEntity`, `EventModel` e seus métodos de serialização (`fromMap`, `toMap`, `toCreatePayload`).
-- [ ] T3.2: Refatorar as lógicas em `AgendaController` (ex: `upcomingEvents`, `pastEvents`, `monthlyEvents`) para usar `startsAt`.
+- [x] T3.2: Refatorar as lógicas em `AgendaController` (ex: `upcomingEvents`, `pastEvents`, `monthlyEvents`) para usar `startsAt`.
 - [ ] T3.3: Atualizar `NotificationService` (da Spec 023) para extrair o aviso de 24h/2h a partir de `startsAt`.
 - [ ] T3.4: Refatorar as telas (`PrincipalScreen`, `HistoryScreen`, cards) e os date/time pickers do `NewAppointmentWidget`.
 - [ ] T3.5: Ajustar e rodar a suíte de testes (unitários/widget) no mobile, garantindo o piso de 80% de cobertura.
