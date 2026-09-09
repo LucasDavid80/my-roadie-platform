@@ -1,10 +1,11 @@
 # Plano Técnico — 024: Padronização de Horários com Timestamps
 
 ## 1. Arquitetura e Decisões Técnicas
-- O campo atual `date` (DateTime isolado) e os horários `startTime`, `endTime` (String "HH:mm") são convertidos em `startsAt` (DateTime) e `endsAt` (DateTime?).
-- Todos os timestamps devem ser gravados em UTC no banco de dados e convertidos para o fuso horário local nos frontends (Mobile/Web) ao serem exibidos/selecionados.
-- Na hora de migrar os dados legados, deve-se ler o `date` de cada evento, combinar com `startTime`/`endTime` e injetar a hora ajustada na criação de `startsAt`/`endsAt`.
-- Atualização do Prisma Schema e DTOs no backend com validações rigorosas (ex: `endsAt` > `startsAt`).
+- O campo atual `date` (DateTime isolado) e os horários `startTime`, `endTime` (String "HH:mm") são convertidos em `startsAt` (DateTime), `endsAt` (DateTime?) e `timezone` (String).
+- Todos os timestamps devem ser gravados em UTC no banco de dados. O campo `timezone` (ex: "America/Sao_Paulo") ancora o evento ao local físico, garantindo exibição local consistente independentemente de onde o usuário estiver.
+- Na hora de migrar os dados legados (migration em múltiplos passos), deve-se ler o `date` de cada evento, combinar com `startTime`/`endTime` e injetar a hora ajustada em UTC, inferindo o timezone do criador do evento ou da banda.
+- Atualização do Prisma Schema e DTOs no backend com validações rigorosas na camada de DTO, via um decorator customizado `@IsAfterDate('startsAt')` para garantir que `endsAt` seja posterior a `startsAt`.
+- **Decisão de UX/UI:** Nos formulários de criação/edição (Web e Mobile), os três inputs antigos (`[Data]`, `[Início]`, `[Fim]`) devem ser consolidados em dois blocos de seleção: **"Data e Hora de Início" (obrigatório)** e **"Data e Hora de Fim" (opcional)**, incluindo a seleção/exibição do timezone.
 
 ## 2. Modelagem de Dados / Contratos
 ### Prisma Schema (`backend/prisma/schema.prisma`)
@@ -13,7 +14,8 @@ model Event {
   // ... campos atuais ...
   startsAt DateTime
   endsAt   DateTime?
-  // Remover date, startTime e endTime
+  timezone String   @default("America/Sao_Paulo")
+  // Remover date, startTime e endTime após backfill
 }
 ```
 
@@ -25,7 +27,11 @@ export class CreateEventDto {
 
   @IsOptional()
   @IsDateString()
+  @IsAfterDate('startsAt', { message: 'endsAt must be after startsAt' })
   endsAt?: string;
+
+  @IsString()
+  timezone: string;
 }
 ```
 
@@ -45,4 +51,5 @@ export class CreateEventDto {
 - Atualizar testes de unidade do `AgendaController` no mobile para injetar e testar as novas lógicas temporais (inclusive lógicas para calcular "próximos eventos").
 - No backend, escrever testes no `EventsService` para validar as regras de `startsAt` e `endsAt`.
 - Testar o rollback e conversão do banco de dados na base mock/local antes de ir para CI.
+- Realizar validação e testes manuais mandatórios em **dispositivo físico** para os casos não cobertos fielmente por simuladores (ex: mudanças de Timezone do SO em tempo real, disparo e recebimento de push notifications / alarmes em background na transição da madrugada).
 - Garantir 80%+ de cobertura após refatorações.
