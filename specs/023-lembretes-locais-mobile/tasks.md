@@ -61,7 +61,7 @@
   `Future<EventEntity>`, mas a implementação concreta retorna `EventModel`.
   Solução: fazer `EventModel` estender ou implementar `EventEntity`, ou
   alterar o contrato da interface para `Future<EventModel>`.
-- [ ] Remover os cinco `print()` introduzidos no commit `252fe73` em
+- [x] Remover os cinco `print()` introduzidos no commit `252fe73` em
   `mobile/lib/services/notification_service.dart` (linhas 96-98, 106, 124).
   Esses prints foram adicionados como debug de QA e não foram revertidos.
   Causam cinco avisos `avoid_print` no `flutter analyze`, violando o

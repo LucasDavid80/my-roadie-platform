@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+import '../core/utils/app_logger.dart';
 import '../domain/entities/event_entity.dart';
 
 /// Servico singleton responsavel por toda a logica de notificacoes locais.
@@ -93,9 +94,9 @@ class NotificationService {
         tz.TZDateTime.from(eventDateTime, tz.local);
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
 
-    print('--- SCHEDULING NOTIFICATION ---');
-    print('Current time (now): $now');
-    print('Event time (eventTz): $eventTz');
+    AppLogger.info('--- SCHEDULING NOTIFICATION ---');
+    AppLogger.info('Current time (now): $now');
+    AppLogger.info('Event time (eventTz): $eventTz');
 
     // Cancela os lembretes existentes antes de agendar os novos.
     await cancelEventReminders(event.id);
@@ -103,7 +104,7 @@ class NotificationService {
     // Lembrete de 24 horas antes.
     final tz.TZDateTime reminder24h =
         eventTz.subtract(const Duration(hours: 24));
-    print('Reminder 24h: $reminder24h | isAfter(now)? ${reminder24h.isAfter(now)}');
+    AppLogger.info('Reminder 24h: $reminder24h | isAfter(now)? ${reminder24h.isAfter(now)}');
     if (reminder24h.isAfter(now)) {
       await _plugin.zonedSchedule(
         event.id.hashCode,
@@ -121,7 +122,7 @@ class NotificationService {
     // Lembrete de 2 horas antes.
     final tz.TZDateTime reminder2h =
         eventTz.subtract(const Duration(hours: 2));
-    print('Reminder 2h: $reminder2h | isAfter(now)? ${reminder2h.isAfter(now)}');
+    AppLogger.info('Reminder 2h: $reminder2h | isAfter(now)? ${reminder2h.isAfter(now)}');
     if (reminder2h.isAfter(now)) {
       await _plugin.zonedSchedule(
         event.id.hashCode + 1,
