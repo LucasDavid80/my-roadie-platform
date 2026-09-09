@@ -66,32 +66,14 @@ class NotificationService {
         ?.createNotificationChannel(channel);
   }
 
-  /// Agenda dois lembretes para o evento: 24h e 2h antes do [EventEntity.startTime].
+  /// Agenda dois lembretes para o evento: 24h e 2h antes do [EventEntity.startsAt].
   ///
-  /// - Ignora silenciosamente se [EventEntity.startTime] for vazio ou invalido.
   /// - Ignora silenciosamente se o horario calculado ja passou.
   /// - Cancela lembretes anteriores do mesmo evento antes de agendar os novos,
   ///   garantindo que edicoes nao gerem notificacoes duplicadas.
   Future<void> scheduleEventReminders(EventEntity event) async {
-    if (event.startTime.isEmpty) return;
-
-    final List<String> parts = event.startTime.split(':');
-    if (parts.length < 2) return;
-
-    final int? hour = int.tryParse(parts[0]);
-    final int? minute = int.tryParse(parts[1]);
-    if (hour == null || minute == null) return;
-
-    final DateTime eventDateTime = DateTime(
-      event.date.year,
-      event.date.month,
-      event.date.day,
-      hour,
-      minute,
-    );
-
     final tz.TZDateTime eventTz =
-        tz.TZDateTime.from(eventDateTime, tz.local);
+        tz.TZDateTime.from(event.startsAt, tz.local);
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
 
     AppLogger.info('--- SCHEDULING NOTIFICATION ---');
