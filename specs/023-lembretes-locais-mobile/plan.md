@@ -15,9 +15,9 @@
 ### Fluxo de agendamento
 ```
 Criar/Editar Evento
-  └─> AgendaController.createEvent() / updateEvent()
+  └─> AgendaController.addOrUpdateEvent()
         └─> NotificationService.scheduleEventReminders(event)
-              ├─> Cancelar notificações antigas (via cancelEventReminders)
+              ├─> cancelEventReminders(event.id)   ← ocorre aqui, dentro do serviço
               ├─> Calcular startTime - 24h → agendar se no futuro
               └─> Calcular startTime - 2h  → agendar se no futuro
 
@@ -83,6 +83,12 @@ mobile/
         └── notification_service_test.dart        ← NOVO: testes unitários do serviço
 ```
 
+> **Débito técnico (aberto):** `AgendaController` usa cast direto
+> `savedEvent as EventModel` para chamar `scheduleEventReminders`.
+> O contrato `IAgendaRepository.saveEvent → Future<EventEntity>` é mais
+> amplo que o necessário; a correção deve ampliar `EventModel` para
+> implementar `EventEntity` ou estreitar o contrato da interface.
+
 ### Permissão Android (`AndroidManifest.xml`)
 ```xml
 <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -106,3 +112,10 @@ Utilizar `mockito` ou `mocktail` para mockar `FlutterLocalNotificationsPlugin` e
 ### Cobertura alvo
 - `NotificationService`: >= 80% (linhas) — verificado com `flutter test --coverage`.
 - Os controllers existentes (`AgendaController`) não terão seus testes alterados — apenas os calls ao `NotificationService` serão verificados indiretamente via mock nos testes do serviço.
+
+## 5. Débitos técnicos abertos (identificados em auditoria pós-fechamento)
+
+| # | Item | Descrição | Origem |
+|---|---|---|---|
+| DT-1 | `print()` de debug em produção | Cinco chamadas `print()` adicionadas em `notification_service.dart` durante QA (commit `252fe73`) para inspecionar `now`, `eventTz`, `reminder24h` e `reminder2h`. Não foram removidos antes do fechamento. Devem ser substituídos por `AppLogger.info(...)` com proteção `kDebugMode`. | commit `252fe73`, linhas 96–98, 106, 124 |
+| DT-2 | Cast inseguro `EventEntity → EventModel` | `AgendaController` realiza cast direto ao chamar `scheduleEventReminders`; lança `CastError` em runtime se o contrato da interface for satisfeito por uma implementação que retorne `EventEntity` puro. | `agenda_controller.dart:52,56` |

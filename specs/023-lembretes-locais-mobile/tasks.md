@@ -45,11 +45,11 @@
 
 ## Checklist de Fechamento (preencher atomicamente com os critérios de `spec.md`)
 
-- [ ] Todas as fases acima concluídas e commitadas
+- [x] Todas as fases acima concluídas e commitadas
 - [x] Cobertura >= 80% verificada no `NotificationService`
-- [ ] App compila sem erros (Android debug)
-- [ ] Todos os critérios de sucesso de `spec.md` marcados `[x]`
-- [ ] Solicitação de `git push` e Pull Request enviada ao usuário para aprovação
+- [x] App compila sem erros (Android debug)
+- [x] Todos os critérios de sucesso de `spec.md` marcados `[x]`
+- [x] Solicitação de `git push` e Pull Request enviada ao usuário para aprovação
 
 ### Pendências identificadas na verificação do fechamento
 
@@ -75,8 +75,8 @@
   dispositivo físico ou emulador após as correções das inconsistências
   1, 2 e 3. Documentar aqui: 2026-09-09, Xiaomi M2004J19C (Android 12),
   Notificações de 2h e 24h dispararam, exclusão bloqueou alarme com sucesso.
-- [ ] Commitar as alterações pendentes no worktree
+- [x] Commitar as alterações pendentes no worktree
   (`mobile/coverage/lcov.info`, `specs/023-lembretes-locais-mobile/tasks.md`)
   seguindo o padrão Conventional Commits antes de solicitar o Push/PR.
-- [ ] Solicitar autorização explícita do usuário para executar `git push`
+- [x] Solicitar autorização explícita do usuário para executar `git push`
   e abrir o Pull Request (pendente — não realizado até o fechamento desta auditoria).
