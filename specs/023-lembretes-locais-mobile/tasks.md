@@ -68,7 +68,7 @@
   critério T4.1. Alternativa: substituir por `AppLogger.info(...)` com
   proteção `kDebugMode`, padrão já estabelecido em
   `mobile/lib/core/utils/app_logger.dart`.
-- [ ] Reexecutar `flutter build apk --debug` e `flutter analyze` após as
+- [x] Reexecutar `flutter build apk --debug` e `flutter analyze` após as
   correções das inconsistências 1, 2 e 3, e registrar o resultado (saída
   do terminal ou log de CI) como evidência no fechamento definitivo da spec.
 - [ ] T5.2–T5.4 (reexecução): Realizar novo ciclo de QA manual em
