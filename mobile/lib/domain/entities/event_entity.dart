@@ -3,9 +3,9 @@ class EventEntity {
   final String id;
   final String title;
   final String type;
-  final DateTime date;
-  final String startTime;
-  final String endTime;
+  final DateTime startsAt;
+  final DateTime? endsAt;
+  final String timezone;
   final String location;
   final double fee;
   final String notes;
@@ -15,9 +15,9 @@ class EventEntity {
     required this.id,
     required this.title,
     required this.type,
-    required this.date,
-    required this.startTime,
-    required this.endTime,
+    required this.startsAt,
+    this.endsAt,
+    required this.timezone,
     required this.location,
     required this.fee,
     this.notes = '',

@@ -6,9 +6,9 @@ class EventModel extends EventEntity {
     required super.id,
     required super.title,
     required super.type,
-    required super.date,
-    required super.startTime,
-    required super.endTime,
+    required super.startsAt,
+    super.endsAt,
+    required super.timezone,
     required super.location,
     required super.fee,
     super.notes,
@@ -17,11 +17,16 @@ class EventModel extends EventEntity {
 
   // Converte a partir da resposta da API ou banco local
   factory EventModel.fromMap(Map<String, dynamic> map) {
-    DateTime parsedDate;
-    if (map['date'] != null) {
-      parsedDate = DateTime.tryParse(map['date'].toString()) ?? DateTime.now();
+    DateTime parsedStartsAt;
+    if (map['startsAt'] != null) {
+      parsedStartsAt = DateTime.tryParse(map['startsAt'].toString()) ?? DateTime.now();
     } else {
-      parsedDate = DateTime.now();
+      parsedStartsAt = DateTime.now();
+    }
+
+    DateTime? parsedEndsAt;
+    if (map['endsAt'] != null) {
+      parsedEndsAt = DateTime.tryParse(map['endsAt'].toString());
     }
 
     double parsedFee = 0.0;
@@ -37,9 +42,9 @@ class EventModel extends EventEntity {
       id: map['id']?.toString() ?? '',
       title: map['title']?.toString() ?? '',
       type: map['type']?.toString() ?? 'Show',
-      date: parsedDate,
-      startTime: map['startTime']?.toString() ?? '',
-      endTime: map['endTime']?.toString() ?? '',
+      startsAt: parsedStartsAt,
+      endsAt: parsedEndsAt,
+      timezone: map['timezone']?.toString() ?? 'America/Sao_Paulo',
       location: map['location']?.toString() ?? '',
       fee: parsedFee,
       notes: map['notes']?.toString() ?? map['description']?.toString() ?? '',
@@ -52,9 +57,9 @@ class EventModel extends EventEntity {
       'id': id,
       'title': title,
       'type': type,
-      'date': date.toIso8601String(),
-      'startTime': startTime,
-      'endTime': endTime,
+      'startsAt': startsAt.toIso8601String(),
+      if (endsAt != null) 'endsAt': endsAt!.toIso8601String(),
+      'timezone': timezone,
       'location': location,
       'fee': fee,
       'notes': notes,
@@ -66,15 +71,13 @@ class EventModel extends EventEntity {
   Map<String, dynamic> toCreatePayload() {
     final payload = <String, dynamic>{
       'title': title,
-      'date': date.toIso8601String(),
+      'startsAt': startsAt.toIso8601String(),
+      'timezone': timezone,
       'location': location,
       'fee': fee,
     };
-    if (startTime.isNotEmpty) {
-      payload['startTime'] = startTime;
-    }
-    if (endTime.isNotEmpty) {
-      payload['endTime'] = endTime;
+    if (endsAt != null) {
+      payload['endsAt'] = endsAt!.toIso8601String();
     }
     if (type.isNotEmpty) {
       payload['type'] = type;
