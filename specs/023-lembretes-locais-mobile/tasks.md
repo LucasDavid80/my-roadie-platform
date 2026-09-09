@@ -71,11 +71,10 @@
 - [x] Reexecutar `flutter build apk --debug` e `flutter analyze` após as
   correções das inconsistências 1, 2 e 3, e registrar o resultado (saída
   do terminal ou log de CI) como evidência no fechamento definitivo da spec.
-- [ ] T5.2–T5.4 (reexecução): Realizar novo ciclo de QA manual em
+- [x] T5.2–T5.4 (reexecução): Realizar novo ciclo de QA manual em
   dispositivo físico ou emulador após as correções das inconsistências
-  1, 2 e 3. Documentar aqui: data, dispositivo, versão do Android e
-  resultado observado (notificação de 2h, notificação de 24h e ausência de
-  notificação fantasma após exclusão do evento).
+  1, 2 e 3. Documentar aqui: 2026-09-09, Xiaomi M2004J19C (Android 12),
+  Notificações de 2h e 24h dispararam, exclusão bloqueou alarme com sucesso.
 - [ ] Commitar as alterações pendentes no worktree
   (`mobile/coverage/lcov.info`, `specs/023-lembretes-locais-mobile/tasks.md`)
   seguindo o padrão Conventional Commits antes de solicitar o Push/PR.

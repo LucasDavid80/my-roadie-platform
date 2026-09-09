@@ -281,3 +281,13 @@ Esses arquivos não foram revertidos nem modificados por esta auditoria.
 O `flutter analyze` e `flutter build apk --debug` foram reexecutados com sucesso:
 - `flutter analyze`: No issues found!
 - `flutter build apk --debug`: Built build\app\outputs\flutter-apk\app-debug.apk
+
+## QA Manual (Evidência 4)
+
+- **Data**: 2026-09-09
+- **Dispositivo**: M2004J19C (Xiaomi)
+- **SO**: Android 12 (API 31)
+- **Resultados Observados**:
+  - T5.2 (Notificação de 2h): Disparada com sucesso.
+  - T5.3 (Notificação de 24h - Edição): Disparada com sucesso.
+  - T5.4 (Ausência pós-exclusão): Comprovada ausência de notificação fantasma após exclusão do evento.
