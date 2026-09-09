@@ -10,7 +10,7 @@
 - [x] T1.4: Atualizar o diagrama `docs/database/erd.md` pós-migration (Constitution §3).
 - [x] T1.5: Criar decorator customizado `@IsAfterDate` e atualizar DTOs (`CreateEventDto`, `UpdateEventDto`) com validações rigorosas.
 - [x] T1.6: Refatorar o `EventsService` e `EventsController` para suportar a nova estrutura.
-- [ ] T1.7: Atualizar testes automatizados do backend e garantir 80%+ de cobertura.
+- [x] T1.7: Atualizar testes automatizados do backend e garantir 80%+ de cobertura.
 
 ## Fase 2: Interface & Integração (Frontend Web)
 - [ ] T2.1: Atualizar interfaces TypeScript (`Event`) na pasta `types/`.

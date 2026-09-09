@@ -47,9 +47,10 @@ describe('EventsService', () => {
   const mockEvent = {
     id: 'event-uuid-123',
     title: 'Show no Festival de Verão',
-    date: new Date('2026-10-15T20:00:00.000Z'),
-    startTime: '19:30',
-    endTime: '22:00',
+    startsAt: new Date('2026-10-15T20:00:00.000Z'),
+    endsAt: new Date('2026-10-15T22:00:00.000Z'),
+    timezone: 'America/Sao_Paulo',
+
     type: 'Show',
     fee: new Prisma.Decimal(1500),
     location: 'Concha Acústica',
@@ -67,7 +68,9 @@ describe('EventsService', () => {
     description: 'Cachê - Show no Festival de Verão',
     amount: new Prisma.Decimal(1500),
     type: TransactionType.INCOME,
-    date: new Date('2026-10-15T20:00:00.000Z'),
+    startsAt: new Date('2026-10-15T20:00:00.000Z'),
+    endsAt: new Date('2026-10-15T22:00:00.000Z'),
+    timezone: 'America/Sao_Paulo',
     bandId: 'band-uuid-1',
     userId: 'user-uuid-1',
     eventId: 'event-uuid-123',
@@ -136,7 +139,8 @@ describe('EventsService', () => {
     it('deve criar um novo evento com sucesso quando o usuário for membro da banda', async () => {
       const dto: CreateEventDto = {
         title: 'Show no Festival de Verão',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         location: 'Concha Acústica',
         description: 'Apresentação principal do festival',
         bandId: 'band-uuid-1',
@@ -156,11 +160,12 @@ describe('EventsService', () => {
       expect(prisma.event.create).toHaveBeenCalledWith({
         data: {
           title: dto.title,
-          date: new Date(dto.date),
+          startsAt: new Date(dto.startsAt),
+          endsAt: dto.endsAt ? new Date(dto.endsAt) : undefined,
+          timezone: dto.timezone || 'America/Sao_Paulo',
           location: dto.location,
           description: dto.description,
-          startTime: undefined,
-          endTime: undefined,
+
           type: undefined,
           fee: undefined,
           status: EventStatus.PENDING,
@@ -177,12 +182,13 @@ describe('EventsService', () => {
     it('deve persistir startTime, endTime, type, fee e criar uma Transaction do tipo INCOME quando fee > 0', async () => {
       const dto: CreateEventDto = {
         title: 'Show com Cachê',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         location: 'Concha Acústica',
         bandId: 'band-uuid-1',
-        startTime: '19:30',
-        endTime: '22:00',
+
         type: 'Show',
+        endsAt: '2026-10-15T22:00:00.000Z',
         fee: 2000,
       };
 
@@ -190,8 +196,7 @@ describe('EventsService', () => {
         {
           ...mockEvent,
           title: 'Show com Cachê',
-          startTime: '19:30',
-          endTime: '22:00',
+
           type: 'Show',
           fee: new Prisma.Decimal(2000),
         };
@@ -202,11 +207,12 @@ describe('EventsService', () => {
       expect(prisma.event.create).toHaveBeenCalledWith({
         data: {
           title: dto.title,
-          date: new Date(dto.date),
+          startsAt: new Date(dto.startsAt),
+          endsAt: dto.endsAt ? new Date(dto.endsAt) : undefined,
+          timezone: dto.timezone || 'America/Sao_Paulo',
           location: dto.location,
           description: undefined,
-          startTime: '19:30',
-          endTime: '22:00',
+
           type: 'Show',
           fee: new Prisma.Decimal(2000),
           status: EventStatus.PENDING,
@@ -222,7 +228,7 @@ describe('EventsService', () => {
           description: 'Cachê - Show com Cachê',
           amount: new Prisma.Decimal(2000),
           type: TransactionType.INCOME,
-          date: eventWithFee.date,
+          date: eventWithFee.startsAt,
           bandId: 'band-uuid-1',
           userId: mockUser.userId,
           eventId: eventWithFee.id,
@@ -242,7 +248,8 @@ describe('EventsService', () => {
 
       const dto: CreateEventDto = {
         title: 'Show Proibido',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         location: 'Local',
         bandId: 'band-uuid-1',
       };
@@ -257,7 +264,8 @@ describe('EventsService', () => {
 
       const dto: CreateEventDto = {
         title: 'Show Sem Banda',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         location: 'Local',
         bandId: 'band-inexistente',
       };
@@ -274,7 +282,8 @@ describe('EventsService', () => {
 
       const dto: CreateEventDto = {
         title: 'Show Solo com Banda Pré-existente',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         location: 'Auditório',
       };
 
@@ -286,11 +295,12 @@ describe('EventsService', () => {
       expect(prisma.event.create).toHaveBeenCalledWith({
         data: {
           title: dto.title,
-          date: new Date(dto.date),
+          startsAt: new Date(dto.startsAt),
+          endsAt: dto.endsAt ? new Date(dto.endsAt) : undefined,
+          timezone: dto.timezone || 'America/Sao_Paulo',
           location: dto.location,
           description: undefined,
-          startTime: undefined,
-          endTime: undefined,
+
           type: undefined,
           fee: undefined,
           status: EventStatus.PENDING,
@@ -339,7 +349,8 @@ describe('EventsService', () => {
 
       const dto: CreateEventDto = {
         title: 'Primeiro Show Solo',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         location: 'Teatro Municipal',
       };
 
@@ -370,11 +381,12 @@ describe('EventsService', () => {
       expect(prisma.event.create).toHaveBeenCalledWith({
         data: {
           title: dto.title,
-          date: new Date(dto.date),
+          startsAt: new Date(dto.startsAt),
+          endsAt: dto.endsAt ? new Date(dto.endsAt) : undefined,
+          timezone: dto.timezone || 'America/Sao_Paulo',
           location: dto.location,
           description: undefined,
-          startTime: undefined,
-          endTime: undefined,
+
           type: undefined,
           fee: undefined,
           status: EventStatus.PENDING,
@@ -399,7 +411,7 @@ describe('EventsService', () => {
       expect(prisma.event.findMany).toHaveBeenCalledWith({
         where: { bandId: { in: ['band-uuid-1'] } },
         include: { tasks: true },
-        orderBy: { date: 'asc' },
+        orderBy: { startsAt: 'asc' },
       });
       expect(result).toEqual([mockEvent]);
     });
@@ -415,7 +427,7 @@ describe('EventsService', () => {
       expect(prisma.event.findMany).toHaveBeenCalledWith({
         where: { bandId: 'band-uuid-1' },
         include: { tasks: true },
-        orderBy: { date: 'asc' },
+        orderBy: { startsAt: 'asc' },
       });
       expect(result).toEqual([mockEvent]);
     });
@@ -425,7 +437,7 @@ describe('EventsService', () => {
 
       expect(prisma.event.findMany).toHaveBeenCalledWith({
         include: { tasks: true },
-        orderBy: { date: 'asc' },
+        orderBy: { startsAt: 'asc' },
       });
       expect(result).toEqual([mockEvent]);
     });
@@ -515,7 +527,9 @@ describe('EventsService', () => {
         description: 'Cachê - Show no Festival de Verão',
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
-        date: new Date('2026-10-15T20:00:00.000Z'),
+        startsAt: new Date('2026-10-15T20:00:00.000Z'),
+        endsAt: new Date('2026-10-15T22:00:00.000Z'),
+        timezone: 'America/Sao_Paulo',
         userId: mockUser.userId,
         bandId: mockEvent.bandId,
         eventId: mockEvent.id,
@@ -537,7 +551,7 @@ describe('EventsService', () => {
         data: {
           amount: new Prisma.Decimal(2500),
           description: `Cachê - ${mockEvent.title}`,
-          date: mockEvent.date,
+          date: mockEvent.startsAt,
           band: { connect: { id: mockEvent.bandId } },
         },
       });
@@ -557,7 +571,7 @@ describe('EventsService', () => {
           description: `Cachê - ${mockEvent.title}`,
           amount: new Prisma.Decimal(1800),
           type: TransactionType.INCOME,
-          date: mockEvent.date,
+          date: mockEvent.startsAt,
           bandId: mockEvent.bandId,
           userId: mockUser.userId,
           eventId: mockEvent.id,
@@ -571,7 +585,9 @@ describe('EventsService', () => {
         description: 'Cachê - Show no Festival de Verão',
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
-        date: new Date('2026-10-15T20:00:00.000Z'),
+        startsAt: new Date('2026-10-15T20:00:00.000Z'),
+        endsAt: new Date('2026-10-15T22:00:00.000Z'),
+        timezone: 'America/Sao_Paulo',
         userId: mockUser.userId,
         bandId: mockEvent.bandId,
         eventId: mockEvent.id,
@@ -599,7 +615,9 @@ describe('EventsService', () => {
         description: 'Cachê - Show no Festival de Verão',
         amount: new Prisma.Decimal(1000),
         type: TransactionType.INCOME,
-        date: new Date('2026-10-15T20:00:00.000Z'),
+        startsAt: new Date('2026-10-15T20:00:00.000Z'),
+        endsAt: new Date('2026-10-15T22:00:00.000Z'),
+        timezone: 'America/Sao_Paulo',
         userId: mockUser.userId,
         bandId: mockEvent.bandId,
         eventId: mockEvent.id,

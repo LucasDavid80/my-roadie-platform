@@ -69,7 +69,8 @@ describe('EventsController', () => {
     it('deve delegar a criação do evento ao EventsService', async () => {
       const dto: CreateEventDto = {
         title: 'Show no Festival de Verão',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         startTime: '19:30',
         endTime: '22:00',
         type: 'Show',
@@ -88,7 +89,8 @@ describe('EventsController', () => {
     it('deve repassar NotFoundException se a banda não for encontrada no service', async () => {
       const dto: CreateEventDto = {
         title: 'Show Sem Banda',
-        date: '2026-10-15T20:00:00.000Z',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
         location: 'Local',
         bandId: 'band-inexistente',
       };
