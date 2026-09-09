@@ -2,6 +2,7 @@ import 'package:agenda_musical/core/constants/app_colors.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:agenda_musical/presentation/widgets/new_appointment_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CommitmentCard extends StatelessWidget {
   final EventEntity event;
@@ -65,7 +66,9 @@ class CommitmentCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   _buildInfoRow(
                     Icons.schedule,
-                    "${event.startTime} - ${event.endTime}",
+                    event.endsAt != null 
+                        ? "${DateFormat('HH:mm').format(event.startsAt)} - ${DateFormat('HH:mm').format(event.endsAt!)}"
+                        : DateFormat('HH:mm').format(event.startsAt),
                   ),
                   _buildInfoRow(Icons.location_on_outlined, event.location),
                   _buildInfoRow(

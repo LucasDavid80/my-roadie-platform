@@ -24,7 +24,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
   /// No filtro _getEventsForDay, não precisa mais de DateTime.parse:
   List<EventEntity> _getEventsForDay(DateTime day) {
     return widget.events.where((event) {
-      return isSameDay(event.date, day); // Muito mais simples!
+      return isSameDay(event.startsAt, day); // Muito mais simples!
     }).toList();
   }
 

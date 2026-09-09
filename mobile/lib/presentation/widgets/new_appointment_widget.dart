@@ -25,9 +25,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
 
   // --- 2. Variáveis de Estado (Para guardar as escolhas) ---
   String _selectedType = 'Show'; // Valor inicial do dropdown
-  DateTime? _selectedDate;
-  TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
+  DateTime? _startsAt;
+  DateTime? _endsAt;
+  String _timezone = 'America/Sao_Paulo';
   bool _isLoading = false;
 
   @override
@@ -44,22 +44,10 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
 
       _notesController.text = e.notes;
       _selectedType = e.type;
-      _selectedDate = e.date;
-
-      // Converte String "HH:mm" para TimeOfDay
-      _startTime = _parseTimeOfDay(e.startTime);
-      _endTime = _parseTimeOfDay(e.endTime);
-    }
-  }
-
-  // Função auxiliar para converter String "19:30" em TimeOfDay(19, 30)
-  TimeOfDay? _parseTimeOfDay(String timeString) {
-    if (timeString == '--:--' || timeString.isEmpty) return null;
-    try {
-      final parts = timeString.split(':');
-      return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
-    } catch (e) {
-      return null;
+      
+      _startsAt = e.startsAt;
+      _endsAt = e.endsAt;
+      _timezone = e.timezone;
     }
   }
 
@@ -73,61 +61,55 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
     super.dispose();
   }
 
-  // Função auxiliar para formatar TimeOfDay no formato estrito "HH:mm"
-  String _formatTimeOfDay(TimeOfDay? time) {
-    if (time == null) return '--:--';
-    final hour = time.hour.toString().padLeft(2, '0');
-    final minute = time.minute.toString().padLeft(2, '0');
-    return '$hour:$minute';
-  }
-
-  // --- Lógica para abrir o Calendário ---
-  Future<void> _pickDate() async {
-    final DateTime? picked = await showDatePicker(
+  // --- Lógica para abrir Calendário e Relógio juntos ---
+  Future<void> _pickDateTime(bool isStart) async {
+    final current = isStart 
+        ? (_startsAt ?? DateTime.now()) 
+        : (_endsAt ?? _startsAt ?? DateTime.now());
+        
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
+      initialDate: current,
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime(2030),
       builder: (context, child) {
-        // Customiza a cor do calendário para Laranja
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(primary: AppColors.primary),
+            colorScheme: const ColorScheme.light(primary: AppColors.primary),
           ),
           child: child!,
         );
       },
     );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
-    }
-  }
 
-  // --- Lógica para abrir o Relógio ---
-  Future<void> _pickTime(bool isStart) async {
-    final initial = (isStart ? _startTime : _endTime) ?? TimeOfDay.now();
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: initial,
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(primary: AppColors.primary),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      setState(() {
-        if (isStart) {
-          _startTime = picked;
-        } else {
-          _endTime = picked;
-        }
-      });
+    if (pickedDate != null) {
+      if (!mounted) return;
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(current),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(primary: AppColors.primary),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          final newDateTime = DateTime(
+            pickedDate.year, pickedDate.month, pickedDate.day,
+            pickedTime.hour, pickedTime.minute,
+          );
+          if (isStart) {
+            _startsAt = newDateTime;
+          } else {
+            _endsAt = newDateTime;
+          }
+        });
+      }
     }
   }
 
@@ -213,7 +195,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                     ),
                     const SizedBox(height: 16),
 
-                    // TIPO E DATA
+                    // TIPO E TIMEZONE
                     Row(
                       children: [
                         // Dropdown de Tipo
@@ -275,72 +257,77 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                           ),
                         ),
                         const SizedBox(width: 12),
-
-                        // Seletor de Data (Agora clicável)
+                        // Dropdown de Timezone
                         Expanded(
                           flex: 4,
-                          child: InkWell(
-                            onTap: _pickDate, // Abre o calendário
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildLabel('Data'),
-                                const SizedBox(height: 4),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                  ),
-                                  height: 48,
-                                  decoration: _boxDecoration(),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          _selectedDate == null
-                                              ? 'Selecionar'
-                                              : DateFormat('dd/MM/yyyy').format(
-                                                  _selectedDate!,
-                                                ), // Formata a data
-                                          style: const TextStyle(
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ),
-                                      const Icon(
-                                        Icons.calendar_today_outlined,
-                                        size: 18,
-                                        color: Colors.black54,
-                                      ),
-                                    ],
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLabel('Fuso Horário'),
+                              const SizedBox(height: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                height: 48,
+                                decoration: _boxDecoration(),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: _timezone,
+                                    isExpanded: true,
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.grey,
+                                    ),
+                                    items:
+                                        [
+                                          'America/Sao_Paulo',
+                                          'America/Manaus',
+                                          'America/Recife',
+                                        ].map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value.split('/').last.replaceAll('_', ' '),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          );
+                                        }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _timezone = newValue!;
+                                      });
+                                    },
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
 
-                    // HORÁRIOS (Agora clicáveis)
+                    // HORÁRIOS
                     Row(
                       children: [
                         Expanded(
-                          child: _buildClickableTimeField(
-                            'Início',
-                            _startTime,
-                            () => _pickTime(true),
+                          child: _buildClickableDateTimeField(
+                            'Início (Obrigatório)',
+                            _startsAt,
+                            () => _pickDateTime(true),
                             key: const ValueKey('appointment_start_time_field'),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: _buildClickableTimeField(
-                            'Término',
-                            _endTime,
-                            () => _pickTime(false),
+                          child: _buildClickableDateTimeField(
+                            'Fim (Opcional)',
+                            _endsAt,
+                            () => _pickDateTime(false),
                             key: const ValueKey('appointment_end_time_field'),
                           ),
                         ),
@@ -409,13 +396,13 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                               ? null
                               : () async {
                                   if (_titleController.text.trim().isEmpty ||
-                                      _selectedDate == null) {
+                                      _startsAt == null) {
                                     ScaffoldMessenger.of(
                                       context,
                                     ).showSnackBar(
                                       const SnackBar(
                                         content: Text(
-                                          'Por favor, preencha o título e selecione uma data.',
+                                          'Por favor, preencha o título e a data de início.',
                                         ),
                                         backgroundColor: AppColors.erro,
                                       ),
@@ -434,9 +421,9 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
                                         : DateTime.now().toString(),
                                     title: _titleController.text.trim(),
                                     type: _selectedType,
-                                    date: _selectedDate!,
-                                    startTime: _formatTimeOfDay(_startTime),
-                                    endTime: _formatTimeOfDay(_endTime),
+                                    startsAt: _startsAt!,
+                                    endsAt: _endsAt,
+                                    timezone: _timezone,
                                     location: _locationController.text.trim(),
                                     fee: showsFee
                                         ? double.tryParse(
@@ -566,12 +553,13 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
     style: TextStyle(fontWeight: FontWeight.w600, color: Colors.blueGrey[700]),
   );
 
-  Widget _buildClickableTimeField(
+  Widget _buildClickableDateTimeField(
     String label,
-    TimeOfDay? time,
+    DateTime? dateTime,
     VoidCallback onTap, {
     Key? key,
   }) {
+    final formatString = dateTime != null ? DateFormat('dd/MM HH:mm').format(dateTime) : 'Selecionar';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -589,7 +577,7 @@ class _NewAppointmentWidgetState extends State<NewAppointmentWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _formatTimeOfDay(time),
+                  formatString,
                   style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 14,

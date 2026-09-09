@@ -24,7 +24,7 @@ class CommitmentsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Ordenação (Boa prática: fazer uma cópia antes de ordenar para não mutar a original)
     final sortedCommitments = [...commitments]
-      ..sort((a, b) => a.date.compareTo(b.date));
+      ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,14 +102,14 @@ class CommitmentsWidget extends StatelessWidget {
             final commitment = sortedCommitments[index];
             bool showHeader =
                 index == 0 ||
-                commitment.date != sortedCommitments[index - 1].date;
+                !_isSameDay(commitment.startsAt, sortedCommitments[index - 1].startsAt);
 
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (showHeader) _buildDateHeader(commitment.date),
+                  if (showHeader) _buildDateHeader(commitment.startsAt),
                   CommitmentCard(
                     event: commitment,
                     onConfirm: onConfirm,
@@ -122,6 +122,10 @@ class CommitmentsWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   // O método que faltava para o seu código compilar

@@ -62,14 +62,14 @@ class HistoryScreen extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     final commitment = pastEvents[index];
                     final bool showHeader = index == 0 ||
-                        !_isSameDay(commitment.date, pastEvents[index - 1].date);
+                        !_isSameDay(commitment.startsAt, pastEvents[index - 1].startsAt);
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (showHeader) _buildDateHeader(commitment.date),
+                          if (showHeader) _buildDateHeader(commitment.startsAt),
                           CommitmentCard(
                             event: commitment,
                             onConfirm: handleOnConfirm,
