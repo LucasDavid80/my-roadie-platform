@@ -5,13 +5,34 @@ import 'package:agenda_musical/presentation/controllers/agenda_controller.dart';
 import 'package:agenda_musical/domain/interfaces/i_agenda_repository.dart';
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:agenda_musical/services/notification_service.dart';
+
+import 'package:timezone/timezone.dart' as tz_local;
+
 class MockAgendaRepository extends Mock implements IAgendaRepository {}
+class MockFlutterLocalNotificationsPlugin extends Mock implements FlutterLocalNotificationsPlugin {}
 
 void main() {
   late ProviderContainer container;
   late MockAgendaRepository mockAgendaRepository;
 
   setUpAll(() {
+    tz.initializeTimeZones();
+    registerFallbackValue(tz_local.TZDateTime.now(tz_local.local));
+    registerFallbackValue(const NotificationDetails());
+    registerFallbackValue(AndroidScheduleMode.alarmClock);
+    registerFallbackValue(UILocalNotificationDateInterpretation.absoluteTime);
+    final mockPlugin = MockFlutterLocalNotificationsPlugin();
+    when(() => mockPlugin.cancel(any())).thenAnswer((_) async {});
+    when(() => mockPlugin.zonedSchedule(
+      any(), any(), any(), any(), any(),
+      androidScheduleMode: any(named: 'androidScheduleMode'),
+      uiLocalNotificationDateInterpretation: any(named: 'uiLocalNotificationDateInterpretation'),
+      payload: any(named: 'payload'),
+    )).thenAnswer((_) async {});
+    NotificationService.setMockPlugin(mockPlugin);
     registerFallbackValue(
       EventEntity(
         id: '1',

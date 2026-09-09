@@ -7,9 +7,23 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:agenda_musical/core/router.dart';
 import 'package:agenda_musical/core/utils/app_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz_env;
+import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
+  
+  try {
+    final currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz_env.setLocalLocation(tz_env.getLocation(currentTimeZone.identifier));
+  } catch (e) {
+    AppLogger.error('Erro ao buscar fuso horário local', e);
+  }
+
+  await NotificationService.instance.initialize();
   await initializeDateFormatting('pt_BR', null);
 
   if (AppConfig.isConfigured) {

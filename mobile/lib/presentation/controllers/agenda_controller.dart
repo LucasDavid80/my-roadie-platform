@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/event_entity.dart';
 import '../../../domain/interfaces/i_agenda_repository.dart';
 import '../../../data/repositories/agenda_repository_impl.dart';
+import '../../../services/notification_service.dart';
 import 'auth_controller.dart';
 
 // Providers para injeção do repositório de agenda
@@ -46,8 +47,12 @@ class AgendaController extends Notifier<List<EventEntity>> {
             else
               e,
         ];
+        await NotificationService.instance
+            .scheduleEventReminders(savedEvent);
       } else {
         state = [...state, savedEvent];
+        await NotificationService.instance
+            .scheduleEventReminders(savedEvent);
       }
     } catch (e) {
       rethrow;
@@ -58,6 +63,7 @@ class AgendaController extends Notifier<List<EventEntity>> {
     try {
       await _repository.deleteEvent(id);
       state = state.where((e) => e.id != id).toList();
+      await NotificationService.instance.cancelEventReminders(id);
     } catch (e) {
       // Trata erros de forma segura
     }

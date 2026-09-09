@@ -200,7 +200,19 @@
 - Impacto esperado: alto (valor imediato para os usuários que já utilizam a agenda do app em produção)
 - Depende de: Extensão do Modelo de Eventos (spec 015)
 - Release: v1.1.1
-- Status: ideia
+- Status: fazendo (specs/023-lembretes-locais-mobile/)
+
+---
+
+### Release v1.1.2 — Padronização de Horários e Timestamps da Agenda
+> Objetivo: Substituir a modelagem híbrida de horários (`date: DateTime` + `startTime: String` + `endTime: String`) por timestamps completos (`startsAt: DateTime` e `endsAt: DateTime?`), eliminando fragilidades de fuso horário (UTC vs local), viabilizando eventos que ultrapassam a meia-noite (madrugada) e habilitando consultas nativas de sobreposição de agenda no PostgreSQL.
+
+#### Padronização de Horários com Timestamps (startsAt / endsAt)
+- Intenção: Migrar a persistência de horários de eventos para timestamps completos com fuso horário (`startsAt: DateTime` e `endsAt: DateTime?`), com migration no Prisma para conversão dos dados existentes e atualização de contratos no NestJS, Next.js e Flutter.
+- Impacto esperado: alto (integridade de dados, consistência de timezone, facilidade de ordenação e suporte nativo a eventos na madrugada)
+- Depende de: Lembretes Locais de Eventos Próximos na Agenda (spec 023)
+- Release: v1.1.2
+- Status: priorizado (próxima spec: specs/024-padronizacao-horarios-timestamp/)
 
 ---
 
