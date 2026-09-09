@@ -9,7 +9,7 @@
 - [x] T1.3: Atualizar o `schema.prisma` tornando `startsAt` e `timezone` `NOT NULL` e removendo `date`, `startTime`, `endTime`, seguida de nova migration.
 - [x] T1.4: Atualizar o diagrama `docs/database/erd.md` pós-migration (Constitution §3).
 - [x] T1.5: Criar decorator customizado `@IsAfterDate` e atualizar DTOs (`CreateEventDto`, `UpdateEventDto`) com validações rigorosas.
-- [ ] T1.6: Refatorar o `EventsService` e `EventsController` para suportar a nova estrutura.
+- [x] T1.6: Refatorar o `EventsService` e `EventsController` para suportar a nova estrutura.
 - [ ] T1.7: Atualizar testes automatizados do backend e garantir 80%+ de cobertura.
 
 ## Fase 2: Interface & Integração (Frontend Web)

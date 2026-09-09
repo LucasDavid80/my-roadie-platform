@@ -91,11 +91,13 @@ export class EventsService {
     const createdEvent = await this.prisma.event.create({
       data: {
         title: createEventDto.title,
-        date: new Date(createEventDto.date),
+        startsAt: new Date(createEventDto.startsAt),
+        endsAt: createEventDto.endsAt
+          ? new Date(createEventDto.endsAt)
+          : undefined,
+        timezone: createEventDto.timezone,
         location: createEventDto.location,
         description: createEventDto.description,
-        startTime: createEventDto.startTime,
-        endTime: createEventDto.endTime,
         type: createEventDto.type,
         fee:
           createEventDto.fee !== undefined
@@ -116,7 +118,7 @@ export class EventsService {
           description: `Cachê - ${createdEvent.title}`,
           amount: new Prisma.Decimal(createEventDto.fee),
           type: TransactionType.INCOME,
-          date: createdEvent.date,
+          date: createdEvent.startsAt,
           bandId: resolvedBandId,
           userId,
           eventId: createdEvent.id,
@@ -136,14 +138,14 @@ export class EventsService {
       return await this.prisma.event.findMany({
         where: { bandId },
         include: { tasks: true },
-        orderBy: { date: 'asc' },
+        orderBy: { startsAt: 'asc' },
       });
     }
 
     if (user.role === Role.ADMIN) {
       return await this.prisma.event.findMany({
         include: { tasks: true },
-        orderBy: { date: 'asc' },
+        orderBy: { startsAt: 'asc' },
       });
     }
 
@@ -153,7 +155,7 @@ export class EventsService {
         bandId: { in: bandIds },
       },
       include: { tasks: true },
-      orderBy: { date: 'asc' },
+      orderBy: { startsAt: 'asc' },
     });
   }
 
@@ -221,20 +223,22 @@ export class EventsService {
     if (updateEventDto.title !== undefined) {
       data.title = updateEventDto.title;
     }
-    if (updateEventDto.date !== undefined) {
-      data.date = new Date(updateEventDto.date);
+    if (updateEventDto.startsAt !== undefined) {
+      data.startsAt = new Date(updateEventDto.startsAt);
+    }
+    if (updateEventDto.endsAt !== undefined) {
+      data.endsAt = updateEventDto.endsAt
+        ? new Date(updateEventDto.endsAt)
+        : null;
+    }
+    if (updateEventDto.timezone !== undefined) {
+      data.timezone = updateEventDto.timezone;
     }
     if (updateEventDto.location !== undefined) {
       data.location = updateEventDto.location;
     }
     if (updateEventDto.description !== undefined) {
       data.description = updateEventDto.description;
-    }
-    if (updateEventDto.startTime !== undefined) {
-      data.startTime = updateEventDto.startTime;
-    }
-    if (updateEventDto.endTime !== undefined) {
-      data.endTime = updateEventDto.endTime;
     }
     if (updateEventDto.type !== undefined) {
       data.type = updateEventDto.type;
@@ -275,7 +279,7 @@ export class EventsService {
             data: {
               amount: new Prisma.Decimal(updateEventDto.fee),
               description: `Cachê - ${updatedEvent.title}`,
-              date: updatedEvent.date,
+              date: updatedEvent.startsAt,
               band: { connect: { id: updatedEvent.bandId } },
             },
           });
@@ -285,7 +289,7 @@ export class EventsService {
               description: `Cachê - ${updatedEvent.title}`,
               amount: new Prisma.Decimal(updateEventDto.fee),
               type: TransactionType.INCOME,
-              date: updatedEvent.date,
+              date: updatedEvent.startsAt,
               bandId: updatedEvent.bandId,
               userId,
               eventId: updatedEvent.id,
@@ -302,8 +306,8 @@ export class EventsService {
       if (updateEventDto.title !== undefined) {
         transactionData.description = `Cachê - ${updatedEvent.title}`;
       }
-      if (updateEventDto.date !== undefined) {
-        transactionData.date = updatedEvent.date;
+      if (updateEventDto.startsAt !== undefined) {
+        transactionData.date = updatedEvent.startsAt;
       }
       if (updateEventDto.bandId !== undefined) {
         transactionData.band = { connect: { id: updatedEvent.bandId } };
