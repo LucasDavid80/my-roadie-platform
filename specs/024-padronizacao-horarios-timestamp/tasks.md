@@ -5,7 +5,7 @@
 
 ## Fase 1: Implementação (Backend / Prisma)
 - [x] T1.1: Atualizar o `schema.prisma` adicionando as colunas `startsAt`, `endsAt` e `timezone` (nullable inicialmente).
-- [ ] T1.2: Criar e rodar migration customizada de backfill para preencher os novos campos nos dados legados, inferindo o fuso.
+- [x] T1.2: Criar e rodar migration customizada de backfill para preencher os novos campos nos dados legados, inferindo o fuso.
 - [ ] T1.3: Atualizar o `schema.prisma` tornando `startsAt` e `timezone` `NOT NULL` e removendo `date`, `startTime`, `endTime`, seguida de nova migration.
 - [ ] T1.4: Atualizar o diagrama `docs/database/erd.md` pós-migration (Constitution §3).
 - [ ] T1.5: Criar decorator customizado `@IsAfterDate` e atualizar DTOs (`CreateEventDto`, `UpdateEventDto`) com validações rigorosas.
