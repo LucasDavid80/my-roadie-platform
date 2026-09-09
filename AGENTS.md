@@ -36,6 +36,7 @@ Ver `constitution.md` §1 (stack) e `docs/architecture/*.md` para comandos de ca
 
 ## Fluxo de Git
 
+- **CRÍTICO: Verificação Documental Pré-Push:** Sempre antes de qualquer `git push` para qualquer branch, você deve, obrigatoriamente, conferir se os arquivos da pasta da spec que está sendo feita (`spec.md`, `plan.md`, `tasks.md`) e o `backlog.md` estão totalmente corretos, coerentes com a realidade do código atual e com seus status devidamente atualizados.
 - **Nunca** rode `git push` sem confirmação explícita minha na mensagem atual.
   Commits locais são permitidos pelas regras abaixo, mas subir pro remoto (push) exige minha autorização a cada vez.
 - **Nunca** commite diretamente na branch `main`/`master`. Toda mudança deve ir em uma branch dedicada.
