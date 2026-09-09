@@ -200,7 +200,7 @@
 - Impacto esperado: alto (valor imediato para os usuários que já utilizam a agenda do app em produção)
 - Depende de: Extensão do Modelo de Eventos (spec 015)
 - Release: v1.1.1
-- Status: fazendo (specs/023-lembretes-locais-mobile/)
+- Status: concluído (specs/023-lembretes-locais-mobile/)
 
 ---
 
@@ -212,7 +212,7 @@
 - Impacto esperado: alto (integridade de dados, consistência de timezone, facilidade de ordenação e suporte nativo a eventos na madrugada)
 - Depende de: Lembretes Locais de Eventos Próximos na Agenda (spec 023)
 - Release: v1.1.2
-- Status: priorizado (próxima spec: specs/024-padronizacao-horarios-timestamp/)
+- Status: fazendo (specs/024-padronizacao-horarios-timestamp/)
 
 ---
 
