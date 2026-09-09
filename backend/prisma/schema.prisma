@@ -59,6 +59,9 @@ model Event {
   date         DateTime
   startTime    String?
   endTime      String?
+  startsAt     DateTime?
+  endsAt       DateTime?
+  timezone     String?
   type         String?       @default("Show")
   fee          Decimal?      @db.Decimal(10, 2)
   location     String
