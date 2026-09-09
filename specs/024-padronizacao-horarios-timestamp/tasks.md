@@ -13,10 +13,10 @@
 - [x] T1.7: Atualizar testes automatizados do backend e garantir 80%+ de cobertura.
 
 ## Fase 2: Interface & Integração (Frontend Web)
-- [ ] T2.1: Atualizar interfaces TypeScript (`Event`) na pasta `types/`.
-- [ ] T2.2: Refatorar os formulários de criação/edição de evento para adotar `startsAt` e `endsAt`.
-- [ ] T2.3: Atualizar listagens de eventos, agendas e componentes que renderizam datas no painel web.
-- [ ] T2.4: Rodar suíte de testes web para garantir integridade.
+- [x] T2.1: Atualizar interfaces TypeScript (`Event`) na pasta `types/`.
+- [x] T2.2: Refatorar os formulários de criação/edição de evento para adotar `startsAt` e `endsAt`.
+- [x] T2.3: Atualizar listagens de eventos, agendas e componentes que renderizam datas no painel web.
+- [x] T2.4: Rodar suíte de testes web para garantir integridade.
 
 ## Fase 3: Interface & Integração (Mobile)
 - [ ] T3.1: Atualizar `EventEntity`, `EventModel` e seus métodos de serialização (`fromMap`, `toMap`, `toCreatePayload`).
