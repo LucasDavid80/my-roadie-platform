@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/event_entity.dart';
 import '../../../domain/interfaces/i_agenda_repository.dart';
 import '../../../data/repositories/agenda_repository_impl.dart';
-import '../../../domain/models/event_model.dart';
 import '../../../services/notification_service.dart';
 import 'auth_controller.dart';
 
@@ -49,11 +48,11 @@ class AgendaController extends Notifier<List<EventEntity>> {
               e,
         ];
         await NotificationService.instance
-            .scheduleEventReminders(savedEvent as EventModel);
+            .scheduleEventReminders(savedEvent);
       } else {
         state = [...state, savedEvent];
         await NotificationService.instance
-            .scheduleEventReminders(savedEvent as EventModel);
+            .scheduleEventReminders(savedEvent);
       }
     } catch (e) {
       rethrow;

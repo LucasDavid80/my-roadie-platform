@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-import '../domain/models/event_model.dart';
+import '../domain/entities/event_entity.dart';
 
 /// Servico singleton responsavel por toda a logica de notificacoes locais.
 ///
@@ -65,13 +65,13 @@ class NotificationService {
         ?.createNotificationChannel(channel);
   }
 
-  /// Agenda dois lembretes para o evento: 24h e 2h antes do [EventModel.startTime].
+  /// Agenda dois lembretes para o evento: 24h e 2h antes do [EventEntity.startTime].
   ///
-  /// - Ignora silenciosamente se [EventModel.startTime] for vazio ou invalido.
+  /// - Ignora silenciosamente se [EventEntity.startTime] for vazio ou invalido.
   /// - Ignora silenciosamente se o horario calculado ja passou.
   /// - Cancela lembretes anteriores do mesmo evento antes de agendar os novos,
   ///   garantindo que edicoes nao gerem notificacoes duplicadas.
-  Future<void> scheduleEventReminders(EventModel event) async {
+  Future<void> scheduleEventReminders(EventEntity event) async {
     if (event.startTime.isEmpty) return;
 
     final List<String> parts = event.startTime.split(':');

@@ -15,7 +15,12 @@
 ## Fase 2: Integração ao AgendaController
 
 - [x] T2.1: Chamar `NotificationService.scheduleEventReminders(event)` ao final do fluxo de criação de evento em `agenda_controller.dart`
-- [x] T2.2: Chamar `NotificationService.cancelEventReminders(eventId)` + `scheduleEventReminders(event)` ao editar um evento (cancelar antigos e agendar novos)
+- [x] T2.2: Ao editar um evento, `scheduleEventReminders(event)` é chamado
+  no `AgendaController`; o cancelamento dos agendamentos anteriores ocorre
+  internamente dentro do serviço (primeira instrução de
+  `scheduleEventReminders` chama `cancelEventReminders`), não via chamada
+  separada no controller. O comportamento final é equivalente ao descrito na
+  task, mas a implementação difere da sequência literal especificada.
 - [x] T2.3: Chamar `NotificationService.cancelEventReminders(eventId)` ao excluir um evento em `agenda_controller.dart`
 
 ## Fase 3: Testes Automatizados & Qualidade
@@ -40,8 +45,39 @@
 
 ## Checklist de Fechamento (preencher atomicamente com os critérios de `spec.md`)
 
-- [x] Todas as fases acima concluídas e commitadas
+- [ ] Todas as fases acima concluídas e commitadas
 - [x] Cobertura >= 80% verificada no `NotificationService`
-- [x] App compila sem erros (Android debug)
-- [x] Todos os critérios de sucesso de `spec.md` marcados `[x]`
-- [x] Solicitação de `git push` e Pull Request enviada ao usuário para aprovação
+- [ ] App compila sem erros (Android debug)
+- [ ] Todos os critérios de sucesso de `spec.md` marcados `[x]`
+- [ ] Solicitação de `git push` e Pull Request enviada ao usuário para aprovação
+
+### Pendências identificadas na verificação do fechamento
+
+- [x] Corrigir o cast inseguro `savedEvent as EventModel` em
+  `AgendaController.addOrUpdateEvent` (linhas 52 e 56): se o repositório
+  retornar `EventEntity` em vez de `EventModel`, a chamada a
+  `scheduleEventReminders` lança `CastError` em runtime e os lembretes não
+  são agendados. Causa-raiz: `IAgendaRepository.saveEvent` declara retorno
+  `Future<EventEntity>`, mas a implementação concreta retorna `EventModel`.
+  Solução: fazer `EventModel` estender ou implementar `EventEntity`, ou
+  alterar o contrato da interface para `Future<EventModel>`.
+- [ ] Remover os cinco `print()` introduzidos no commit `252fe73` em
+  `mobile/lib/services/notification_service.dart` (linhas 96-98, 106, 124).
+  Esses prints foram adicionados como debug de QA e não foram revertidos.
+  Causam cinco avisos `avoid_print` no `flutter analyze`, violando o
+  critério T4.1. Alternativa: substituir por `AppLogger.info(...)` com
+  proteção `kDebugMode`, padrão já estabelecido em
+  `mobile/lib/core/utils/app_logger.dart`.
+- [ ] Reexecutar `flutter build apk --debug` e `flutter analyze` após as
+  correções das inconsistências 1, 2 e 3, e registrar o resultado (saída
+  do terminal ou log de CI) como evidência no fechamento definitivo da spec.
+- [ ] T5.2–T5.4 (reexecução): Realizar novo ciclo de QA manual em
+  dispositivo físico ou emulador após as correções das inconsistências
+  1, 2 e 3. Documentar aqui: data, dispositivo, versão do Android e
+  resultado observado (notificação de 2h, notificação de 24h e ausência de
+  notificação fantasma após exclusão do evento).
+- [ ] Commitar as alterações pendentes no worktree
+  (`mobile/coverage/lcov.info`, `specs/023-lembretes-locais-mobile/tasks.md`)
+  seguindo o padrão Conventional Commits antes de solicitar o Push/PR.
+- [ ] Solicitar autorização explícita do usuário para executar `git push`
+  e abrir o Pull Request (pendente — não realizado até o fechamento desta auditoria).
