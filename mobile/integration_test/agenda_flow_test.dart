@@ -61,7 +61,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // 5. Seleciona a data no DatePicker
-        final dateSelector = find.text('Selecionar');
+        final dateSelector = find.descendant(
+          of: find.byKey(const ValueKey('appointment_start_time_field')),
+          matching: find.text('Selecionar'),
+        );
         expect(dateSelector, findsOneWidget);
         await tester.tap(dateSelector);
         await tester.pumpAndSettle();
@@ -83,11 +86,26 @@ void main() {
         await tester.enterText(feeField, '3500,00');
         await tester.pumpAndSettle();
 
-        // 7. Clica no botão de criar compromisso
+        // Fecha o teclado se estiver aberto para liberar a área de toque
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pumpAndSettle();
+
+        // 7. Garante que o botão está visível rolando dentro do modal e clica
         final confirmButton = find.byKey(
           const ValueKey('appointment_confirm_button'),
         );
         expect(confirmButton, findsOneWidget);
+        await tester.scrollUntilVisible(
+          confirmButton,
+          50.0,
+          scrollable: find
+              .descendant(
+                of: find.byType(NewAppointmentWidget),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+        );
+        await tester.pumpAndSettle();
         await tester.tap(confirmButton);
         await tester.pumpAndSettle();
 
@@ -150,11 +168,22 @@ void main() {
         await tester.enterText(feeField, '4000,00');
         await tester.pumpAndSettle();
 
-        // 5. Clica no botão de salvar/confirmar alterações
+        // 5. Garante que o botão está visível e clica para salvar as alterações
         final confirmButton = find.byKey(
           const ValueKey('appointment_confirm_button'),
         );
         expect(confirmButton, findsOneWidget);
+        await tester.scrollUntilVisible(
+          confirmButton,
+          50.0,
+          scrollable: find
+              .descendant(
+                of: find.byType(NewAppointmentWidget),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+        );
+        await tester.pumpAndSettle();
         await tester.tap(confirmButton);
         await tester.pumpAndSettle();
 
