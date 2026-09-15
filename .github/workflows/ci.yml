@@ -310,7 +310,6 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
           cache: 'gradle'
-      - uses: android-actions/setup-android@v3
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'

@@ -13,9 +13,9 @@ export class CreateUserDto {
   @IsOptional()
   name?: string;
 
-  @IsEnum(['ADMIN', 'MUSICIAN', 'ROADIE'], { message: 'Perfil inválido' })
+  @IsEnum(['MUSICIAN', 'ROADIE'], { message: 'Perfil inválido ou não permitido' })
   @IsOptional()
-  role?: 'ADMIN' | 'MUSICIAN' | 'ROADIE';
+  role?: 'MUSICIAN' | 'ROADIE';
 
   @IsString()
   @IsOptional()
