@@ -27,14 +27,17 @@
 > **Nota de Atomicidade (DevLog):** A antiga task T3.5, que cobria a adequação de toda a suíte de testes de uma só vez, mostrou-se ampla demais. Para preservar o princípio de **atomicidade** e facilitar a depuração (isolando falhas lógicas de falhas de UI), ela foi dividida nas subtarefas abaixo.
 
 - [x] T3.5.1: Ajustar erros de compilação na suíte de testes do mobile (substituição em massa de propriedades apagadas).
-- [ ] T3.5.2: Corrigir falhas residuais de testes de unidade e serviços (ex: `remote_datasource_test`, `notification_service_test`).
-- [ ] T3.5.3: Corrigir falhas residuais de testes de widget de agendamento (ex: `new_appointment_widget_test`).
-- [ ] T3.5.4: Rodar a suíte final no mobile validando os 80% de cobertura e confirmar aprovação geral.
+- [x] T3.5.2: Corrigir falhas residuais de testes de unidade e serviços (ex: `remote_datasource_test`, `notification_service_test`).
+- [x] T3.5.3: Corrigir falhas residuais de testes de widget de agendamento (ex: `new_appointment_widget_test`).
+- [x] T3.5.4: Rodar a suíte final no mobile validando os 80% de cobertura e confirmar aprovação geral.
 
-## Fase 4: Testes em Dispositivo Físico
-- [ ] T4.1: Testar o aplicativo alterando manualmente o fuso horário (timezone) nas configurações do dispositivo físico para garantir que os eventos ajustam sua exibição (`startsAt` e `endsAt`) corretamente.
-- [ ] T4.2: Validar o agendamento e recebimento das notificações locais (24h e 2h antes) em background real no hardware, já que o gerenciamento de energia e alarms em simuladores difere do ambiente real.
-- [ ] T4.3: Realizar testes de transição de data com o dispositivo físico, mantendo o app em background durante a virada da madrugada.
+## Fase 4: Testes Manuais (Emulador e Dispositivo Físico)
+- [x] T4.1: (Emulador) Testar o aplicativo alterando o fuso horário (timezone) nas configurações do emulador para garantir que os eventos ajustam sua exibição (`startsAt` e `endsAt`) corretamente.
+- [x] T4.2: (Emulador) Validar o agendamento e recebimento das notificações locais (24h e 2h antes) simulando as passagens de tempo.
+- [ ] T4.3: (Emulador) Realizar testes de transição de data com o emulador, simulando a virada da madrugada.
+- [ ] T4.4: (Físico) Testar o aplicativo alterando manualmente o fuso horário (timezone) nas configurações do dispositivo físico.
+- [ ] T4.5: (Físico) Validar o agendamento e recebimento das notificações locais em background real no hardware.
+- [ ] T4.6: (Físico) Realizar testes de transição de data com o dispositivo físico, mantendo o app em background durante a virada da madrugada.
 
 ## Fase 5: Fechamento & Sincronização
 - [ ] T5.1: Re-rodar os testes E2E do sistema.
