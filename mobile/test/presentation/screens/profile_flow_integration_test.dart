@@ -1,3 +1,4 @@
+
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:agenda_musical/domain/entities/user_entity.dart';
 import 'package:agenda_musical/domain/interfaces/i_agenda_repository.dart';
@@ -36,9 +37,9 @@ void main() {
         id: '1',
         title: 'Test Event',
         type: 'Show',
-        date: DateTime(2026, 7, 16),
-        startTime: '10:00',
-        endTime: '12:00',
+        startsAt: DateTime(2026, 7, 16),
+        timezone: 'America/Sao_Paulo',
+        endsAt: null,
         location: 'Test Location',
         fee: 100.0,
       ),

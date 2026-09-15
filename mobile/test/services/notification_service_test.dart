@@ -28,14 +28,14 @@ void main() {
     service = NotificationService.instance;
   });
 
-  EventModel createEvent({required String id, required String startTime, required DateTime date}) {
+  EventModel createEvent({required String id, required DateTime date}) {
     return EventModel(
       id: id,
       title: 'Teste',
       type: 'Show',
-      date: date,
-      startTime: startTime,
-      endTime: '',
+      startsAt: date,
+      timezone: 'America/Sao_Paulo',
+      endsAt: null,
       location: 'Local',
       fee: 0.0,
       notes: '',
@@ -43,7 +43,7 @@ void main() {
   }
 
   group('NotificationService Tests -', () {
-    test('T-U1: scheduleEventReminders agenda 2 notificacoes quando startTime eh futuro (> 24h)', () async {
+    test('T-U1: scheduleEventReminders agenda 2 notificacoes quando startsAt eh futuro (> 24h)', () async {
       // Setup
       when(() => mockPlugin.cancel(any())).thenAnswer((_) async {});
       when(() => mockPlugin.zonedSchedule(
@@ -56,9 +56,8 @@ void main() {
       final now = DateTime.now();
       // Future date > 24h (e.g. 2 days ahead)
       final futureDate = now.add(const Duration(days: 2));
-      final startTimeStr = '${futureDate.hour.toString().padLeft(2, '0')}:${futureDate.minute.toString().padLeft(2, '0')}';
       
-      final event = createEvent(id: 'event_1', startTime: startTimeStr, date: futureDate);
+      final event = createEvent(id: 'event_1', date: futureDate);
 
       // Act
       await service.scheduleEventReminders(event);
@@ -90,7 +89,7 @@ void main() {
       )).called(1);
     });
 
-    test('T-U2: scheduleEventReminders agenda apenas 1 notificacao quando startTime esta entre 2h e 24h no futuro', () async {
+    test('T-U2: scheduleEventReminders agenda apenas 1 notificacao quando startsAt esta entre 2h e 24h no futuro', () async {
       when(() => mockPlugin.cancel(any())).thenAnswer((_) async {});
       when(() => mockPlugin.zonedSchedule(
         any(), any(), any(), any(), any(),
@@ -102,9 +101,8 @@ void main() {
       final now = DateTime.now();
       // Future date between 2h and 24h (e.g. 10 hours ahead)
       final futureDate = now.add(const Duration(hours: 10));
-      final startTimeStr = '${futureDate.hour.toString().padLeft(2, '0')}:${futureDate.minute.toString().padLeft(2, '0')}';
       
-      final event = createEvent(id: 'event_2', startTime: startTimeStr, date: futureDate);
+      final event = createEvent(id: 'event_2', date: futureDate);
 
       // Act
       await service.scheduleEventReminders(event);
@@ -138,15 +136,14 @@ void main() {
       )).called(1);
     });
 
-    test('T-U3: scheduleEventReminders nao agenda nada quando startTime ja passou', () async {
+    test('T-U3: scheduleEventReminders nao agenda nada quando startsAt ja passou', () async {
       when(() => mockPlugin.cancel(any())).thenAnswer((_) async {});
 
       final now = DateTime.now();
       // Past date
       final pastDate = now.subtract(const Duration(hours: 10));
-      final startTimeStr = '${pastDate.hour.toString().padLeft(2, '0')}:${pastDate.minute.toString().padLeft(2, '0')}';
       
-      final event = createEvent(id: 'event_3', startTime: startTimeStr, date: pastDate);
+      final event = createEvent(id: 'event_3', date: pastDate);
 
       // Act
       await service.scheduleEventReminders(event);
@@ -163,24 +160,7 @@ void main() {
       ));
     });
 
-    test('T-U4: scheduleEventReminders nao agenda nada quando startTime e vazio/nulo', () async {
-      when(() => mockPlugin.cancel(any())).thenAnswer((_) async {});
-
-      final now = DateTime.now();
-      final event = createEvent(id: 'event_4', startTime: '', date: now);
-
-      // Act
-      await service.scheduleEventReminders(event);
-
-      // Assert
-      verifyNever(() => mockPlugin.cancel(any()));
-      verifyNever(() => mockPlugin.zonedSchedule(
-        any(), any(), any(), any(), any(),
-        androidScheduleMode: any(named: 'androidScheduleMode'),
-        uiLocalNotificationDateInterpretation: any(named: 'uiLocalNotificationDateInterpretation'),
-        payload: any(named: 'payload'),
-      ));
-    });
+    
 
     test('T-U5: cancelEventReminders chama cancel com os dois IDs derivados do eventId', () async {
       when(() => mockPlugin.cancel(any())).thenAnswer((_) async {});

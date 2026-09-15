@@ -1,3 +1,4 @@
+
 import 'package:agenda_musical/domain/entities/event_entity.dart';
 import 'package:agenda_musical/presentation/screens/principal/widgets/commitment_card.dart';
 import 'package:agenda_musical/presentation/screens/principal/widgets/commitments_widget.dart';
@@ -39,9 +40,9 @@ void main() {
         id: '1',
         title: 'Show 1',
         type: 'Show',
-        date: DateTime.now(),
-        startTime: '20:00',
-        endTime: '22:00',
+        startsAt: DateTime.now(),
+        timezone: 'America/Sao_Paulo',
+        endsAt: null,
         location: 'Local 1',
         fee: 500.0,
         notes: '',
@@ -50,9 +51,9 @@ void main() {
         id: '2',
         title: 'Show 2',
         type: 'Ensaio',
-        date: DateTime.now(),
-        startTime: '14:00',
-        endTime: '16:00',
+        startsAt: DateTime.now(),
+        timezone: 'America/Sao_Paulo',
+        endsAt: null,
         location: 'Local 2',
         fee: 0.0,
         notes: '',

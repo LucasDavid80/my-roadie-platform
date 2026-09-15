@@ -106,7 +106,7 @@ void main() {
               .first,
         );
         await tester.pumpAndSettle();
-        await tester.tap(confirmButton);
+        await tester.tap(confirmButton, warnIfMissed: false);
         await tester.pumpAndSettle();
 
         // 8. Valida que o modal fechou e o novo card está renderizado na lista da agenda
@@ -184,7 +184,7 @@ void main() {
               .first,
         );
         await tester.pumpAndSettle();
-        await tester.tap(confirmButton);
+        await tester.tap(confirmButton, warnIfMissed: false);
         await tester.pumpAndSettle();
 
         // 6. Valida que o modal fechou e a listagem reflete os novos dados

@@ -30,7 +30,7 @@ void main() {
 
     // Como o título está vazio, o onConfirm não deve ser chamado e o SnackBar deve ser exibido
     expect(confirmed, isFalse);
-    expect(find.text('Por favor, preencha o título e selecione uma data.'), findsOneWidget);
+    expect(find.text('Por favor, preencha o título e a data de início.'), findsOneWidget);
   });
 
   testWidgets('Should show error SnackBar and keep form open with input data when onConfirm throws exception', (WidgetTester tester) async {
@@ -38,9 +38,9 @@ void main() {
       id: '123',
       title: 'Show Antigo',
       type: 'Ensaio',
-      date: DateTime(2026, 5, 25),
-      startTime: '14:00',
-      endTime: '16:00',
+      startsAt: DateTime(2026, 5, 25),
+      timezone: 'America/Sao_Paulo',
+      endsAt: null,
       location: 'Estúdio X',
       fee: 200.0,
       notes: 'Levar cabos',
@@ -95,9 +95,9 @@ void main() {
       id: '123',
       title: 'Show Antigo',
       type: 'Ensaio',
-      date: DateTime(2026, 5, 25),
-      startTime: '14:00',
-      endTime: '16:00',
+      startsAt: DateTime(2026, 5, 25),
+      timezone: 'America/Sao_Paulo',
+      endsAt: null,
       location: 'Estúdio X',
       fee: 200.0,
       notes: 'Levar cabos',
@@ -149,9 +149,9 @@ void main() {
       id: '123',
       title: 'Show Antigo',
       type: 'Show',
-      date: DateTime(2026, 5, 25),
-      startTime: '14:00',
-      endTime: '16:00',
+      startsAt: DateTime(2026, 5, 25),
+      timezone: 'America/Sao_Paulo',
+      endsAt: null,
       location: 'Estúdio X',
       fee: 200.0,
       notes: 'Levar cabos',
@@ -175,9 +175,9 @@ void main() {
       id: '124',
       title: 'Ensaio Geral',
       type: 'Ensaio',
-      date: DateTime(2026, 5, 25),
-      startTime: '14:00',
-      endTime: '16:00',
+      startsAt: DateTime(2026, 5, 25),
+      timezone: 'America/Sao_Paulo',
+      endsAt: null,
       location: 'Estúdio X',
       fee: 0.0,
       notes: 'Levar partituras',
@@ -210,7 +210,11 @@ void main() {
 
     // Preenche título e data
     await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Ensaio de Domingo');
-    await tester.tap(find.text('Selecionar'));
+    final selBtn = find.text('Selecionar').first;
+    await tester.ensureVisible(selBtn);
+    await tester.tap(selBtn);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
@@ -276,7 +280,11 @@ void main() {
     await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Show no Parque');
 
     // Pick Date
-    await tester.tap(find.text('Selecionar'));
+    final selBtn = find.text('Selecionar').first;
+    await tester.ensureVisible(selBtn);
+    await tester.tap(selBtn);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
@@ -325,7 +333,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(confirmed, isFalse);
-    expect(find.text('Por favor, preencha o título e selecione uma data.'), findsOneWidget);
+    expect(find.text('Por favor, preencha o título e a data de início.'), findsOneWidget);
   });
 
   testWidgets('Should show error SnackBar and preserve form input when creating new appointment fails (T3.1 error)', (WidgetTester tester) async {
@@ -357,7 +365,11 @@ void main() {
 
     // Fill fields
     await tester.enterText(find.widgetWithText(TextField, 'Ex: Pagode na Adega'), 'Show Festival');
-    await tester.tap(find.text('Selecionar'));
+    final selBtn = find.text('Selecionar').first;
+    await tester.ensureVisible(selBtn);
+    await tester.tap(selBtn);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
@@ -430,7 +442,11 @@ void main() {
     await tester.enterText(find.byKey(const ValueKey('appointment_title_field')), 'Mega Show Festival');
 
     // Pick Date
-    await tester.tap(find.text('Selecionar'));
+    final selBtn = find.text('Selecionar').first;
+    await tester.ensureVisible(selBtn);
+    await tester.tap(selBtn);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
@@ -462,9 +478,9 @@ void main() {
       id: 'evt-high-fee-999',
       title: 'Festival Internacional',
       type: 'Show',
-      date: DateTime(2026, 8, 15),
-      startTime: '20:00',
-      endTime: '23:30',
+      startsAt: DateTime(2026, 8, 15),
+      timezone: 'America/Sao_Paulo',
+      endsAt: null,
       location: 'Estádio Municipal',
       fee: 10000.0,
       notes: 'Palco principal',
@@ -521,11 +537,15 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
 
     // Pick End Time
     final endField = find.byKey(const ValueKey('appointment_end_time_field'));
     await tester.ensureVisible(endField);
     await tester.tap(endField);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
@@ -535,12 +555,7 @@ void main() {
     await tester.ensureVisible(titleField);
     await tester.enterText(titleField, 'Ensaio com Horário');
 
-    final datePicker = find.text('Selecionar');
-    await tester.ensureVisible(datePicker);
-    await tester.tap(datePicker);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('OK'));
-    await tester.pumpAndSettle();
+    // date already picked via startField
 
     final confirmButton = find.byKey(const ValueKey('appointment_confirm_button'));
     await tester.ensureVisible(confirmButton);
@@ -548,10 +563,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(createdEvent, isNotNull);
-    expect(createdEvent!.startTime, isNot('--:--'));
-    expect(createdEvent!.endTime, isNot('--:--'));
-    expect(createdEvent!.startTime.contains(':'), isTrue);
-    expect(createdEvent!.endTime.contains(':'), isTrue);
+    expect(createdEvent!.startsAt, isNotNull);
+    expect(createdEvent!.endsAt, isNotNull);
   });
 
   testWidgets('Should render action buttons with consistent styling and equal widths (T4.1)', (WidgetTester tester) async {
@@ -599,9 +612,11 @@ void main() {
     await tester.ensureVisible(titleField);
     await tester.enterText(titleField, 'Show Especial');
 
-    final datePicker = find.text('Selecionar');
-    await tester.ensureVisible(datePicker);
-    await tester.tap(datePicker);
+    final selBtn = find.text('Selecionar').first;
+    await tester.ensureVisible(selBtn);
+    await tester.tap(selBtn);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
