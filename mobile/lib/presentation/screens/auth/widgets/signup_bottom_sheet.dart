@@ -84,8 +84,9 @@ class _SignupBottomSheetState extends ConsumerState<SignupBottomSheet> {
           context.pop();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Cadastro realizado com sucesso!'),
+              content: Text('Cadastro realizado! Verifique seu e-mail para confirmar a conta.'),
               backgroundColor: Colors.green,
+              duration: Duration(seconds: 5),
             ),
           );
         } else {
