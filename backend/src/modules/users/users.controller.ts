@@ -36,9 +36,13 @@ export class UsersController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
+    const role = (createUserDto.role as Role) || Role.MUSICIAN;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { role: _, ...rest } = createUserDto;
+    
     return this.usersService.createUser({
-      ...createUserDto,
-      role: Role.MUSICIAN,
+      ...rest,
+      role,
     });
   }
 
