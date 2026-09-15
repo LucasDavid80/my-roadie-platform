@@ -130,6 +130,20 @@ class CommitmentsWidget extends StatelessWidget {
 
   // O método que faltava para o seu código compilar
   Widget _buildDateHeader(DateTime date) {
+    if (_isSameDay(date, DateTime.now())) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+        child: Text(
+          'Hoje',
+          style: TextStyle(
+            color: AppColors.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      );
+    }
+
     String formatted = DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(date);
     formatted = formatted[0].toUpperCase() + formatted.substring(1);
 
