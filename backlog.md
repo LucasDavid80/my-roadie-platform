@@ -450,3 +450,9 @@
 - Depende de: nenhum
 - Release: v1.6.0
 - Status: ideia
+### Configuração de Deep Links e Redirecionamento Pós-Cadastro
+- Intenção: Configurar as Redirect URLs no Supabase e ajustar o AndroidManifest para que o clique no e-mail de confirmação abra o aplicativo automaticamente (Deep Linking), evitando que o usuário caia em uma tela branca 'Hello World!' no frontend web.
+- Impacto esperado: médio (UX de onboarding contínuo)
+- Depende de: nenhum
+- Release: a definir
+- Status: ideia
