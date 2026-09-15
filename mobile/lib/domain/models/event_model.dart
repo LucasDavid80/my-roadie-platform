@@ -19,14 +19,14 @@ class EventModel extends EventEntity {
   factory EventModel.fromMap(Map<String, dynamic> map) {
     DateTime parsedStartsAt;
     if (map['startsAt'] != null) {
-      parsedStartsAt = DateTime.tryParse(map['startsAt'].toString()) ?? DateTime.now();
+      parsedStartsAt = DateTime.tryParse(map['startsAt'].toString())?.toLocal() ?? DateTime.now();
     } else {
       parsedStartsAt = DateTime.now();
     }
 
     DateTime? parsedEndsAt;
     if (map['endsAt'] != null) {
-      parsedEndsAt = DateTime.tryParse(map['endsAt'].toString());
+      parsedEndsAt = DateTime.tryParse(map['endsAt'].toString())?.toLocal();
     }
 
     double parsedFee = 0.0;
@@ -57,8 +57,8 @@ class EventModel extends EventEntity {
       'id': id,
       'title': title,
       'type': type,
-      'startsAt': startsAt.toIso8601String(),
-      if (endsAt != null) 'endsAt': endsAt!.toIso8601String(),
+      'startsAt': startsAt.toUtc().toIso8601String(),
+      if (endsAt != null) 'endsAt': endsAt!.toUtc().toIso8601String(),
       'timezone': timezone,
       'location': location,
       'fee': fee,
@@ -71,13 +71,13 @@ class EventModel extends EventEntity {
   Map<String, dynamic> toCreatePayload() {
     final payload = <String, dynamic>{
       'title': title,
-      'startsAt': startsAt.toIso8601String(),
+      'startsAt': startsAt.toUtc().toIso8601String(),
       'timezone': timezone,
       'location': location,
       'fee': fee,
     };
     if (endsAt != null) {
-      payload['endsAt'] = endsAt!.toIso8601String();
+      payload['endsAt'] = endsAt!.toUtc().toIso8601String();
     }
     if (type.isNotEmpty) {
       payload['type'] = type;
