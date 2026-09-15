@@ -99,13 +99,19 @@ class AgendaController extends Notifier<List<EventEntity>> {
 
   List<EventEntity> get upcomingEvents {
     final today = _startOfDay(DateTime.now());
-    return state.where((e) => !_startOfDay(e.startsAt).isBefore(today)).toList()
+    return state.where((e) {
+      final refDate = e.endsAt ?? e.startsAt.add(const Duration(hours: 2));
+      return !_startOfDay(refDate).isBefore(today);
+    }).toList()
       ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
   }
 
   List<EventEntity> get pastEvents {
     final today = _startOfDay(DateTime.now());
-    return state.where((e) => _startOfDay(e.startsAt).isBefore(today)).toList()
+    return state.where((e) {
+      final refDate = e.endsAt ?? e.startsAt.add(const Duration(hours: 2));
+      return _startOfDay(refDate).isBefore(today);
+    }).toList()
       ..sort((a, b) => b.startsAt.compareTo(a.startsAt));
   }
 }
