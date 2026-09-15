@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsEmail({}, { message: 'O e-mail deve ser um endereço válido' })
@@ -12,6 +12,10 @@ export class CreateUserDto {
   @IsString({ message: 'O nome deve ser um texto' })
   @IsOptional()
   name?: string;
+
+  @IsEnum(['ADMIN', 'MUSICIAN', 'ROADIE'], { message: 'Perfil inválido' })
+  @IsOptional()
+  role?: 'ADMIN' | 'MUSICIAN' | 'ROADIE';
 
   @IsString()
   @IsOptional()
