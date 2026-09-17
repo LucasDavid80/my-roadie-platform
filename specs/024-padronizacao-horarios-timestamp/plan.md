@@ -6,6 +6,8 @@
 - Na hora de migrar os dados legados (migration em múltiplos passos), deve-se ler o `date` de cada evento, combinar com `startTime`/`endTime` e injetar a hora ajustada em UTC, inferindo o timezone do criador do evento ou da banda.
 - Atualização do Prisma Schema e DTOs no backend com validações rigorosas na camada de DTO, via um decorator customizado `@IsAfterDate('startsAt')` para garantir que `endsAt` seja posterior a `startsAt`.
 - **Decisão de UX/UI:** Nos formulários de criação/edição (Web e Mobile), os três inputs antigos (`[Data]`, `[Início]`, `[Fim]`) devem ser consolidados em dois blocos de seleção: **"Data e Hora de Início" (obrigatório)** e **"Data e Hora de Fim" (opcional)**, incluindo a seleção/exibição do timezone.
+- **Transição para Histórico (Mobile):** Para impedir que eventos da madrugada pulem prematuramente para a aba de histórico antes de terminarem, a separação de eventos passados e futuros no `AgendaController` passará a se basear no `endsAt` (com fallback para `startsAt + 2h`). Os eventos passam a ser descartados da lista principal imediatamente após o encerramento.
+- **Label Visual (Mobile):** Adição do label "Hoje" para eventos do dia corrente na listagem de próximos compromissos.
 
 ## 2. Modelagem de Dados / Contratos
 ### Prisma Schema (`backend/prisma/schema.prisma`)
