@@ -1,5 +1,8 @@
 # Plano Técnico — 023: Lembretes Locais de Eventos Próximos na Agenda (Mobile)
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** Todas as referências a `startTime` neste plano foram substituídas no código por `startsAt` (DateTime ISO-8601) na Spec 024. Pseudocódigos e tabelas de teste abaixo refletem a nomenclatura original da época da execução.
+
 ## 1. Arquitetura e Decisões Técnicas
 
 ### Biblioteca escolhida

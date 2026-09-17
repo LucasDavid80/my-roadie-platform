@@ -1,5 +1,8 @@
 # Spec — 015: Extensão do Modelo de Eventos & Ações do Card de Compromisso
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** Os campos `startTime` (String `"HH:mm"`) e `endTime` (String `"HH:mm"`) referenciados nesta spec foram substituídos por `startsAt` (DateTime ISO-8601), `endsAt` (DateTime?) e `timezone` (String) na Spec 024 (Padronização de Horários com Timestamps). Os campos `type` e `fee` permanecem válidos. O conteúdo abaixo reflete o estado do projeto na época da execução desta spec.
+
 ## Objetivo
 
 Estender o modelo `Event` no banco de dados (Prisma) e na API backend (NestJS) para suportar e persistir os campos de horário de início (`startTime`), horário de término (`endTime`), tipo de evento (`type`) e cachê (`fee`), sincronizando automaticamente o cachê do evento com o módulo financeiro (`Transaction`), além de habilitar no aplicativo mobile o envio/recebimento completo desses dados, implementar o fluxo interativo de exclusão/cancelamento de compromissos com confirmação no `CommitmentCard`, e aplicar ajustes de layout/alinhamento no formulário de criação/edição.

@@ -1,5 +1,8 @@
 # Spec — 020: Correção de UX no Modal "Novo Compromisso" (Mobile)
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** As referências a `startTime` e `endTime` nesta spec refletem o estado anterior à padronização de horários. Esses campos foram substituídos por `startsAt` (DateTime ISO-8601), `endsAt` (DateTime?) e `timezone` (String) na Spec 024.
+
 ## Objetivo
 
 Corrigir falhas de experiência do usuário (UX) e usabilidade visual no modal/diálogo de criação e edição de compromissos (`NewAppointmentWidget`) do aplicativo mobile:
