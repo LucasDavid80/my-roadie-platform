@@ -212,7 +212,7 @@
 - Impacto esperado: alto (integridade de dados, consistência de timezone, facilidade de ordenação e suporte nativo a eventos na madrugada)
 - Depende de: Lembretes Locais de Eventos Próximos na Agenda (spec 023)
 - Release: v1.1.2
-- Status: fazendo (specs/024-padronizacao-horarios-timestamp/)
+- Status: concluído (specs/024-padronizacao-horarios-timestamp/)
 
 ---
 
