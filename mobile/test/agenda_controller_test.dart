@@ -324,7 +324,7 @@ void main() {
 
     test('Should separate and sort upcomingEvents (ascending) and pastEvents (descending)', () async {
       final now = DateTime.now();
-      final todayMorning = DateTime(now.year, now.month, now.day, 8, 0);
+      final todayUpcoming = now.add(const Duration(hours: 1));
       final tomorrow = DateTime(now.year, now.month, now.day + 1, 20, 0);
       final inTwoDays = DateTime(now.year, now.month, now.day + 2, 19, 0);
       final yesterday = DateTime(now.year, now.month, now.day - 1, 21, 0);
@@ -334,7 +334,7 @@ void main() {
         id: 'event-today',
         title: 'Show Hoje',
         type: 'Show',
-        startsAt: todayMorning,
+        startsAt: todayUpcoming,
         timezone: 'America/Sao_Paulo',
         endsAt: null,
         location: 'Local Hoje',

@@ -103,6 +103,10 @@ describe('EventsService', () => {
                 id: 'user-uuid-1',
                 name: 'Lucas Musician',
               }),
+              create: jest.fn().mockResolvedValue({
+                id: 'user-uuid-new',
+                name: '',
+              }),
             },
             event: {
               create: jest.fn().mockResolvedValue(mockEvent),
@@ -399,6 +403,29 @@ describe('EventsService', () => {
       });
       expect(result).toEqual(mockEvent);
     });
+
+    it('deve criar o usuário no banco caso não seja encontrado (resolveDbUser)', async () => {
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValueOnce(null);
+      const newUser = { id: 'user-uuid-new', name: '' };
+      jest.spyOn(prisma.user, 'create').mockResolvedValueOnce(newUser as any);
+      jest.spyOn(bandAccessService, 'getUserBandIds').mockResolvedValueOnce([]);
+
+      const dto: CreateEventDto = {
+        title: 'Show no Festival',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
+        location: 'Concha Acústica',
+      };
+      
+      await service.create(dto, { ...mockUser, email: null });
+      
+      expect(prisma.user.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          supabaseId: mockUser.userId,
+          email: `${mockUser.userId}@supabase.user`,
+        }),
+      });
+    });
   });
 
   describe('findAll', () => {
@@ -639,6 +666,72 @@ describe('EventsService', () => {
         data: {
           description: 'Cachê - Show no Festival de Verão',
         },
+      });
+    });
+
+    it('deve atualizar startsAt, endsAt, timezone, location, description, type', async () => {
+      const updateDto: UpdateEventDto = {
+        startsAt: '2026-10-15T21:00:00.000Z',
+        endsAt: '2026-10-15T23:00:00.000Z',
+        timezone: 'America/Sao_Paulo',
+        location: 'Novo Local',
+        description: 'Nova Descrição',
+        type: 'Ensaio',
+      };
+      
+      await service.update('event-uuid-123', updateDto, mockUser);
+      
+      expect(prisma.event.update).toHaveBeenCalledWith({
+        where: { id: 'event-uuid-123' },
+        data: expect.objectContaining({
+          startsAt: new Date(updateDto.startsAt!),
+          endsAt: new Date(updateDto.endsAt!),
+          timezone: updateDto.timezone,
+          location: updateDto.location,
+          description: updateDto.description,
+          type: updateDto.type,
+        }),
+        include: expect.any(Object),
+      });
+    });
+
+    it('deve atualizar transaction data (date e band) se startsAt ou bandId mudarem e fee não mudar', async () => {
+      const existingTx: Transaction = {
+        id: 'tx-uuid-1',
+        description: 'Cachê',
+        amount: new Prisma.Decimal(1000),
+        type: TransactionType.INCOME,
+        startsAt: new Date('2026-10-15T20:00:00.000Z'),
+        endsAt: null,
+        timezone: 'America/Sao_Paulo',
+        userId: mockUser.userId,
+        bandId: mockEvent.bandId,
+        eventId: mockEvent.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx);
+
+      const updateDto: UpdateEventDto = {
+        startsAt: '2026-11-15T20:00:00.000Z',
+        bandId: 'band-uuid-nova',
+      };
+
+      const updatedEvent = { 
+        ...mockEvent, 
+        startsAt: new Date(updateDto.startsAt!), 
+        bandId: updateDto.bandId! 
+      };
+      jest.spyOn(prisma.event, 'update').mockResolvedValueOnce(updatedEvent);
+
+      await service.update('event-uuid-123', updateDto, mockUser);
+
+      expect(prisma.transaction.update).toHaveBeenCalledWith({
+        where: { id: 'tx-uuid-1' },
+        data: expect.objectContaining({
+          date: updatedEvent.startsAt,
+          band: { connect: { id: updateDto.bandId } },
+        }),
       });
     });
 

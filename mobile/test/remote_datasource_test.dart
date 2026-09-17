@@ -154,7 +154,7 @@ void main() {
       expect(decodedPayload['id'], isNull);
       expect(decodedPayload['fee'], 500.0);
       expect(decodedPayload['type'], 'Show');
-      expect(decodedPayload['startsAt'], '2026-07-16T20:00:00.000');
+      expect(decodedPayload['startsAt'], tEventModel.startsAt.toUtc().toIso8601String());
       expect(decodedPayload['timezone'], 'America/Sao_Paulo');
       expect(decodedPayload['title'], 'Show Rock');
       expect(decodedPayload['description'], 'Trazer cabos');
