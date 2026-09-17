@@ -118,7 +118,7 @@
 - Status: concluído (specs/014-corrigir-criacao-compromisso-dispositivo-fisico/)
 
 ### Extensão do Modelo de Eventos & Ações do Card de Compromisso (Horários, Cachê e Exclusão)
-- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para suportar e persistir `startTime`, `endTime`, `type` e `fee`, sincronizar automaticamente receitas em `Transaction` quando houver cachê (`fee > 0`), conectar o botão de deletar em `CommitmentCard` com confirmação ao fluxo de remoção do `AgendaController`, e ajustar layout/dinamismo do formulário `NewAppointmentWidget`.
+- Intenção: Estender o modelo `Event` no Prisma e backend NestJS para suportar e persistir `startsAt`, `endsAt`, `type` e `fee`, sincronizar automaticamente receitas em `Transaction` quando houver cachê (`fee > 0`), conectar o botão de deletar em `CommitmentCard` com confirmação ao fluxo de remoção do `AgendaController`, e ajustar layout/dinamismo do formulário `NewAppointmentWidget`.
 - Impacto esperado: alto (completude da agenda, usabilidade e integração financeira)
 - Depende de: Corrigir criação de compromisso no dispositivo físico (spec 014)
 - Release: v1.0.0
