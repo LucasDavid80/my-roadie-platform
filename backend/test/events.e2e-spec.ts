@@ -23,9 +23,9 @@ describe('EventsController (e2e)', () => {
   const mockEvent = {
     id: mockEventId,
     title: 'Show no Festival de Verão',
-    date: new Date('2026-10-15T20:00:00.000Z').toISOString(),
-    startTime: '19:30',
-    endTime: '22:00',
+    startsAt: new Date('2026-10-15T19:30:00.000Z').toISOString(),
+    endsAt: new Date('2026-10-15T22:00:00.000Z').toISOString(),
+    timezone: 'America/Sao_Paulo',
     type: 'Show',
     fee: 1500,
     location: 'Concha Acústica',
@@ -156,7 +156,8 @@ describe('EventsController (e2e)', () => {
         .post('/events')
         .send({
           title: 'Show Teste',
-          date: '2026-10-15T20:00:00.000Z',
+          startsAt: '2026-10-15T20:00:00.000Z',
+          timezone: 'America/Sao_Paulo',
           location: 'Local',
           bandId: mockBandId,
         })
@@ -212,9 +213,9 @@ describe('EventsController (e2e)', () => {
           .post('/events')
           .send({
             title: 'Show no Festival de Verão',
-            date: '2026-10-15T20:00:00.000Z',
-            startTime: '19:30',
-            endTime: '22:00',
+            startsAt: '2026-10-15T19:30:00.000Z',
+            endsAt: '2026-10-15T22:00:00.000Z',
+            timezone: 'America/Sao_Paulo',
             type: 'Show',
             fee: 1500,
             location: 'Concha Acústica',
@@ -235,7 +236,8 @@ describe('EventsController (e2e)', () => {
           .post('/events')
           .send({
             title: 'Show Sem Banda',
-            date: '2026-10-15T20:00:00.000Z',
+            startsAt: '2026-10-15T20:00:00.000Z',
+            timezone: 'America/Sao_Paulo',
             location: 'Local',
             bandId: '00000000-0000-4000-8000-000000000000',
           })
@@ -247,7 +249,8 @@ describe('EventsController (e2e)', () => {
           .post('/events')
           .send({
             title: 'Show Teste',
-            date: '2026-10-15T20:00:00.000Z',
+            startsAt: '2026-10-15T20:00:00.000Z',
+            timezone: 'America/Sao_Paulo',
             location: 'Local',
             bandId: mockBandId,
             id: 'tentativa-id-cliente',
@@ -260,7 +263,8 @@ describe('EventsController (e2e)', () => {
           .post('/events')
           .send({
             title: 'Show Solo',
-            date: '2026-10-15T20:00:00.000Z',
+            startsAt: '2026-10-15T20:00:00.000Z',
+            timezone: 'America/Sao_Paulo',
             location: 'Auditório',
           })
           .expect(201)
@@ -320,8 +324,9 @@ describe('EventsController (e2e)', () => {
           .patch(`/events/${mockEventId}`)
           .send({
             title: 'Show Atualizado',
-            startTime: '20:00',
-            endTime: '23:00',
+            startsAt: '2026-10-15T20:00:00.000Z',
+            endsAt: '2026-10-15T23:00:00.000Z',
+            timezone: 'America/Sao_Paulo',
             type: 'Show',
             fee: 2000,
           })
