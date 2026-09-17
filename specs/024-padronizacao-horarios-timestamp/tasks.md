@@ -40,15 +40,15 @@
 - [x] T4.6: (Físico) Realizar testes de transição de data com o dispositivo físico, mantendo o app em background durante a virada da madrugada.
 
 ## Fase 5: Fechamento & Sincronização
-- [ ] T5.1: Re-rodar os testes E2E do sistema.
-- [ ] T5.2: Atualizar documentação de baseline e registrar auditorias necessárias.
-- [ ] T5.3: Marcar checklist de fechamento e critérios de sucesso da spec.
+- [x] T5.1: Re-rodar os testes E2E do sistema.
+- [x] T5.2: Atualizar documentação de baseline e registrar auditorias necessárias.
+- [x] T5.3: Marcar checklist de fechamento e critérios de sucesso da spec.
 
 ---
 
 ## Checklist de Fechamento (preencher atomicamente com os critérios de `spec.md`)
-- [ ] Todas as fases acima concluídas e commitadas
-- [ ] Cobertura >= 80% verificada no Backend, Web e Mobile
-- [ ] Testes E2E executados e passando
-- [ ] Todos os critérios de sucesso de `spec.md` marcados `[x]`
-- [ ] Solicitação de `git push` e Pull Request enviada ao usuário
+- [x] Todas as fases acima concluídas e commitadas
+- [x] Cobertura >= 80% verificada no Backend, Web e Mobile
+- [x] Testes E2E executados e passando
+- [x] Todos os critérios de sucesso de `spec.md` marcados `[x]`
+- [x] Solicitação de `git push` e Pull Request enviada ao usuário

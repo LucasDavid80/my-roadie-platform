@@ -19,11 +19,11 @@ Hoje, se um show começa às 23:00 e termina às 02:00, o sistema tem dificuldad
 - Lembretes customizáveis pelo usuário.
 
 ## 5. Critérios de Sucesso
-- [ ] A migration do banco de dados aplica a substituição em etapas sem perda de dados.
-- [ ] O fuso horário do local do show é preservado pelo campo `timezone`, mantendo estabilidade de leitura.
-- [ ] Eventos que ultrapassam a meia-noite são salvos corretamente e calculam duração corretamente.
-- [ ] Os formulários (Web e Mobile) adotam a interface unificada de "Data e Hora de Início" (obrigatório) e "Data e Hora de Fim" (opcional).
-- [ ] O Mobile exibe e salva os eventos corretamente usando `startsAt` e `endsAt`.
-- [ ] A lógica de alarmes do mobile e o dashboard continuam operando normalmente.
-- [ ] Testes no dispositivo físico executados com sucesso (validação de timezone do SO e alarmes de hardware real).
-- [ ] Testes unitários afetados e E2E estão atualizados e passando verde.
+- [x] A migration do banco de dados aplica a substituição em etapas sem perda de dados.
+- [x] O fuso horário do local do show é preservado pelo campo `timezone`, mantendo estabilidade de leitura.
+- [x] Eventos que ultrapassam a meia-noite são salvos corretamente e calculam duração corretamente.
+- [x] Os formulários (Web e Mobile) adotam a interface unificada de "Data e Hora de Início" (obrigatório) e "Data e Hora de Fim" (opcional).
+- [x] O Mobile exibe e salva os eventos corretamente usando `startsAt` e `endsAt`.
+- [x] A lógica de alarmes do mobile e o dashboard continuam operando normalmente.
+- [x] Testes no dispositivo físico executados com sucesso (validação de timezone do SO e alarmes de hardware real).
+- [x] Testes unitários afetados e E2E estão atualizados e passando verde.
