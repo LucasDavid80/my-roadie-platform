@@ -21,9 +21,9 @@ describe('EventsController', () => {
   const mockEvent = {
     id: 'event-uuid-123',
     title: 'Show no Festival de Verão',
-    date: new Date('2026-10-15T20:00:00.000Z'),
-    startTime: '19:30',
-    endTime: '22:00',
+    startsAt: new Date('2026-10-15T20:00:00.000Z'),
+    endsAt: new Date('2026-10-15T23:00:00.000Z'),
+    timezone: 'America/Sao_Paulo',
     type: 'Show',
     fee: 1500,
     location: 'Concha Acústica',
@@ -71,8 +71,6 @@ describe('EventsController', () => {
         title: 'Show no Festival de Verão',
         startsAt: '2026-10-15T20:00:00.000Z',
         timezone: 'America/Sao_Paulo',
-        startTime: '19:30',
-        endTime: '22:00',
         type: 'Show',
         fee: 1500,
         location: 'Concha Acústica',
@@ -144,8 +142,8 @@ describe('EventsController', () => {
     it('deve atualizar o evento chamando o service com ID, DTO e user', async () => {
       const dto: UpdateEventDto = {
         title: 'Show Atualizado',
-        startTime: '20:00',
-        endTime: '23:00',
+        startsAt: '2026-10-15T20:00:00.000Z',
+        endsAt: '2026-10-15T23:00:00.000Z',
         type: 'Show',
         fee: 2000,
       };

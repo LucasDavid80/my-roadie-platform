@@ -16,9 +16,11 @@ export function IsAfterDate(
       constraints: [property],
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
-          const [relatedPropertyName] = args.constraints;
-          const relatedValue = (args.object as any)[relatedPropertyName];
+        validate(value: unknown, args: ValidationArguments) {
+          const [relatedPropertyName] = args.constraints as string[];
+          const relatedValue = (args.object as Record<string, unknown>)[
+            relatedPropertyName
+          ];
 
           // If either value is missing, skip cross-validation
           // (Missing required fields will be caught by their own @IsNotEmpty decorators)
@@ -26,8 +28,8 @@ export function IsAfterDate(
             return true;
           }
 
-          const date = new Date(value);
-          const relatedDate = new Date(relatedValue);
+          const date = new Date(value as string | number | Date);
+          const relatedDate = new Date(relatedValue as string | number | Date);
 
           // Both must be valid dates to compare
           if (isNaN(date.getTime()) || isNaN(relatedDate.getTime())) {
@@ -37,7 +39,7 @@ export function IsAfterDate(
           return date > relatedDate;
         },
         defaultMessage(args: ValidationArguments) {
-          const [relatedPropertyName] = args.constraints;
+          const [relatedPropertyName] = args.constraints as string[];
           return `${args.property} must be strictly after ${relatedPropertyName}`;
         },
       },

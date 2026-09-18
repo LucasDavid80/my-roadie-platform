@@ -55,3 +55,8 @@ export class CreateEventDto {
 - Testar o rollback e conversão do banco de dados na base mock/local antes de ir para CI.
 - Realizar validação e testes manuais mandatórios em **dispositivo físico** para os casos não cobertos fielmente por simuladores (ex: mudanças de Timezone do SO em tempo real, disparo e recebimento de push notifications / alarmes em background na transição da madrugada).
 - Garantir 80%+ de cobertura após refatorações.
+
+> **DevLog (Patch Pós-Fechamento):** Após o fechamento desta spec, identificou-se no commit `93cfbce` que testes estavam falhando devido a fragilidades residuais:
+> 1. No `agenda_controller_test.dart`, o teste de separação de eventos assumia fixamente "8:00 AM" como evento futuro, o que quebrava o teste se a execução CI ocorresse à tarde. Corrigido para `now.add(1h)`.
+> 2. No `remote_datasource_test.dart`, o teste de payload hardcodava a string local `2026-07-16T20:00:00.000` enquanto o modelo serializava nativamente em UTC (`toUtc().toIso8601String()`).
+> 3. No backend (`events.service.spec.ts`), foram adicionados testes pendentes de cobertura, validando o fallback da criação de usuário (resolveDbUser) e o update relacional com transações em cima dos novos timestamps.

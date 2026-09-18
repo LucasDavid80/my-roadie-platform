@@ -183,7 +183,7 @@ describe('EventsService', () => {
       expect(result).toEqual(mockEvent);
     });
 
-    it('deve persistir startTime, endTime, type, fee e criar uma Transaction do tipo INCOME quando fee > 0', async () => {
+    it('deve persistir startsAt, endsAt, type, fee e criar uma Transaction do tipo INCOME quando fee > 0', async () => {
       const dto: CreateEventDto = {
         title: 'Show com Cachê',
         startsAt: '2026-10-15T20:00:00.000Z',
@@ -407,7 +407,9 @@ describe('EventsService', () => {
     it('deve criar o usuário no banco caso não seja encontrado (resolveDbUser)', async () => {
       jest.spyOn(prisma.user, 'findFirst').mockResolvedValueOnce(null);
       const newUser = { id: 'user-uuid-new', name: '' };
-      jest.spyOn(prisma.user, 'create').mockResolvedValueOnce(newUser as any);
+      jest
+        .spyOn(prisma.user, 'create')
+        .mockResolvedValueOnce(newUser as unknown as User);
       jest.spyOn(bandAccessService, 'getUserBandIds').mockResolvedValueOnce([]);
 
       const dto: CreateEventDto = {
@@ -416,10 +418,11 @@ describe('EventsService', () => {
         timezone: 'America/Sao_Paulo',
         location: 'Concha Acústica',
       };
-      
+
       await service.create(dto, { ...mockUser, email: null });
-      
+
       expect(prisma.user.create).toHaveBeenCalledWith({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: expect.objectContaining({
           supabaseId: mockUser.userId,
           email: `${mockUser.userId}@supabase.user`,
@@ -678,11 +681,12 @@ describe('EventsService', () => {
         description: 'Nova Descrição',
         type: 'Ensaio',
       };
-      
+
       await service.update('event-uuid-123', updateDto, mockUser);
-      
+
       expect(prisma.event.update).toHaveBeenCalledWith({
         where: { id: 'event-uuid-123' },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: expect.objectContaining({
           startsAt: new Date(updateDto.startsAt!),
           endsAt: new Date(updateDto.endsAt!),
@@ -691,6 +695,7 @@ describe('EventsService', () => {
           description: updateDto.description,
           type: updateDto.type,
         }),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         include: expect.any(Object),
       });
     });
@@ -710,17 +715,19 @@ describe('EventsService', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      jest.spyOn(prisma.transaction, 'findFirst').mockResolvedValueOnce(existingTx);
+      jest
+        .spyOn(prisma.transaction, 'findFirst')
+        .mockResolvedValueOnce(existingTx);
 
       const updateDto: UpdateEventDto = {
         startsAt: '2026-11-15T20:00:00.000Z',
         bandId: 'band-uuid-nova',
       };
 
-      const updatedEvent = { 
-        ...mockEvent, 
-        startsAt: new Date(updateDto.startsAt!), 
-        bandId: updateDto.bandId! 
+      const updatedEvent = {
+        ...mockEvent,
+        startsAt: new Date(updateDto.startsAt!),
+        bandId: updateDto.bandId!,
       };
       jest.spyOn(prisma.event, 'update').mockResolvedValueOnce(updatedEvent);
 
@@ -728,6 +735,7 @@ describe('EventsService', () => {
 
       expect(prisma.transaction.update).toHaveBeenCalledWith({
         where: { id: 'tx-uuid-1' },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: expect.objectContaining({
           date: updatedEvent.startsAt,
           band: { connect: { id: updateDto.bandId } },

@@ -95,7 +95,6 @@ class AgendaController extends Notifier<List<EventEntity>> {
         .fold(0.0, (sum, event) => sum + event.fee);
   }
 
-  DateTime _startOfDay(DateTime d) => DateTime(d.year, d.month, d.day);
 
   List<EventEntity> get upcomingEvents {
     final now = DateTime.now();
