@@ -1,5 +1,7 @@
 # Spec — 021: Histórico de Compromissos (Mobile)
 
+> **Supersedido parcialmente pela Spec 024:** As referências à propriedade `date` nesta spec refletem o estado anterior à padronização de horários. Ela foi substituída por `startsAt` na Spec 024 (Padronização de Horários com Timestamps). O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 ## Objetivo
 
 Separar, na Agenda do aplicativo mobile, os compromissos passados dos futuros: a lista "Próximos Compromissos" na tela principal (`PrincipalScreen`) passa a exibir exclusivamente eventos a partir da data atual (`>= hoje`), e uma nova tela dedicada de **Histórico** passa a reunir todos os compromissos já ocorridos (`< hoje`), acessível por um atalho/botão a partir da Agenda.

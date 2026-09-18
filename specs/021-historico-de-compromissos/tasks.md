@@ -1,5 +1,7 @@
 # Tasks — 021: Histórico de Compromissos (Mobile)
 
+> **Supersedido parcialmente pela Spec 024:** A propriedade `date` referenciada nestas tasks reflete o estado anterior à padronização de horários. Ela foi substituída por `startsAt` na Spec 024. O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 Pré-requisitos: nenhum bloqueante direto. Recomendado rodar depois (ou junto) da spec 022 (correção dos cards do dashboard), já que ambas mexem em `compromissosTotal`/`events` da `PrincipalScreen` e compartilham o mesmo critério de "mês/dia corrente".
 
 ## Fase 0 — Confirmar decisões em aberto antes de codar

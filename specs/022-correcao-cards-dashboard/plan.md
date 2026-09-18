@@ -1,5 +1,7 @@
 # Plan — 022: Correção dos Cards de Estatísticas do Dashboard (Mobile)
 
+> **Supersedido parcialmente pela Spec 024:** A propriedade `date` referenciada neste plano reflete o estado anterior à padronização de horários. Ela foi substituída por `startsAt` na Spec 024. O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 ## Visão Geral da Solução
 
 Os dados de compromissos já residem no estado local do Riverpod (`AgendaController extends Notifier<List<EventEntity>>`). A correção não exige nenhum endpoint adicional nem alteração no backend: é uma melhoria puramente analítica e de apresentação no mobile, ajustando getters matemáticos e aplicando máscara monetária.

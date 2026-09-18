@@ -1,5 +1,7 @@
 # Plan — 021: Histórico de Compromissos (Mobile)
 
+> **Supersedido parcialmente pela Spec 024:** A propriedade `date` referenciada neste plano reflete o estado anterior à padronização de horários. Ela foi substituída por `startsAt` na Spec 024 (Padronização de Horários com Timestamps). O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 ## Visão Geral da Solução
 
 Toda a lista de eventos já está disponível em memória via `agendaProvider` (`AgendaController extends Notifier<List<EventEntity>>`, populado por `getEvents()` no repositório). Não é necessário nenhum novo endpoint: a separação passado/futuro é apenas uma derivação da mesma lista, calculada em dois getters no controller e consumida por dois pontos de UI diferentes (Agenda continua mostrando só o futuro; tela nova mostra só o passado).
