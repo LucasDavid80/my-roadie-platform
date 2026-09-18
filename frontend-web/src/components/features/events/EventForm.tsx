@@ -9,7 +9,7 @@ const eventSchema = z.object({
     type: z.string().min(1, 'Tipo é obrigatório'),
     startsAt: z.string().min(1, 'Data e Hora de início são obrigatórias'),
     endsAt: z.string().optional(),
-    timezone: z.string().default('America/Sao_Paulo'),
+    timezone: z.string().min(1),
     location: z.string().min(1, 'Local é obrigatório'),
     fee: z.number().optional(),
     description: z.string().optional(),
