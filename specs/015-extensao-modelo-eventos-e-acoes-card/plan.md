@@ -1,5 +1,8 @@
 # Plan — 015: Extensão do Modelo de Eventos & Ações do Card de Compromisso
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** Os campos `date` (DateTime), `startTime` (String `"HH:mm"`) e `endTime` (String `"HH:mm"`) referenciados neste plano foram substituídos por `startsAt` (DateTime ISO-8601), `endsAt` (DateTime?) e `timezone` (String) na Spec 024. Os campos `type` e `fee` permanecem válidos. O conteúdo abaixo reflete o estado do projeto na época da execução desta spec.
+
 ## Visão Geral da Solução
 
 Esta especificação estende o ecossistema de eventos de ponta a ponta com sincronização financeira integrada:

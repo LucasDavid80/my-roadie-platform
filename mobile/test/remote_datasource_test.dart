@@ -45,9 +45,9 @@ void main() {
         'id': '1',
         'title': 'Show Rock',
         'type': 'SHOW',
-        'date': '2026-07-16T12:00:00.000',
-        'startTime': '20:00',
-        'endTime': '22:00',
+        'startsAt': '2026-07-16T20:00:00.000Z',
+        'endsAt': '2026-07-16T22:00:00.000Z',
+        'timezone': 'America/Sao_Paulo',
         'location': 'Bar do Rock',
         'fee': 500.0,
         'notes': 'Trazer cabos'
@@ -105,9 +105,9 @@ void main() {
       id: 'temp-id-123',
       title: 'Show Rock',
       type: 'Show',
-      date: DateTime(2026, 7, 16, 20, 0),
-      startTime: '20:00',
-      endTime: '22:00',
+      startsAt: DateTime(2026, 7, 16, 20, 0),
+      timezone: 'America/Sao_Paulo',
+      endsAt: null,
       location: 'Bar do Rock',
       fee: 500.0,
       notes: 'Trazer cabos',
@@ -117,7 +117,8 @@ void main() {
     final tSavedResponseJson = {
       'id': 'persisted-uuid-999',
       'title': 'Show Rock',
-      'date': '2026-07-16T20:00:00.000',
+      'startsAt': '2026-07-16T20:00:00.000Z',
+      'timezone': 'America/Sao_Paulo',
       'location': 'Bar do Rock',
       'description': 'Trazer cabos',
       'bandId': 'band-uuid-1',
@@ -153,8 +154,8 @@ void main() {
       expect(decodedPayload['id'], isNull);
       expect(decodedPayload['fee'], 500.0);
       expect(decodedPayload['type'], 'Show');
-      expect(decodedPayload['startTime'], '20:00');
-      expect(decodedPayload['endTime'], '22:00');
+      expect(decodedPayload['startsAt'], tEventModel.startsAt.toUtc().toIso8601String());
+      expect(decodedPayload['timezone'], 'America/Sao_Paulo');
       expect(decodedPayload['title'], 'Show Rock');
       expect(decodedPayload['description'], 'Trazer cabos');
       expect(decodedPayload['bandId'], 'band-uuid-1');
@@ -211,9 +212,9 @@ void main() {
         id: '123e4567-e89b-12d3-a456-426614174000',
         title: 'Show Rock Atualizado',
         type: 'Show',
-        date: DateTime(2026, 7, 16, 20, 0),
-        startTime: '21:00',
-        endTime: '23:30',
+        startsAt: DateTime(2026, 7, 16, 20, 0),
+        timezone: 'America/Sao_Paulo',
+        endsAt: null,
         location: 'Novo Local',
         fee: 800.0,
         notes: 'Setlist atualizado',
@@ -223,7 +224,8 @@ void main() {
       final tUpdatedResponseJson = {
         'id': '123e4567-e89b-12d3-a456-426614174000',
         'title': 'Show Rock Atualizado',
-        'date': '2026-07-16T20:00:00.000',
+        'startsAt': '2026-07-16T20:00:00.000Z',
+        'timezone': 'America/Sao_Paulo',
         'location': 'Novo Local',
         'fee': 800.0,
         'description': 'Setlist atualizado',

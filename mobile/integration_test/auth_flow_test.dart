@@ -49,7 +49,7 @@ void main() {
         final submitFinder = find.byKey(const ValueKey('login_submit_button'));
         expect(submitFinder, findsOneWidget);
         await tester.tap(submitFinder);
-        await tester.pumpAndSettle();
+        await E2EBindingHelper.pumpAndSettleWithTimeout(tester);
 
         // 4. Valida que navegou para a PrincipalScreen com os elementos esperados
         expect(find.byType(PrincipalScreen), findsOneWidget);
@@ -102,7 +102,7 @@ void main() {
         final submitFinder = find.byKey(const ValueKey('login_submit_button'));
         expect(submitFinder, findsOneWidget);
         await tester.tap(submitFinder);
-        await tester.pumpAndSettle();
+        await E2EBindingHelper.pumpAndSettleWithTimeout(tester);
 
         // 4. Valida que permanece na tela de login e exibe feedback de erro
         expect(find.byType(PrincipalScreen), findsNothing);

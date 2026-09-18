@@ -39,7 +39,7 @@ export class UsersController {
     const role = (createUserDto.role as Role) || Role.MUSICIAN;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { role: _, ...rest } = createUserDto;
-    
+
     return this.usersService.createUser({
       ...rest,
       role,

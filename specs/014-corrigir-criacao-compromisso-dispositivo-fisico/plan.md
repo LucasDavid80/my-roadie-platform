@@ -1,5 +1,7 @@
 # Plan — 014: Corrigir Criação de Compromisso no Dispositivo Físico
 
+> **Supersedido parcialmente pela Spec 024:** A propriedade `date` da entidade `Event` referenciada neste plano reflete o estado anterior à padronização de horários. Ela foi substituída por `startsAt` na Spec 024. O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 ## Diagnóstico Técnico Detalhado
 
 O fluxo de criação de compromissos no app mobile falhou ao ser testado no dispositivo físico devido aos seguintes pontos:

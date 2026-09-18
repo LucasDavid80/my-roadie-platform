@@ -1,5 +1,8 @@
 # Plan — 020: Correção de UX no Modal "Novo Compromisso" (Mobile)
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** A referência a `startTime`/`endTime` neste plano reflete o estado anterior à padronização de horários. Esses campos foram substituídos por `startsAt`, `endsAt` e `timezone` na Spec 024.
+
 ## 1. Diagnóstico Técnico & Arquitetura
 
 O modal de criação/edição de compromissos é implementado pelo widget `NewAppointmentWidget` (`mobile/lib/presentation/widgets/new_appointment_widget.dart`), consumido tanto na criação via `PrincipalScreen` quanto na edição via `CommitmentCard`.

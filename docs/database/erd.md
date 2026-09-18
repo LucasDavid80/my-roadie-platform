@@ -27,7 +27,7 @@ Entities principais:
 
 - Event
   - id: uuid (PK)
-  - title, date, startTime?, endTime?, type?, fee? (Decimal), location, description?, status
+  - title, startsAt, endsAt?, timezone, type?, fee? (Decimal), location, description?, status
   - bandId -> Band.id
   - createdById -> User.id
   - createdAt, updatedAt
@@ -77,9 +77,9 @@ erDiagram
   EVENT {
     String id PK
     String title
-    DateTime date
-    String startTime
-    String endTime
+    DateTime startsAt
+    DateTime endsAt
+    String timezone
     String type
     Decimal fee
     String location

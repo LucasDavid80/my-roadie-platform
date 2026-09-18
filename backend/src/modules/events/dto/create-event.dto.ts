@@ -8,15 +8,25 @@ import {
   IsUUID,
 } from 'class-validator';
 import { EventStatus } from '@prisma/client';
+import { IsAfterDate } from '../../../common/decorators/is-after-date.decorator';
 
 export class CreateEventDto {
   @IsString({ message: 'O título deve ser um texto' })
   @IsNotEmpty({ message: 'O título não pode estar vazio' })
   title!: string;
 
-  @IsDateString({}, { message: 'A data deve ser uma string ISO8601 válida' })
-  @IsNotEmpty({ message: 'A data é obrigatória' })
-  date!: string;
+  @IsDateString({}, { message: 'startsAt deve ser uma string ISO8601 válida' })
+  @IsNotEmpty({ message: 'startsAt é obrigatório' })
+  startsAt!: string;
+
+  @IsOptional()
+  @IsDateString({}, { message: 'endsAt deve ser uma string ISO8601 válida' })
+  @IsAfterDate('startsAt', { message: 'endsAt deve ser posterior a startsAt' })
+  endsAt?: string;
+
+  @IsString({ message: 'O timezone deve ser um texto' })
+  @IsNotEmpty({ message: 'O timezone é obrigatório' })
+  timezone!: string;
 
   @IsString({ message: 'O local deve ser um texto' })
   @IsNotEmpty({ message: 'O local não pode estar vazio' })
@@ -25,14 +35,6 @@ export class CreateEventDto {
   @IsString({ message: 'A descrição deve ser um texto' })
   @IsOptional()
   description?: string;
-
-  @IsString({ message: 'O horário de início deve ser um texto' })
-  @IsOptional()
-  startTime?: string;
-
-  @IsString({ message: 'O horário de término deve ser um texto' })
-  @IsOptional()
-  endTime?: string;
 
   @IsString({ message: 'O tipo deve ser um texto' })
   @IsOptional()

@@ -1,5 +1,7 @@
 # Spec — 014: Corrigir Criação de Compromisso no Dispositivo Físico
 
+> **Supersedido parcialmente pela Spec 024:** A propriedade `date` da entidade `Event` referenciada nesta spec reflete o estado anterior à padronização de horários. Ela foi substituída por `startsAt` na Spec 024. O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 ## Objetivo
 
 Investigar e corrigir a falha em que a criação e sincronização de novos compromissos (eventos) não funciona ao utilizar o aplicativo mobile em um dispositivo físico, garantindo que o backend persista os eventos corretamente, que o app mobile envie os payloads adequados e forneça feedback visual imediato em caso de falha de rede, autenticação ou validação.

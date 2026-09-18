@@ -1,5 +1,8 @@
 # Tasks — 015: Extensão do Modelo de Eventos & Ações do Card de Compromisso
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** Os campos `date`, `startTime` e `endTime` referenciados nestas tasks foram substituídos por `startsAt`, `endsAt` e `timezone` na Spec 024. O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 ## Fase 0 — Diagnóstico & Validação Prévia

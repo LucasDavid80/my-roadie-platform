@@ -1,5 +1,8 @@
 # Spec — 023: Lembretes Locais de Eventos Próximos na Agenda (Mobile)
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** Todas as referências a `startTime` nesta spec foram substituídas no código por `startsAt` (DateTime ISO-8601) na Spec 024 (Padronização de Horários com Timestamps). A lógica de agendamento de lembretes (24h e 2h antes) permanece a mesma, mas ancora-se em `event.startsAt` em vez de `event.startTime`. O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 ## 1. Objetivo
 
 Agendar e disparar notificações locais nativas no dispositivo móvel (Android e iOS) para avisar o usuário sobre shows, ensaios e compromissos que estão chegando, com antecedência configurada (24h e 2h antes do início). O sistema opera 100% offline, sem necessidade de conexão com a internet ou infraestrutura de servidor (FCM/APNs remotos), utilizando o pacote `flutter_local_notifications`.

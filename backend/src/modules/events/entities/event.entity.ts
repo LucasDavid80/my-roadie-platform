@@ -3,9 +3,9 @@ import { EventStatus } from '@prisma/client';
 export class Event {
   id!: string;
   title!: string;
-  date!: Date;
-  startTime?: string | null;
-  endTime?: string | null;
+  startsAt!: Date;
+  endsAt?: Date | null;
+  timezone!: string;
   type?: string | null;
   fee?: number | null;
   location!: string;

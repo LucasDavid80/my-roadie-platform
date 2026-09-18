@@ -1,5 +1,8 @@
 # Tasks — 023: Lembretes Locais de Eventos Próximos na Agenda (Mobile)
 
+> [!IMPORTANT]
+> **Supersedido parcialmente pela Spec 024:** As referências a `startTime` nestas tasks correspondem a `startsAt` no código atual, conforme a Spec 024.
+
 ## Fase 0: Setup & Preparação
 
 - [x] T0.1: Criar branch `spec/023-lembretes-locais-mobile` e inicializar documentação da spec (`spec.md`, `plan.md`, `tasks.md`)

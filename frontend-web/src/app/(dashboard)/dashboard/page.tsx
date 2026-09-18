@@ -24,9 +24,11 @@ interface StatCardProps {
 }
 
 interface CalendarEvent {
-    date: number;
+    startsAt: string;
     title: string;
+    local: string;
     color: string;
+    dot: string;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -88,7 +90,10 @@ function MonthCalendar({ events }: { events: CalendarEvent[] }) {
         current.month === today.getMonth() &&
         current.year === today.getFullYear();
 
-    const hasEvent = (day: number) => events.find(e => e.date === day);
+    const hasEvent = (day: number) => events.find(e => {
+        const d = new Date(e.startsAt);
+        return d.getDate() === day && d.getMonth() === current.month && d.getFullYear() === current.year;
+    });
 
     // Montar grid: dias do mês anterior + dias do mês atual + dias do próximo
     const cells: { day: number; type: 'prev' | 'current' | 'next' }[] = [];
@@ -157,7 +162,7 @@ function MonthCalendar({ events }: { events: CalendarEvent[] }) {
                                 {cell.day}
                             </div>
                             {event && (
-                                <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${event.color}`} />
+                                <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${event.dot}`} />
                             )}
                         </div>
                     );
@@ -170,18 +175,18 @@ function MonthCalendar({ events }: { events: CalendarEvent[] }) {
 // ─── Page principal ───────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+
     // Eventos mockados — futuramente vêm da API
     const mockEvents: CalendarEvent[] = [
-        { date: 10, title: 'Show Bar do João', color: 'bg-primary' },
-        { date: 18, title: 'Ensaio geral', color: 'bg-card-blue' },
-        { date: 25, title: 'Festival', color: 'bg-card-green' },
+        { startsAt: new Date(currentYear, currentMonth, 10, 20, 0).toISOString(), title: 'Show Bar do João', local: 'Centro, SP', color: 'bg-primary/10 border-primary/20', dot: 'bg-primary' },
+        { startsAt: new Date(currentYear, currentMonth, 18, 14, 0).toISOString(), title: 'Ensaio geral', local: 'Estúdio X', color: 'bg-blue-50 border-blue-100', dot: 'bg-card-blue' },
+        { startsAt: new Date(currentYear, currentMonth, 25, 18, 30).toISOString(), title: 'Festival', local: 'Parque Municipal', color: 'bg-green-50 border-green-100', dot: 'bg-card-green' },
     ];
 
-    const upcomingEvents = [
-        { day: '10', month: 'Mai', title: 'Show Bar do João', local: 'Centro, SP', color: 'bg-primary/10 border-primary/20', dot: 'bg-primary' },
-        { day: '18', month: 'Mai', title: 'Ensaio geral', local: 'Estúdio X', color: 'bg-blue-50 border-blue-100', dot: 'bg-card-blue' },
-        { day: '25', month: 'Mai', title: 'Festival', local: 'Parque Municipal', color: 'bg-green-50 border-green-100', dot: 'bg-card-green' },
-    ];
+    const upcomingEvents = mockEvents.sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -242,21 +247,26 @@ export default function DashboardPage() {
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                {upcomingEvents.map((e, i) => (
-                                    <div key={i} className={`flex items-start gap-3 p-3 rounded-2xl border ${e.color}`}>
-                                        <div className="text-center min-w-[36px]">
-                                            <p className="text-xl font-bold text-secondary leading-none">{e.day}</p>
-                                            <p className="text-xs text-slate-400 font-medium">{e.month}</p>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-1.5 mb-0.5">
-                                                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${e.dot}`} />
-                                                <p className="text-sm font-semibold text-secondary truncate">{e.title}</p>
+                                {upcomingEvents.map((e, i) => {
+                                    const d = new Date(e.startsAt);
+                                    const day = d.getDate().toString().padStart(2, '0');
+                                    const monthStr = MONTHS[d.getMonth()].substring(0, 3);
+                                    return (
+                                        <div key={i} className={`flex items-start gap-3 p-3 rounded-2xl border ${e.color}`}>
+                                            <div className="text-center min-w-[36px]">
+                                                <p className="text-xl font-bold text-secondary leading-none">{day}</p>
+                                                <p className="text-xs text-slate-400 font-medium capitalize">{monthStr}</p>
                                             </div>
-                                            <p className="text-xs text-slate-400 truncate">{e.local}</p>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-1.5 mb-0.5">
+                                                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${e.dot}`} />
+                                                    <p className="text-sm font-semibold text-secondary truncate">{e.title}</p>
+                                                </div>
+                                                <p className="text-xs text-slate-400 truncate">{e.local}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

@@ -56,9 +56,9 @@ model BandMember {
 model Event {
   id           String        @id @default(uuid())
   title        String
-  date         DateTime
-  startTime    String?
-  endTime      String?
+  startsAt     DateTime
+  endsAt       DateTime?
+  timezone     String        @default("America/Sao_Paulo")
   type         String?       @default("Show")
   fee          Decimal?      @db.Decimal(10, 2)
   location     String

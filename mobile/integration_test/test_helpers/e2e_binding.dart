@@ -2,11 +2,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 /// Utilitários e inicialização de bindings para testes de integração E2E.
 class E2EBindingHelper {
   /// Garante que o binding do integration_test esteja inicializado.
+  ///
+  /// Também inicializa o banco de dados de timezones (necessário para o
+  /// [NotificationService] que usa [tz.local] internamente).
   static IntegrationTestWidgetsFlutterBinding ensureInitialized() {
+    tz.initializeTimeZones();
     return IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   }
 
