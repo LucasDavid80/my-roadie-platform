@@ -1,5 +1,7 @@
 # Tasks — 014: Corrigir Criação de Compromisso no Dispositivo Físico
 
+> **Supersedido parcialmente pela Spec 024:** A propriedade `date` da entidade `Event` referenciada nestas tasks reflete o estado anterior à padronização de horários. Ela foi substituída por `startsAt` na Spec 024. O conteúdo abaixo reflete o estado do projeto na época da execução.
+
 Pré-requisitos: `spec.md` e `plan.md` aprovados.
 
 ## Fase 0 — Diagnóstico & Validação Prévia
