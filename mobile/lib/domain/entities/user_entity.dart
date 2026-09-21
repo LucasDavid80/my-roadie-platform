@@ -12,6 +12,7 @@ class UserEntity {
   final List<String> instruments;
   final List<String> styles;
   final bool isAvailable;
+  final String? termsAcceptedVersion;
 
   UserEntity({
     required this.id,
@@ -27,6 +28,7 @@ class UserEntity {
     this.instruments = const [],
     this.styles = const [],
     this.isAvailable = true,
+    this.termsAcceptedVersion,
   });
 
   UserEntity copyWith({
@@ -42,6 +44,7 @@ class UserEntity {
     List<String>? instruments,
     List<String>? styles,
     bool? isAvailable,
+    String? termsAcceptedVersion,
   }) {
     return UserEntity(
       id: id,
@@ -57,6 +60,7 @@ class UserEntity {
       instruments: instruments ?? this.instruments,
       styles: styles ?? this.styles,
       isAvailable: isAvailable ?? this.isAvailable,
+      termsAcceptedVersion: termsAcceptedVersion ?? this.termsAcceptedVersion,
     );
   }
 }
