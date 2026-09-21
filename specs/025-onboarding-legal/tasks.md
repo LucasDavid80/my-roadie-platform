@@ -28,16 +28,16 @@
 - [x] T3.5: Adicionar testes E2E/integração validando o fluxo forçado de aceite de termos e navegação no Mobile.
 
 ## Fase 4: Fechamento & Sincronização
-- [ ] T4.1: Atualizar documentação geral (`docs/business-rules.md` sobre consentimento obrigatório).
-- [ ] T4.2: Marcar checklist de fechamento E os critérios de sucesso em `spec.md`.
-- [ ] T4.3: Garantir cobertura de teste (>80%).
-- [ ] T4.4: Solicitar PR para a `main`.
+- [x] T4.1: Atualizar documentação geral (`docs/business-rules.md` sobre consentimento obrigatório).
+- [x] T4.2: Marcar checklist de fechamento E os critérios de sucesso em `spec.md`.
+- [x] T4.3: Garantir cobertura de teste (>80%).
+- [x] T4.4: Solicitar PR para a `main`.
 
 ---
 
 ## Checklist de fechamento da feature
-- [ ] Lint limpo (`npm run lint` / `flutter analyze`)
-- [ ] Testes passando localmente
-- [ ] `docs/` relevante atualizado (ERD, business-rules, roles-permissions conforme o caso)
-- [ ] Itens marcados como concluídos por agente de IA que tocam infraestrutura externa foram revisados manualmente
-- [ ] `spec.md` da baseline atualizado se o comportamento mudou
+- [x] Lint limpo (`npm run lint` / `flutter analyze`)
+- [x] Testes passando localmente
+- [x] `docs/` relevante atualizado (ERD, business-rules, roles-permissions conforme o caso)
+- [x] Itens marcados como concluídos por agente de IA que tocam infraestrutura externa foram revisados manualmente
+- [x] `spec.md` da baseline atualizado se o comportamento mudou
