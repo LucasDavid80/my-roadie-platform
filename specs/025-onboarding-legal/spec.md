@@ -24,3 +24,7 @@ Para atingir o grau essencial de conformidade jurídica com a LGPD e preparar a 
 - [ ] Consentimento do usuário fica registrado no banco de dados associado ao seu `userId`.
 - [ ] Ao atualizar a versão dos termos, usuários existentes são obrigados a aceitar novamente ao logarem.
 - [ ] O backend retorna os metadados da última versão dos termos na rota adequada e valida a consistência.
+
+## 6. Registro de Verificações (Fase 0)
+- **T0.1:** Documentação base criada e branch `spec/025-onboarding-legal` inicializada.
+- **T0.2:** Verificação de build e testes na base atualizada: todos os módulos (Backend, Frontend-web, Mobile) compilaram e passaram em seus testes sem falhas. Nenhuma quebra detectada na `main`.

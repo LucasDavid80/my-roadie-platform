@@ -2,7 +2,7 @@
 
 ## Fase 0: Setup & Preparação
 - [x] T0.1: Criar branch `spec/025-onboarding-legal` e inicializar documentação da spec.
-- [ ] T0.2: Verificar e rodar a base para checar se a build atual não está quebrada antes de começar.
+- [x] T0.2: Verificar e rodar a base para checar se a build atual não está quebrada antes de começar.
 
 ## Fase 1: Implementação Backend (Modelagem e API)
 - [ ] T1.1: Atualizar `schema.prisma` com os campos `termsAcceptedVersion` e `termsAcceptedAt` na tabela `User`.
