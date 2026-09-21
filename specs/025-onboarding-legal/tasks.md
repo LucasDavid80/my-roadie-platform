@@ -25,7 +25,7 @@
 - [x] T3.2: Integrar chamada a `GET /legal/current-version` e `POST /users/me/consent` nos repositórios e serviços.
 - [x] T3.3: Implementar `LegalGuard` ou injetar a verificação no fluxo após Login/Cadastro e App Startup: se versão não bater, força o modal antes de ir ao Dashboard.
 - [x] T3.4: Adicionar testes unitários para a camada de repositório, models e widget (LegalConsentModal) no Mobile.
-- [ ] T3.5: Adicionar testes E2E/integração validando o fluxo forçado de aceite de termos e navegação no Mobile.
+- [x] T3.5: Adicionar testes E2E/integração validando o fluxo forçado de aceite de termos e navegação no Mobile.
 
 ## Fase 4: Fechamento & Sincronização
 - [ ] T4.1: Atualizar documentação geral (`docs/business-rules.md` sobre consentimento obrigatório).
