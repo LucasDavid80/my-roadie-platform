@@ -23,7 +23,7 @@
 ## Fase 3: Interface Mobile (Flutter)
 - [x] T3.1: Criar widget / modal de Termos de Uso no mobile.
 - [x] T3.2: Integrar chamada a `GET /legal/current-version` e `POST /users/me/consent` nos repositórios e serviços.
-- [ ] T3.3: Implementar `LegalGuard` ou injetar a verificação no fluxo após Login/Cadastro e App Startup: se versão não bater, força o modal antes de ir ao Dashboard.
+- [x] T3.3: Implementar `LegalGuard` ou injetar a verificação no fluxo após Login/Cadastro e App Startup: se versão não bater, força o modal antes de ir ao Dashboard.
 
 ## Fase 4: Fechamento & Sincronização
 - [ ] T4.1: Atualizar documentação geral (`docs/business-rules.md` sobre consentimento obrigatório).
