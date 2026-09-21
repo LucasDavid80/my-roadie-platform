@@ -14,7 +14,7 @@
 
 ## Fase 2: Interface Frontend Web (Next.js)
 - [x] T2.1: Criar página pública e estática para visualização dos Termos de Uso (ex: `/termos`).
-- [ ] T2.2: Criar o componente `LegalConsentModal` para exibição forçada dos termos.
+- [x] T2.2: Criar o componente `LegalConsentModal` para exibição forçada dos termos.
 - [ ] T2.3: Integrar a lógica global (`AuthContext` ou root layout) para verificar se `user.termsAcceptedVersion < currentVersion`. Se sim, exibe o modal de forma travada.
 - [ ] T2.4: Integrar botão "Aceitar" do modal com o endpoint `POST /users/me/consent` e atualizar o estado do usuário localmente para liberar o acesso.
 
