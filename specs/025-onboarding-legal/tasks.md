@@ -5,14 +5,15 @@
 - [x] T0.2: Verificar e rodar a base para checar se a build atual não está quebrada antes de começar.
 
 ## Fase 1: Implementação Backend (Modelagem e API)
-- [ ] T1.1: Atualizar `schema.prisma` com os campos `termsAcceptedVersion` e `termsAcceptedAt` na tabela `User`.
-- [ ] T1.2: Rodar `npx prisma format`, `npx prisma generate`, criar e rodar a migration. Atualizar `docs/database/erd.md`.
-- [ ] T1.3: Criar um `LegalModule` (e `LegalController`) que expõe via `GET /legal/current-version` a versão atual dos termos (retornando uma constante).
-- [ ] T1.4: Adicionar o DTO de consentimento e implementar `POST /users/me/consent` no `UsersController` para registrar o aceite e a hora (`new Date()`).
-- [ ] T1.5: Adicionar testes unitários no service/controller garantindo a integridade desse fluxo.
+- [x] T1.1: Atualizar `schema.prisma` com os campos `termsAcceptedVersion` e `termsAcceptedAt` na tabela `User`.
+- [x] T1.2: Rodar `npx prisma format`, `npx prisma generate`, criar e rodar a migration. Atualizar `docs/database/erd.md`.
+- [x] T1.3: Criar um `LegalModule` (e `LegalController`) que expõe via `GET /legal/current-version` a versão atual dos termos (retornando uma constante).
+- [x] T1.4: Adicionar o DTO de consentimento e implementar `POST /users/me/consent` no `UsersController` para registrar o aceite e a hora (`new Date()`).
+- [x] T1.5: Adicionar testes unitários no service/controller garantindo a integridade desse fluxo.
+- [x] T1.6: Adicionar testes E2E para a rota de aceite de termos e para a leitura da versão constante.
 
 ## Fase 2: Interface Frontend Web (Next.js)
-- [ ] T2.1: Criar página pública e estática para visualização dos Termos de Uso (ex: `/termos`).
+- [x] T2.1: Criar página pública e estática para visualização dos Termos de Uso (ex: `/termos`).
 - [ ] T2.2: Criar o componente `LegalConsentModal` para exibição forçada dos termos.
 - [ ] T2.3: Integrar a lógica global (`AuthContext` ou root layout) para verificar se `user.termsAcceptedVersion < currentVersion`. Se sim, exibe o modal de forma travada.
 - [ ] T2.4: Integrar botão "Aceitar" do modal com o endpoint `POST /users/me/consent` e atualizar o estado do usuário localmente para liberar o acesso.
