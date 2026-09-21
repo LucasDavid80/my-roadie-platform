@@ -224,7 +224,7 @@
 - Impacto esperado: alto (blindagem jurídica/LGPD)
 - Depende de: nenhum
 - Release: v1.2.0
-- Status: ideia
+- Status: em andamento (specs/025-onboarding-legal/)
 
 ---
 
