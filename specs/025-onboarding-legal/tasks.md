@@ -57,4 +57,4 @@
 - [x] T5.4: Commitar os arquivos do backend modificados e não commitados (`M` no git status): `backend/prisma/schema.prisma`, `backend/src/app.module.ts`, `backend/src/modules/users/users.controller.ts`, `backend/src/modules/users/users.service.ts`, `backend/src/modules/users/users.controller.spec.ts`, `backend/src/modules/users/users.service.spec.ts`, `backend/test/users.e2e-spec.ts`.
 - [x] T5.5: Verificar (`git diff`) e commitar `mobile/lib/core/guards/legal_guard.dart` (modificado sem commit após o fechamento) — ou reverter se a mudança for indevida.
 - [x] T5.6: Verificar (`git diff`) e commitar `specs/025-onboarding-legal/spec.md` (modificado localmente sem commit).
-- [ ] T5.7: Verificar `frontend-web/src/components/features/events/EventForm.tsx` (modificado sem commit, não pertence a esta spec) — commitar na branch correta ou stash antes de abrir o PR.
+- [x] T5.7: Verificar `frontend-web/src/components/features/events/EventForm.tsx` (modificado sem commit, não pertence a esta spec) — commitar na branch correta ou stash antes de abrir o PR.
