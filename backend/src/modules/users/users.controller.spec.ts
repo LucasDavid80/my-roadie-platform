@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { UsersController } from './users.controller';
@@ -16,12 +15,21 @@ describe('UsersController', () => {
 
   // Criamos um "mock" do Service para não depender da lógica real dele
   const mockUsersService = {
-    createUser: jest.fn((dto) => ({ id: '1', ...dto })),
+    createUser: jest.fn((dto: CreateUserDto) => ({ id: '1', ...dto })),
     findAll: jest.fn(() => [{ id: '1', email: 'teste@myroadie.br' }]),
-    findOne: jest.fn((id) => ({ id, email: 'teste@myroadie.br' })),
-    update: jest.fn((id, dto) => ({ id, ...dto })),
-    updateRole: jest.fn((id, role) => ({ id, role })),
-    remove: jest.fn((id) => ({ id, email: 'teste@myroadie.br' })),
+    findOne: jest.fn((id: string) => ({ id, email: 'teste@myroadie.br' })),
+    update: jest.fn((id: string, dto: Record<string, unknown>) => ({
+      id,
+      ...dto,
+    })),
+    updateRole: jest.fn((id: string, role: Role) => ({ id, role })),
+    updateConsent: jest.fn(
+      (user: Record<string, unknown>, termsVersion: string) => ({
+        ...user,
+        termsAcceptedVersion: termsVersion,
+      }),
+    ),
+    remove: jest.fn((id: string) => ({ id, email: 'teste@myroadie.br' })),
   };
 
   beforeEach(async () => {
@@ -93,7 +101,11 @@ describe('UsersController', () => {
       const id = '1';
       const dto = { name: 'Novo Nome' };
       const req = { user: undefined };
-      await controller.update(id, dto, req);
+      await controller.update(
+        id,
+        dto,
+        req as unknown as Parameters<UsersController['update']>[2],
+      );
       expect(service.update).toHaveBeenCalledWith(id, dto, undefined);
     });
 
@@ -107,6 +119,40 @@ describe('UsersController', () => {
         .mockRejectedValueOnce(new Error('Erro de Banco'));
 
       await expect(controller.update(id, dto)).rejects.toThrow('Erro de Banco');
+    });
+  });
+
+  describe('updateConsent', () => {
+    it('deve chamar o updateConsent do service com os dados corretos', async () => {
+      const dto = { termsVersion: 'v1.0.0' };
+      const req = { user: { userId: '123', email: 'teste@teste.com' } };
+
+      const result = await controller.updateConsent(
+        req as unknown as Parameters<UsersController['updateConsent']>[0],
+        dto,
+      );
+
+      expect(service.updateConsent).toHaveBeenCalledWith(
+        req.user,
+        dto.termsVersion,
+      );
+      expect(result).toHaveProperty('termsAcceptedVersion', 'v1.0.0');
+    });
+
+    it('deve repassar exceção se o service falhar', async () => {
+      const dto = { termsVersion: 'v1.0.0' };
+      jest
+        .spyOn(service, 'updateConsent')
+        .mockRejectedValueOnce(
+          new NotFoundException('Usuário não autenticado'),
+        );
+
+      await expect(
+        controller.updateConsent(
+          {} as unknown as Parameters<UsersController['updateConsent']>[0],
+          dto,
+        ),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 

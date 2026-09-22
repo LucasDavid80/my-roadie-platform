@@ -231,4 +231,25 @@ describe('UsersController (e2e)', () => {
         });
     });
   });
+
+  describe('/users/me/consent (POST)', () => {
+    it('deve retornar 201 e atualizar a versão aceita quando o usuário enviar payload válido', () => {
+      return request(app.getHttpServer())
+        .post('/users/me/consent')
+        .send({
+          termsVersion: 'v1.0.0',
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('termsAcceptedVersion', 'v1.0.0');
+        });
+    });
+
+    it('deve retornar 400 (Bad Request) quando o termsVersion for vazio ou omitido', () => {
+      return request(app.getHttpServer())
+        .post('/users/me/consent')
+        .send({})
+        .expect(400);
+    });
+  });
 });

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -95,6 +95,21 @@ describe('UsersService', () => {
         NotFoundException,
       );
     });
+
+    it('deve criar e retornar usuário se não encontrado mas o reqUser for fornecido', async () => {
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(null);
+      const reqUser = { userId: 'supabase-id-999', email: 'novo@teste.com' };
+      const createdUser = {
+        ...mockUser,
+        id: 'uuid-999',
+        supabaseId: 'supabase-id-999',
+      };
+      jest.spyOn(prisma.user, 'create').mockResolvedValue(createdUser as any);
+
+      const found = await service.findOne('supabase-id-999', reqUser);
+      expect(prisma.user.create).toHaveBeenCalled();
+      expect(found).toEqual(createdUser);
+    });
   });
 
   describe('update', () => {
@@ -107,6 +122,48 @@ describe('UsersService', () => {
       const updated = await service.update('uuid-123', updateDto);
 
       expect(updated.name).toBe('Novo Nome');
+    });
+
+    it('deve criar um usuário no update se ele não existir e reqUser for fornecido', async () => {
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(null);
+      const reqUser = { userId: 'supabase-id-999', email: 'novo@teste.com' };
+      const createdUser = { ...mockUser, id: 'uuid-999', name: 'Novo Nome' };
+      jest.spyOn(prisma.user, 'create').mockResolvedValue(createdUser as any);
+
+      const updated = await service.update(
+        'uuid-999',
+        { name: 'Novo Nome' },
+        reqUser,
+      );
+      expect(prisma.user.create).toHaveBeenCalled();
+      expect(updated).toEqual(createdUser);
+    });
+  });
+
+  describe('updateConsent', () => {
+    it('deve atualizar a versão dos termos aceitos', async () => {
+      jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(mockUser);
+      jest.spyOn(prisma.user, 'update').mockResolvedValue({
+        ...mockUser,
+        termsAcceptedVersion: 'v1.0.0',
+        termsAcceptedAt: new Date(),
+      } as unknown as User);
+
+      const reqUser = {
+        userId: 'supabase-id-123',
+        email: 'lucas@myroadie.br',
+        role: Role.ROADIE,
+      };
+      const updated = await service.updateConsent(reqUser, 'v1.0.0');
+
+      expect(updated).toHaveProperty('termsAcceptedVersion', 'v1.0.0');
+      expect(prisma.user.update).toHaveBeenCalled();
+    });
+
+    it('deve lançar NotFoundException se usuário não estiver autenticado', async () => {
+      await expect(service.updateConsent(undefined, 'v1.0.0')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
