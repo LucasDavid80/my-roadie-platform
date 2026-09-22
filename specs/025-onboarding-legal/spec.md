@@ -20,10 +20,10 @@ Para atingir o grau essencial de conformidade jurídica com a LGPD e preparar a 
 - Painel para administradores redigirem/editarem os termos dinamicamente via CMS nativo (os documentos serão estáticos e versionados na aplicação por enquanto).
 
 ## 5. Critérios de Sucesso
-- [ ] Usuário recém-cadastrado precisa aceitar os termos e a política para acessar a Agenda/Dashboard.
-- [ ] Consentimento do usuário fica registrado no banco de dados associado ao seu `userId`.
-- [ ] Ao atualizar a versão dos termos, usuários existentes são obrigados a aceitar novamente ao logarem.
-- [ ] O backend retorna os metadados da última versão dos termos na rota adequada e valida a consistência.
+- [x] Usuário recém-cadastrado precisa aceitar os termos e a política para acessar a Agenda/Dashboard.
+- [x] Consentimento do usuário fica registrado no banco de dados associado ao seu `userId`.
+- [x] Ao atualizar a versão dos termos, usuários existentes são obrigados a aceitar novamente ao logarem.
+- [x] O backend retorna os metadados da última versão dos termos na rota adequada e valida a consistência.
 
 ## 6. Registro de Verificações (Fase 0)
 - **T0.1:** Documentação base criada e branch `spec/025-onboarding-legal` inicializada.
