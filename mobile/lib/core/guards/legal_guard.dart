@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/datasources/remote_datasource.dart';
 import '../../data/repositories/legal_repository_impl.dart';
 import '../../domain/interfaces/i_legal_repository.dart';
 import '../../presentation/widgets/legal_consent_modal.dart';
