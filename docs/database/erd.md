@@ -10,6 +10,8 @@ Entities principais:
   - name: string?
   - role: enum {MUSICIAN, ROADIE, ADMIN}
   - supabaseId: string (unique)
+  - termsAcceptedVersion: string?
+  - termsAcceptedAt: datetime?
   - createdAt, updatedAt
 
 - Band
@@ -69,6 +71,8 @@ erDiagram
     String name
     String role
     String supabaseId
+    String termsAcceptedVersion
+    DateTime termsAcceptedAt
   }
   BAND {
     String id PK

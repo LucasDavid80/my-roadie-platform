@@ -24,7 +24,7 @@ model User {
 
 ## 3. Estrutura de Arquivos Afetados
 - `backend/prisma/schema.prisma`
-- `backend/src/legal/legal.controller.ts` e `legal.service.ts` (Novo Módulo Simples)
+- `backend/src/modules/legal/legal.controller.ts` e `legal.service.ts` (Novo Módulo Simples)
 - `backend/src/users/users.controller.ts` e `users.service.ts`
 - `frontend-web/src/app/(public)/termos/page.tsx`
 - `frontend-web/src/components/LegalConsentModal.tsx`
