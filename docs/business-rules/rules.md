@@ -30,6 +30,11 @@ Resumo das regras centrais atualmente implementadas:
 7. Dados e Migrations
    - Alterações em `prisma/schema.prisma` exigem: `npx prisma migrate` (quando aplicável) e `npx prisma generate` antes de build/test.
 
+8. Consentimento Legal
+   - Todos os usuários (novos e existentes) devem aceitar formalmente os Termos de Uso e a Política de Privacidade.
+   - O registro do consentimento (`termsAcceptedVersion` e `termsAcceptedAt`) fica salvo na entidade User.
+   - A navegação na plataforma (Web e Mobile) é bloqueada se o usuário não tiver aceitado a versão vigente dos documentos legais.
+
 Observações:
 - Regras por endpoint estão nos controllers/services do backend; consulte DTOs para validações de entrada.
 - Ao adicionar novos campos no schema, atualizar o ERD e a documentação da API.

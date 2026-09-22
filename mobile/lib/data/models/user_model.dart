@@ -16,6 +16,7 @@ class UserModel extends UserEntity {
     super.instruments,
     super.styles,
     super.isAvailable,
+    super.termsAcceptedVersion,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +54,7 @@ class UserModel extends UserEntity {
       isAvailable: json['isAvailable'] is bool
           ? json['isAvailable'] as bool
           : true,
+      termsAcceptedVersion: json['termsAcceptedVersion']?.toString(),
     );
   }
 
@@ -70,6 +72,7 @@ class UserModel extends UserEntity {
       'instruments': instruments,
       'styles': styles,
       'isAvailable': isAvailable,
+      'termsAcceptedVersion': termsAcceptedVersion,
     };
   }
 }

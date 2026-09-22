@@ -18,3 +18,4 @@ Thumbs.db
 # Local CI / Act
 .act-event.json
 .actrc
+audits/security/

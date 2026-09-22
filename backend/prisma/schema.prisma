@@ -7,27 +7,29 @@ datasource db {
 }
 
 model User {
-  id             String        @id @default(uuid())
-  email          String        @unique
-  name           String?
-  role           Role          @default(MUSICIAN)
-  experience     String?
-  phone          String?
-  instagram      String?
-  city           String?
-  federativeUnit String?
-  minCache       Decimal?      @db.Decimal(10, 2)
-  youtubeLink    String?
-  bio            String?
-  instruments    String[]
-  styles         String[]
-  isAvailable    Boolean       @default(true)
-  createdAt      DateTime      @default(now())
-  supabaseId     String        @unique
-  updatedAt      DateTime      @updatedAt
-  bands          BandMember[]
-  createdEvents  Event[]       @relation("EventCreator")
-  transactions   Transaction[]
+  id                   String        @id @default(uuid())
+  email                String        @unique
+  name                 String?
+  role                 Role          @default(MUSICIAN)
+  experience           String?
+  phone                String?
+  instagram            String?
+  city                 String?
+  federativeUnit       String?
+  minCache             Decimal?      @db.Decimal(10, 2)
+  youtubeLink          String?
+  bio                  String?
+  instruments          String[]
+  styles               String[]
+  isAvailable          Boolean       @default(true)
+  createdAt            DateTime      @default(now())
+  supabaseId           String        @unique
+  updatedAt            DateTime      @updatedAt
+  termsAcceptedVersion String?       @db.VarChar(50)
+  termsAcceptedAt      DateTime?
+  bands                BandMember[]
+  createdEvents        Event[]       @relation("EventCreator")
+  transactions         Transaction[]
 }
 
 model Band {

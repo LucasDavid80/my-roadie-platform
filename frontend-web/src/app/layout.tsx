@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LegalConsentWrapper } from "@/components/LegalConsentWrapper";
 
 export default function RootLayout({
   children,
@@ -31,7 +32,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>
-          {children}
+          <LegalConsentWrapper>
+            {children}
+          </LegalConsentWrapper>
         </AuthProvider>
       </body>
     </html>

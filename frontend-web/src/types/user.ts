@@ -17,6 +17,8 @@ export interface UserEntity {
     supabaseId: string;
     createdAt?: string;
     updatedAt?: string;
+    termsAcceptedVersion?: string | null;
+    termsAcceptedAt?: string | null;
 }
 
 export type CreateUserData = Pick<UserEntity, 'email' | 'supabaseId'> & {

@@ -273,4 +273,53 @@ class RemoteDataSource {
       throw NetworkException(e.toString());
     }
   }
+
+  // --- Legal ---
+
+  Future<String> getCurrentTermsVersion() async {
+    try {
+      final response = await _client.get(
+        Uri.parse('${AppConfig.backendUrl}/legal/current-version'),
+        headers: _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        final dynamic data = jsonDecode(response.body);
+        return data['version']?.toString() ?? '';
+      } else {
+        throw ServerException(
+          'Failed to get current terms version: ${response.statusCode}',
+        );
+      }
+    } on http.ClientException {
+      throw NetworkException();
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw NetworkException(e.toString());
+    }
+  }
+
+  Future<void> acceptTerms(String termsVersion) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('${AppConfig.backendUrl}/users/me/consent'),
+        headers: _getHeaders(),
+        body: jsonEncode({'termsVersion': termsVersion}),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        if (response.statusCode == 401) {
+          throw UnauthorizedException();
+        }
+        throw ServerException(
+          'Failed to accept terms: ${response.statusCode}',
+        );
+      }
+    } on http.ClientException {
+      throw NetworkException();
+    } catch (e) {
+      if (e is UnauthorizedException || e is ServerException) rethrow;
+      throw NetworkException(e.toString());
+    }
+  }
 }

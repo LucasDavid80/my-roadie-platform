@@ -2,7 +2,7 @@ import 'package:agenda_musical/presentation/screens/auth/login_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-// Importe suas telas aqui
+import 'package:agenda_musical/core/guards/legal_guard.dart';
 import 'package:agenda_musical/presentation/screens/principal/principal_screen.dart';
 import 'package:agenda_musical/presentation/screens/person/person_screen.dart';
 import 'package:agenda_musical/presentation/screens/history/history_screen.dart';
@@ -15,7 +15,7 @@ final GoRouter router = GoRouter(
       path: '/',
       name: 'home',
       builder: (BuildContext context, GoRouterState state) {
-        return const PrincipalScreen(); // Sua tela inicial
+        return const LegalGuard(child: PrincipalScreen()); // Sua tela inicial
       },
       routes: [
         // Rota do Perfil (Aninhada ou separada, aqui vou deixar aninhada para facilitar o "voltar")

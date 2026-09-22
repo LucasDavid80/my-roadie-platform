@@ -15,6 +15,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
+import { ConsentDto } from './dto/consent.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -36,13 +37,12 @@ export class UsersController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
-    const role = (createUserDto.role as Role) || Role.MUSICIAN;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { role: _, ...rest } = createUserDto;
+    const { role, ...rest } = createUserDto;
+    const finalRole = (role as Role) || Role.MUSICIAN;
 
     return this.usersService.createUser({
       ...rest,
-      role,
+      role: finalRole,
     });
   }
 
@@ -57,6 +57,15 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
     return this.usersService.findOne(id, req?.user);
+  }
+
+  @Post('me/consent')
+  @UseGuards(JwtAuthGuard)
+  updateConsent(
+    @Req() req: AuthenticatedRequest,
+    @Body() consentDto: ConsentDto,
+  ) {
+    return this.usersService.updateConsent(req?.user, consentDto.termsVersion);
   }
 
   @Patch(':id')

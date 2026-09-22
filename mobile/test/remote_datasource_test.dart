@@ -364,4 +364,54 @@ void main() {
       );
     });
   });
+
+  group('getCurrentTermsVersion', () {
+    test('should return version string when status code is 200 (positive case)', () async {
+      when(() => mockHttpClient.get(
+            any(),
+            headers: any(named: 'headers'),
+          )).thenAnswer((_) async => http.Response(jsonEncode({'version': 'v1.0.0'}), 200));
+
+      final result = await remoteDataSource.getCurrentTermsVersion();
+
+      expect(result, 'v1.0.0');
+    });
+
+    test('should throw ServerException when status code is 500 (negative case)', () async {
+      when(() => mockHttpClient.get(
+            any(),
+            headers: any(named: 'headers'),
+          )).thenAnswer((_) async => http.Response('Server Error', 500));
+
+      expect(
+        () => remoteDataSource.getCurrentTermsVersion(),
+        throwsA(isA<ServerException>()),
+      );
+    });
+  });
+
+  group('acceptTerms', () {
+    test('should complete successfully when status code is 201 (positive case)', () async {
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer((_) async => http.Response('', 201));
+
+      await expectLater(remoteDataSource.acceptTerms('v1.0.0'), completes);
+    });
+
+    test('should throw UnauthorizedException when status code is 401 (negative case)', () async {
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer((_) async => http.Response('Unauthorized', 401));
+
+      expect(
+        () => remoteDataSource.acceptTerms('v1.0.0'),
+        throwsA(isA<UnauthorizedException>()),
+      );
+    });
+  });
 }

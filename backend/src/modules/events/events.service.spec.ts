@@ -422,11 +422,10 @@ describe('EventsService', () => {
       await service.create(dto, { ...mockUser, email: null });
 
       expect(prisma.user.create).toHaveBeenCalledWith({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: expect.objectContaining({
           supabaseId: mockUser.userId,
           email: `${mockUser.userId}@supabase.user`,
-        }),
+        }) as unknown as Prisma.UserCreateInput,
       });
     });
   });
@@ -686,7 +685,6 @@ describe('EventsService', () => {
 
       expect(prisma.event.update).toHaveBeenCalledWith({
         where: { id: 'event-uuid-123' },
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: expect.objectContaining({
           startsAt: new Date(updateDto.startsAt!),
           endsAt: new Date(updateDto.endsAt!),
@@ -694,9 +692,8 @@ describe('EventsService', () => {
           location: updateDto.location,
           description: updateDto.description,
           type: updateDto.type,
-        }),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        include: expect.any(Object),
+        }) as unknown as Prisma.EventUpdateInput,
+        include: expect.any(Object) as unknown as Prisma.EventInclude,
       });
     });
 
@@ -735,11 +732,10 @@ describe('EventsService', () => {
 
       expect(prisma.transaction.update).toHaveBeenCalledWith({
         where: { id: 'tx-uuid-1' },
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: expect.objectContaining({
           date: updatedEvent.startsAt,
           band: { connect: { id: updateDto.bandId } },
-        }),
+        }) as unknown as Prisma.TransactionUpdateInput,
       });
     });
 

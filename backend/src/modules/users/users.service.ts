@@ -127,6 +127,24 @@ export class UsersService {
     });
   }
 
+  async updateConsent(
+    reqUser: { userId: string; email: string; role?: Role } | undefined,
+    termsVersion: string,
+  ) {
+    if (!reqUser?.userId) {
+      throw new NotFoundException('Usuário não autenticado');
+    }
+    const user = await this.findOne('me', reqUser);
+
+    return await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        termsAcceptedVersion: termsVersion,
+        termsAcceptedAt: new Date(),
+      },
+    });
+  }
+
   async updateRole(id: string, role: Role) {
     const searchConditions: Prisma.UserWhereInput[] = [
       { id },
