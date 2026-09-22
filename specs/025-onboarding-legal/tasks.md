@@ -54,7 +54,7 @@
 
 ### 5.2 — Correções de Versionamento Git (requer ação humana)
 - [x] T5.3: Commitar todos os arquivos do backend não versionados (`??` no git status): pasta `backend/src/modules/legal/`, `backend/src/modules/users/dto/consent.dto.ts`, `backend/test/legal.e2e-spec.ts` e `backend/prisma/migrations/20260921000000_add_legal_consent_fields/`.
-- [ ] T5.4: Commitar os arquivos do backend modificados e não commitados (`M` no git status): `backend/prisma/schema.prisma`, `backend/src/app.module.ts`, `backend/src/modules/users/users.controller.ts`, `backend/src/modules/users/users.service.ts`, `backend/src/modules/users/users.controller.spec.ts`, `backend/src/modules/users/users.service.spec.ts`, `backend/test/users.e2e-spec.ts`.
+- [x] T5.4: Commitar os arquivos do backend modificados e não commitados (`M` no git status): `backend/prisma/schema.prisma`, `backend/src/app.module.ts`, `backend/src/modules/users/users.controller.ts`, `backend/src/modules/users/users.service.ts`, `backend/src/modules/users/users.controller.spec.ts`, `backend/src/modules/users/users.service.spec.ts`, `backend/test/users.e2e-spec.ts`.
 - [ ] T5.5: Verificar (`git diff`) e commitar `mobile/lib/core/guards/legal_guard.dart` (modificado sem commit após o fechamento) — ou reverter se a mudança for indevida.
 - [ ] T5.6: Verificar (`git diff`) e commitar `specs/025-onboarding-legal/spec.md` (modificado localmente sem commit).
 - [ ] T5.7: Verificar `frontend-web/src/components/features/events/EventForm.tsx` (modificado sem commit, não pertence a esta spec) — commitar na branch correta ou stash antes de abrir o PR.
