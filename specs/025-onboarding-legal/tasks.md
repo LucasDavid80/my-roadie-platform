@@ -28,7 +28,7 @@
 - [x] T3.5: Adicionar testes E2E/integração validando o fluxo forçado de aceite de termos e navegação no Mobile.
 
 ## Fase 4: Fechamento & Sincronização
-- [x] T4.1: Atualizar documentação geral (`docs/business-rules.md` sobre consentimento obrigatório).
+- [x] T4.1: Atualizar documentação geral (`docs/business-rules/rules.md` sobre consentimento obrigatório).
 - [x] T4.2: Marcar checklist de fechamento E os critérios de sucesso em `spec.md`.
 - [x] T4.3: Garantir cobertura de teste (>80%).
 - [x] T4.4: Solicitar PR para a `main`.
@@ -41,3 +41,20 @@
 - [x] `docs/` relevante atualizado (ERD, business-rules, roles-permissions conforme o caso)
 - [x] Itens marcados como concluídos por agente de IA que tocam infraestrutura externa foram revisados manualmente
 - [x] `spec.md` da baseline atualizado se o comportamento mudou
+
+---
+
+## Fase 5: Correções Pós-Auditoria
+
+> Itens identificados na auditoria realizada em 2026-09-21. Nenhum item desta fase altera código de produto.
+
+### 5.1 — Correções Documentais (agente)
+- [x] T5.1: Corrigir caminho em `tasks.md` T4.1: `docs/business-rules.md` → `docs/business-rules/rules.md`.
+- [x] T5.2: Corrigir caminho em `plan.md` linha 27: `backend/src/legal/` → `backend/src/modules/legal/`.
+
+### 5.2 — Correções de Versionamento Git (requer ação humana)
+- [x] T5.3: Commitar todos os arquivos do backend não versionados (`??` no git status): pasta `backend/src/modules/legal/`, `backend/src/modules/users/dto/consent.dto.ts`, `backend/test/legal.e2e-spec.ts` e `backend/prisma/migrations/20260921000000_add_legal_consent_fields/`.
+- [ ] T5.4: Commitar os arquivos do backend modificados e não commitados (`M` no git status): `backend/prisma/schema.prisma`, `backend/src/app.module.ts`, `backend/src/modules/users/users.controller.ts`, `backend/src/modules/users/users.service.ts`, `backend/src/modules/users/users.controller.spec.ts`, `backend/src/modules/users/users.service.spec.ts`, `backend/test/users.e2e-spec.ts`.
+- [ ] T5.5: Verificar (`git diff`) e commitar `mobile/lib/core/guards/legal_guard.dart` (modificado sem commit após o fechamento) — ou reverter se a mudança for indevida.
+- [ ] T5.6: Verificar (`git diff`) e commitar `specs/025-onboarding-legal/spec.md` (modificado localmente sem commit).
+- [ ] T5.7: Verificar `frontend-web/src/components/features/events/EventForm.tsx` (modificado sem commit, não pertence a esta spec) — commitar na branch correta ou stash antes de abrir o PR.
