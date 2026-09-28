@@ -236,7 +236,7 @@
 - Impacto esperado: alto (fundação de colaboração e múltiplos projetos na plataforma)
 - Depende de: Autorização por Banda (spec 011)
 - Release: v1.3.0
-- Status: ideia
+- Status: em spec (specs/026-gestao-basica-bandas/)
 
 #### 2. Identidade Única por @username e Busca de Usuários
 - Intenção: Adicionar o campo `username` único (`@unique`) no modelo `User` do Prisma com regras de validação (letras minúsculas, números, `_` e `.`), endpoint de busca dinâmica de perfis (`GET /users/search?q=`) e seleção de `@` no cadastro e tela de perfil.
