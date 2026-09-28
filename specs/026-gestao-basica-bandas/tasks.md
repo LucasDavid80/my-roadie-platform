@@ -10,7 +10,7 @@
 
 - [x] T1.1: Criar o módulo `bands` com DTOs, service, controller e registro no módulo raiz.
 - [x] T1.2: Implementar listagem e detalhes de bandas respeitando associação via `BandMember`.
-- [ ] T1.3: Implementar criação transacional de banda com associação automática do criador como `OWNER`.
+- [x] T1.3: Implementar criação transacional de banda com associação automática do criador como `OWNER`.
 - [ ] T1.4: Implementar edição e exclusão com autorização de `OWNER`/`ADMIN`, validações e integridade referencial.
 - [ ] T1.5: Atualizar a matriz de permissões e a documentação de banco caso os contratos ou schema sejam alterados.
 
