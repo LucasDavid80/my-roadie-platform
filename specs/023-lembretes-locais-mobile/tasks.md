@@ -82,4 +82,4 @@
   (`mobile/coverage/lcov.info`, `specs/023-lembretes-locais-mobile/tasks.md`)
   seguindo o padrão Conventional Commits antes de solicitar o Push/PR.
 - [x] Solicitar autorização explícita do usuário para executar `git push`
-  e abrir o Pull Request (pendente — não realizado até o fechamento desta auditoria).
+  e abrir o Pull Request.

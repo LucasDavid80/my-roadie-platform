@@ -106,12 +106,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 8. Débito técnico a considerar antes/junto das próximas features
 
-1. Módulos ausentes: nenhum (módulos Task, RepertoireSong, Transaction e Event entregues nas specs 004, 005, 006 e 014).
-2. Mobile com camada de dados implementada e conectada (resolvido na spec 003).
-3. Decisões de stack do frontend-web não fechadas na documentação (resolvido na spec 001).
-4. Nenhum `spec.md`/`plan.md`/`tasks.md` formal existia antes desta migração — daqui em diante, toda feature nova segue o fluxo descrito em `constitution.md` §8.
-5. **Rotas admin não isoladas** — Resolvido na spec 002 (rotas movidas para o Route Group `(admin)` com layout guard dedicado).
-6. **Cobertura de testes não medida contra a meta atual** — Resolvido na spec 001 (ver tabela de medição na seção 5).
-7. **Gaps de LGPD listados em `constitution.md` §10** — Parcialmente resolvido: **consentimento no cadastro** implementado na Spec 025 (modal obrigatório, registro de `termsAcceptedVersion`/`termsAcceptedAt`, UX Block em re-login). Permanecem pendentes: política de exclusão de conta (Spec v1.6.0), exportação de dados (Spec v1.6.0), log de acesso a dados sensíveis, confirmação de região/criptografia do Supabase.
+1. Nenhum `spec.md`/`plan.md`/`tasks.md` formal existia antes desta migração — daqui em diante, toda feature nova segue o fluxo descrito em `constitution.md` §8.
+2. **Gaps de LGPD listados em `constitution.md` §10** — Parcialmente resolvido: **consentimento no cadastro** implementado na Spec 025 (modal obrigatório, registro de `termsAcceptedVersion`/`termsAcceptedAt`, UX Block em re-login). Permanecem pendentes: política de exclusão de conta (Spec v1.6.0), exportação de dados (Spec v1.6.0), log de acesso a dados sensíveis, confirmação de região/criptografia do Supabase.
 
-> O item 7 nasceu de uma atualização da `constitution.md` feita **depois** desta baseline ter sido escrita. O consentimento foi endereçado na Spec 025; os demais itens ainda precisam de spec própria.
+> O item 2 nasceu de uma atualização da `constitution.md` feita **depois** desta baseline ter sido escrita. O consentimento foi endereçado na Spec 025; os demais itens ainda precisam de spec própria.
