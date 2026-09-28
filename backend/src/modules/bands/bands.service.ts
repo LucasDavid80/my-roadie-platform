@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma, Role } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BandAccessService } from '../band-access/band-access.service';
 import { CurrentUserPayload } from '../auth/decorators/current-user.decorator';
 import { CreateBandDto } from './dto/create-band.dto';
+import { UpdateBandDto } from './dto/update-band.dto';
 
 @Injectable()
 export class BandsService {
@@ -59,6 +65,81 @@ export class BandsService {
           updatedAt: true,
         },
       });
+    });
+  }
+
+  private async assertManagementAccess(id: string, user: CurrentUserPayload) {
+    const band = await this.prisma.band.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    if (!band) {
+      throw new NotFoundException(`Banda com ID ${id} não encontrada`);
+    }
+
+    if (user.role === Role.ADMIN) {
+      return band;
+    }
+
+    const owner = await this.prisma.bandMember.findFirst({
+      where: {
+        bandId: id,
+        role: 'OWNER',
+        OR: [{ userId: user.userId }, { user: { supabaseId: user.userId } }],
+      },
+      select: { id: true },
+    });
+
+    if (!owner) {
+      throw new ForbiddenException(
+        'Apenas o proprietário da banda pode realizar esta operação',
+      );
+    }
+
+    return band;
+  }
+
+  async update(
+    id: string,
+    updateBandDto: UpdateBandDto,
+    user: CurrentUserPayload,
+  ) {
+    await this.assertManagementAccess(id, user);
+
+    return this.prisma.band.update({
+      where: { id },
+      data:
+        updateBandDto.name === undefined ? {} : { name: updateBandDto.name },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async remove(id: string, user: CurrentUserPayload) {
+    await this.assertManagementAccess(id, user);
+
+    await this.prisma.$transaction(async (transaction) => {
+      const [eventCount, repertoireCount, transactionCount] = await Promise.all(
+        [
+          transaction.event.count({ where: { bandId: id } }),
+          transaction.repertoireSong.count({ where: { bandId: id } }),
+          transaction.transaction.count({ where: { bandId: id } }),
+        ],
+      );
+
+      if (eventCount > 0 || repertoireCount > 0 || transactionCount > 0) {
+        throw new ConflictException(
+          'A banda não pode ser excluída enquanto possuir eventos, músicas de repertório ou transações vinculadas',
+        );
+      }
+
+      await transaction.bandMember.deleteMany({ where: { bandId: id } });
+      await transaction.band.delete({ where: { id } });
     });
   }
 
