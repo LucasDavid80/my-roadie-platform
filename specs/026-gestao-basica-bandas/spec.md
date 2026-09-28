@@ -46,3 +46,11 @@ Esta spec é a fundação das próximas features de colaboração, convites e no
 - **Frontend Web:** `frontend-web/src/types/event.ts` já expõe `bandId` no contrato de eventos. Não foram encontrados tipos, serviço de API, provider/contexto ou interface de gestão/seleção de bandas; o dashboard atual ainda usa dados mockados para a agenda.
 - **Mobile:** `mobile/lib/domain/entities/event_entity.dart` e `mobile/lib/domain/models/event_model.dart` já carregam `bandId`; `RemoteDataSource` envia esse campo no contrato de eventos e remove `id` do payload de criação. `AgendaRepositoryImpl` e `AgendaController` ainda não mantêm lista ou seleção de bandas, nem propagam um workspace ativo para as consultas.
 - **Contratos documentais:** `docs/auth/roles-permissions.md` registra associação por `BandMember` e acesso global de `ADMIN`, enquanto `docs/database/erd.md` documenta as relações atuais. Nenhum dos dois documentos descreve ainda os endpoints ou a regra de ownership desta spec.
+
+## 7. Política de integridade para exclusão — T0.3
+
+- A exclusão de uma banda não fará cascata sobre eventos, tarefas, repertório ou transações, para não remover dados operacionais e financeiros silenciosamente.
+- `DELETE /bands/:id` só poderá prosseguir quando não existirem `Event`, `RepertoireSong` ou `Transaction` associados à banda. A existência de qualquer um desses recursos deverá produzir uma resposta de conflito explícita, preservando a banda e todos os seus dados.
+- Quando a banda estiver sem recursos dependentes, os registros `BandMember` serão removidos na mesma transação da exclusão da `Band`. Isso evita deixar associações órfãs e respeita as restrições `ON DELETE RESTRICT` existentes.
+- A política se aplica tanto ao `OWNER` quanto ao `ADMIN` autorizados pela spec; usuários não associados continuam recebendo resposta de autorização adequada.
+- A implementação prevista não exige alteração no schema Prisma, migration, geração de client ou atualização do ERD. O endpoint deverá executar as verificações e exclusões de forma transacional e tratar explicitamente a condição de conflito.

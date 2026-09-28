@@ -30,6 +30,13 @@ Contratos previstos:
 - `PATCH /bands/:id` — altera campos permitidos, inicialmente `name`, somente para `OWNER` ou `ADMIN`.
 - `DELETE /bands/:id` — remove a banda conforme a política de integridade definida e somente para `OWNER` ou `ADMIN`.
 
+Política de integridade para `DELETE /bands/:id`:
+
+- Não usar exclusão em cascata para apagar dados de eventos, repertório ou transações.
+- Bloquear a exclusão com resposta de conflito quando existir qualquer `Event`, `RepertoireSong` ou `Transaction` ligado à banda.
+- Quando não houver esses recursos, remover os `BandMember` e a `Band` na mesma transação Prisma.
+- A política preserva as relações `ON DELETE RESTRICT` atuais e não exige migration ou alteração do schema.
+
 DTOs:
 
 - `CreateBandDto`: `name` obrigatório, não vazio e com limite de tamanho definido pelo contrato.

@@ -4,7 +4,7 @@
 
 - [x] T0.1: Criar branch e inicializar `spec.md`, `plan.md` e `tasks.md` da Spec 026.
 - [x] T0.2: Confirmar contratos existentes de `Band`, `BandMember`, autorização por banda e dependências entre Web, Mobile e backend.
-- [ ] T0.3: Definir e documentar a política de integridade para exclusão de banda antes de alterar o schema ou implementar o endpoint.
+- [x] T0.3: Definir e documentar a política de integridade para exclusão de banda antes de alterar o schema ou implementar o endpoint.
 
 ## Fase 1: Implementação — Backend / Domínio
 
