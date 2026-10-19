@@ -16,7 +16,7 @@
 
 ## Fase 2: Interface & Integração — Web / Mobile
 
-- [ ] T2.1: Criar contratos tipados e serviço de API de bandas no frontend Web.
+- [x] T2.1: Criar contratos tipados e serviço de API de bandas no frontend Web.
 - [ ] T2.2: Implementar contexto/provider de workspace ativo e seletor de bandas no Web.
 - [ ] T2.3: Implementar criação, edição, exclusão e estados de erro/vazio da gestão de bandas no Web.
 - [ ] T2.4: Criar entidade, model, datasource/repository e controller de bandas no Mobile.
