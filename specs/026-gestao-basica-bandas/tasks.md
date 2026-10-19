@@ -18,7 +18,7 @@
 
 - [x] T2.1: Criar contratos tipados e serviço de API de bandas no frontend Web.
 - [x] T2.2: Implementar contexto/provider de workspace ativo e seletor de bandas no Web.
-- [ ] T2.3: Implementar criação, edição, exclusão e estados de erro/vazio da gestão de bandas no Web.
+- [x] T2.3: Implementar criação, edição, exclusão e estados de erro/vazio da gestão de bandas no Web.
 - [ ] T2.4: Criar entidade, model, datasource/repository e controller de bandas no Mobile.
 - [ ] T2.5: Implementar seletor e fluxo mínimo de gestão de workspace no Mobile.
 - [ ] T2.6: Integrar o `bandId` ativo às consultas e criações existentes que dependem de banda, sem enviar campos gerados pelo banco.

@@ -5,6 +5,7 @@ import {
     useCallback,
     useContext,
     useEffect,
+    useRef,
     useState,
     type ReactNode,
 } from 'react';
@@ -21,6 +22,7 @@ interface WorkspaceContextData {
     isLoading: boolean;
     error: string | null;
     selectBand: (bandId: string) => void;
+    refreshBands: () => Promise<void>;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextData | undefined>(undefined);
@@ -31,8 +33,9 @@ export function WorkspaceProvider({ children }: Readonly<{ children: ReactNode }
     const [activeBandId, setActiveBandId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const isMountedRef = useRef(true);
 
-    useEffect(() => {
+    const refreshBands = useCallback(async () => {
         if (!isAuthenticated) {
             setBands([]);
             setActiveBandId(null);
@@ -40,47 +43,45 @@ export function WorkspaceProvider({ children }: Readonly<{ children: ReactNode }
             return;
         }
 
-        let isMounted = true;
+        setIsLoading(true);
+        setError(null);
 
-        async function loadBands() {
-            setIsLoading(true);
-            setError(null);
+        try {
+            const availableBands = await bandService.getAll();
+            if (!isMountedRef.current) return;
 
-            try {
-                const availableBands = await bandService.getAll();
-                if (!isMounted) return;
+            const storedBandId = sessionStorage.getItem(ACTIVE_BAND_STORAGE_KEY);
+            const nextActiveBandId =
+                availableBands.find((band) => band.id === storedBandId)?.id ??
+                availableBands[0]?.id ??
+                null;
 
-                const storedBandId = sessionStorage.getItem(ACTIVE_BAND_STORAGE_KEY);
-                const nextActiveBandId =
-                    availableBands.find((band) => band.id === storedBandId)?.id ??
-                    availableBands[0]?.id ??
-                    null;
+            setBands(availableBands);
+            setActiveBandId(nextActiveBandId);
 
-                setBands(availableBands);
-                setActiveBandId(nextActiveBandId);
-
-                if (nextActiveBandId) {
-                    sessionStorage.setItem(ACTIVE_BAND_STORAGE_KEY, nextActiveBandId);
-                } else {
-                    sessionStorage.removeItem(ACTIVE_BAND_STORAGE_KEY);
-                }
-            } catch {
-                if (isMounted) {
-                    setError('Não foi possível carregar suas bandas.');
-                }
-            } finally {
-                if (isMounted) {
-                    setIsLoading(false);
-                }
+            if (nextActiveBandId) {
+                sessionStorage.setItem(ACTIVE_BAND_STORAGE_KEY, nextActiveBandId);
+            } else {
+                sessionStorage.removeItem(ACTIVE_BAND_STORAGE_KEY);
+            }
+        } catch {
+            if (isMountedRef.current) {
+                setError('Não foi possível carregar suas bandas.');
+            }
+        } finally {
+            if (isMountedRef.current) {
+                setIsLoading(false);
             }
         }
-
-        void loadBands();
-
-        return () => {
-            isMounted = false;
-        };
     }, [isAuthenticated]);
+
+    useEffect(() => {
+        void refreshBands();
+    }, [refreshBands]);
+
+    useEffect(() => () => {
+        isMountedRef.current = false;
+    }, []);
 
     const selectBand = useCallback((bandId: string) => {
         if (!bands.some((band) => band.id === bandId)) {
@@ -95,7 +96,7 @@ export function WorkspaceProvider({ children }: Readonly<{ children: ReactNode }
 
     return (
         <WorkspaceContext.Provider
-            value={{ bands, activeBandId, activeBand, isLoading, error, selectBand }}
+            value={{ bands, activeBandId, activeBand, isLoading, error, selectBand, refreshBands }}
         >
             {children}
         </WorkspaceContext.Provider>
