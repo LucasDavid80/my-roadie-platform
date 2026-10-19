@@ -115,12 +115,14 @@ class RemoteDataSource {
 
   // --- Events ---
 
-  Future<List<EventModel>> getEvents() async {
+  Future<List<EventModel>> getEvents([String? bandId]) async {
     try {
-      final response = await _client.get(
-        Uri.parse('${AppConfig.backendUrl}/events'),
-        headers: _getHeaders(),
+      final eventsUri = Uri.parse('${AppConfig.backendUrl}/events').replace(
+        queryParameters: {
+          if (bandId != null && bandId.isNotEmpty) 'bandId': bandId,
+        },
       );
+      final response = await _client.get(eventsUri, headers: _getHeaders());
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
