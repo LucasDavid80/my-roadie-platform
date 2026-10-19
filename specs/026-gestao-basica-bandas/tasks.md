@@ -25,7 +25,7 @@
 
 ## Fase 3: Testes Automatizados & Qualidade
 
-- [ ] T3.1: Adicionar testes unitários e E2E do backend para sucesso, validação, não membro e `ADMIN`.
+- [x] T3.1: Adicionar testes unitários e E2E do backend para sucesso, validação, não membro e `ADMIN`.
 - [ ] T3.2: Adicionar testes Web para provider, seletor, CRUD e propagação do workspace ativo.
 - [ ] T3.3: Adicionar testes Mobile de model/repository, controller e widget.
 - [ ] T3.4: Executar lint, build e testes direcionados dos aplicativos afetados.
