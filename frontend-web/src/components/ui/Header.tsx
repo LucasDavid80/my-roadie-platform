@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Music, CalendarDays, User, LogOut, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { BandSelector } from './BandSelector';
 
 export function Header() {
     const pathname = usePathname();
@@ -25,6 +26,7 @@ export function Header() {
                 </div>
             </div>
             <div className="flex items-center gap-3">
+                <BandSelector />
                 <Link 
                     href="/dashboard" 
                     className={`w-9 h-9 flex items-center justify-center rounded-xl transition-colors ${isDashboard ? 'bg-blue-50 text-primary' : 'hover:bg-slate-100 text-slate-500'}`}
