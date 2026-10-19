@@ -42,7 +42,6 @@ class BandController extends Notifier<BandWorkspaceState> {
 
   @override
   BandWorkspaceState build() {
-    Future.microtask(fetchBands);
     return const BandWorkspaceState();
   }
 

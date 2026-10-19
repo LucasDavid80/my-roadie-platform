@@ -6,6 +6,7 @@ import 'package:agenda_musical/core/guards/legal_guard.dart';
 import 'package:agenda_musical/presentation/screens/principal/principal_screen.dart';
 import 'package:agenda_musical/presentation/screens/person/person_screen.dart';
 import 'package:agenda_musical/presentation/screens/history/history_screen.dart';
+import 'package:agenda_musical/presentation/screens/bands/bands_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/login', // <--- Mude para começar no login
@@ -32,6 +33,13 @@ final GoRouter router = GoRouter(
           name: 'history',
           builder: (BuildContext context, GoRouterState state) {
             return const HistoryScreen();
+          },
+        ),
+        GoRoute(
+          path: 'bands',
+          name: 'bands',
+          builder: (BuildContext context, GoRouterState state) {
+            return const BandsScreen();
           },
         ),
       ],

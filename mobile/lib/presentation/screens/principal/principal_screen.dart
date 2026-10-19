@@ -95,7 +95,8 @@ class PrincipalScreen extends ConsumerWidget {
               CustomCalendar(events: events), // <-- Passando a lista observada
 
               CommitmentsWidget(
-                commitments: upcomingEvents, // <-- Passando a lista de próximos compromissos
+                commitments:
+                    upcomingEvents, // <-- Passando a lista de próximos compromissos
                 onConfirm:
                     handleOnConfirm, // <-- Passando a função do controller
                 onDelete: handleOnDelete,
