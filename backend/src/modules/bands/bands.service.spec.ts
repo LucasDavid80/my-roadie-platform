@@ -171,4 +171,151 @@ describe('BandsService', () => {
     );
     expect(transaction.band.delete).not.toHaveBeenCalled();
   });
+
+  it('deve criar o usuário no banco quando ele ainda não existir e o token não tiver e-mail', async () => {
+    const transaction = {
+      user: {
+        findFirst: jest.fn().mockResolvedValue(null),
+        create: jest.fn().mockResolvedValue({ id: 'created-user' }),
+      },
+      band: {
+        create: jest.fn().mockResolvedValue(band),
+      },
+    };
+    prisma.$transaction.mockImplementationOnce(
+      (callback: (tx: typeof transaction) => unknown) => callback(transaction),
+    );
+    const userWithoutEmail = {
+      userId: 'user-new',
+    } as CurrentUserPayload;
+
+    await expect(
+      service.create({ name: 'Banda Nova' }, userWithoutEmail),
+    ).resolves.toEqual(band);
+    expect(transaction.user.create).toHaveBeenCalledWith({
+      data: {
+        supabaseId: 'user-new',
+        email: 'user-new@supabase.user',
+        name: '',
+        role: Role.MUSICIAN,
+      },
+      select: { id: true },
+    });
+    expect(transaction.band.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          members: {
+            create: { userId: 'created-user', role: 'OWNER' },
+          },
+        }),
+      }),
+    );
+  });
+
+  it('deve atualizar o nome da banda para o OWNER', async () => {
+    await expect(
+      service.update('band-1', { name: 'Banda Atualizada' }, musician),
+    ).resolves.toEqual({ ...band, name: 'Banda Atualizada' });
+    expect(prisma.band.update).toHaveBeenCalledWith({
+      where: { id: 'band-1' },
+      data: { name: 'Banda Atualizada' },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  });
+
+  it('deve atualizar sem alterar o nome quando ele não for enviado', async () => {
+    await service.update('band-1', {}, musician);
+
+    expect(prisma.band.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: {} }),
+    );
+  });
+
+  it('deve negar edição para usuário que não é owner', async () => {
+    prisma.bandMember.findFirst.mockResolvedValueOnce(null);
+
+    await expect(
+      service.update('band-1', { name: 'Banda Atualizada' }, musician),
+    ).rejects.toThrow(ForbiddenException);
+  });
+
+  it('deve permitir edição por ADMIN sem consultar vínculo de owner', async () => {
+    prisma.bandMember.findFirst.mockResolvedValueOnce(null);
+
+    await expect(
+      service.update('band-1', { name: 'Banda Atualizada' }, admin),
+    ).resolves.toEqual({ ...band, name: 'Banda Atualizada' });
+    expect(prisma.bandMember.findFirst).not.toHaveBeenCalled();
+  });
+
+  it('deve informar quando a banda não existe na edição', async () => {
+    prisma.band.findUnique.mockResolvedValueOnce(null);
+
+    await expect(
+      service.update('missing-band', { name: 'Banda Atualizada' }, musician),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('deve excluir membros e banda quando não houver recursos vinculados', async () => {
+    const transaction = {
+      event: { count: jest.fn().mockResolvedValue(0) },
+      repertoireSong: { count: jest.fn().mockResolvedValue(0) },
+      transaction: { count: jest.fn().mockResolvedValue(0) },
+      bandMember: { deleteMany: jest.fn() },
+      band: { delete: jest.fn() },
+    };
+    prisma.$transaction.mockImplementationOnce(
+      (callback: (tx: typeof transaction) => unknown) => callback(transaction),
+    );
+
+    await service.remove('band-1', musician);
+
+    expect(transaction.bandMember.deleteMany).toHaveBeenCalledWith({
+      where: { bandId: 'band-1' },
+    });
+    expect(transaction.band.delete).toHaveBeenCalledWith({
+      where: { id: 'band-1' },
+    });
+  });
+
+  it('deve impedir exclusão quando existirem músicas de repertório', async () => {
+    const transaction = {
+      event: { count: jest.fn().mockResolvedValue(0) },
+      repertoireSong: { count: jest.fn().mockResolvedValue(1) },
+      transaction: { count: jest.fn().mockResolvedValue(0) },
+      bandMember: { deleteMany: jest.fn() },
+      band: { delete: jest.fn() },
+    };
+    prisma.$transaction.mockImplementationOnce(
+      (callback: (tx: typeof transaction) => unknown) => callback(transaction),
+    );
+
+    await expect(service.remove('band-1', musician)).rejects.toThrow(
+      ConflictException,
+    );
+    expect(transaction.band.delete).not.toHaveBeenCalled();
+  });
+
+  it('deve impedir exclusão quando existirem transações', async () => {
+    const transaction = {
+      event: { count: jest.fn().mockResolvedValue(0) },
+      repertoireSong: { count: jest.fn().mockResolvedValue(0) },
+      transaction: { count: jest.fn().mockResolvedValue(1) },
+      bandMember: { deleteMany: jest.fn() },
+      band: { delete: jest.fn() },
+    };
+    prisma.$transaction.mockImplementationOnce(
+      (callback: (tx: typeof transaction) => unknown) => callback(transaction),
+    );
+
+    await expect(service.remove('band-1', musician)).rejects.toThrow(
+      ConflictException,
+    );
+    expect(transaction.band.delete).not.toHaveBeenCalled();
+  });
 });

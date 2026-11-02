@@ -93,4 +93,44 @@ describe('WorkspaceContext', () => {
         expect(result.current.error).toBe('Não foi possível carregar suas bandas.');
         expect(result.current.bands).toEqual([]);
     });
+
+    it('deve limpar o workspace quando o usuário não estiver autenticado', async () => {
+        vi.mocked(useAuth).mockReturnValue({ isAuthenticated: false } as ReturnType<typeof useAuth>);
+        sessionStorage.setItem('@MyRoadie:activeBandId', 'band-1');
+
+        const { result } = renderHook(() => useWorkspace(), {
+            wrapper: ({ children }) => <WorkspaceProvider>{children}</WorkspaceProvider>,
+        });
+
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+        expect(bandService.getAll).not.toHaveBeenCalled();
+        expect(result.current.bands).toEqual([]);
+        expect(result.current.activeBandId).toBeNull();
+        expect(result.current.error).toBeNull();
+    });
+
+    it('deve remover o workspace salvo quando não houver bandas acessíveis', async () => {
+        vi.mocked(bandService.getAll).mockResolvedValue([]);
+        sessionStorage.setItem('@MyRoadie:activeBandId', 'band-1');
+
+        const { result } = renderHook(() => useWorkspace(), {
+            wrapper: ({ children }) => <WorkspaceProvider>{children}</WorkspaceProvider>,
+        });
+
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+        expect(result.current.activeBandId).toBeNull();
+        expect(sessionStorage.getItem('@MyRoadie:activeBandId')).toBeNull();
+    });
+
+    it('deve lançar erro quando useWorkspace for usado fora do provider', () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        expect(() => renderHook(() => useWorkspace())).toThrow(
+            'useWorkspace deve ser usado dentro de WorkspaceProvider',
+        );
+
+        consoleError.mockRestore();
+    });
 });

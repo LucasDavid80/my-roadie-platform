@@ -29,7 +29,10 @@
 - [x] T3.2: Adicionar testes Web para provider, seletor, CRUD e propagação do workspace ativo.
 - [x] T3.3: Adicionar testes Mobile de model/repository, controller e widget.
 - [x] T3.4: Executar lint, build e testes direcionados dos aplicativos afetados.
-- [ ] T3.5: Verificar cobertura mínima de 80% em cada aplicativo afetado.
+- [x] T3.5: Verificar cobertura mínima de 80% em cada aplicativo afetado.
+  - Backend: statements 95,31% · branches 80,30% · functions 93,04% · lines 94,94%; módulo `bands` com 88,4% stmts / 88,88% branches / 100% funcs / 90,47% lines. 239 testes passando.
+  - Mobile: 87,8% de linhas (sem arquivos gerados); arquivos de bandas entre 95,2% e 100%. 177 testes passando.
+  - Frontend Web: arquivos da spec todos ≥ 80% (`bands/page.tsx` 100/96,29/100/100; `WorkspaceContext` 98/84,21/100/100; `BandSelector` 100/87,5/100/100; `band-service` 100/100/100/100). Global: 88,77% stmts · 71,11% branches · 94,11% funcs · 89,24% lines. O déficit global de branches é pré-existente (baseline estimado em ~66,4% antes da 026) e está concentrado em `AuthContext`, `LoginForm` e `api.ts`, fora do escopo desta spec — pendência a tratar em spec própria.
 
 ## Fase 4: Fechamento & Sincronização
 

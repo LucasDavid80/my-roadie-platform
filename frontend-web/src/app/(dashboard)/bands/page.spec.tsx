@@ -116,4 +116,81 @@ describe('BandsPage', () => {
         expect(screen.getAllByText('Informe o nome da banda.')).toHaveLength(2);
         expect(bandService.create).not.toHaveBeenCalled();
     });
+
+    it('deve exibir mensagens de validação da API em lista ao falhar o salvamento', async () => {
+        vi.mocked(bandService.create).mockRejectedValueOnce({
+            response: { data: { message: ['Nome é obrigatório', 'Nome muito longo'] } },
+        });
+        render(<BandsPage />);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Nova banda' }));
+        fireEvent.change(screen.getByLabelText('Nome da banda'), {
+            target: { value: 'Banda Nova' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+
+        await waitFor(() => {
+            expect(screen.getAllByText('Nome é obrigatório, Nome muito longo').length).toBeGreaterThan(0);
+        });
+    });
+
+    it('deve exibir mensagem textual da API ao falhar o salvamento', async () => {
+        vi.mocked(bandService.create).mockRejectedValueOnce({
+            response: { data: { message: 'Nome já utilizado' } },
+        });
+        render(<BandsPage />);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Nova banda' }));
+        fireEvent.change(screen.getByLabelText('Nome da banda'), {
+            target: { value: 'Banda Nova' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+
+        await waitFor(() => {
+            expect(screen.getAllByText('Nome já utilizado').length).toBeGreaterThan(0);
+        });
+    });
+
+    it('não deve excluir a banda quando a confirmação for cancelada', () => {
+        vi.stubGlobal('confirm', vi.fn().mockReturnValue(false));
+        render(<BandsPage />);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Excluir Banda Um' }));
+
+        expect(bandService.delete).not.toHaveBeenCalled();
+        vi.unstubAllGlobals();
+    });
+
+    it('deve exibir mensagem padrão quando a exclusão falhar sem detalhes', async () => {
+        vi.stubGlobal('confirm', vi.fn().mockReturnValue(true));
+        vi.mocked(bandService.delete).mockRejectedValueOnce(new Error('network'));
+        render(<BandsPage />);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Excluir Banda Um' }));
+
+        await waitFor(() => {
+            expect(screen.getByText('Não foi possível excluir a banda.')).toBeInTheDocument();
+        });
+        vi.unstubAllGlobals();
+    });
+
+    it('deve fechar o modal pelo backdrop, pelo botão X e por Cancelar', () => {
+        render(<BandsPage />);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Nova banda' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
+        expect(screen.queryByRole('heading', { name: 'Nova banda' })).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('button', { name: 'Nova banda' }));
+        const closeButton = screen
+            .getByRole('heading', { name: 'Nova banda' })
+            .parentElement?.querySelector('button');
+        fireEvent.click(closeButton as Element);
+        expect(screen.queryByRole('heading', { name: 'Nova banda' })).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('button', { name: 'Nova banda' }));
+        const backdrop = document.querySelector('.absolute.inset-0');
+        fireEvent.click(backdrop as Element);
+        expect(screen.queryByRole('heading', { name: 'Nova banda' })).not.toBeInTheDocument();
+    });
 });
