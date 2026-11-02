@@ -36,6 +36,6 @@
 
 ## Fase 4: Fechamento & Sincronização
 
-- [ ] T4.1: Atualizar baseline raiz (`spec.md` e `plan.md`) e documentação relacionada com o comportamento efetivamente entregue.
+- [x] T4.1: Atualizar baseline raiz (`spec.md` e `plan.md`) e documentação relacionada com o comportamento efetivamente entregue.
 - [ ] T4.2: Revisar o backlog e atualizar o status da feature para o estado correspondente à entrega.
 - [ ] T4.3: Marcar simultaneamente o checklist de fechamento de `tasks.md` e os critérios de sucesso de `spec.md`.
