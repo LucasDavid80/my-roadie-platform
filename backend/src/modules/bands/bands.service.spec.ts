@@ -207,7 +207,7 @@ describe('BandsService', () => {
           members: {
             create: { userId: 'created-user', role: 'OWNER' },
           },
-        }),
+        }) as Record<string, unknown>,
       }),
     );
   });
