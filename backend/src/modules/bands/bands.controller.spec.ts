@@ -91,11 +91,7 @@ describe('BandsController', () => {
 
       const result = await controller.update('band-uuid-1', dto, mockUser);
 
-      expect(service.update).toHaveBeenCalledWith(
-        'band-uuid-1',
-        dto,
-        mockUser,
-      );
+      expect(service.update).toHaveBeenCalledWith('band-uuid-1', dto, mockUser);
       expect(result).toEqual(mockBand);
     });
   });
