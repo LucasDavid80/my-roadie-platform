@@ -10,6 +10,9 @@ Resumo das regras centrais atualmente implementadas:
 2. Bandas
    - Band é uma entidade colaborativa com membros (BandMember).
    - BandMember tem `role` (ex.: owner/member) e a relação única [userId, bandId].
+   - O criador de uma banda é associado automaticamente como `OWNER` na mesma transação de criação.
+   - Usuários listam apenas bandas das quais são membros; ADMIN tem acesso global.
+   - Edição e exclusão de banda exigem `OWNER` ou ADMIN. A exclusão é bloqueada quando existem eventos, músicas de repertório ou transações vinculadas; sem dependências, BandMember e Band são removidos na mesma transação, sem cascata sobre esses recursos.
    - Ações na banda (ex.: adicionar músicas ao repertório) são permitidas para membros apropriados.
 
 3. Eventos

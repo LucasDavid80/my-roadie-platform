@@ -10,12 +10,15 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   AgendaRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<List<EventEntity>> getEvents() async {
-    return await remoteDataSource.getEvents();
+  Future<List<EventEntity>> getEvents([String? bandId]) async {
+    return remoteDataSource.getEvents(bandId);
   }
 
   @override
-  Future<EventEntity> saveEvent(EventEntity event) async {
+  Future<EventEntity> saveEvent(
+    EventEntity event, [
+    String? activeBandId,
+  ]) async {
     final model = EventModel(
       id: event.id,
       title: event.title,
@@ -26,7 +29,7 @@ class AgendaRepositoryImpl implements IAgendaRepository {
       location: event.location,
       fee: event.fee,
       notes: event.notes,
-      bandId: event.bandId,
+      bandId: event.bandId ?? activeBandId,
     );
     final savedModel = await remoteDataSource.saveEvent(model);
     return savedModel ?? event;

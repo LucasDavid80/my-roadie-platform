@@ -4,6 +4,7 @@ import '../../../domain/interfaces/i_agenda_repository.dart';
 import '../../../data/repositories/agenda_repository_impl.dart';
 import '../../../services/notification_service.dart';
 import 'auth_controller.dart';
+import 'band_controller.dart';
 
 // Providers para injeção do repositório de agenda
 final agendaRepositoryProvider = Provider<IAgendaRepository>((ref) {
@@ -18,12 +19,19 @@ class AgendaController extends Notifier<List<EventEntity>> {
   List<EventEntity> build() {
     // Carrega os eventos de forma assíncrona logo após a criação do Notifier
     Future.microtask(() => fetchEvents());
+    ref.listen<BandWorkspaceState>(bandProvider, (previous, next) {
+      if (previous?.activeBandId != next.activeBandId) {
+        fetchEvents(next.activeBandId);
+      }
+    });
     return [];
   }
 
-  Future<void> fetchEvents() async {
+  Future<void> fetchEvents([String? bandId]) async {
     try {
-      final events = await _repository.getEvents();
+      final events = bandId == null
+          ? await _repository.getEvents()
+          : await _repository.getEvents(bandId);
       state = events;
     } catch (e) {
       // Trata erros de forma segura silenciosa ou setando estado, conforme a spec/plan
@@ -32,11 +40,13 @@ class AgendaController extends Notifier<List<EventEntity>> {
 
   Future<void> addOrUpdateEvent(EventEntity event) async {
     try {
-      final savedEvent = await _repository.saveEvent(event);
+      final activeBandId = ref.read(bandProvider).activeBandId;
+      final savedEvent = activeBandId == null
+          ? await _repository.saveEvent(event)
+          : await _repository.saveEvent(event, activeBandId);
       final index = state.indexWhere(
         (e) =>
-            e.id == savedEvent.id ||
-            (event.id.isNotEmpty && e.id == event.id),
+            e.id == savedEvent.id || (event.id.isNotEmpty && e.id == event.id),
       );
       if (index != -1) {
         state = [
@@ -47,12 +57,10 @@ class AgendaController extends Notifier<List<EventEntity>> {
             else
               e,
         ];
-        await NotificationService.instance
-            .scheduleEventReminders(savedEvent);
+        await NotificationService.instance.scheduleEventReminders(savedEvent);
       } else {
         state = [...state, savedEvent];
-        await NotificationService.instance
-            .scheduleEventReminders(savedEvent);
+        await NotificationService.instance.scheduleEventReminders(savedEvent);
       }
     } catch (e) {
       rethrow;
@@ -82,9 +90,11 @@ class AgendaController extends Notifier<List<EventEntity>> {
   int get monthlyShows {
     final now = DateTime.now();
     return state
-        .where((e) =>
-            _isSameMonth(e.startsAt, now) &&
-            e.type.trim().toLowerCase() == 'show')
+        .where(
+          (e) =>
+              _isSameMonth(e.startsAt, now) &&
+              e.type.trim().toLowerCase() == 'show',
+        )
         .length;
   }
 
@@ -95,14 +105,12 @@ class AgendaController extends Notifier<List<EventEntity>> {
         .fold(0.0, (sum, event) => sum + event.fee);
   }
 
-
   List<EventEntity> get upcomingEvents {
     final now = DateTime.now();
     return state.where((e) {
       final refDate = e.endsAt ?? e.startsAt.add(const Duration(hours: 2));
       return !refDate.isBefore(now);
-    }).toList()
-      ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
+    }).toList()..sort((a, b) => a.startsAt.compareTo(b.startsAt));
   }
 
   List<EventEntity> get pastEvents {
@@ -110,8 +118,7 @@ class AgendaController extends Notifier<List<EventEntity>> {
     return state.where((e) {
       final refDate = e.endsAt ?? e.startsAt.add(const Duration(hours: 2));
       return refDate.isBefore(now);
-    }).toList()
-      ..sort((a, b) => b.startsAt.compareTo(a.startsAt));
+    }).toList()..sort((a, b) => b.startsAt.compareTo(a.startsAt));
   }
 }
 

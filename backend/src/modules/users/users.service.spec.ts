@@ -99,12 +99,22 @@ describe('UsersService', () => {
     it('deve criar e retornar usuário se não encontrado mas o reqUser for fornecido', async () => {
       jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(null);
       const reqUser = { userId: 'supabase-id-999', email: 'novo@teste.com' };
-      const createdUser = {
+      const createdUser: User = {
         ...mockUser,
         id: 'uuid-999',
         supabaseId: 'supabase-id-999',
+        experience: null,
+        phone: null,
+        instagram: null,
+        city: null,
+        federativeUnit: null,
+        minCache: null,
+        youtubeLink: null,
+        bio: null,
+        termsAcceptedVersion: null,
+        termsAcceptedAt: null,
       };
-      jest.spyOn(prisma.user, 'create').mockResolvedValue(createdUser as any);
+      jest.spyOn(prisma.user, 'create').mockResolvedValue(createdUser);
 
       const found = await service.findOne('supabase-id-999', reqUser);
       expect(prisma.user.create).toHaveBeenCalled();
@@ -127,8 +137,22 @@ describe('UsersService', () => {
     it('deve criar um usuário no update se ele não existir e reqUser for fornecido', async () => {
       jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(null);
       const reqUser = { userId: 'supabase-id-999', email: 'novo@teste.com' };
-      const createdUser = { ...mockUser, id: 'uuid-999', name: 'Novo Nome' };
-      jest.spyOn(prisma.user, 'create').mockResolvedValue(createdUser as any);
+      const createdUser: User = {
+        ...mockUser,
+        id: 'uuid-999',
+        name: 'Novo Nome',
+        experience: null,
+        phone: null,
+        instagram: null,
+        city: null,
+        federativeUnit: null,
+        minCache: null,
+        youtubeLink: null,
+        bio: null,
+        termsAcceptedVersion: null,
+        termsAcceptedAt: null,
+      };
+      jest.spyOn(prisma.user, 'create').mockResolvedValue(createdUser);
 
       const updated = await service.update(
         'uuid-999',

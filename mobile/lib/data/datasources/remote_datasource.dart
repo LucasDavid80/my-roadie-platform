@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/config/app_config.dart';
 import '../models/user_model.dart';
+import '../models/band_model.dart';
 import '../../domain/models/event_model.dart';
 
 class UnauthorizedException implements Exception {
@@ -59,7 +60,9 @@ class RemoteDataSource {
       } catch (_) {}
     }
 
-    AppLogger.info('DEBUG AUTH TOKEN PRESENTE: ${token != null && token.isNotEmpty}');
+    AppLogger.info(
+      'DEBUG AUTH TOKEN PRESENTE: ${token != null && token.isNotEmpty}',
+    );
 
     final headers = <String, String>{'Content-Type': 'application/json'};
     if (token != null && token.isNotEmpty) {
@@ -68,29 +71,80 @@ class RemoteDataSource {
     return headers;
   }
 
-  // --- Events ---
+  // --- Bands ---
 
-  Future<List<EventModel>> getEvents() async {
+  Future<List<BandModel>> getBands() async {
     try {
       final response = await _client.get(
-        Uri.parse('${AppConfig.backendUrl}/events'),
+        Uri.parse('${AppConfig.backendUrl}/bands'),
         headers: _getHeaders(),
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data.map((json) => EventModel.fromMap(json)).toList();
+        final dynamic data = jsonDecode(response.body);
+        if (data is! List) {
+          throw ServerException('Resposta inválida ao carregar bandas');
+        }
+        return data
+            .whereType<Map<String, dynamic>>()
+            .map(BandModel.fromJson)
+            .toList();
       } else if (response.statusCode == 401) {
-        throw UnauthorizedException(_extractErrorMessage(response.body, 'Não autorizado'));
+        throw UnauthorizedException(
+          _extractErrorMessage(response.body, 'Não autorizado'),
+        );
       } else {
         throw ServerException(
-          _extractErrorMessage(response.body, 'Failed to load events: ${response.statusCode}'),
+          _extractErrorMessage(
+            response.body,
+            'Failed to load bands: ${response.statusCode}',
+          ),
         );
       }
     } on http.ClientException {
       throw NetworkException();
     } catch (e) {
-      if (e is UnauthorizedException || e is ServerException || e is NetworkException) {
+      if (e is UnauthorizedException ||
+          e is ServerException ||
+          e is NetworkException) {
+        rethrow;
+      }
+      throw NetworkException(e.toString());
+    }
+  }
+
+  // --- Events ---
+
+  Future<List<EventModel>> getEvents([String? bandId]) async {
+    try {
+      final eventsUri = Uri.parse('${AppConfig.backendUrl}/events').replace(
+        queryParameters: {
+          if (bandId != null && bandId.isNotEmpty) 'bandId': bandId,
+        },
+      );
+      final response = await _client.get(eventsUri, headers: _getHeaders());
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((json) => EventModel.fromMap(json)).toList();
+      } else if (response.statusCode == 401) {
+        throw UnauthorizedException(
+          _extractErrorMessage(response.body, 'Não autorizado'),
+        );
+      } else {
+        throw ServerException(
+          _extractErrorMessage(
+            response.body,
+            'Failed to load events: ${response.statusCode}',
+          ),
+        );
+      }
+    } on http.ClientException {
+      throw NetworkException();
+    } catch (e) {
+      if (e is UnauthorizedException ||
+          e is ServerException ||
+          e is NetworkException) {
         rethrow;
       }
       throw NetworkException(e.toString());
@@ -141,7 +195,9 @@ class RemoteDataSource {
     } on http.ClientException {
       throw NetworkException();
     } catch (e) {
-      if (e is UnauthorizedException || e is ServerException || e is NetworkException) {
+      if (e is UnauthorizedException ||
+          e is ServerException ||
+          e is NetworkException) {
         rethrow;
       }
       throw NetworkException(e.toString());
@@ -181,10 +237,7 @@ class RemoteDataSource {
       AppLogger.info('DEBUG REQUEST URL: $url');
       AppLogger.info('DEBUG REQUEST HEADERS: $headers');
 
-      final response = await _client.get(
-        Uri.parse(url),
-        headers: headers,
-      );
+      final response = await _client.get(Uri.parse(url), headers: headers);
 
       AppLogger.info('DEBUG RESPONSE STATUS: ${response.statusCode}');
       AppLogger.info('DEBUG RESPONSE BODY: ${response.body}');
@@ -311,9 +364,7 @@ class RemoteDataSource {
         if (response.statusCode == 401) {
           throw UnauthorizedException();
         }
-        throw ServerException(
-          'Failed to accept terms: ${response.statusCode}',
-        );
+        throw ServerException('Failed to accept terms: ${response.statusCode}');
       }
     } on http.ClientException {
       throw NetworkException();

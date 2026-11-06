@@ -115,12 +115,15 @@ class FakeAgendaRepository implements IAgendaRepository {
             : [];
 
   @override
-  Future<List<EventEntity>> getEvents() async {
+  Future<List<EventEntity>> getEvents([String? bandId]) async {
     return List<EventEntity>.unmodifiable(events);
   }
 
   @override
-  Future<EventEntity> saveEvent(EventEntity event) async {
+  Future<EventEntity> saveEvent(
+    EventEntity event, [
+    String? activeBandId,
+  ]) async {
     final eventToSave = event.id.isEmpty
         ? EventEntity(
             id: 'event_${DateTime.now().millisecondsSinceEpoch}',

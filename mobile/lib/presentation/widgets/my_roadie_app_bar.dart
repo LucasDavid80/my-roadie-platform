@@ -28,11 +28,8 @@ class MyRoadieAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Image.asset(
           'assets/images/logo.png',
           fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) => const Icon(
-            Icons.music_note,
-            color: AppColors.primary,
-            size: 32,
-          ),
+          errorBuilder: (context, error, stackTrace) =>
+              const Icon(Icons.music_note, color: AppColors.primary, size: 32),
         ),
       ),
 
@@ -67,6 +64,20 @@ class MyRoadieAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {
               // Use push se quiser que tenha botão de voltar, ou go se for uma aba fixa
               if (selectedScreen != 'profile') context.push('/profile');
+            },
+          ),
+
+          const SizedBox(width: 8),
+
+          IconButton(
+            key: const ValueKey('bands_appbar_button'),
+            icon: const Icon(Icons.groups),
+            color: selectedScreen == 'bands'
+                ? AppColors.primary
+                : AppColors.secondary,
+            tooltip: 'Minhas bandas',
+            onPressed: () {
+              if (selectedScreen != 'bands') context.push('/bands');
             },
           ),
 

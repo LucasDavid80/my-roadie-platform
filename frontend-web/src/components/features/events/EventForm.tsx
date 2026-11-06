@@ -1,8 +1,7 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Input } from '@/components/ui/Input';
-import { EventStatus } from '@/types/event';
 
 const eventSchema = z.object({
     title: z.string().min(1, 'Título é obrigatório'),
@@ -29,7 +28,7 @@ export function EventForm({ initialData, onSubmit, onCancel, isLoading }: EventF
         register,
         handleSubmit,
         formState: { errors },
-        watch,
+        control,
     } = useForm<EventFormValues>({
         resolver: zodResolver(eventSchema),
         defaultValues: {
@@ -44,7 +43,7 @@ export function EventForm({ initialData, onSubmit, onCancel, isLoading }: EventF
         },
     });
 
-    const type = watch('type');
+    const type = useWatch({ control, name: 'type' });
     const showsFee = type === 'Show' || type === 'Gravação';
 
     return (
@@ -114,7 +113,9 @@ export function EventForm({ initialData, onSubmit, onCancel, isLoading }: EventF
                     type="number"
                     step="0.01"
                     placeholder="0.00"
-                    {...register('fee', { valueAsNumber: true })}
+                    {...register('fee', {
+                        setValueAs: (v) => (v === '' || v == null ? undefined : Number(v)),
+                    })}
                     error={errors.fee?.message}
                 />
             )}

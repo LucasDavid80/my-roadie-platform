@@ -13,7 +13,17 @@ export default defineConfig({
         exclude: ['**/node_modules/**', '**/tests/**', '**/dist/**'],
         coverage: {
             provider: 'v8',
-            reporter: ['text', 'lcov', 'clover'],
+            reporter: ['text', 'html', 'lcov', 'clover'],
+            reportsDirectory: './coverage/vitest',
+            // sem isso, arquivos que nenhum teste importa ficam fora do relatório
+            include: ['src/**/*.{ts,tsx}'],
+            exclude: [
+                'src/test/**',
+                'src/**/*.d.ts',
+                'src/**/*.test.{ts,tsx}',
+                'src/**/*.spec.{ts,tsx}',
+                'src/**/layout.tsx',
+            ],
         },
     },
     resolve: {

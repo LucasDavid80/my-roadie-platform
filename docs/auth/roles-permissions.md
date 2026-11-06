@@ -5,10 +5,14 @@ Papéis definidos no sistema:
 - MUSICIAN
   - Pode criar e editar próprios eventos, tarefas e repertório da sua banda.
   - Pode visualizar transações e eventos relacionados às suas bandas.
+  - Pode listar bandas das quais é membro e criar bandas.
+  - Pode editar ou excluir bandas das quais é `OWNER`, respeitando a integridade dos dados vinculados.
 
 - ROADIE
   - Permissões semelhantes ao MUSICIAN; frequentemente gerencia tarefas e logística.
   - Pode ser atribuído como responsável por tarefas em eventos de bandas.
+  - Pode listar bandas das quais é membro e criar bandas.
+  - Pode editar ou excluir bandas das quais é `OWNER`, respeitando a integridade dos dados vinculados.
 
 - ADMIN
   - Acesso global: criar/editar/deletar quaisquer recursos, gerenciar usuários, bandas e transações.
@@ -18,6 +22,15 @@ Matriz simplificada (Read / Create / Update / Delete / Notes):
 - MUSICIAN: R, C (own/band), U (own/band), D (own)
 - ROADIE: R, C (own/band), U (assigned), D (own)
 - ADMIN: R, C, U, D (global)
+
+Operações de bandas:
+
+- MUSICIAN/ROADIE: listar bandas associadas, criar banda com associação automática como
+  `OWNER`, visualizar detalhes de bandas associadas e editar/excluir somente bandas
+  próprias (`BandMember.role = OWNER`).
+- ADMIN: listar e visualizar qualquer banda, além de criar, editar e excluir globalmente.
+- A exclusão é bloqueada quando a banda possui eventos, músicas de repertório ou
+  transações vinculadas; não há cascata desses recursos.
 
 Observações importantes:
 - Usuários são vinculados a um supabaseId (ID do provedor de autenticação). O backend espera receber `supabaseId` ao criar o perfil.

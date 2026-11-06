@@ -14,13 +14,15 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 
 ## 2. Backend
 
-- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `tasks`, `repertoire`, `transactions`, `band-access`, `legal`).
+- Estrutura: `src/modules/<dominio>` (hoje: `auth`, `users`, `events`, `bands`, `tasks`, `repertoire`, `transactions`, `band-access`, `legal`).
 - Persistência: Prisma Client sobre Postgres (Supabase). `DATABASE_URL` via env.
 - Fluxo de schema: editar `prisma/schema.prisma` → migration → `npx prisma generate` → atualizar `docs/database/erd.md`.
 - Autenticação e Autorização: Supabase Auth emite identidade; backend valida via estratégia JWT (`jwt.strategy.ts` com suporte dinâmico a ES256 via JWKS do Supabase e HS256 em dev local), guards (`JwtAuthGuard` com logs detalhados e exceções descritivas como `TOKEN_EXPIRED`, `INVALID_SIGNATURE`, `MALFORMED_TOKEN`, `MISSING_BEARER`, `OwnershipGuard`) e `BandAccessService` (`getUserBandIds`, `assertMembership`) para verificação de pertencimento via `BandMember` nos módulos de `tasks`, `repertoire` e `transactions` (Spec 011, Spec 012). Módulo `events` autenticado e ativo com `EventsController` e `EventsService` integrados ao Prisma, suporte a Workspace Unificado para músicos solo, horários baseados em timestamps padronizados (`startsAt`, `endsAt`, `timezone`), sincronização automática com `Transaction` (`INCOME` para `fee > 0`) e integridade referencial `onDelete: Cascade` (Spec 014, Spec 015, Spec 024).
 - Configuração de Produção & CORS: `backend/src/main.ts` restringe CORS à origem definida em `process.env.FRONTEND_URL`, eliminando permissões abertas de wildcard para segurança em produção; script `"start:prod": "node dist/src/main"` em `backend/package.json` mapeia corretamente o ponto de entrada compilado no monorepo (Spec 016).
 
 **Lacunas de módulos e autorização por banda zeradas:** módulos `Task` (spec 004), `RepertoireSong` (spec 005) e `Transaction` (spec 006) entregues e com autorização por banda fechada via `BandAccessService` (spec 011); módulo `Event` ativo com endpoints REST completos, suporte a workspace solo, extensão de campos, sincronização financeira e testes unitários/E2E (spec 014, spec 015). Módulo `Legal` entregue: `GET /legal/current-version` (retorna versão constante) e `POST /users/me/consent` no `UsersController` com campos `termsAcceptedVersion`/`termsAcceptedAt` na entidade `User` (spec 025).
+
+Módulo `Bands` entregue (Spec 026): `BandsModule` com `BandsController`, `BandsService` e DTOs, protegido por `JwtAuthGuard`; listagem/detalhes usam `BandMember` (ADMIN com acesso global), criação transacional com `BandMember(role: "OWNER")` (auto-provisionando o `User` local via `supabaseId`/e-mail quando necessário), edição/exclusão restritas a `OWNER`/`ADMIN` e exclusão transacional bloqueada por `Event`/`RepertoireSong`/`Transaction`. A implementação não exigiu alteração de schema Prisma, migration ou ERD.
 
 ## 3. Frontend Web
 
@@ -30,6 +32,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - Instância centralizada do Supabase em `src/lib/supabase.ts`. Autenticação integrada ao Supabase Auth via `signInWithPassword` no `AuthContext` (Spec 008) e cadastro integrado ao Supabase Auth + API NestJS (`POST /users`) no `RegisterForm` (Spec 010). `AuthContext` com trava `useRef` garantindo disparo único de `fetchProfile` e tratamento amigável de erros de autenticação na UI (Spec 012).
 - Página de Distribuição & Resiliência: Rota `/testers` (`src/app/testers/page.tsx`) com interface resiliente contra links ausentes/404, validação dinâmica de URLs externas (`NEXT_PUBLIC_APK_DOWNLOAD_URL` e `NEXT_PUBLIC_IPA_DOWNLOAD_URL`), badge informativo de status ("Em breve / Aguardando build"), link alternativo para GitHub Releases e exibição da versão ativa via `NEXT_PUBLIC_APP_VERSION` (Spec 016, Spec 018).
 - Onboarding Legal (Spec 025): página pública `/termos` (`app/(public)/termos/page.tsx`); `LegalConsentModal` e `LegalConsentWrapper` integrados ao root layout do `(dashboard)` implementando o padrão **UX Block** — verifica `user.termsAcceptedVersion` vs. `GET /legal/current-version` e, se desatualizado ou nulo, exibe modal bloqueante; aceite dispara `POST /users/me/consent` e atualiza o estado local do `AuthContext`.
+- Workspace ativo e gestão de bandas (Spec 026): `WorkspaceContext` (`src/contexts/WorkspaceContext.tsx`) carrega `GET /bands`, persiste `activeBandId` em `sessionStorage` (`@MyRoadie:activeBandId`), valida o workspace salvo contra a lista acessível e expõe `selectBand`/`refreshBands`; `WorkspaceProvider` envolve o layout do `(dashboard)` e `BandSelector` integra o `Header`. `bandService` (`src/services/band-service.ts`) e `src/types/band.ts` espelham o contrato do backend, e a página `(dashboard)/bands` concentra o CRUD mínimo. O `activeBandId` ainda não alimenta chamadas de eventos no Web (dashboard com dados mockados).
 
 **Decisão fechada:** A stack do frontend-web foi confirmada e documentada em `docs/architecture/frontend.md` (Tailwind CSS, Context API e Axios).
 
@@ -51,6 +54,7 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 - ✅ **Histórico de Compromissos e Filtragem de Próximos Eventos:** `AgendaController` implementa helper `_startOfDay(DateTime d)` para comparação normalizada de datas por dia/mês/ano sem interferência de horários e disponibiliza getters `upcomingEvents` (eventos `>= hoje`, ordenados de forma ascendente) e `pastEvents` (eventos `< hoje`, ordenados de forma descendente). A `PrincipalScreen` consome `upcomingEvents` em `CommitmentsWidget` e no cálculo de `compromissosTotal` em `InfosWidget`. `CommitmentsWidget` incorpora botão "Ver histórico" (`ValueKey('view_history_button')`) que navega para `/history`. Rota aninhada `history` registrada no `GoRouter` (`core/router.dart`) mapeando para `HistoryScreen` (`presentation/screens/history/history_screen.dart`), que lista `pastEvents` agrupados por data com `_isSameDay` e `_buildDateHeader`, mensagens de estado vazio amigáveis e reuso de `CommitmentCard` com ações completas de edição (`onConfirm`) e exclusão com diálogo (`onDelete`) (Spec 021).
 - ✅ **Correção dos Cards de Estatísticas do Dashboard:** No mobile, `AgendaController` mantém um helper `_isSameMonth` e expõe getters derivados do estado reativo para eventos, shows e cachês do mês corrente. `PrincipalScreen` lê esses getters e repassa os valores diretamente ao `InfosWidget`, enquanto `upcomingEvents` continua sendo a fonte do card "Próximos" e da lista. A camada visual usa `intl` (`NumberFormat.currency(locale: 'pt_BR', symbol: 'R$')`) e `FittedBox(fit: BoxFit.scaleDown)` com `maxLines: 1` para acomodar valores monetários extensos. A cobertura inclui testes de controller, widget e integração da tela principal, além de validação visual em dispositivo físico (Spec 022).
 - ✅ **Onboarding Legal e LegalGuard (Spec 025):** `LegalRepository` e datasource remoto integram `GET /legal/current-version` e `POST /users/me/consent`; `LegalGuard` implementado no fluxo pós-login/startup verificando versão aceita — se desatualizada ou nula, intercepta a navegação e força o modal de aceite antes de liberar o Dashboard; `LegalConsentModal` widget apresenta os Termos de Uso e Política de Privacidade com botão de aceite. Testes unitários cobrem repositório, models e widget; testes de integração validam o fluxo de bloqueio, aceite e liberação da navegação.
+- ✅ **Workspace Ativo e Gestão de Bandas (Spec 026):** `BandEntity`/`BandModel`, `RemoteDataSource.getBands`, `IBandRepository`/`BandRepositoryImpl` e `BandController` (`bandProvider`) mantêm lista, `activeBandId`, `isLoading` e `error`, descartando workspace inválido; `BandsScreen` (rota `/bands` via `MyRoadieAppBar`) e `BandSelector` permitem listar e alternar o workspace. `AgendaController` observa o `bandProvider` e recarrega eventos ao trocar de banda, enviando o `activeBandId` em `getEvents`/`saveEvent` sem campos gerados pelo banco.
 
 ## 5. Testes
 
@@ -66,6 +70,16 @@ Músico/Roadie → mobile (Flutter)       ├→ backend (NestJS) → Supabase (
 | Backend | 92.83% | 71.76% | 92.10% | 92.04% |
 | Frontend Web | 81.08% | 54.37% | 88.88% | 81.42% |
 | Mobile | - | - | - | 83.67% |
+
+### Cobertura de Testes (Medição de 02/11/2026 — Spec 026)
+
+| App | % Statements | % Branches | % Functions | % Lines |
+|---|---|---|---|---|
+| Backend | 95.31% | 80.30% | 93.04% | 94.94% |
+| Frontend Web | 88.77% | 71.11% | 94.11% | 89.24% |
+| Mobile | - | - | - | 87.80% |
+
+Todos os arquivos criados/alterados pela Spec 026 ficaram acima de 80%. O global de branches do frontend-web segue abaixo do piso por débito pré-existente (`AuthContext`, `LoginForm` e `api.ts`), a ser tratado em spec própria.
 
 ## 6. CI/CD
 
