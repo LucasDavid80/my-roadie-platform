@@ -31,12 +31,12 @@ Esta spec é a fundação das próximas features de colaboração, convites e no
 
 ## 5. Critérios de Sucesso
 
-- [ ] Um usuário autenticado consegue listar somente as bandas das quais é membro.
-- [ ] A criação de uma banda válida cria a `Band` e uma `BandMember` do criador com papel `OWNER` em uma operação consistente.
-- [ ] Somente o `OWNER` da banda ou um `ADMIN` consegue editar ou excluir a banda; usuários não associados recebem resposta de autorização adequada.
-- [ ] Web e Mobile conseguem selecionar uma banda ativa e manter o contexto durante a navegação da sessão.
-- [ ] Recursos dependentes de banda usam o workspace ativo sem misturar dados entre bandas.
-- [ ] Backend, Web e Mobile possuem testes cobrindo sucesso e erro/borda, mantendo o piso de cobertura de 80% aplicável.
+- [x] Um usuário autenticado consegue listar somente as bandas das quais é membro.
+- [x] A criação de uma banda válida cria a `Band` e uma `BandMember` do criador com papel `OWNER` em uma operação consistente.
+- [x] Somente o `OWNER` da banda ou um `ADMIN` consegue editar ou excluir a banda; usuários não associados recebem resposta de autorização adequada.
+- [x] Web e Mobile conseguem selecionar uma banda ativa e manter o contexto durante a navegação da sessão.
+- [x] Recursos dependentes de banda usam o workspace ativo sem misturar dados entre bandas.
+- [x] Backend, Web e Mobile possuem testes cobrindo sucesso e erro/borda, mantendo o piso de cobertura de 80% aplicável.
 
 ## 6. Inspeção de contratos existentes — T0.2
 
