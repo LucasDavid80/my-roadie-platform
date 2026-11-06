@@ -169,7 +169,7 @@ jobs:
 
   frontend-e2e:
     needs: frontend-test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: ./frontend-web
@@ -249,12 +249,12 @@ jobs:
           lcov --remove coverage/lcov.info '**/*.g.dart' '**/*.freezed.dart' 'lib/main.dart' \
             -o coverage/lcov.clean.info --ignore-errors unused
           genhtml coverage/lcov.clean.info -o coverage/html --quiet
-      # - name: Publicar relatório de cobertura
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: mobile-coverage
-      #     path: mobile/coverage/html
-      #     retention-days: 7
+      - name: Publicar relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-coverage
+          path: mobile/coverage/html
+          retention-days: 7
   mobile-e2e-emulator:
     name: Mobile E2E Emulator (Spec 019)
     needs: mobile-test
